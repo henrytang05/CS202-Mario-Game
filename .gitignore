@@ -1,2 +1,4 @@
 compile_flags.txt
 lib/libraylib.a
+
+build/

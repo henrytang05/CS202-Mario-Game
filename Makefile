@@ -14,8 +14,9 @@ ifeq ($(OS),Windows_NT)
 	g++ $(OBJS) -o $@ -Llib -lraylib -lopengl32 -lgdi32 -lwinmm -lcomdlg32 -lole32
 else
 	mkdir -p $(dir $@)
-	g++ $(OBJS) -o $@ -framework CoreVideo -framework IOKit -framework Cocoa -framework GLUT -framework OpenGL -Llib -lraylib
+	g++ $(OBJS) -o $@ -lGL -lGLU -lglut -Llib -lraylib
 endif
+
 
 $(BUILD)/%.o: $(SRC)/%.cpp
 	mkdir -p $(dir $@)

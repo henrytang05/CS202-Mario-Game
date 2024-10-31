@@ -39,7 +39,7 @@ $(BUILD)/%.o: $(SRC)/%.cpp $(PCH)
 
 .PHONY: all clean debug release
 
-all: release
+all: debug
 
 release: FLAGS := $(RELEASE_FLAGS)
 release: $(TARGET)

@@ -3,3 +3,5 @@ compile_flags.txt
 lib
 build
 *.exe
+
+log.txt

@@ -1,4 +1,4 @@
-TARGET := Mario
+TARGET := Mario.exe
 
 SRC := src
 BUILD := build
@@ -11,28 +11,42 @@ OBJS := $(subst $(SRC)/,$(BUILD)/,$(addsuffix .o,$(basename $(SRCS))))
 # Precompiled header
 PCH := $(BUILD)/pch.h.gch
 
-FLAGS := -std=c++17 -I$(INCLUDE) -g
+# Compiler flags for debug and release
+DEBUG_FLAGS := -std=c++17 -I$(INCLUDE) -g -O0 -Wall -DDebug 
+RELEASE_FLAGS := -std=c++17 -I$(INCLUDE) -O3 
 
-all: $(TARGET)
+# Libraries for Windows and Linux
+ifeq ($(OS),Windows_NT)
+    LIBS := -L$(LIB) -lraylib -lopengl32 -lgdi32 -lwinmm -lcomdlg32 -lole32
+else
+    LIBS := -L$(LIB) -lraylib 
+endif
+
+
 
 $(TARGET): $(OBJS)
-ifeq ($(OS),Windows_NT)
 	mkdir -p $(dir $@)
-	g++ $(OBJS) -o $@ -L$(LIB) -lraylib -lopengl32 -lgdi32 -lwinmm -lcomdlg32 -lole32
-else
-	mkdir -p $(dir $@)
-	g++ $(OBJS) -o $@ -lGL -lGLU -lglut -L$(LIB) -lraylib
-endif
+	g++ $(OBJS) -o $@ $(LIBS)
 
 # Rule to compile the precompiled header
 $(PCH): include/pch.h
 	mkdir -p $(BUILD)
-	g++ $(FLAGS) -x c++-header $< -o $@
+	g++ $(RELEASE_FLAGS) -x c++-header $< -o $@
 
 $(BUILD)/%.o: $(SRC)/%.cpp $(PCH)
 	mkdir -p $(dir $@)
 	g++ $(FLAGS) -c $< -o $@ 
 
-.PHONY: all clean
+.PHONY: all clean debug release
+
+all: release
+
+release: FLAGS := $(RELEASE_FLAGS)
+release: $(TARGET)
+
+debug: FLAGS := $(DEBUG_FLAGS)
+debug: $(TARGET)
+
 clean:
 	rm -rf $(BUILD)
+	rm -f $(TARGET)

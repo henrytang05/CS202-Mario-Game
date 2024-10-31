@@ -3,6 +3,8 @@
 
 #include "Scene.h"
 
+namespace SceneSpace {
+
 class IntroScene : public Scene {
 public:
   IntroScene();
@@ -11,4 +13,5 @@ public:
 
 private:
 };
+} // namespace SceneSpace
 #endif // INTROSCENE_H

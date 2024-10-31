@@ -5,13 +5,12 @@ class System {
   friend class SystemManager;
 
 public:
-  virtual ~System() = 0;
+  virtual ~System() = default;
 
   const std::set<Entity> GetEntities() const { return mEntities; }
 
 private:
   std::set<Entity> mEntities;
 };
-inline System::~System() {}
 
 #endif // SYSTEM_H

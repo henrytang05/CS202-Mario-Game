@@ -2,13 +2,10 @@
 #define PCH_H
 
 // STL
-#include <algorithm>
-#include <assert.h>
+
 #include <bitset>
-#include <cassert>
 #include <chrono>
 #include <fstream>
-#include <functional>
 #include <iostream>
 #include <istream>
 #include <limits>
@@ -19,7 +16,6 @@
 #include <set>
 #include <sstream>
 #include <stack>
-#include <stdint.h>
 #include <string>
 #include <unordered_map>
 #include <unordered_set>

@@ -1,9 +1,10 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include "pch.h"
+
 #include "Scenes/Scene.h"
 #include "globals.h"
-#include "pch.h"
 #include <unordered_map>
 using namespace SceneSpace;
 

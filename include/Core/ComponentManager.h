@@ -1,7 +1,8 @@
 #ifndef COMPONENT_MANAGER_H
 #define COMPONENT_MANAGER_H
-#include "ComponentArray.h"
 #include "pch.h"
+
+#include "ComponentArray.h"
 
 class ComponentManager {
 public:

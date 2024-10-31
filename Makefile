@@ -15,8 +15,8 @@ PCH_H := $(INCLUDE)/pch.h
 PCH_GCH := $(BUILD)/pch.h.gch  # Change the output path to BUILD
 
 # Compiler flags for debug and release
-DEBUG_FLAGS := -std=c++17 -I$(INCLUDE) -g -O0 -Wall -D_DEBUG -include $(PCH_H)
-RELEASE_FLAGS := -std=c++17 -I$(INCLUDE) -O3 -Wall -include $(PCH_H)
+DEBUG_FLAGS := -std=c++17 -I$(INCLUDE) -g -O0 -D_DEBUG -include $(PCH_H) -H
+RELEASE_FLAGS := -std=c++17 -I$(INCLUDE) -O3 -Wall -include $(PCH_H) -H
 PCH_FLAGS := -std=c++17 -O3 -x c++-header
 FLAGS := $(DEBUG_FLAGS)
 

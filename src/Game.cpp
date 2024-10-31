@@ -1,10 +1,10 @@
-#include "Game.h"
+#include "pch.h"
 
+#include "Game.h"
 #include "Logger.h"
 #include "Scenes/GameScene.h"
 #include "Scenes/IntroScene.h"
 #include "Scenes/Scene.h"
-#include "pch.h"
 
 Game::Game() { Init(); }
 Game::~Game() {

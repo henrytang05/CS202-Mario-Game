@@ -1,7 +1,9 @@
 #ifndef COMPONENT_ARRAY_H
 #define COMPONENT_ARRAY_H
-#include "EntityComponent.h"
+
 #include "pch.h"
+
+#include "EntityComponent.h"
 class IComponentArray {
 public:
   virtual ~IComponentArray() = default;

@@ -1,9 +1,10 @@
 #ifndef COORDINATOR_H
 #define COORDINATOR_H
+#include "pch.h"
+
 #include "ComponentManager.h"
 #include "EntityManager.h"
 #include "SystemManager.h"
-#include "pch.h"
 
 class Coordinator {
 public:

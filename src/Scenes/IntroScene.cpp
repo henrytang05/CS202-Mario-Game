@@ -1,6 +1,7 @@
-#include "Scenes/IntroScene.h"
+#include "pch.h"
+
 #include "Logger.h"
-#include "raylib.h"
+#include "Scenes/IntroScene.h"
 
 namespace SceneSpace {
 IntroScene::IntroScene() : Scene() {}

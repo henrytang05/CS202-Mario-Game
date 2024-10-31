@@ -9,7 +9,9 @@
 Game::Game() { Init(); }
 Game::~Game() {
   Clean();
+#ifdef DEBUG
   Log("log.txt", LogLevel::INFO, "Game destroyed");
+#endif
 }
 
 void Game::Init() {

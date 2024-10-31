@@ -5,7 +5,9 @@
 namespace SceneSpace {
 IntroScene::IntroScene() : Scene() {}
 IntroScene::~IntroScene() {
+#ifdef DEBUG
   Log("log.txt", LogLevel::INFO, "IntroScene destroyed");
+#endif
 }
 
 void IntroScene::Update() {

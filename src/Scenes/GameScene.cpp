@@ -5,7 +5,9 @@ namespace SceneSpace {
 
 GameScene::GameScene() : Scene() {}
 GameScene::~GameScene() {
+#ifdef DEBUG
   Log("log.txt", LogLevel::INFO, "GameScene destroyed");
+#endif
 }
 
 void GameScene::Update() {

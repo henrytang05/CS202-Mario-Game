@@ -4,4 +4,4 @@ lib
 build
 *.exe
 
-log.txt
+*.txt

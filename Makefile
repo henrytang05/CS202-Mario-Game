@@ -9,11 +9,14 @@ SRCS := $(shell find $(SRC) -type f -name '*.cpp')
 OBJS := $(subst $(SRC)/,$(BUILD)/,$(addsuffix .o,$(basename $(SRCS))))
 
 # Precompiled header
-PCH := $(BUILD)/pch.h.gch
+PCH_H := $(INCLUDE)/pch.h 
+PCH_GCH := $(BUILD)/pch.h.gch  # Change the output path to BUILD
 
 # Compiler flags for debug and release
-DEBUG_FLAGS := -std=c++17 -I$(INCLUDE) -g -O0 -Wall -DDebug 
-RELEASE_FLAGS := -std=c++17 -I$(INCLUDE) -O3 
+DEBUG_FLAGS := -std=c++17 -I$(INCLUDE) -g -O0 -Wall -DDebug -include $(PCH_H) 
+RELEASE_FLAGS := -std=c++17 -I$(INCLUDE) -O3 -Wall -include $(PCH_H)
+PCH_FLAGS := -std=c++17 -O3 -x c++-header
+FLAGS := $(DEBUG_FLAGS)
 
 # Libraries for Windows and Linux
 ifeq ($(OS),Windows_NT)
@@ -22,18 +25,16 @@ else
     LIBS := -L$(LIB) -lraylib 
 endif
 
-
-
-$(TARGET): $(OBJS)
+$(TARGET): $(OBJS) $(PCH_GCH)
 	mkdir -p $(dir $@)
 	g++ $(OBJS) -o $@ $(LIBS)
 
 # Rule to compile the precompiled header
-$(PCH): include/pch.h
+$(PCH_GCH): $(PCH_H)
 	mkdir -p $(BUILD)
-	g++ $(RELEASE_FLAGS) -x c++-header $< -o $@
+	g++ $(PCH_FLAGS) $(PCH_H) -o $@
 
-$(BUILD)/%.o: $(SRC)/%.cpp $(PCH)
+$(BUILD)/%.o: $(SRC)/%.cpp $(PCH_GCH)
 	mkdir -p $(dir $@)
 	g++ $(FLAGS) -c $< -o $@ 
 

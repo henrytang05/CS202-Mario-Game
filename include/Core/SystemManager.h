@@ -2,8 +2,10 @@
 #define SYSTEM_MANAGER_H
 #include "EntityComponent.h"
 #include "System.h"
+#include "Core/World.h"
 
 class SystemManager {
+  friend class World;
 public:
   TEMPLATE std::shared_ptr<T> RegisterSystem();
   TEMPLATE void SetSignature(Signature signature);
@@ -42,7 +44,7 @@ inline void SystemManager::EntityDestroyed(Entity entity) {
   // Erase a destroyed entity from all system lists
   // mEntities is a set so no check needed
   for (auto const &pair : mSystems) {
-    auto const &system = pair.second;
+    Shared<System> system = pair.second;
 
     system->mEntities.erase(entity);
   }
@@ -53,7 +55,7 @@ inline void SystemManager::EntitySignatureChanged(Entity entity,
   // Notify each system that an entity's signature changed
   for (auto const &pair : mSystems) {
     auto const &type = pair.first;
-    auto const &system = pair.second;
+    Shared<System> system = pair.second;
     auto const &systemSignature = mSignatures[type];
 
     // Entity signature matches system signature - insert into set

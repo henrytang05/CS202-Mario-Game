@@ -31,7 +31,7 @@ private:
   Coordinator(const Coordinator &) = delete;
   Coordinator &operator=(const Coordinator &) = delete;
 
-private:
+protected:
   Unique<ComponentManager> mComponentManager;
   Unique<EntityManager> mEntityManager;
   Unique<SystemManager> mSystemManager;

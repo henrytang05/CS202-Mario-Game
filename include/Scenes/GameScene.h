@@ -14,6 +14,8 @@ private:
   int frameIndex;
   int frameDelay;
   int frameDelayCounter;
+  int gravity;
+  float ground;
   Vector2 velocity, position;
   bool gameOver;
   std::vector<Shared<TextureSmallCharacter>> characters;

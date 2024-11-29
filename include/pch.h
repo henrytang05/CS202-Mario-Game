@@ -2,7 +2,7 @@
 #define PCH_H
 
 // STL
-#include<bits/stdc++.h>
+#include <cstring>
 #include <bitset>
 #include <chrono>
 #include <fstream>

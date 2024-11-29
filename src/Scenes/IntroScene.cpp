@@ -1,12 +1,14 @@
 #include "pch.h"
-
 #include "Logger.h"
 #include "Scenes/Scene.h"
 #include "Scenes/IntroScene.h"
 #include "Scenes/GameScene.h"
 #include "InputHandler.h"
 namespace SceneSpace {
-IntroScene::IntroScene() : Scene() {}
+IntroScene::IntroScene() : Scene() {
+  changeScreen = false;
+  background = LoadTexture("../CS202-Mario-Game/assets/MenuBackground.png");
+}
 IntroScene::~IntroScene() {
 #ifdef _DEBUG
   Log("log.txt", LogLevel::INFO, "IntroScene destroyed");
@@ -19,8 +21,7 @@ Shared<Scene> IntroScene::update() {
   return nullptr;
 }
 void IntroScene::draw() {
-  DrawText("Congrats! You created your first window!", 190, 200, 20, LIGHTGRAY);
-  DrawText("This is IntroScene", 190, 180, 20, LIGHTGRAY);
+  DrawTexture(background,0,0,WHITE);
 }
 void IntroScene::pressEnter() {
   changeScreen = true;

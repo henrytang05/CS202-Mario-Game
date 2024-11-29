@@ -1,15 +1,22 @@
 #ifndef GAMESCENE_H
 #define GAMESCENE_H
-#include "Scene.h"
 #include "Texture.h"
 namespace SceneSpace {
+class Scene;
 class GameScene : public Scene {
 public:
   GameScene();
   ~GameScene();
-  void Update() override;
+  Shared<Scene> update() override;
+  void draw() override;
+  void acceptInputHandler(InputHandler inputHandler) override;
+  void loadResources() override;
+  void start() override;
   bool isFinished();
-
+  void pressUp() override;
+  void pressNothing() override;
+  void pressLeft() override;
+  void pressRight() override;
 private:
   int frameIndex;
   int frameDelay;

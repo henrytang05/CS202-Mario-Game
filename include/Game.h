@@ -2,26 +2,22 @@
 #define GAME_H
 
 #include "pch.h"
-
-#include "Scenes/Scene.h"
 #include "globals.h"
 #include <unordered_map>
+#include "InputHandler.h"
 using namespace SceneSpace;
-
+class Scene;
 class Game {
 public:
   Game();
   ~Game();
-  void Init();
-  void Update();
-  void Draw();
-  void Clean();
-  void Run();
+  void init();
+  void clean();
+  void run();
 
 private:
-  SceneType m_currentSceneType;
-  Weak<Scene> m_currentScene;
-  std::unordered_map<SceneType, std::shared_ptr<Scene>> m_scenes;
+  Shared<SceneSpace::Scene> currentScene;
+  InputHandler inputHandler;
 };
 
 #endif // GAME_H

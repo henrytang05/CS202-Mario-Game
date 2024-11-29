@@ -1,9 +1,22 @@
+#include "Scenes/Scene.h"
 #include "Scenes/GameScene.h"
+#include "Scenes/IntroScene.h"
+#include "InputHandler.h"
 #include "Logger.h"
 #include "globals.h"
 namespace SceneSpace {
 
 GameScene::GameScene() : Scene() {
+}
+GameScene::~GameScene() {
+#ifdef _DEBUG
+  Log("log.txt", LogLevel::INFO, "GameScene destroyed");
+#endif
+}
+void GameScene::loadResources() {
+  characters = {make_shared<TextureSmallCharacter>("./assets/Luigi-Small")};
+}
+void GameScene::start() {
   gameOver = false; 
   velocity = {0, 0};
   ground = 3 * screenHeight / 4;
@@ -11,42 +24,43 @@ GameScene::GameScene() : Scene() {
   frameIndex = frameDelayCounter = 0;
   frameDelay = 10;
   gravity = 1;
-  characters = {make_shared<TextureSmallCharacter>("./assets/Luigi-Small")};
 }
-GameScene::~GameScene() {
-#ifdef _DEBUG
-  Log("log.txt", LogLevel::INFO, "GameScene destroyed");
-#endif
+void GameScene::acceptInputHandler(InputHandler inputHandler) {
+  inputHandler.inputHandleForGameScene(*this);
 }
-
-void GameScene::Update() {
-  bool isDuckling = 0;
+void GameScene::draw() {
+  characters[0]->drawTexture(position);
+}
+void GameScene::pressUp() {
   if(position.y >= ground) {
-    if( IsKeyDown(KEY_UP)) {
-      velocity.y = -15;
-    }
-    else if(IsKeyDown(KEY_RIGHT)) {
-      velocity.x = 2;
-      if(characters[0]->getIsFlip()) {
-        characters[0]->updateFlip();
-        characters[0]->updateFrame(frameIndex);
-      }
-    }
-    else if(IsKeyDown(KEY_LEFT)) {
-      velocity.x = -2;
-      if(!characters[0]->getIsFlip()) {
-        characters[0]->updateFlip();
-        characters[0]->updateFrame(frameIndex);
-      }
-    }
-    else {
-      velocity.x = 0;
-      frameIndex = 0;
-      if(IsKeyDown(KEY_DOWN)) {
-        isDuckling = true;
-      }
+    velocity.y = -15;
+  }
+}
+void GameScene::pressLeft() {
+  if(position.y >= ground) {
+    velocity.x = -2;
+    if(!characters[0]->getIsFlip()) {
+      characters[0]->updateFlip();
+      characters[0]->updateFrame(frameIndex);
     }
   }
+}
+void GameScene::pressRight() {
+  if(position.y >= ground) {
+    velocity.x = 2;
+    if(characters[0]->getIsFlip()) {
+      characters[0]->updateFlip();
+      characters[0]->updateFrame(frameIndex);
+    }
+  }
+}
+void GameScene::pressNothing() {
+  if(position.y >= ground) {
+    velocity.x = 0;
+    frameIndex = 0;
+  }
+}
+Shared<Scene> GameScene::update() {
   position.x += velocity.x;
   position.y += velocity.y;
   bool isOnTheGround = (position.y >= ground);
@@ -75,12 +89,9 @@ void GameScene::Update() {
         }
       }
     }
-    else if(isDuckling) {
-      frameIndex = 8;
-    }
     characters[0]->updateFrame(frameIndex);
   }
-  characters[0]->drawTexture(position);
+  return nullptr;
 }
 
 bool GameScene::isFinished() { return gameOver; }

@@ -1,17 +1,20 @@
 #ifndef INTROSCENE_H
 #define INTROSCENE_H
-
-#include "Scene.h"
-
 namespace SceneSpace {
+class Scene;
 
 class IntroScene : public Scene {
 public:
   IntroScene();
   ~IntroScene();
-  void Update() override;
-
+  Shared<Scene> update() override;
+  void draw() override;
+  void acceptInputHandler(InputHandler inputHandler) override;
+  void loadResources() override;
+  void start() override;
+  void pressEnter() override;
 private:
+  bool changeScreen;
 };
 } // namespace SceneSpace
 #endif // INTROSCENE_H

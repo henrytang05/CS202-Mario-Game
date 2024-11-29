@@ -2,47 +2,40 @@
 
 #include "Game.h"
 #include "Logger.h"
+#include "Scenes/Scene.h"
 #include "Scenes/GameScene.h"
 #include "Scenes/IntroScene.h"
-#include "Scenes/Scene.h"
 
-Game::Game() { Init(); }
+Game::Game() { init(); }
 Game::~Game() {
-  Clean();
+  clean();
 #ifdef _DEBUG
   Log("log.txt", LogLevel::INFO, "Game destroyed");
 #endif
 }
 
-void Game::Init() {
-  InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
-
+void Game::init() {
+  InitWindow(screenWidth, screenHeight, "Super Mario");
   SetTargetFPS(60);
-  m_scenes.insert({SceneType::INTRO, std::make_shared<IntroScene>()});
-  m_scenes.insert({SceneType::GAME, std::make_shared<GameScene>()});
-  m_currentSceneType = SceneType::INTRO;
-  m_currentScene = m_scenes[m_currentSceneType];
+  currentScene = std::make_shared<SceneSpace::IntroScene>();
+  currentScene->loadResources();
+  currentScene->start();
 }
 
-void Game::Run() {
+void Game::run() {
   while (!WindowShouldClose()) {
+    currentScene->acceptInputHandler(inputHandler);
+    Shared<SceneSpace::Scene> nextScene = currentScene->update();
+    if(nextScene) {
+      currentScene = nextScene;
+      currentScene->loadResources();
+      currentScene->start();
+    }
+    // Draw
     BeginDrawing();
+    currentScene->draw();
     ClearBackground(RAYWHITE);
-    Update();
     EndDrawing();
   }
 }
-
-void Game::Update() {
-  if (IsKeyPressed(KEY_ENTER)) {
-    if (m_currentSceneType == SceneType::INTRO) {
-      m_currentSceneType = SceneType::GAME;
-    } else {
-      m_currentSceneType = SceneType::INTRO;
-    }
-    m_currentScene = m_scenes[m_currentSceneType];
-  }
-
-  m_currentScene.lock()->Update();
-}
-void Game::Clean() { CloseWindow(); }
+void Game::clean() { CloseWindow(); }

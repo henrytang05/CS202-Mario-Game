@@ -15,6 +15,7 @@ public:
   void pressEnter() override;
 private:
   bool changeScreen;
+  Texture background;
 };
 } // namespace SceneSpace
 #endif // INTROSCENE_H

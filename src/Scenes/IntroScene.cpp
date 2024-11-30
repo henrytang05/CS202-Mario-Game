@@ -7,7 +7,7 @@
 namespace SceneSpace {
 IntroScene::IntroScene() : Scene() {
   changeScreen = false;
-  background = LoadTexture("../CS202-Mario-Game/assets/MenuBackground.png");
+  background = LoadTexture("./assets/MenuBackground.png");
 }
 IntroScene::~IntroScene() {
 #ifdef _DEBUG

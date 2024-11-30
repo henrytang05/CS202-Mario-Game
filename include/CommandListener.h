@@ -5,12 +5,12 @@ public:
     CommandListener();
     virtual ~CommandListener();
 
-    virtual void pressUp();
-    virtual void pressDown();
-    virtual void pressLeft();
-    virtual void pressRight();
-    virtual void pressEnter();
-    virtual void pressNothing();
+    virtual void pressUp() {};
+    virtual void pressDown() {};
+    virtual void pressLeft() {};
+    virtual void pressRight() {};
+    virtual void pressEnter() {};
+    virtual void pressNothing() {};
 };
 
 #endif // COMMANDLISTENER_H

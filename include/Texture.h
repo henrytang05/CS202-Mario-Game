@@ -1,7 +1,7 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
 #include "pch.h"
-class TextureSmallCharacter {
+class TextureCharacter {
 private:    
     int numFrame;
     int frameWidth;
@@ -9,8 +9,9 @@ private:
     Rectangle frameRec;
     Texture2D flipTexture, texture;
 public:
-    TextureSmallCharacter(){};
-    TextureSmallCharacter(const char *filename);
+    TextureCharacter() = default;
+    virtual ~TextureCharacter() = default;
+    TextureCharacter(std::string filename, int _numFrame);
     void drawTexture(Vector2 position);
     void updateFrame(int frameIndex);
     void updateFlip();

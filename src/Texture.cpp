@@ -2,33 +2,32 @@
 #include "Logger.h"
 #include "globals.h"
 
-TextureSmallCharacter::TextureSmallCharacter(const char *filename) {
-    char tmp1[20];
-    strcpy(tmp1, filename);
-    strcat(tmp1, ".png");
-    texture = LoadTexture(tmp1);
-    numFrame = 11;
+TextureCharacter::TextureCharacter(std::string filename, int _numFrame) {
+    numFrame = _numFrame;
+    texture = LoadTexture((filename + ".png").c_str());
+    flipTexture = LoadTexture((filename + "-Flip.png").c_str());
     isFlip = 0;
     frameWidth = texture.width/numFrame;
     frameRec = {(float)frameWidth, 0.0f, (float)frameWidth, (float)texture.height};
-    char tmp2[20];
-    strcpy(tmp2, filename);
-    strcat(tmp2, "-Flip.png");
-    flipTexture = LoadTexture(tmp2);
 }
-bool TextureSmallCharacter::getIsFlip() {
+bool TextureCharacter::getIsFlip() {
     return isFlip;
 }
-void TextureSmallCharacter::updateFlip() {
+void TextureCharacter::updateFlip() {
     isFlip ^= 1;
 }
-void TextureSmallCharacter::drawTexture(Vector2 position) {
+void TextureCharacter::drawTexture(Vector2 position) {
+    Rectangle dest = {position.x, position.y, (float)frameWidth * 4.0f, (float)texture.height * 4.0f};
     if(isFlip) {
+        //DrawTexturePro(flipTexture, frameRec, dest, {0.0f, 0.0f}, 0.0f, WHITE); // Mario x4 size
         DrawTextureRec(flipTexture, frameRec, position, WHITE);
     }
-    else DrawTextureRec(texture, frameRec, position, WHITE);
+    else { 
+        //DrawTexturePro(texture, frameRec, dest, {0.0f, 0.0f}, 0.0f, WHITE); // Mario x4 size
+        DrawTextureRec(texture, frameRec, position, WHITE);
+    }
 }
-void TextureSmallCharacter::updateFrame(int frameIndex) {
+void TextureCharacter::updateFrame(int frameIndex) {
     if(isFlip) {
         frameRec.x = float(frameWidth * (numFrame - frameIndex - 1));
     }

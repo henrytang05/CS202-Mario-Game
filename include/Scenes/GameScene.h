@@ -1,6 +1,6 @@
 #ifndef GAMESCENE_H
 #define GAMESCENE_H
-#include "Texture.h"
+#include "Character.h"
 namespace SceneSpace {
 class Scene;
 class GameScene : public Scene {
@@ -13,21 +13,8 @@ public:
   void start() override;
   bool isFinished();
 private:
-  enum State {
-    STATE_STANDING, 
-    STATE_MOVING,
-    STATE_JUMPING,
-    STATE_DROPPING
-  };
-  State characterState;
-  int frameIndex;
-  int frameDelay;
-  int frameDelayCounter;
-  float gravity;
-  float ground;
-  Vector2 velocity, position;
+  std::vector<Shared<Character>> characters;
   bool gameOver;
-  std::vector<Shared<TextureSmallCharacter>> characters;
 };
 } // namespace SceneSpace
 

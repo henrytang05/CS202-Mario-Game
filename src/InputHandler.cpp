@@ -6,8 +6,3 @@ void InputHandler::inputHandleForGameScene(SceneSpace::GameScene &listener) {
     else if(IsKeyDown(KEY_UP)) listener.pressUp();
     else listener.pressNothing();
 }
-
-void InputHandler::inputHandleForIntroScene(SceneSpace::IntroScene &listener) {
-    if(IsKeyDown(KEY_ENTER))
-        listener.pressEnter();
-}

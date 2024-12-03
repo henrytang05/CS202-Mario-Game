@@ -4,7 +4,7 @@ class CommandListener {
 public:
     CommandListener();
     virtual ~CommandListener();
-
+    
     virtual void pressUp();
     virtual void pressDown();
     virtual void pressLeft();

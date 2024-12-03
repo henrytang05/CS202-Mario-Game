@@ -1,5 +1,6 @@
 #ifndef INTROSCENE_H
 #define INTROSCENE_H
+#include "GUI.h"
 namespace SceneSpace {
 class Scene;
 
@@ -12,10 +13,13 @@ public:
   void acceptInputHandler(InputHandler inputHandler) override;
   void loadResources() override;
   void start() override;
-  void pressEnter() override;
 private:
-  bool changeScreen;
+  bool changeGameScreen, changeLoadScreen, changeRankingScreen, changeSettingsScreen;
   Texture background;
+  GUI::ImageButton* NewGameButton;
+  GUI::ImageButton* LoadGameButton;
+  GUI::ImageButton* RankingButton;
+  GUI::ImageButton* SettingsButton;
 };
 } // namespace SceneSpace
 #endif // INTROSCENE_H

@@ -24,7 +24,6 @@ void Game::init() {
 
 void Game::run() {
   while (!WindowShouldClose()) {
-    currentScene->acceptInputHandler(inputHandler);
     Shared<SceneSpace::Scene> nextScene = currentScene->update();
     if(nextScene) {
       currentScene = nextScene;

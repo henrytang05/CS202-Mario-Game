@@ -2,7 +2,6 @@
 #include "Scenes/Scene.h"
 #include "Scenes/IntroScene.h"
 #include "Scenes/GameScene.h"
-#include "InputHandler.h"
 namespace SceneSpace {
 IntroScene::IntroScene() : Scene() {
   changeGameScreen = false;
@@ -43,10 +42,6 @@ void IntroScene::draw() {
   LoadGameButton->draw();
   RankingButton->draw();
   SettingsButton->draw();
-}
-
-void IntroScene::acceptInputHandler(InputHandler inputHandler) {
-  inputHandler.inputHandleForIntroScene(*this);
 }
 void IntroScene::loadResources() {
   background = LoadTexture("./assets/MenuBackground.png");

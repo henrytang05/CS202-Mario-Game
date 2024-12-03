@@ -9,19 +9,21 @@ public:
   ~GameScene();
   Shared<Scene> update() override;
   void draw() override;
-  void acceptInputHandler(InputHandler inputHandler) override;
   void loadResources() override;
   void start() override;
   bool isFinished();
-  void pressUp() override;
-  void pressNothing() override;
-  void pressLeft() override;
-  void pressRight() override;
 private:
+  enum State {
+    STATE_STANDING, 
+    STATE_MOVING,
+    STATE_JUMPING,
+    STATE_DROPPING
+  };
+  State characterState;
   int frameIndex;
   int frameDelay;
   int frameDelayCounter;
-  int gravity;
+  float gravity;
   float ground;
   Vector2 velocity, position;
   bool gameOver;

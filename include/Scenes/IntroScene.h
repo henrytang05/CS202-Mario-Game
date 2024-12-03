@@ -10,7 +10,6 @@ public:
   ~IntroScene();
   Shared<Scene> update() override;
   void draw() override;
-  void acceptInputHandler(InputHandler inputHandler) override;
   void loadResources() override;
   void start() override;
 private:

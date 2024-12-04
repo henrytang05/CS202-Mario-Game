@@ -16,7 +16,7 @@ Game::~Game() {
 
 void Game::init() {
   InitWindow(screenWidth, screenHeight, "Super Mario");
-  SetTargetFPS(30);
+  SetTargetFPS(60);
   currentScene = std::make_shared<SceneSpace::IntroScene>();
   currentScene->loadResources();
   currentScene->start();

@@ -16,7 +16,7 @@ void GameScene::loadResources() {
 }
 void GameScene::start() {
   gameOver = false;
-  characters = {make_shared<Character>("./assets/Mario-Small", 11)};
+  characters = {make_shared<Character>("./assets/Luigi-Small", 11)};
 }
 void GameScene::draw() {
   for(Shared<Character> ch : characters) {

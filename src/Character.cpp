@@ -9,7 +9,6 @@ Character::Character(std::string filename, int _numFrame) : TextureCharacter(fil
   delayFrameCounter = 0;
 }
 void Character::update() {
-    float dt = GetFrameTime();
     switch(characterState) {
         case STATE_STANDING:
         // Stopping acceleration
@@ -91,9 +90,6 @@ void Character::update() {
             frameIndex += 1;
             frameIndex %= 2;
         }
-        if(characterState == STATE_JUMPING) {
-            frameIndex = 4;
-        }
         if(characterState == STATE_DROPPING) {
             frameIndex = 5;
         }
@@ -101,6 +97,9 @@ void Character::update() {
     if(characterState == STATE_STANDING) {
         delayFrameCounter = 0;
         frameIndex = 0;
+    }
+    if(characterState == STATE_JUMPING) {
+        frameIndex = 4;
     }
     this->updateFrame(frameIndex);
 }

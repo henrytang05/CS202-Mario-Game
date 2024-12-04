@@ -7,7 +7,7 @@ class CharacterState;
 class Character : public TextureCharacter {
 public:
     Character() = default;
-    Character(std::string filename, int _numFrame);
+    Character(std::string filename, int _numFrame, Vector2 _size);
     virtual ~Character();
     virtual void update();
     virtual void setVelocity(Vector2 newVelocity);
@@ -18,5 +18,6 @@ private:
   CharacterState *stateCharacter;
   float ground;
   Vector2 velocity, position;
+  Vector2 size;
 };
 #endif // CHARACTER_H

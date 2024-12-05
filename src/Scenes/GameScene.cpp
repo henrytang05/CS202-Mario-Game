@@ -35,6 +35,10 @@ void GameScene::draw() {
 Shared<Scene> GameScene::update() {
   player->update();
   camera.target.x = player->getPosition().x;
+  if(camera.target.x <= screenWidth/(2.0f * camera.zoom))
+    camera.target.x = screenWidth/(2.0f * camera.zoom);
+  if(camera.target.x >= screenWidth - screenWidth/(2.0f * camera.zoom))
+    camera.target.x = screenWidth - screenWidth/(2.0f * camera.zoom);
   return nullptr;
 }
 

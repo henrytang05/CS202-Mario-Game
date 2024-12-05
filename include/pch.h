@@ -2,9 +2,11 @@
 #define PCH_H
 
 // STL
-#include <cstring>
+#include <array>
 #include <bitset>
+#include <cassert>
 #include <chrono>
+#include <cstring>
 #include <fstream>
 #include <iostream>
 #include <istream>
@@ -22,7 +24,6 @@
 #include <vector>
 
 #include "raylib.h"
-#include "globals.h"
 
 template <typename T> using Shared = std::shared_ptr<T>;
 template <typename T> using Unique = std::unique_ptr<T>;

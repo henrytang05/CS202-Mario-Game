@@ -1,6 +1,6 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
-#include "pch.h"
+
 class TextureCharacter {
 private:    
     int numFrame;

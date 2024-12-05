@@ -1,8 +1,11 @@
 #ifndef GAMESCENE_H
 #define GAMESCENE_H
 #include "Character.h"
+#include "Entity/Entity.h"
+#include "Entity/EntityFactory.h"
+#include "Scene.h"
+
 namespace SceneSpace {
-class Scene;
 class GameScene : public Scene {
 public:
   GameScene();
@@ -12,8 +15,12 @@ public:
   void loadResources() override;
   void start() override;
   bool isFinished();
+  void init();
+
 private:
-  std::vector<Shared<Character>> characters;
+  // std::vector<Shared<Character>> characters;
+  std::vector<Shared<Entity>> entities;
+  Unique<IFactory> entityFactory;
   bool gameOver;
 };
 } // namespace SceneSpace

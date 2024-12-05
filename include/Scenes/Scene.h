@@ -1,6 +1,6 @@
 #ifndef SCENE_H
 #define SCENE_H
-#include "pch.h"
+
 namespace SceneSpace {
 
 enum SceneType : uint8_t { INTRO = 0, GAME };

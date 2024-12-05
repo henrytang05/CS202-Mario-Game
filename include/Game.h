@@ -1,7 +1,7 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include "pch.h"
+
 #include "globals.h"
 #include <unordered_map>
 #include "Scenes/Scene.h"

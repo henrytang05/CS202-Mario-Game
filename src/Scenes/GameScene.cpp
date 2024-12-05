@@ -22,7 +22,8 @@ void GameScene::start() {
   player = make_shared<Character>("./assets/Luigi-Small", 11, Vector2{0.0f, 0.0f}, Vector2{16, 23});
   camera.offset = {screenWidth/2.0f, screenHeight/2.0f};
   camera.rotation = 0.0f;
-  camera.target = player->getPosition();
+  camera.target.x = player->getPosition().x;
+  camera.target.y = 784.0f-186.0f;
   camera.zoom = 2.0f;
 }
 void GameScene::draw() {
@@ -33,7 +34,7 @@ void GameScene::draw() {
 }
 Shared<Scene> GameScene::update() {
   player->update();
-  camera.target = player->getPosition();
+  camera.target.x = player->getPosition().x;
   return nullptr;
 }
 

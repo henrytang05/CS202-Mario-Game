@@ -5,7 +5,7 @@
 #include "Scenes/Scene.h"
 #include "Scenes/GameScene.h"
 #include "Scenes/IntroScene.h"
-
+#include "Map.h"
 Game::Game() { init(); }
 Game::~Game() {
   clean();

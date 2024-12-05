@@ -21,6 +21,8 @@
 #include <unordered_set>
 #include <vector>
 
+#include "json.h"
+#include "json_fwd.h"
 #include "raylib.h"
 #include "globals.h"
 

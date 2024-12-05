@@ -5,28 +5,35 @@
 #include "globals.h"
 namespace SceneSpace {
 
-GameScene::GameScene() : Scene() {
+GameScene::GameScene() 
+    : Scene() {
 }
 GameScene::~GameScene() {
 #ifdef _DEBUG
   Log("log.txt", LogLevel::INFO, "GameScene destroyed");
 #endif
 }
-void GameScene::loadResources() {
+void GameScene::loadResources() { 
+      tileFactory = TileFactory("Map/OverWorld.json", "Map/OverWorld.png"); 
+      mapRenderer = MapRenderer("Map/Level1.json", tileFactory);
 }
 void GameScene::start() {
   gameOver = false;
-  characters = {make_shared<Character>("./assets/Luigi-Small", 11, Vector2{0.0f, 0.0f}, Vector2{16, 23})};
+  player = make_shared<Character>("./assets/Luigi-Small", 11, Vector2{0.0f, 0.0f}, Vector2{16, 23});
+  camera.offset = {screenWidth/2.0f, screenHeight/2.0f};
+  camera.rotation = 0.0f;
+  camera.target = player->getPosition();
+  camera.zoom = 2.0f;
 }
 void GameScene::draw() {
-  for(Shared<Character> ch : characters) {
-    ch->draw();
-  }
+  BeginMode2D(camera);
+  mapRenderer.Render();
+  player->draw();
+  EndMode2D();
 }
 Shared<Scene> GameScene::update() {
-  for(Shared<Character> ch : characters) {
-    ch->update();
-  }
+  player->update();
+  camera.target = player->getPosition();
   return nullptr;
 }
 

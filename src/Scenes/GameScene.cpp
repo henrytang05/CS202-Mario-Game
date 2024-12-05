@@ -19,18 +19,21 @@ void GameScene::loadResources() {
 }
 void GameScene::start() {
   gameOver = false;
-  characters = {make_shared<Character>("./assets/Luigi-Small", 11, Vector2{0.0f, 0.0f}, Vector2{16, 23})};
+  player = make_shared<Character>("./assets/Luigi-Small", 11, Vector2{0.0f, 0.0f}, Vector2{16, 23});
+  camera.offset = {screenWidth/2.0f, screenHeight/2.0f};
+  camera.rotation = 0.0f;
+  camera.target = player->getPosition();
+  camera.zoom = 2.0f;
 }
 void GameScene::draw() {
+  BeginMode2D(camera);
   mapRenderer.Render();
-  for(Shared<Character> ch : characters) {
-    ch->draw();
-  }
+  player->draw();
+  EndMode2D();
 }
 Shared<Scene> GameScene::update() {
-  for(Shared<Character> ch : characters) {
-    ch->update();
-  }
+  player->update();
+  camera.target = player->getPosition();
   return nullptr;
 }
 

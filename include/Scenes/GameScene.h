@@ -14,9 +14,10 @@ public:
   void start() override;
   bool isFinished();
 private:
-  std::vector<Shared<Character>> characters;
+  Shared<Character> player;
   TileFactory tileFactory;
   MapRenderer mapRenderer;
+  Camera2D camera = {0};
   bool gameOver;
 };
 } // namespace SceneSpace

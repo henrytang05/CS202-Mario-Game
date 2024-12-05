@@ -120,4 +120,4 @@ void MovingState::update(Character &character) {
         frameIndex = (frameIndex + 1) % 2;
         character.updateFrame(frameIndex);
     }
-}
+} 

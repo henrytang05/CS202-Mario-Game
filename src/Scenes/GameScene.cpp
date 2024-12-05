@@ -16,7 +16,7 @@ void GameScene::loadResources() {
 }
 void GameScene::start() {
   gameOver = false;
-  characters = {make_shared<Character>("./assets/Luigi-Small", 11, Vector2{16, 23})};
+  characters = {make_shared<Character>("./assets/Luigi-Small", 11, Vector2{0.0f, 0.0f}, Vector2{16, 23})};
 }
 void GameScene::draw() {
   for(Shared<Character> ch : characters) {

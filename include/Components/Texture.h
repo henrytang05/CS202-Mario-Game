@@ -5,14 +5,13 @@
 
 class TextureComponent : public Component {
 public:
-  TextureComponent() = default;
-  TextureComponent(std::string filename, int _numFrame);
+  TextureComponent(std::string filename, int _numFrame, Entity *e);
   virtual ~TextureComponent() = default;
   void update() override;
   void drawTexture(Vector2 position);
   void updateFrame(int frameIndex);
   void updateFlip();
-  void init();
+  void init() override;
 
   bool getIsFlip();
 

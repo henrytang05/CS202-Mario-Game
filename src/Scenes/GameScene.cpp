@@ -13,12 +13,12 @@ GameScene::GameScene() : Scene() { init(); }
 void GameScene::init() {
     entityFactory = std::make_unique<EntityFactory>();
     Shared<Entity> mario = entityFactory->createMario();
-    Shared<Entity> luigi = entityFactory->createLuigi();
-    Shared<Entity> goomba = entityFactory->createGoomba();
+    // Shared<Entity> luigi = entityFactory->createLuigi();
+    // Shared<Entity> goomba = entityFactory->createGoomba();
 
     entities.push_back(mario);
-    entities.push_back(luigi);
-    entities.push_back(goomba);
+    // entities.push_back(luigi);
+    // entities.push_back(goomba);
 }
 
 GameScene::~GameScene() {

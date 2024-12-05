@@ -2,14 +2,20 @@
 #include "Components/Position.h"
 #include "Entity/Entity.h"
 
-BoundingBoxComponent::BoundingBoxComponent() : Component() { init(); }
+BoundingBoxComponent::BoundingBoxComponent(Entity *e) : Component(e) {
+  init();
+#ifdef _DEBUG
+  Log("log.txt", LogLevel::INFO, name + " created");
+#endif
+}
 
 void BoundingBoxComponent::init() {
-  // ASSERT(entity->hasComponent<PositionComponent>());
+  ASSERT(entity->hasComponent<PositionComponent>());
 
   position = std::make_shared<PositionComponent>(
       entity->getComponent<PositionComponent>());
   size = {0, 0};
+  name = "BoundingBoxComponent";
 }
 
 void BoundingBoxComponent::setSize(Vector2 size) { this->size = size; }

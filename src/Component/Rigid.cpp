@@ -2,11 +2,17 @@
 
 #include "Components/Transform.h"
 
-RigidBodyComponent::RigidBodyComponent() : Component() { init(); }
+RigidBodyComponent::RigidBodyComponent(Entity *e) : Component(e) {
+  init();
 
-void RigidBodyComponent::init() {}
+#ifdef _DEBUG
+  Log("log.txt", LogLevel::INFO, name + " created");
+#endif
+}
+
+void RigidBodyComponent::init() { name = "RigidBodyComponent"; }
 
 void RigidBodyComponent::update() {
-    entity->getComponent<TransformComponent>().update();
-    entity->getComponent<BoundingBoxComponent>().update();
+  entity->getComponent<TransformComponent>().update();
+  entity->getComponent<BoundingBoxComponent>().update();
 }

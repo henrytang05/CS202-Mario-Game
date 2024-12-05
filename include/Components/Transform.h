@@ -6,8 +6,8 @@
 
 class TransformComponent : public Component {
 public:
-  TransformComponent();
-  void init();
+  TransformComponent(Vector2 velocity, float speed, Entity *e);
+  void init() override;
   void update() override;
 
 private:

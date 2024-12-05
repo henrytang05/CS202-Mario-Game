@@ -6,9 +6,9 @@
 
 class BoundingBoxComponent : public Component {
 public:
-  BoundingBoxComponent();
+  BoundingBoxComponent(Entity *e);
 
-  void init();
+  void init() override;
   void setSize(Vector2 size);
   void update() override;
   Vector2 getPos();

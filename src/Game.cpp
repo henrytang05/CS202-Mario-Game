@@ -33,7 +33,6 @@ void Game::run() {
     // Draw
     BeginDrawing();
     currentScene->draw();
-    ClearBackground(RAYWHITE);
     EndDrawing();
   }
 }

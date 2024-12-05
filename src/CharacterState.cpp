@@ -82,7 +82,7 @@ void StandingState::update(Character &character) {
 
 MovingState::MovingState(Vector2 _velocity) {
     velocity = _velocity;
-    frameDelay = 5;
+    frameDelay = 10;
     frameDelayCounter = frameIndex = 0;
 }
 CharacterState* MovingState::handleInput(Character &character) {

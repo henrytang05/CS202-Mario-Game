@@ -15,6 +15,7 @@ public:
     virtual bool isOnTheGround();
     virtual void draw();
 private:
+  Camera2D camera = {0};
   CharacterState *stateCharacter;
   float ground;
   Vector2 velocity, position;

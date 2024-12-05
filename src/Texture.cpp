@@ -17,19 +17,16 @@ void TextureCharacter::updateFlip() {
     isFlip ^= 1;
 }
 void TextureCharacter::drawTexture(Vector2 position) {
-    Rectangle dest = {position.x, position.y, (float)frameWidth * 4.0f, (float)texture.height * 4.0f};
     if(isFlip) {
-        //DrawTexturePro(flipTexture, frameRec, dest, {0.0f, 0.0f}, 0.0f, WHITE); // Mario x4 size
         DrawTextureRec(flipTexture, frameRec, position, WHITE);
     }
     else { 
-        //DrawTexturePro(texture, frameRec, dest, {0.0f, 0.0f}, 0.0f, WHITE); // Mario x4 size
         DrawTextureRec(texture, frameRec, position, WHITE);
     }
-    DrawLine(0, position.y, screenWidth, position.y, BLACK);  
-    DrawLine(position.x, 0, position.x, screenHeight, BLACK);  
-    DrawLine(0, position.y + 23, screenWidth, position.y + 23, BLACK);  
-    DrawLine(position.x + 16, 0, position.x + 16, screenHeight, BLACK);  
+    DrawLine(position.x, position.y, position.x + 16, position.y, BLACK);  
+    DrawLine(position.x, position.y + 23, position.x + 16, position.y + 23, BLACK);  
+    DrawLine(position.x, position.y, position.x, position.y + 23, BLACK);  
+    DrawLine(position.x + 16, position.y, position.x + 16, position.y + 23, BLACK);  
 }
 void TextureCharacter::updateFrame(int frameIndex) {
     if(isFlip) {

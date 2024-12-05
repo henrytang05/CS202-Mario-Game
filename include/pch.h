@@ -25,7 +25,6 @@
 #include "globals.h"
 
 #include "json.h"
-#include "box2d/box2d.h"
 template <typename T> using Shared = std::shared_ptr<T>;
 template <typename T> using Unique = std::unique_ptr<T>;
 template <typename T> using Weak = std::weak_ptr<T>;

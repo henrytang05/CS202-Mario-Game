@@ -22,7 +22,7 @@ FLAGS := $(DEBUG_FLAGS)
 
 # Libraries for Windows and Linux
 ifeq ($(OS),Windows_NT)
-    LIBS := -L$(LIB) -lraylib -lopengl32 -lgdi32 -lwinmm -lcomdlg32 -lole32
+    LIBS := -L$(LIB) -lraylib -lopengl32 -lgdi32 -lwinmm -lcomdlg32 -lole32 
 else
     LIBS := -L$(LIB) -lraylib 
 endif
@@ -51,3 +51,4 @@ debug: $(TARGET)
 clean:
 	rm -rf $(BUILD)
 	rm -f $(TARGET)
+

@@ -17,6 +17,7 @@ public:
   void pressNothing() override;
   void pressLeft() override;
   void pressRight() override;
+  Vector2 getCameraTarget();
 private:
   int frameIndex;
   int frameDelay;

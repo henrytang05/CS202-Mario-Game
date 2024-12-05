@@ -19,8 +19,8 @@ void GameScene::loadResources() {
 void GameScene::start() {
   gameOver = false; 
   velocity = {0, 0};
-  ground = 3 * screenHeight / 4;
-  position = {0, (float)ground};
+  ground = screenHeight - 48;
+  position = {0, 784};//Uy change
   frameIndex = frameDelayCounter = 0;
   frameDelay = 10;
   gravity = 1;
@@ -95,4 +95,7 @@ Shared<Scene> GameScene::update() {
 }
 
 bool GameScene::isFinished() { return gameOver; }
+Vector2 GameScene::getCameraTarget(){
+  return position;
+}
 } // namespace SceneSpace

@@ -1,6 +1,7 @@
 #ifndef GAMESCENE_H
 #define GAMESCENE_H
 #include "Texture.h"
+#include "Map.h"
 namespace SceneSpace {
 class Scene;
 class GameScene : public Scene {
@@ -27,6 +28,8 @@ private:
   Vector2 velocity, position;
   bool gameOver;
   std::vector<Shared<TextureSmallCharacter>> characters;
+  TileFactory factory;
+  MapRenderer mapRenderer;
 };
 } // namespace SceneSpace
 

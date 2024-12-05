@@ -6,7 +6,9 @@
 #include "globals.h"
 namespace SceneSpace {
 
-GameScene::GameScene() : Scene() {
+GameScene::GameScene() : Scene(), 
+factory("Map/OverWorld.json", "Map/OverWorld.png"), 
+mapRenderer("Map/Level1.json", factory) {
 }
 GameScene::~GameScene() {
 #ifdef _DEBUG
@@ -29,6 +31,7 @@ void GameScene::acceptInputHandler(InputHandler inputHandler) {
   inputHandler.inputHandleForGameScene(*this);
 }
 void GameScene::draw() {
+  mapRenderer.Render();
   characters[0]->drawTexture(position);
 }
 void GameScene::pressUp() {

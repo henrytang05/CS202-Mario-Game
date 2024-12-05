@@ -1,12 +1,12 @@
 #include "Map.h"
 
-void Block::Render() {
-    DrawTexture(texture, position.x, position.y, WHITE);
-}
+// void Block::Render() {
+//     DrawTexture(texture, position.x, position.y, WHITE);
+// }
 
-void Interact::Render() {
-    DrawTexture(texture, position.x, position.y, WHITE);
-}
+// void Interact::Render() {
+//     DrawTexture(texture, position.x, position.y, WHITE);
+// }
 
 TileFactory::TileFactory(const std::string& tilesetPath, const std::string& imagePath) {
     std::ifstream file(tilesetPath);
@@ -70,7 +70,6 @@ MapRenderer::MapRenderer(const std::string& mapPath, TileFactory& factory) {
                             int y = (index / mapWidth) * tileHeight;
                             //std::cerr<<"y: " << y << std::endl;
                             //std::cerr<<"index: " << index << std::endl;
-                            if(index==4499) continue;
                             int offset = tileId - firstgid;
                             auto obj = factory.Create(offset, "Block", { (float)x, (float)y });
                             if (obj) {

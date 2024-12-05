@@ -1,4 +1,4 @@
-#include"GameObject.h"
+#include "GameObject.h"
 void Block::Render() {
     DrawTexture(texture, position.x, position.y, WHITE);
 }

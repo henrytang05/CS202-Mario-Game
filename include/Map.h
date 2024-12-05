@@ -3,7 +3,7 @@
 #include "GameObject.h"
 using json = nlohmann::json;
 
-// // Base class for all objects
+// Base class for all objects
 // class GameObject {
 // protected:
 //     Vector2 position;
@@ -39,6 +39,7 @@ class TileFactory {
     std::map<int, Texture2D> textureMap;
 
 public:
+    TileFactory()=default;
     TileFactory(const std::string& tilesetPath, const std::string& imagePath);
     std::shared_ptr<GameObject> Create(int tileId, const std::string& type, Vector2 position);
 };
@@ -49,6 +50,7 @@ class MapRenderer {
     int mapWidth, mapHeight, tileWidth, tileHeight;
 
 public:
+    MapRenderer()=default;
     MapRenderer(const std::string& mapPath, TileFactory& factory);
     void Render();
 };

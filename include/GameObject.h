@@ -1,8 +1,6 @@
 #pragma once
 #include "pch.h"
-
 using json = nlohmann::json;
-
 // Base class for all objects
 class GameObject {
 protected:

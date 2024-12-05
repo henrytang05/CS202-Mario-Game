@@ -55,7 +55,7 @@ MapRenderer::MapRenderer(const std::string& mapPath, TileFactory& factory) {
     tileWidth = mapData["tilewidth"];
     tileHeight = mapData["tileheight"];
 
-    //int groundLevel = (3 * 810) / 4;
+    int groundLevel = (3 * 810) / 4;
 
     for (const auto& layer : mapData["layers"]) {
         if (layer["type"] == "tilelayer") {
@@ -68,8 +68,8 @@ MapRenderer::MapRenderer(const std::string& mapPath, TileFactory& factory) {
                         if (tileId >= firstgid) {
                             int x = (index % mapWidth) * tileWidth;
                             int y = (index / mapWidth) * tileHeight;
-                            //std::cerr<<"y: " << y << std::endl;
-                            //std::cerr<<"index: " << index << std::endl;
+                            std::cerr<<"y: " << y << std::endl;
+                            std::cerr<<"index: " << index << std::endl;
                             int offset = tileId - firstgid;
                             auto obj = factory.Create(offset, "Block", { (float)x, (float)y });
                             if (obj) {
@@ -85,16 +85,8 @@ MapRenderer::MapRenderer(const std::string& mapPath, TileFactory& factory) {
 }
 
 void MapRenderer::Render() {
-    
     for (const auto& obj : objects) {
         obj->Render();
-    }
-    int x; 
-    for (x = 0; x <= screenWidth; x += tileWidth) {
-        DrawLine(x, 0, x, screenHeight, LIGHTGRAY);
-    }
-    for (int y = 0; y <= screenHeight; y += tileHeight) {
-        DrawLine(0, y, screenWidth, y, LIGHTGRAY);
     }
 }
 

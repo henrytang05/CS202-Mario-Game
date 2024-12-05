@@ -21,10 +21,11 @@
 #include <unordered_set>
 #include <vector>
 
+#include "json.h"
+#include "json_fwd.h"
 #include "raylib.h"
 #include "globals.h"
 
-#include "json.h"
 template <typename T> using Shared = std::shared_ptr<T>;
 template <typename T> using Unique = std::unique_ptr<T>;
 template <typename T> using Weak = std::weak_ptr<T>;

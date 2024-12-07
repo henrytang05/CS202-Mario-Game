@@ -6,7 +6,7 @@
 
 class RigidBodyComponent : public Component {
 public:
-  RigidBodyComponent(Entity *e);
+  RigidBodyComponent();
   void init() override;
   void update() override;
 };

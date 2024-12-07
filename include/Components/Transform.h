@@ -6,7 +6,7 @@
 
 class TransformComponent : public Component {
 public:
-  TransformComponent(Vector2 velocity, float speed, Entity *e);
+  TransformComponent(Vector2 velocity, float speed);
   void init() override;
   void update() override;
 

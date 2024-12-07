@@ -1,0 +1,5 @@
+
+inline ComponentTypeID getComponentTypeID() {
+  static ComponentTypeID lastID = 0;
+  return lastID++;
+}

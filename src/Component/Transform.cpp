@@ -5,18 +5,12 @@
 #include "globals.h"
 #include "pch.h"
 
-TransformComponent::TransformComponent(Vector2 velocity, float speed, Entity *e)
-    : Component(e), velocity(velocity), speed(speed) {
-  init();
-
-#ifdef _DEBUG
-  Log("log.txt", LogLevel::INFO, name + " created");
-#endif
-}
+TransformComponent::TransformComponent(Vector2 velocity, float speed)
+    : Component("TransformComponent"), velocity(velocity), speed(speed) {}
 
 void TransformComponent::init() {
-  ASSERT(entity->hasComponent<PositionComponent>());
-  name = "TransformComponent";
+  if (!entity->hasComponent<PositionComponent>())
+    entity->addComponent<PositionComponent>();
 }
 
 void TransformComponent::update() {

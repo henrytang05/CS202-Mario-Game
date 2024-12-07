@@ -5,7 +5,7 @@
 
 class CameraComponent : public Component, public Camera2D {
 public:
-  CameraComponent(Entity *e);
+  CameraComponent();
   void init() override;
   void update() override;
   void setTarget(Vector2 target);

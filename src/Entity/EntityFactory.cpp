@@ -1,7 +1,7 @@
 #include "Entity/EntityFactory.h"
 
 #include "Components/BoundingBox.h"
-#include "Components/Components.h"
+#include "Components/Components_include.h"
 #include "Components/Position.h"
 #include "Components/Rigid.h"
 #include "Components/Transform.h"

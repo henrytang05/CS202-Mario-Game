@@ -8,7 +8,7 @@ Vector2 operator+(const Vector2 &v1, const Vector2 &v2);
 
 class PositionComponent : public Component {
 public:
-  PositionComponent(Entity *e);
+  PositionComponent();
   void setPos(Vector2 pos);
   Vector2 getPos() const;
   float getX() const;

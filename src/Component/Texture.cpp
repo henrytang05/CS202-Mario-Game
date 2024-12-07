@@ -2,24 +2,18 @@
 #include "Components/Position.h"
 #include "Entity/Entity.h"
 
-TextureComponent::TextureComponent(std::string filename, int _numFrame,
-                                   Entity *e)
-    : Component(e) {
-  numFrame = _numFrame;
+TextureComponent::TextureComponent(std::string filename, int _numFrame)
+
+    : Component("TextureComponent"), numFrame(_numFrame) {
   texture = LoadTexture((filename + ".png").c_str());
   flipTexture = LoadTexture((filename + "-Flip.png").c_str());
+}
+
+void TextureComponent::init() {
   isFlip = 0;
   frameWidth = texture.width / numFrame;
   frameRec = {(float)frameWidth, 0.0f, (float)frameWidth,
               (float)texture.height};
-  init();
-}
-
-void TextureComponent::init() {
-  name = "TextureComponent";
-#ifdef _DEBUG
-  Log("log.txt", LogLevel::INFO, name + " created");
-#endif
 }
 
 void TextureComponent::update() {

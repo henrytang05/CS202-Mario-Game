@@ -5,7 +5,7 @@
 
 class TextureComponent : public Component {
 public:
-  TextureComponent(std::string filename, int _numFrame, Entity *e);
+  TextureComponent(std::string filename, int _numFrame);
   virtual ~TextureComponent() = default;
   void update() override;
   void drawTexture(Vector2 position);

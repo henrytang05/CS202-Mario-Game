@@ -2,17 +2,17 @@
 #include "Components/BoundingBox.h"
 #include "Entity/Entity.h"
 
-CameraComponent::CameraComponent(Entity *e) : Component(e) { init(); }
+CameraComponent::CameraComponent() : Component("CameraComponent") {}
 
 void CameraComponent::init() {
-  ASSERT(entity->hasComponent<BoundingBoxComponent>());
+  if (!entity->hasComponent<BoundingBoxComponent>())
+    entity->addComponent<BoundingBoxComponent>();
+
   BoundingBoxComponent &bb = entity->getComponent<BoundingBoxComponent>();
   offset = {screenWidth / 2.0f, screenHeight / 2.0f};
   rotation = 0.0f;
   target = bb.getPos();
   zoom = 2.0f;
-
-  name = "CameraComponent";
 
 #ifdef _DEBUG
   Log("log.txt", LogLevel::INFO, name + " created");

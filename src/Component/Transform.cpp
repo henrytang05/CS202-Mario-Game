@@ -17,3 +17,9 @@ void TransformComponent::update() {
   PositionComponent &position = entity->getComponent<PositionComponent>();
   position.setPos(position.getPos() + velocity);
 }
+
+void TransformComponent::setVelocity(Vector2 newVelocity) {
+  velocity = newVelocity;
+}
+
+Vector2 TransformComponent::getVelocity() const { return velocity; }

@@ -1,7 +1,7 @@
 #ifndef POSITION_COMPONENT_H
 #define POSITION_COMPONENT_H
 
-#include "Entity/Entity.h"
+#include "Components/Component.h"
 #include "raylib.h"
 
 Vector2 operator+(const Vector2 &v1, const Vector2 &v2);

@@ -20,6 +20,12 @@ Entity::~Entity() {
 }
 
 void Entity::update() {
+
+  CharacterState *newState = stateCharacter->handleInput(*this);
+  if (newState) {
+    delete stateCharacter;
+    stateCharacter = newState;
+  }
   for (auto &c : components) {
     c->update();
   }

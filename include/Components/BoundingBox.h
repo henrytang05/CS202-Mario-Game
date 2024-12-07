@@ -1,9 +1,8 @@
 #ifndef BOUNDINGBOX_H
 #define BOUNDINGBOX_H
 
+#include "Components/Component.h"
 #include "Components/Position.h"
-#include "Entity/Entity.h"
-
 class BoundingBoxComponent : public Component {
 public:
   BoundingBoxComponent();
@@ -16,6 +15,8 @@ public:
   float getY() const;
   void setX(float x);
   void setY(float y);
+
+  bool isOnTheGround() { return position->getY() + size.y >= ground; }
 
 private:
   Shared<PositionComponent> position;

@@ -9,6 +9,8 @@ public:
   TransformComponent(Vector2 velocity, float speed);
   void init() override;
   void update() override;
+  void setVelocity(Vector2 newVelocity);
+  Vector2 getVelocity() const;
 
 private:
   Vector2 velocity;

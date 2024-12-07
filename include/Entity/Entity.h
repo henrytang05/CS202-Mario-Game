@@ -19,8 +19,8 @@ public:
   virtual ~Entity();
   void init();
 
-  void update();
-  void draw();
+  virtual void update();
+  virtual void draw();
   bool isActive() const;
   void destroy();
 

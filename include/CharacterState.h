@@ -1,7 +1,6 @@
 #ifndef CHARACTERSTATE_H
 #define CHARACTERSTATE_H
 
-#include "globals.h"
 class Character;
 class CharacterState {
 public:

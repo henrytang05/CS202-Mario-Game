@@ -2,7 +2,6 @@
 #define TRANSFORM_COMPONENT_H
 
 #include "Components/Position.h"
-#include "Entity/Entity.h"
 
 class TransformComponent : public Component {
 public:

@@ -1,9 +1,9 @@
-#include "Entity/CharacterStates.h"
+#include "Entity/PlayableEntity.h"
 
 #include "Components/Texture.h"
 NewStandingState::NewStandingState(Vector2 _fraction) { fraction = _fraction; }
 
-NewCharacterState *NewStandingState::handleInput(Entity &character) {
+NewCharacterState *NewStandingState::handleInput(PlayableEntity &character) {
   TextureComponent &texture = character.getComponent<TextureComponent>();
   if (IsKeyDown(KEY_UP)) {
     texture.updateFrame(4);
@@ -35,7 +35,7 @@ NewCharacterState *NewStandingState::handleInput(Entity &character) {
   return nullptr;
 }
 
-void NewStandingState::update(Entity &character) {
+void NewStandingState::update(PlayableEntity &character) {
   Vector2 velocity = character.getVelocity();
   velocity.y = 0.0f;
   if (velocity.x < 0)
@@ -47,7 +47,7 @@ void NewStandingState::update(Entity &character) {
 
 NewJumpingState::NewJumpingState(Vector2 _fraction) { fraction = _fraction; }
 
-NewCharacterState *NewJumpingState::handleInput(Entity &character) {
+NewCharacterState *NewJumpingState::handleInput(PlayableEntity &character) {
   Vector2 velocity = character.getVelocity();
   TextureComponent &texture = character.getComponent<TextureComponent>();
   if (IsKeyReleased(KEY_UP) || velocity.y <= -15.0f) {
@@ -57,7 +57,7 @@ NewCharacterState *NewJumpingState::handleInput(Entity &character) {
   texture.updateFrame(4);
   return nullptr;
 }
-void NewJumpingState::update(Entity &character) {
+void NewJumpingState::update(PlayableEntity &character) {
   Vector2 velocity = character.getVelocity();
   velocity.y = std::max(velocity.y - 2.0f, -15.0f);
   if (velocity.x < 0)
@@ -68,7 +68,7 @@ void NewJumpingState::update(Entity &character) {
 }
 
 NewDroppingState::NewDroppingState(Vector2 _fraction) { fraction = _fraction; }
-NewCharacterState *NewDroppingState::handleInput(Entity &character) {
+NewCharacterState *NewDroppingState::handleInput(PlayableEntity &character) {
   TextureComponent &texture = character.getComponent<TextureComponent>();
   if (character.isOnTheGround()) {
     texture.updateFrame(0);
@@ -77,7 +77,7 @@ NewCharacterState *NewDroppingState::handleInput(Entity &character) {
   texture.updateFrame(5);
   return nullptr;
 }
-void NewDroppingState::update(Entity &character) {
+void NewDroppingState::update(PlayableEntity &character) {
   Vector2 velocity = character.getVelocity();
   velocity.y = std::min(velocity.y + fraction.y, 15.0f);
   if (velocity.x < 0)
@@ -93,7 +93,7 @@ NewMovingState::NewMovingState(Vector2 _velocity) {
   frameDelayCounter = frameIndex = 0;
 }
 
-NewCharacterState *NewMovingState::handleInput(Entity &character) {
+NewCharacterState *NewMovingState::handleInput(PlayableEntity &character) {
   TextureComponent &texture = character.getComponent<TextureComponent>();
   if (IsKeyDown(KEY_UP)) {
     texture.updateFrame(4);
@@ -110,7 +110,7 @@ NewCharacterState *NewMovingState::handleInput(Entity &character) {
   }
   return nullptr;
 }
-void NewMovingState::update(Entity &character) {
+void NewMovingState::update(PlayableEntity &character) {
   TextureComponent &texture = character.getComponent<TextureComponent>();
   velocity.x = std::min(velocity.x, 10.0f);
   velocity.x = std::max(velocity.x, -10.0f);

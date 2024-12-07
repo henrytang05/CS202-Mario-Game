@@ -19,8 +19,6 @@ public:
     for (auto &c : components) {
       c->update();
     }
-    Vector2 position = getComponent<PositionComponent>().getPos();
-    getComponent<CameraComponent>().setTarget(position);
   }
 
 protected:

@@ -8,10 +8,10 @@ void CameraComponent::init() {
   if (!entity->hasComponent<BoundingBoxComponent>())
     entity->addComponent<BoundingBoxComponent>();
 
-  BoundingBoxComponent &bb = entity->getComponent<BoundingBoxComponent>();
+  // BoundingBoxComponent &bb = entity->getComponent<BoundingBoxComponent>();
   offset = {screenWidth / 2.0f, screenHeight / 2.0f};
   rotation = 0.0f;
-  target = bb.getPos();
+  // target = bb.getPos();
   zoom = 2.0f;
 
 #ifdef _DEBUG
@@ -23,4 +23,8 @@ void CameraComponent::setTarget(Vector2 target) { this->target = target; }
 
 void CameraComponent::update() {
   setTarget(entity->getComponent<BoundingBoxComponent>().getPos());
+}
+
+void CameraComponent::setTarget(Shared<Entity> target) {
+  this->target = target->getComponent<BoundingBoxComponent>().getPos();
 }

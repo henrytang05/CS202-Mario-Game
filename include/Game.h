@@ -1,21 +1,23 @@
 #ifndef GAME_H
 #define GAME_H
 
-
-#include "globals.h"
-#include <unordered_map>
+#include "Components/Camera.h"
 #include "Scenes/Scene.h"
+
 using namespace SceneSpace;
-class Game {
+class Game : public IUpdatable, public IDrawable {
 public:
   Game();
   ~Game();
   void init();
   void clean();
   void run();
+  void update() override;
+  void draw() override;
 
 private:
   Shared<SceneSpace::Scene> currentScene;
+  CameraComponent camera;
 };
 
 #endif // GAME_H

@@ -1,9 +1,9 @@
 #ifndef INTERFACES_H
 #define INTERFACES_H
 
-class IIputable {
+class IInputable {
 public:
-  virtual ~IIputable() = default;
+  virtual ~IInputable() = default;
   virtual void input() = 0;
 };
 

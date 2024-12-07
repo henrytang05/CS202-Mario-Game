@@ -3,8 +3,8 @@
 #include "Components/Components_include.h"
 #include "Components/Texture.h"
 
-Entity::Entity() : active(true), name("Unnamed") { init(); }
-Entity::Entity(std::string name) : active(true), name(name) {
+Entity::Entity() : name("Unnamed") { init(); }
+Entity::Entity(std::string name) : name(name) {
 #ifdef _DEBUG
   Log("log.txt", LogLevel::DEBUG, name + " created");
 #endif
@@ -20,12 +20,6 @@ Entity::~Entity() {
 }
 
 void Entity::update() {
-
-  CharacterState *newState = stateCharacter->handleInput(*this);
-  if (newState) {
-    delete stateCharacter;
-    stateCharacter = newState;
-  }
   for (auto &c : components) {
     c->update();
   }
@@ -33,18 +27,15 @@ void Entity::update() {
 
 void Entity::draw() {
   ASSERT(hasComponent<PositionComponent>());
-  ASSERT(hasComponent<CameraComponent>());
+  // ASSERT(hasComponent<CameraComponent>());
   ASSERT(hasComponent<TextureComponent>());
-  PositionComponent &positionC = getComponent<PositionComponent>();
-  Vector2 position = positionC.getPos();
-  CameraComponent &camera = getComponent<CameraComponent>();
+  // PositionComponent &positionC = getComponent<PositionComponent>();
+  // Vector2 position = positionC.getPos();
+  // CameraComponent &camera = getComponent<CameraComponent>();
 
-  BeginMode2D(camera);
-  getComponent<TextureComponent>().drawTexture(position);
-  DrawLine(0.0f, ground, screenWidth, ground, BLACK);
-  ClearBackground(RAYWHITE);
-  EndMode2D();
+  // BeginMode2D(camera);
+  // getComponent<TextureComponent>().drawTexture(position);
+  // DrawLine(0.0f, ground, screenWidth, ground, BLACK);
+  // ClearBackground(RAYWHITE);
+  // EndMode2D();
 }
-
-bool Entity::isActive() const { return active; }
-void Entity::destroy() { active = false; }

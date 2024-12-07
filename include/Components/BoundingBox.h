@@ -3,23 +3,26 @@
 
 #include "Components/Component.h"
 #include "Components/Position.h"
+#include "globals.h"
 class BoundingBoxComponent : public Component {
 public:
   BoundingBoxComponent();
+  BoundingBoxComponent(Vector2 _size);
 
   void init() override;
   void setSize(Vector2 size);
   void update() override;
   Vector2 getPos();
+  void setPos(Vector2 pos);
   float getX() const;
   float getY() const;
   void setX(float x);
   void setY(float y);
 
-  bool isOnTheGround() { return position->getY() + size.y >= ground; }
+  bool isOnTheGround();
 
 private:
-  Shared<PositionComponent> position;
+  PositionComponent *position;
   Vector2 size;
 };
 #endif // BOUNDINGBOX_H

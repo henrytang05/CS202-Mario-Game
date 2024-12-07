@@ -2,9 +2,9 @@
 
 #include "Game.h"
 #include "Logger.h"
-#include "Scenes/Scene.h"
 #include "Scenes/GameScene.h"
 #include "Scenes/IntroScene.h"
+#include "Scenes/Scene.h"
 
 Game::Game() { init(); }
 Game::~Game() {
@@ -24,16 +24,21 @@ void Game::init() {
 
 void Game::run() {
   while (!WindowShouldClose()) {
-    Shared<SceneSpace::Scene> nextScene = currentScene->update();
-    if(nextScene) {
-      currentScene = nextScene;
-      currentScene->loadResources();
-      currentScene->start();
-    }
-    // Draw
-    BeginDrawing();
-    currentScene->draw();
-    EndDrawing();
+    update();
+    draw();
+  }
+}
+void Game::update() {
+  Shared<SceneSpace::Scene> nextScene = currentScene->updateScene();
+  if (nextScene) {
+    currentScene = nextScene;
+    currentScene->loadResources();
+    currentScene->start();
   }
 }
 void Game::clean() { CloseWindow(); }
+void Game::draw() {
+  BeginDrawing();
+  currentScene->draw();
+  EndDrawing();
+}

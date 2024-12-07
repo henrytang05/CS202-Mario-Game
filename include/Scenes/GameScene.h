@@ -1,16 +1,17 @@
 #ifndef GAMESCENE_H
 #define GAMESCENE_H
-#include "Character.h"
-#include "Entity/Entity.h"
+
+#include "Components/Camera.h"
 #include "Entity/EntityFactory.h"
+#include "Interface.h"
 #include "Scene.h"
 
 namespace SceneSpace {
-class GameScene : public Scene {
+class GameScene : public Scene, public AbstractEntity {
 public:
   GameScene();
   ~GameScene();
-  Shared<Scene> update() override;
+  Shared<Scene> updateScene() override;
   void draw() override;
   void loadResources() override;
   void start() override;
@@ -19,6 +20,7 @@ public:
 
 private:
   // std::vector<Shared<Character>> characters;
+  CameraComponent &camera;
   std::vector<Shared<Entity>> entities;
   Unique<IFactory> entityFactory;
   bool gameOver;

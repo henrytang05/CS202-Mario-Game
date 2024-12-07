@@ -1,7 +1,28 @@
-// NOTE: implementation of the Entity file
-// Don't worry about the warnings from the editor
+#ifndef ABSTRACTENTITY_H
+#define ABSTRACTENTITY_H
 
-template <typename T> inline bool Entity::hasComponent() const {
+#include "Components/Component.h"
+#include "Logger.h"
+
+class AbstractEntity {
+public:
+  AbstractEntity() = default;
+  virtual ~AbstractEntity() = default;
+  template <typename T> bool hasComponent() const;
+  template <typename T, typename... TArgs> T &addComponent(TArgs &&...mArgs);
+  template <typename T> T &getComponent() const;
+
+  bool isActive() const { return active; }
+  void destroy() { active = false; }
+
+public:
+  bool active = true;
+  std::vector<Unique<Component>> components;
+  ComponentArray componentArray;
+  ComponentBitSet componentBitset;
+};
+
+template <typename T> inline bool AbstractEntity::hasComponent() const {
   ComponentTypeID typeID = getComponentTypeID<T>();
 
   if (typeID >= maxComponents) {
@@ -12,7 +33,7 @@ template <typename T> inline bool Entity::hasComponent() const {
 }
 
 template <typename T, typename... TArgs>
-inline T &Entity::addComponent(TArgs &&...mArgs) {
+inline T &AbstractEntity::addComponent(TArgs &&...mArgs) {
   ComponentTypeID typeID = getComponentTypeID<T>();
   if (typeID >= maxComponents) {
     throw std::runtime_error("Exceeded maximum number of components");
@@ -34,7 +55,8 @@ inline T &Entity::addComponent(TArgs &&...mArgs) {
   return *c;
 }
 
-template <typename T> inline T &Entity::getComponent() const {
+template <typename T> inline T &AbstractEntity::getComponent() const {
   auto ptr(componentArray[getComponentTypeID<T>()]);
   return *static_cast<T *>(ptr);
 }
+#endif // ABSTRACTENTITY_H

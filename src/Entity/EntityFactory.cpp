@@ -10,13 +10,16 @@
 
 Shared<Entity> EntityFactory::createMario() {
   Shared<Entity> mario = std::make_shared<newCharacter>("Mario");
-  mario->addComponent<PositionComponent>();
-  Vector2 pos = {1, 0};
-  mario->addComponent<TransformComponent>(pos, 2);
-  mario->addComponent<BoundingBoxComponent>();
+
+  Vector2 size({16, 23});
+  Vector2 position = {0, (float)ground - size.y};
+  Vector2 velocity = {0, 0};
+
+  mario->addComponent<PositionComponent>(position);
+  mario->addComponent<TransformComponent>(velocity, .1);
+  mario->addComponent<BoundingBoxComponent>(size);
   mario->addComponent<RigidBodyComponent>();
-  mario->getComponent<BoundingBoxComponent>().setSize({16, 23});
-  mario->addComponent<CameraComponent>();
+  // mario->addComponent<CameraComponent>();
   mario->addComponent<TextureComponent>("./assets/Luigi-Small", 11);
 
   return mario;

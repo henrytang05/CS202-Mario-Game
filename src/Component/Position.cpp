@@ -5,6 +5,11 @@
 PositionComponent::PositionComponent()
     : Component("PositionComponent"), position({0, 0}) {}
 
+PositionComponent::PositionComponent(Vector2 pos)
+    : Component("PositionComponent") {
+  position = pos;
+}
+
 void PositionComponent::init() {}
 
 void PositionComponent::setPos(Vector2 pos) { position = pos; }

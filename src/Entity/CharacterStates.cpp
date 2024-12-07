@@ -67,7 +67,7 @@ void NewJumpingState::update(Entity &character) {
   character.setVelocity(velocity);
 }
 
-DroppingState::DroppingState(Vector2 _fraction) { fraction = _fraction; }
+NewDroppingState::NewDroppingState(Vector2 _fraction) { fraction = _fraction; }
 NewCharacterState *NewDroppingState::handleInput(Entity &character) {
   TextureComponent &texture = character.getComponent<TextureComponent>();
   if (character.isOnTheGround()) {

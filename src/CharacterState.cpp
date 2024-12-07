@@ -1,5 +1,6 @@
 #include "CharacterState.h"
 #include "Character.h"
+
 JumpingState::JumpingState(Vector2 _fraction) { fraction = _fraction; }
 CharacterState *JumpingState::handleInput(Character &character) {
   Vector2 velocity = character.getVelocity();

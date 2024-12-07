@@ -17,14 +17,15 @@ void TextureComponent::init() {
 }
 
 void TextureComponent::update() {
-  PositionComponent &position = entity->getComponent<PositionComponent>();
-
-  drawTexture(position.getPos());
+  // PositionComponent &position = entity->getComponent<PositionComponent>();
+  //
+  // drawTexture(position.getPos());
 }
 
 bool TextureComponent::getIsFlip() { return isFlip; }
 void TextureComponent::updateFlip() { isFlip ^= 1; }
-void TextureComponent::drawTexture(Vector2 position) {
+void TextureComponent::drawTexture() {
+  Vector2 position = entity->getComponent<PositionComponent>().getPos();
   if (isFlip) {
     DrawTextureRec(flipTexture, frameRec, position, WHITE);
   } else {

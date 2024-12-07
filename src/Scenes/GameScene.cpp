@@ -2,21 +2,25 @@
 
 #include <memory>
 
+#include "Components/Camera.h"
+#include "Components/Texture.h"
 #include "Entity/EntityFactory.h"
 #include "Logger.h"
 #include "Scenes/IntroScene.h"
 #include "globals.h"
+class TextureComponent;
 namespace SceneSpace {
 
-GameScene::GameScene() : Scene() { init(); }
+GameScene::GameScene() : Scene(), camera(addComponent<CameraComponent>()) { init(); }
 
 void GameScene::init() {
     entityFactory = std::make_unique<EntityFactory>();
     Shared<Entity> mario = entityFactory->createMario();
     // Shared<Entity> luigi = entityFactory->createLuigi();
     // Shared<Entity> goomba = entityFactory->createGoomba();
-
     entities.push_back(mario);
+    camera.setTarget(mario);
+
     // entities.push_back(luigi);
     // entities.push_back(goomba);
 }
@@ -33,14 +37,22 @@ void GameScene::start() {
     //     make_shared<Character>("./assets/Luigi-Small", 11, Vector2{16, 23})};
 }
 void GameScene::draw() {
+    BeginMode2D(camera);
+    DrawRectangle(-6000, 320, 13000, 8000, DARKGRAY);
     for (auto &entity : entities) {
         entity->draw();
     }
+
+    camera.setTarget(entities[0]);
+    entities[0]->getComponent<TextureComponent>().drawTexture();
+    DrawLine(0.0f, ground, screenWidth, ground, BLACK);
+    ClearBackground(RAYWHITE);
+    EndMode2D();
     // for (Shared<Character> ch : characters) {
     //   ch->draw();
     // }
 }
-Shared<Scene> GameScene::update() {
+Shared<Scene> GameScene::updateScene() {
     for (auto &entity : entities) {
         entity->update();
     }

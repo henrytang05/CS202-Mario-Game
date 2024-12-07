@@ -1,6 +1,7 @@
 #ifndef COMPONENT_H
 #define COMPONENT_H
-class Entity;
+
+class AbstractEntity;
 class Component;
 using ComponentTypeID = std::size_t;
 
@@ -17,16 +18,16 @@ public:
   virtual ~Component();
   virtual void update();
   virtual void draw();
-  void setEntity(Entity *e);
+  void setEntity(AbstractEntity *e);
 
 private:
   virtual void init();
 
+protected:
+  AbstractEntity *entity;
+
 public:
   const std::string name;
-
-protected:
-  Entity *entity;
 };
 
 inline ComponentTypeID getComponentTypeID() {

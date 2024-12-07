@@ -1,7 +1,11 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
+#include "CharacterState.h"
+#include "Components/BoundingBox.h"
 #include "Components/Component.h"
+#include "Components/Position.h"
+#include "Components/Transform.h"
 #include "Interface.h"
 #include "Logger.h"
 #include "globals.h"
@@ -20,7 +24,15 @@ public:
   bool isActive() const;
   void destroy();
 
-  void setVelocity(Vector2 newVelocity);
+  virtual void setVelocity(Vector2 newVelocity) {
+    getComponent<TransformComponent>().setVelocity(newVelocity);
+  }
+  virtual Vector2 getVelocity() {
+    return getComponent<TransformComponent>().getVelocity();
+  }
+  virtual bool isOnTheGround() {
+    return getComponent<BoundingBoxComponent>().isOnTheGround();
+  }
 
   template <typename T> bool hasComponent() const;
 
@@ -32,6 +44,7 @@ public:
   bool active;
   std::string name;
   std::vector<Unique<Component>> components;
+  CharacterState *stateCharacter;
   ComponentArray componentArray;
   ComponentBitSet componentBitset;
 };

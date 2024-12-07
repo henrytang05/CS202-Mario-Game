@@ -1,7 +1,6 @@
+#include "Components/Components_include.h"
 #include "Entity/Entity.h"
 #include "Entity/PlayableEntity.h"
-
-#include "Components/Components_include.h"
 
 PlayableEntity::PlayableEntity(std::string name) : Entity(name) {}
 
@@ -21,7 +20,7 @@ bool PlayableEntity::isOnTheGround() {
 }
 
 Mario::Mario()
-    : PlayableEntity("Mario"), state(new NewStandingState({0.5f, 0.0f})) {
+    : PlayableEntity("Mario"), state(new StandingState({0.5f, 0.0f})) {
   Vector2 size({16, 23});
   Vector2 position = {0, (float)ground - size.y};
   Vector2 velocity = {0, 0};
@@ -33,8 +32,19 @@ Mario::Mario()
   addComponent<TextureComponent>("./assets/Mario-Small", 11);
 }
 
-void Mario::update() { state->update(*this); }
+void Mario::update() {
+  input();
+  state->update(*this);
+  Entity::update();
+}
 
 void Mario::input() {
-  Unique<NewCharacterState> newState(state->handleInput(*this));
+  if (CharacterState *newState = state->handleInput(*this)) {
+    state = Unique<CharacterState>(newState);
+  }
+}
+
+void Mario::draw() {
+  ASSERT(hasComponent<TextureComponent>());
+  getComponent<TextureComponent>().drawTexture();
 }

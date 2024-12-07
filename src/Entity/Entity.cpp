@@ -3,7 +3,7 @@
 #include "Logger.h"
 #include "globals.h"
 
-Entity::Entity() : name("Unnamed") { init(); }
+Entity::Entity() : name("Unnamed") {}
 Entity::Entity(std::string name) : name(name) {
 #ifdef _DEBUG
   Log("log.txt", LogLevel::DEBUG, name + " created");
@@ -16,11 +16,12 @@ Entity::~Entity() {
 #endif
 }
 
-// void Entity::update() {
-//   for (auto &c : components) {
-//     c->update();
-//   }
-// }
+void Entity::update() {
+  for (auto &c : components) {
+    c->update();
+  }
+}
+
 //
 // void Entity::draw() {
 //   ASSERT(hasComponent<PositionComponent>());

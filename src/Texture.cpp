@@ -14,7 +14,6 @@ TextureCharacter::TextureCharacter(std::string filename, int _numFrame) {
 bool TextureCharacter::getIsFlip() { return isFlip; }
 void TextureCharacter::updateFlip() { isFlip ^= 1; }
 void TextureCharacter::drawTexture(Vector2 position) {
-
   if (isFlip) {
     DrawTextureRec(flipTexture, frameRec, position, WHITE);
   } else {

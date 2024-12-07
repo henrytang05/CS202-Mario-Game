@@ -5,6 +5,7 @@
 #include "Scenes/GameScene.h"
 #include "Scenes/IntroScene.h"
 #include "Scenes/Scene.h"
+#include "globals.h"
 
 Game::Game() { init(); }
 Game::~Game() {

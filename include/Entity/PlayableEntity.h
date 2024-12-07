@@ -6,7 +6,6 @@
 #include "Interface.h"
 
 class PlayableEntity : public Entity,
-                       public IUpdatable,
                        public IDrawable,
                        public IInputable,
                        public IMovable,
@@ -29,6 +28,8 @@ public:
 
   void update() override;
   void draw() override;
+
+private:
   void input() override;
 
 private:

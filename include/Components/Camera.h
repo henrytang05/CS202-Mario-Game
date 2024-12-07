@@ -9,7 +9,7 @@ public:
   void init() override;
   void update() override;
   void setTarget(Vector2 target);
-  void setTarget(Shared<Entity> target);
+  void setTarget(Entity &target);
 };
 
 #endif // CAMERA_H

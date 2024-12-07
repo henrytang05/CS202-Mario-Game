@@ -10,11 +10,11 @@ public:
   virtual void update(PlayableEntity &character) = 0;
 };
 
-class NewStandingState : public CharacterState {
+class StandingState : public CharacterState {
 public:
-  NewStandingState() = default;
-  NewStandingState(Vector2 _fraction);
-  ~NewStandingState() = default;
+  StandingState() = default;
+  StandingState(Vector2 _fraction);
+  ~StandingState() = default;
   CharacterState *handleInput(PlayableEntity &character) override;
   void update(PlayableEntity &character) override;
 
@@ -22,11 +22,11 @@ private:
   Vector2 fraction;
 };
 
-class NewJumpingState : public CharacterState {
+class JumpingState : public CharacterState {
 public:
-  NewJumpingState() = default;
-  ~NewJumpingState() = default;
-  NewJumpingState(Vector2 _fraction);
+  JumpingState() = default;
+  ~JumpingState() = default;
+  JumpingState(Vector2 _fraction);
   CharacterState *handleInput(PlayableEntity &character) override;
   void update(PlayableEntity &character) override;
 
@@ -34,11 +34,11 @@ private:
   Vector2 fraction;
 };
 
-class NewMovingState : public CharacterState {
+class MovingState : public CharacterState {
 public:
-  NewMovingState() = default;
-  ~NewMovingState() = default;
-  NewMovingState(Vector2 _velocity);
+  MovingState() = default;
+  ~MovingState() = default;
+  MovingState(Vector2 _velocity);
   CharacterState *handleInput(PlayableEntity &character) override;
   void update(PlayableEntity &character) override;
 
@@ -47,11 +47,11 @@ private:
   int frameDelay, frameDelayCounter, frameIndex;
 };
 
-class NewDroppingState : public CharacterState {
+class DroppingState : public CharacterState {
 public:
-  NewDroppingState() = default;
-  ~NewDroppingState() = default;
-  NewDroppingState(Vector2 _fraction);
+  DroppingState() = default;
+  ~DroppingState() = default;
+  DroppingState(Vector2 _fraction);
   CharacterState *handleInput(PlayableEntity &character) override;
   void update(PlayableEntity &character) override;
 

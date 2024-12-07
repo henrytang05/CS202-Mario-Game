@@ -25,6 +25,6 @@ void CameraComponent::update() {
   setTarget(entity->getComponent<BoundingBoxComponent>().getPos());
 }
 
-void CameraComponent::setTarget(Shared<Entity> target) {
-  this->target = target->getComponent<BoundingBoxComponent>().getPos();
+void CameraComponent::setTarget(Entity &target) {
+  this->target = target.getComponent<BoundingBoxComponent>().getPos();
 }

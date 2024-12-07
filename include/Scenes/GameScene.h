@@ -3,6 +3,7 @@
 
 #include "Components/Camera.h"
 #include "Entity/EntityFactory.h"
+#include "Entity/PlayableEntity.h"
 #include "Interface.h"
 #include "Scene.h"
 
@@ -21,6 +22,7 @@ public:
 private:
   // std::vector<Shared<Character>> characters;
   CameraComponent &camera;
+  Shared<PlayableEntity> player;
   std::vector<Shared<Entity>> entities;
   Unique<IFactory> entityFactory;
   bool gameOver;

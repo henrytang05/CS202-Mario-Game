@@ -1,9 +1,8 @@
 #include "Components/Transform.h"
 
+#include "AbstractEntity.h"
 #include "Components/Position.h"
-#include "Entity/Entity.h"
 #include "globals.h"
-#include "pch.h"
 
 TransformComponent::TransformComponent(Vector2 velocity, float speed)
     : Component("TransformComponent"), velocity(velocity), speed(speed) {}

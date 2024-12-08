@@ -1,6 +1,6 @@
 #include "Components/Camera.h"
+#include "AbstractEntity.h"
 #include "Components/BoundingBox.h"
-#include "Entity/Entity.h"
 
 CameraComponent::CameraComponent() : Component("CameraComponent") {}
 
@@ -21,6 +21,6 @@ void CameraComponent::update() {
   setTarget(entity->getComponent<BoundingBoxComponent>().getPos());
 }
 
-void CameraComponent::setTarget(Entity &target) {
+void CameraComponent::setTarget(AbstractEntity &target) {
   this->target = target.getComponent<BoundingBoxComponent>().getPos();
 }

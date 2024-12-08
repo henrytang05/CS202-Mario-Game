@@ -1,6 +1,6 @@
 #include "Components/BoundingBox.h"
+#include "AbstractEntity.h"
 #include "Components/Position.h"
-#include "Entity/Entity.h"
 #include "globals.h"
 
 BoundingBoxComponent::BoundingBoxComponent()

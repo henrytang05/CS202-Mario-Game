@@ -20,8 +20,6 @@ void GameScene::init() {
   entityFactory = std::make_unique<EntityFactory>();
   Shared<Mario> mario = entityFactory->createMario();
   player = mario;
-  // Shared<Entity> luigi = entityFactory->createLuigi();
-  // Shared<Entity> goomba = entityFactory->createGoomba();
   entities.push_back(mario);
   camera.setTarget(*mario);
 
@@ -56,13 +54,13 @@ void GameScene::draw() {
   //   ch->draw();
   // }
 }
-Shared<Scene> GameScene::updateScene() {
+void GameScene::update() {
   for (auto &entity : entities) {
     entity->update();
   }
-  // for (Shared<Character> ch : characters) {
-  //   ch->update();
-  // }
+}
+Shared<Scene> GameScene::updateScene() {
+  update();
   return nullptr;
 }
 

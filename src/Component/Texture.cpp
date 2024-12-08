@@ -1,6 +1,6 @@
 #include "Components/Texture.h"
+#include "AbstractEntity.h"
 #include "Components/Position.h"
-#include "Entity/Entity.h"
 
 TextureComponent::TextureComponent(std::string filename, int _numFrame)
 

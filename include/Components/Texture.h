@@ -1,7 +1,6 @@
 #ifndef TEXTURE_COMPONENT_H
 #define TEXTURE_COMPONENT_H
-
-#include "Entity/Entity.h"
+#include "Components/Component.h"
 
 class TextureComponent : public Component {
 public:

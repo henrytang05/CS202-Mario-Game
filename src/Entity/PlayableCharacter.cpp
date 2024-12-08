@@ -1,8 +1,8 @@
+#include "AbstractEntity.h"
 #include "Components/Components_include.h"
-#include "Entity/Entity.h"
 #include "Entity/PlayableEntity.h"
 
-PlayableEntity::PlayableEntity(std::string name) : Entity(name) {}
+PlayableEntity::PlayableEntity(std::string name) : AbstractEntity(name) {}
 
 void PlayableEntity::setVelocity(Vector2 newVelocity) {
   ASSERT(hasComponent<TransformComponent>());
@@ -35,7 +35,9 @@ Mario::Mario()
 void Mario::update() {
   input();
   state->update(*this);
-  Entity::update();
+  for (auto &component : components) {
+    component->update();
+  }
 }
 
 void Mario::input() {

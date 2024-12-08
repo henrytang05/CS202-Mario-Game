@@ -2,11 +2,13 @@
 #define ABSTRACTENTITY_H
 
 #include "Components/Component.h"
+#include "Interface.h"
 #include "Logger.h"
 
-class AbstractEntity {
+class AbstractEntity : public IUpdatable {
 public:
-  AbstractEntity() = default;
+  AbstractEntity() : active(true), name("Unnamed") {}
+  AbstractEntity(std::string name) : active(true), name(name) {}
   virtual ~AbstractEntity() = default;
   template <typename T> bool hasComponent() const;
   template <typename T, typename... TArgs> T &addComponent(TArgs &&...mArgs);
@@ -16,7 +18,8 @@ public:
   void destroy() { active = false; }
 
 public:
-  bool active = true;
+  bool active;
+  std::string name;
   std::vector<Unique<Component>> components;
   ComponentArray componentArray;
   ComponentBitSet componentBitset;

@@ -1,6 +1,6 @@
 #include "Components/Rigid.h"
+#include "AbstractEntity.h"
 #include "Components/Transform.h"
-#include "Entity/Entity.h"
 
 RigidBodyComponent::RigidBodyComponent() : Component("RigidBodyComponent") {}
 

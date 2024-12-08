@@ -1,15 +1,15 @@
 #ifndef PLAYABLE_ENTITY_H
 #define PLAYABLE_ENTITY_H
 
-#include "Entity/Entity.h"
+#include "AbstractEntity.h"
 #include "Entity/States/CharacterStates.h"
 #include "Interface.h"
 
-class PlayableEntity : public Entity,
+class PlayableEntity : public AbstractEntity,
                        public IDrawable,
                        public IInputable,
                        public IMovable,
-                       public IConcreteEntity {
+                       public IRigidEntity {
 
 public:
   PlayableEntity() = default;

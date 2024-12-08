@@ -26,9 +26,9 @@ public:
   virtual Vector2 getVelocity() = 0;
 };
 
-class IConcreteEntity {
+class IRigidEntity {
 public:
-  virtual ~IConcreteEntity() = default;
+  virtual ~IRigidEntity() = default;
   virtual bool isOnTheGround() = 0;
 };
 

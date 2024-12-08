@@ -1,10 +1,10 @@
 #ifndef GAMESCENE_H
 #define GAMESCENE_H
 
+#include "AbstractEntity.h"
 #include "Components/Camera.h"
 #include "Entity/EntityFactory.h"
 #include "Entity/PlayableEntity.h"
-#include "Interface.h"
 #include "Scene.h"
 
 namespace SceneSpace {
@@ -13,6 +13,7 @@ public:
   GameScene();
   ~GameScene();
   Shared<Scene> updateScene() override;
+  void update() override;
   void draw() override;
   void loadResources() override;
   void start() override;
@@ -23,7 +24,7 @@ private:
   // std::vector<Shared<Character>> characters;
   CameraComponent &camera;
   Shared<PlayableEntity> player;
-  std::vector<Shared<Entity>> entities;
+  std::vector<Shared<AbstractEntity>> entities;
   Unique<IFactory> entityFactory;
   bool gameOver;
 };

@@ -16,6 +16,7 @@ Game::~Game() {
 
 void Game::init() {
   InitWindow(screenWidth, screenHeight, "Super Mario");
+  InitAudioDevice();
   SetTargetFPS(60);
   currentScene = std::make_shared<SceneSpace::IntroScene>();
   currentScene->loadResources();
@@ -38,4 +39,7 @@ void Game::run() {
     EndDrawing();
   }
 }
-void Game::clean() { CloseWindow(); }
+void Game::clean() { 
+  CloseAudioDevice();
+  CloseWindow(); 
+}

@@ -34,6 +34,7 @@ void GameScene::draw() {
 void GameScene::pressUp() {
   if(position.y >= ground) {
     velocity.y = -15;
+    SoundCtrl.PlayJumpSmallEffect();  
   }
 }
 void GameScene::pressLeft() {

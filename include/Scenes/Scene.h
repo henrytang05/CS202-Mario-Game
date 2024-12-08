@@ -2,6 +2,8 @@
 #define SCENE_H
 #include "pch.h"
 #include "CommandListener.h"
+#include "SoundController.h"
+
 class InputHandler;
 namespace SceneSpace {
 
@@ -9,6 +11,7 @@ enum SceneType : uint8_t { INTRO = 0, GAME };
 
 class Scene : public CommandListener {
 public:
+  Scene();
   virtual ~Scene();
   virtual Shared<Scene> update() = 0;
   virtual void draw() = 0;
@@ -18,6 +21,7 @@ public:
   // virtual bool isFinished() = 0;
   
 protected:
+  SoundController SoundCtrl;
 };
 } // namespace SceneSpace
 

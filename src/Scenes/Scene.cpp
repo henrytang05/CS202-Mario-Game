@@ -1,5 +1,9 @@
 #include "Scenes/Scene.h"
 #include "InputHandler.h"
 namespace SceneSpace {
-Scene::~Scene() = default;
+    Scene::Scene()
+    {
+        SoundCtrl.LoadSounds();
+    }
+    Scene::~Scene() = default;
 }

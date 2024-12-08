@@ -31,7 +31,7 @@ void GameScene::init() {
 
 GameScene::~GameScene() {
 #ifdef _DEBUG
-  Log("log.txt", LogLevel::INFO, "GameScene destroyed");
+  Log("GameScene destroyed");
 #endif
 }
 void GameScene::loadResources() {}

@@ -7,7 +7,7 @@ Component::Component(std::string name) : entity(nullptr), name(name) {}
 
 Component::~Component() {
 #ifdef _DEBUG
-  Log("log.txt", LogLevel::INFO, name + " destroyed");
+  Log("Component destroyed: " + name);
 #endif
 }
 

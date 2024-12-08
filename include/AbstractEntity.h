@@ -26,7 +26,7 @@ template <typename T> inline bool AbstractEntity::hasComponent() const {
   ComponentTypeID typeID = getComponentTypeID<T>();
 
   if (typeID >= maxComponents) {
-    Log("log.txt", LogLevel::CRITICAL, "Exceeded maximum number of components");
+    Log("Exceeded maximum number of components", LogLevel::ERROR, "log.txt");
     return false;
   }
   return this->componentBitset.test(typeID);
@@ -50,7 +50,7 @@ inline T &AbstractEntity::addComponent(TArgs &&...mArgs) {
   c->init();
 
 #ifdef _DEBUG
-  Log("log.txt", LogLevel::INFO, c->name + " created");
+  Log("Component added: " + c->name);
 #endif
   return *c;
 }

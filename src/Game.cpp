@@ -11,7 +11,7 @@ Game::Game() { init(); }
 Game::~Game() {
   clean();
 #ifdef _DEBUG
-  Log("log.txt", LogLevel::INFO, "Game destroyed");
+  Log("Game destroyed");
 #endif
 }
 

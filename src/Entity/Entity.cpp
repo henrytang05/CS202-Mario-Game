@@ -6,13 +6,13 @@
 Entity::Entity() : name("Unnamed") {}
 Entity::Entity(std::string name) : name(name) {
 #ifdef _DEBUG
-  Log("log.txt", LogLevel::DEBUG, name + " created");
+  Log(name + " created");
 #endif
 }
 
 Entity::~Entity() {
 #ifdef _DEBUG
-  Log("log.txt", LogLevel::DEBUG, name + " destroy");
+  Log(name + " destroyed");
 #endif
 }
 

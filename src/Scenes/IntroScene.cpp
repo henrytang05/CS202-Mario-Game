@@ -11,7 +11,7 @@ IntroScene::IntroScene() : Scene() {
 }
 IntroScene::~IntroScene() {
 #ifdef _DEBUG
-  Log("log.txt", LogLevel::INFO, "IntroScene destroyed");
+  Log("IntroScene destroyed");
 #endif
   delete NewGameButton;
   delete LoadGameButton;

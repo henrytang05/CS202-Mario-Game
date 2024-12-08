@@ -13,10 +13,6 @@ void CameraComponent::init() {
   rotation = 0.0f;
   // target = bb.getPos();
   zoom = 2.0f;
-
-#ifdef _DEBUG
-  Log("log.txt", LogLevel::INFO, name + " created");
-#endif
 }
 
 void CameraComponent::setTarget(Vector2 target) { this->target = target; }

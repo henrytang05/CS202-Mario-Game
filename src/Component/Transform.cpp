@@ -4,8 +4,8 @@
 #include "Components/Position.h"
 #include "globals.h"
 
-TransformComponent::TransformComponent(Vector2 velocity, float speed)
-    : Component("TransformComponent"), velocity(velocity), speed(speed) {}
+TransformComponent::TransformComponent(Vector2 velocity)
+    : Component("TransformComponent"), velocity(velocity) {}
 
 void TransformComponent::init() {
   if (!entity->hasComponent<PositionComponent>())
@@ -14,7 +14,7 @@ void TransformComponent::init() {
 
 void TransformComponent::update() {
   PositionComponent &position = entity->getComponent<PositionComponent>();
-  position.setPos(position.getPos() + velocity);
+  position.setPosition(position.getPosition() + velocity);
 }
 
 void TransformComponent::setVelocity(Vector2 newVelocity) {

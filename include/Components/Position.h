@@ -10,8 +10,8 @@ class PositionComponent : public Component {
 public:
   PositionComponent();
   PositionComponent(Vector2 pos);
-  void setPos(Vector2 pos);
-  Vector2 getPos() const;
+  void setPosition(Vector2 pos);
+  Vector2 getPosition() const;
   float getX() const;
   float getY() const;
   void setX(float x);

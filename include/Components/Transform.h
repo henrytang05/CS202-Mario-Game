@@ -5,7 +5,7 @@
 
 class TransformComponent : public Component {
 public:
-  TransformComponent(Vector2 velocity, float speed);
+  TransformComponent(Vector2 velocity);
   void init() override;
   void update() override;
   void setVelocity(Vector2 newVelocity);
@@ -13,7 +13,6 @@ public:
 
 private:
   Vector2 velocity;
-  float speed;
 };
 
 #endif // TRANSFORM_COMPONENT_H

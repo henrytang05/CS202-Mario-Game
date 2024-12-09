@@ -1,7 +1,11 @@
 #ifndef GAMESCENE_H
 #define GAMESCENE_H
-#include "Character.h"
+#include "AbstractEntity.h"
+#include "Entity/EntityFactory.h"
+#include "Entity/PlayableEntity.h"
 #include "Map.h"
+#include "Scenes/Scene.h"
+
 namespace SceneSpace {
 class GameScene : public Scene, public AbstractEntity {
 public:
@@ -11,17 +15,13 @@ public:
   void update() override;
   void draw() override;
   void loadResources() override;
-  void start() override;
   bool isFinished();
-  void init();
+  void init() override;
 
 private:
-  Shared<Character> player;
   TileFactory tileFactory;
   MapRenderer mapRenderer;
-  Camera2D camera = {0};
-  // std::vector<Shared<Character>> characters;
-  CameraComponent &camera;
+  Camera2D camera;
   Shared<PlayableEntity> player;
   std::vector<Shared<AbstractEntity>> entities;
   Unique<IFactory> entityFactory;

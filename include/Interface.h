@@ -32,4 +32,9 @@ public:
   virtual bool isOnTheGround() = 0;
 };
 
+class AABB {
+private:
+  virtual ~AABB() = default;
+  virtual bool checkCollision(const AABB &other) = 0;
+};
 #endif // INTERFACES_H

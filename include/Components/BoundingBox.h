@@ -4,6 +4,7 @@
 #include "Components/Component.h"
 #include "Components/Position.h"
 #include "globals.h"
+
 class BoundingBoxComponent : public Component {
 public:
   BoundingBoxComponent();
@@ -19,7 +20,10 @@ public:
   void setX(float x);
   void setY(float y);
 
+  bool checkCollision(const BoundingBoxComponent &other) const;
   bool isOnTheGround();
+
+  Rectangle getBox() const;
 
 private:
   PositionComponent *position;

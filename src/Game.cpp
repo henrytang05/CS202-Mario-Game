@@ -7,6 +7,7 @@
 #include "Scenes/IntroScene.h"
 #include "Scenes/Scene.h"
 #include "globals.h"
+#include "raylib.h"
 
 Game::Game() { init(); }
 Game::~Game() {
@@ -21,7 +22,7 @@ void Game::init() {
   SetTargetFPS(60);
   currentScene = std::make_shared<SceneSpace::IntroScene>();
   currentScene->loadResources();
-  currentScene->start();
+  currentScene->init();
 }
 
 void Game::run() {
@@ -35,12 +36,13 @@ void Game::update() {
   if (nextScene) {
     currentScene = nextScene;
     currentScene->loadResources();
-    currentScene->start();
+    currentScene->init();
   }
 }
 void Game::clean() { CloseWindow(); }
 void Game::draw() {
   BeginDrawing();
+  ClearBackground(RAYWHITE);
   currentScene->draw();
   EndDrawing();
 }

@@ -2,6 +2,7 @@
 #include "AbstractEntity.h"
 #include "Components/Position.h"
 #include "globals.h"
+#include "raylib.h"
 
 BoundingBoxComponent::BoundingBoxComponent()
     : Component("BoundingBoxComponent"), position(nullptr), size({0, 0}) {}
@@ -21,8 +22,8 @@ bool BoundingBoxComponent::isOnTheGround() {
 
 void BoundingBoxComponent::setSize(Vector2 size) { this->size = size; }
 
-Vector2 BoundingBoxComponent::getPos() { return position->getPos(); }
-void BoundingBoxComponent::setPos(Vector2 pos) { position->setPos(pos); }
+Vector2 BoundingBoxComponent::getPos() { return position->getPosition(); }
+void BoundingBoxComponent::setPos(Vector2 pos) { position->setPosition(pos); }
 
 float BoundingBoxComponent::getX() const { return position->getX(); }
 float BoundingBoxComponent::getY() const { return position->getY(); }
@@ -36,4 +37,20 @@ void BoundingBoxComponent::update() {
     position->setX(screenWidth - size.x);
   if (position->getY() + size.y >= ground)
     position->setY(ground - size.y);
+}
+
+Rectangle BoundingBoxComponent::getBox() const {
+  return (Rectangle){position->getX(), position->getY(), size.x, size.y};
+}
+
+bool BoundingBoxComponent::checkCollision(
+    const BoundingBoxComponent &other) const {
+
+  Rectangle box = this->getBox();
+  Rectangle otherBox = other.getBox();
+
+  return (box.x <= otherBox.x + otherBox.width &&
+          box.x + box.width >= otherBox.x &&
+          box.y <= otherBox.y + otherBox.height &&
+          box.y + box.height >= otherBox.y);
 }

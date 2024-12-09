@@ -19,13 +19,13 @@ void TextureComponent::init() {
 void TextureComponent::update() {
   // PositionComponent &position = entity->getComponent<PositionComponent>();
   //
-  // drawTexture(position.getPos());
+  // drawTexture(position.getPosition());
 }
 
 bool TextureComponent::getIsFlip() { return isFlip; }
 void TextureComponent::updateFlip() { isFlip ^= 1; }
 void TextureComponent::drawTexture() {
-  Vector2 position = entity->getComponent<PositionComponent>().getPos();
+  Vector2 position = entity->getComponent<PositionComponent>().getPosition();
   if (isFlip) {
     DrawTextureRec(flipTexture, frameRec, position, WHITE);
   } else {

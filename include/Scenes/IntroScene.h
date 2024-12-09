@@ -11,7 +11,7 @@ public:
   Shared<Scene> updateScene() override;
   void draw() override;
   void loadResources() override;
-  void start() override;
+  void init() override;
 
 private:
   bool changeGameScreen, changeLoadScreen, changeRankingScreen,

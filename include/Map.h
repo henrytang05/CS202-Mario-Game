@@ -1,6 +1,6 @@
 #pragma once
-#include "pch.h"
 #include "GameObject.h"
+#include "pch.h"
 using json = nlohmann::json;
 
 // Base class for all objects
@@ -18,7 +18,6 @@ using json = nlohmann::json;
 // // Derived class for a block
 // class Block : public GameObject {
 //     Texture2D texture;
-    
 
 // public:
 //     Block(Texture2D tex, Vector2 pos) : GameObject(pos), texture(tex) {}
@@ -36,40 +35,29 @@ using json = nlohmann::json;
 
 // Factory class for creating game objects
 class TileFactory {
-    std::map<int, Texture2D> textureMap;
+  std::map<int, Texture2D> textureMap;
 
 public:
-    TileFactory()=default;
-    TileFactory(const std::string& tilesetPath, const std::string& imagePath);
-    std::shared_ptr<GameObject> Create(int tileId, const std::string& type, Vector2 position);
+  TileFactory() = default;
+  TileFactory(const std::string &tilesetPath, const std::string &imagePath);
+  std::shared_ptr<GameObject> Create(int tileId, const std::string &type,
+                                     Vector2 position);
 };
 
 // MapRenderer class
 class MapRenderer {
-    std::vector<std::shared_ptr<GameObject>> objects;
-    int mapWidth, mapHeight, tileWidth, tileHeight;
+  std::vector<std::shared_ptr<GameObject>> objects;
+  int mapWidth, mapHeight, tileWidth, tileHeight;
 
 public:
-    MapRenderer()=default;
-    MapRenderer(const std::string& mapPath, TileFactory& factory);
-    void Render();
-};
-
-// Camera class
-class MyCamera {
-    Camera2D camera;
-
-public:
-    MyCamera();
-    void Update(Vector2 target);
-    void BeginMode();
-    void EndMode();
+  MapRenderer() = default;
+  MapRenderer(const std::string &mapPath, TileFactory &factory);
+  void Render();
 };
 
 // #pragma once
 // #include "AABB.h"
 // #include "pch.h"
-
 
 // using json = nlohmann::json;
 
@@ -123,8 +111,9 @@ public:
 //     int tileWidth, tileHeight;
 
 // public:
-//     TileFactory(const std::string& tilesetPath, const std::string& imagePath, b2World& world);
-//     std::shared_ptr<GameObject> Create(int tileId, Vector2 position);
+//     TileFactory(const std::string& tilesetPath, const std::string& imagePath,
+//     b2World& world); std::shared_ptr<GameObject> Create(int tileId, Vector2
+//     position);
 
 //     // Getter for tileMap to avoid access issues
 //     std::map<int, std::shared_ptr<Tile>>& GetTileMap() { return tileMap; }

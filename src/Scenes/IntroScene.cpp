@@ -58,7 +58,7 @@ void IntroScene::loadResources() {
   SettingsButton = new GUI::ImageButton(545, 595, "./assets/SettingsButton.png",
                                         "./assets/Hover_SettingsButton.png");
 };
-void IntroScene::start() {
+void IntroScene::init() {
   changeGameScreen = false;
   changeLoadScreen = false;
   changeRankingScreen = false;

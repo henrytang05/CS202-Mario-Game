@@ -8,113 +8,91 @@
 //     DrawTexture(texture, position.x, position.y, WHITE);
 // }
 
-TileFactory::TileFactory(const std::string& tilesetPath, const std::string& imagePath) {
-    std::ifstream file(tilesetPath);
-    json tilesetData;
-    file >> tilesetData;
+TileFactory::TileFactory(const std::string &tilesetPath,
+                         const std::string &imagePath) {
+  std::ifstream file(tilesetPath);
+  json tilesetData;
+  file >> tilesetData;
 
-    Texture2D tilesetImage = LoadTexture(imagePath.c_str());
-    Image tilesetImageAsImage = LoadImageFromTexture(tilesetImage);
+  Texture2D tilesetImage = LoadTexture(imagePath.c_str());
+  Image tilesetImageAsImage = LoadImageFromTexture(tilesetImage);
 
-    int tileWidth = tilesetData["tilewidth"];
-    int tileHeight = tilesetData["tileheight"];
-    int columns = tilesetData["columns"];
-    int tileCount = tilesetData["tilecount"];
+  int tileWidth = tilesetData["tilewidth"];
+  int tileHeight = tilesetData["tileheight"];
+  int columns = tilesetData["columns"];
+  int tileCount = tilesetData["tilecount"];
 
-    for (int i = 0; i < tileCount; ++i) {
-        float x = (i % columns) * tileWidth;
-        float y = (i / columns) * tileHeight;
-        Image tileImage = ImageFromImage(tilesetImageAsImage, { x, y, (float)tileWidth, (float)tileHeight });
-        Texture2D tileTexture = LoadTextureFromImage(tileImage);
-        textureMap[i] = tileTexture;
-        UnloadImage(tileImage);
-    }
+  for (int i = 0; i < tileCount; ++i) {
+    float x = (i % columns) * tileWidth;
+    float y = (i / columns) * tileHeight;
+    Image tileImage = ImageFromImage(
+        tilesetImageAsImage, {x, y, (float)tileWidth, (float)tileHeight});
+    Texture2D tileTexture = LoadTextureFromImage(tileImage);
+    textureMap[i] = tileTexture;
+    UnloadImage(tileImage);
+  }
 
-    UnloadImage(tilesetImageAsImage);
-    UnloadTexture(tilesetImage);
+  UnloadImage(tilesetImageAsImage);
+  UnloadTexture(tilesetImage);
 }
 
-std::shared_ptr<GameObject> TileFactory::Create(int tileId, const std::string& type, Vector2 position) {
-    if (textureMap.find(tileId) != textureMap.end()) {
-        if (type == "Block") {
-            return std::make_shared<Block>(textureMap[tileId], position);
-        } else if (type == "Interact") {
-            return std::make_shared<Interact>(textureMap[tileId], position);
-        }
+std::shared_ptr<GameObject>
+TileFactory::Create(int tileId, const std::string &type, Vector2 position) {
+  if (textureMap.find(tileId) != textureMap.end()) {
+    if (type == "Block") {
+      return std::make_shared<Block>(textureMap[tileId], position);
+    } else if (type == "Interact") {
+      return std::make_shared<Interact>(textureMap[tileId], position);
     }
-    return nullptr;
+  }
+  return nullptr;
 }
 
-MapRenderer::MapRenderer(const std::string& mapPath, TileFactory& factory) {
-    std::ifstream file(mapPath);
-    json mapData;
-    file >> mapData;
-    
-    mapWidth = mapData["width"];
-    mapHeight = mapData["height"];
-    tileWidth = mapData["tilewidth"];
-    tileHeight = mapData["tileheight"];
+MapRenderer::MapRenderer(const std::string &mapPath, TileFactory &factory) {
+  std::ifstream file(mapPath);
+  json mapData;
+  file >> mapData;
 
-    int groundLevel = (3 * 810) / 4;
+  mapWidth = mapData["width"];
+  mapHeight = mapData["height"];
+  tileWidth = mapData["tilewidth"];
+  tileHeight = mapData["tileheight"];
 
-    for (const auto& layer : mapData["layers"]) {
-        if (layer["type"] == "tilelayer") {
-            int index = 0;
-            for (const auto& tileIdValue : layer["data"]) {
-                if (!tileIdValue.is_null() && tileIdValue.is_number()) {
-                    int tileId = tileIdValue.get<int>();
-                    if (mapData.contains("tilesets") && !mapData["tilesets"].empty()) {
-                        int firstgid = mapData["tilesets"][0]["firstgid"].get<int>();
-                        if (tileId >= firstgid) {
-                            int x = (index % mapWidth) * tileWidth;
-                            int y = (index / mapWidth) * tileHeight;
-                            std::cerr<<"y: " << y << std::endl;
-                            std::cerr<<"index: " << index << std::endl;
-                            int offset = tileId - firstgid;
-                            auto obj = factory.Create(offset, "Block", { (float)x, (float)y });
-                            if (obj) {
-                                objects.push_back(obj);
-                            }
-                        }
-                    }
-                }
-                index++;
+  int groundLevel = (3 * 810) / 4;
+
+  for (const auto &layer : mapData["layers"]) {
+    if (layer["type"] == "tilelayer") {
+      int index = 0;
+      for (const auto &tileIdValue : layer["data"]) {
+        if (!tileIdValue.is_null() && tileIdValue.is_number()) {
+          int tileId = tileIdValue.get<int>();
+          if (mapData.contains("tilesets") && !mapData["tilesets"].empty()) {
+            int firstgid = mapData["tilesets"][0]["firstgid"].get<int>();
+            if (tileId >= firstgid) {
+              int x = (index % mapWidth) * tileWidth;
+              int y = (index / mapWidth) * tileHeight;
+              std::cerr << "y: " << y << std::endl;
+              std::cerr << "index: " << index << std::endl;
+              int offset = tileId - firstgid;
+              auto obj = factory.Create(offset, "Block", {(float)x, (float)y});
+              if (obj) {
+                objects.push_back(obj);
+              }
             }
+          }
         }
+        index++;
+      }
     }
+  }
 }
 
 void MapRenderer::Render() {
-    for (const auto& obj : objects) {
-        obj->Render();
-    }
+  for (const auto &obj : objects) {
+    obj->Render();
+  }
 }
 
-MyCamera::MyCamera() {
-    camera.target = { 6.2*16.0f, screenHeight + 48 };
-    camera.offset = { 300.0f,screenHeight/2+16*18.5f}; //I don't know why this works
-    camera.rotation = 0.0f;
-    camera.zoom = 3.0f;
-}
-
-void MyCamera::Update(Vector2 target) {
-    // 6.2*16.0f, screenWidth-24*16.0f, screenHeight - 48 are the boundaries of the camera
-    //so that the camera does not go beyond the map
-   if(target.x < 6.2*16.0f) camera.target.x = 6.2*16.0f;
-   else if(target.x>screenWidth-24*16.0f) camera.target.x = screenWidth-24*16.0f;
-   else camera.target.x = target.x;
-   
-   if(target.y < screenHeight -48) camera.target.y = screenHeight - 48;
-   else camera.target.y = target.y;
-}
-
-void MyCamera::BeginMode() {
-    BeginMode2D(camera);
-}
-
-void MyCamera::EndMode() {
-    EndMode2D();
-}
 // #include "Map.h"
 
 // Block rendering
@@ -128,7 +106,8 @@ void MyCamera::EndMode() {
 // }
 
 // TileFactory constructor
-// TileFactory::TileFactory(const std::string& tilesetPath, const std::string& imagePath, b2World& world)
+// TileFactory::TileFactory(const std::string& tilesetPath, const std::string&
+// imagePath, b2World& world)
 //     : world(world) {
 //     std::ifstream file(tilesetPath);
 //     json tilesetData;
@@ -147,8 +126,9 @@ void MyCamera::EndMode() {
 //         float x = (i % columns) * tileWidth;
 //         float y = (i / columns) * tileHeight;
 
-//         Image tileImage = ImageFromImage(tilesetImageAsImage, { x, y, (float)tileWidth, (float)tileHeight });
-//         Texture2D tileTexture = LoadTextureFromImage(tileImage);
+//         Image tileImage = ImageFromImage(tilesetImageAsImage, { x, y,
+//         (float)tileWidth, (float)tileHeight }); Texture2D tileTexture =
+//         LoadTextureFromImage(tileImage);
 
 //         tileMap[i] = std::make_shared<Tile>(tileTexture, "default", false);
 
@@ -158,8 +138,10 @@ void MyCamera::EndMode() {
 //     Update tiles based on JSON
 //     for (const auto& tile : tilesetData["tiles"]) {
 //         int id = tile["id"];
-//         std::string type = tile.contains("type") ? tile["type"].get<std::string>() : "default";
-//         bool collision = tile.contains("objectgroup") && !tile["objectgroup"]["objects"].empty();
+//         std::string type = tile.contains("type") ?
+//         tile["type"].get<std::string>() : "default"; bool collision =
+//         tile.contains("objectgroup") &&
+//         !tile["objectgroup"]["objects"].empty();
 
 //         if (tileMap.find(id) != tileMap.end()) {
 //             tileMap[id]->type = type;
@@ -172,7 +154,8 @@ void MyCamera::EndMode() {
 // }
 
 // Create game objects
-// std::shared_ptr<GameObject> TileFactory::Create(int tileId, Vector2 position) {
+// std::shared_ptr<GameObject> TileFactory::Create(int tileId, Vector2 position)
+// {
 //     auto tile = tileMap.find(tileId);
 //     if (tile != tileMap.end()) {
 //         auto& tileData = tile->second;
@@ -212,8 +195,8 @@ void MyCamera::EndMode() {
 //                     int tileId = tileIdValue.get<int>();
 //                     int x = (index % mapWidth) * tileWidth;
 //                     int y = (index / mapWidth) * tileHeight;
-//                     auto obj = factory.Create(tileId, { (float)x, (float)y });
-//                     if (obj) {
+//                     auto obj = factory.Create(tileId, { (float)x, (float)y
+//                     }); if (obj) {
 //                         objects.push_back(obj);
 //                     }
 //                 }

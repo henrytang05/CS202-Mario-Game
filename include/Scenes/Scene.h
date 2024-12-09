@@ -11,7 +11,7 @@ public:
   virtual Shared<Scene> updateScene() = 0;
   virtual void draw() = 0;
   virtual void loadResources() = 0;
-  virtual void start() = 0;
+  virtual void init() = 0;
   // virtual bool isFinished() = 0;
 
 protected:

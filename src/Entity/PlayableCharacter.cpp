@@ -1,6 +1,8 @@
 #include "AbstractEntity.h"
+#include "Components/BoundingBox.h"
 #include "Components/Components_include.h"
 #include "Entity/PlayableEntity.h"
+#include "Entity/States/CharacterStates.h"
 
 PlayableEntity::PlayableEntity(std::string name) : AbstractEntity(name) {}
 
@@ -20,13 +22,13 @@ bool PlayableEntity::isOnTheGround() {
 }
 
 Mario::Mario()
-    : PlayableEntity("Mario"), state(new StandingState({0.5f, 0.0f})) {
+    : PlayableEntity("Mario"), state(new DroppingState({0.0f, 1.0f})) {
   Vector2 size({16, 23});
   Vector2 position = {0, (float)ground - size.y};
   Vector2 velocity = {0, 0};
 
   addComponent<PositionComponent>(position);
-  addComponent<TransformComponent>(velocity, .1);
+  addComponent<TransformComponent>(velocity);
   addComponent<BoundingBoxComponent>(size);
   addComponent<RigidBodyComponent>();
   addComponent<TextureComponent>("./assets/Mario-Small", 11);
@@ -38,6 +40,10 @@ void Mario::update() {
   for (auto &component : components) {
     component->update();
   }
+
+  // check collision
+  // for ( .. )
+  // getComponent<BoundingBoxComponent>().checkCollision()
 }
 
 void Mario::input() {

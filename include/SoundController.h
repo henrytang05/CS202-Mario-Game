@@ -10,7 +10,7 @@ private:
 	Music bg;
 	void LoadBackgroundTracks();
 	void LoadSoundEffects();
-	float volume = 0.5f;
+	float volume = 1.0f;
 public:
 	~SoundController();
 	void LoadSounds();

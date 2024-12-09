@@ -20,7 +20,7 @@ IntroScene::~IntroScene() {
   delete SettingsButton;
 }
 
-Shared<Scene> IntroScene::update() {
+Shared<Scene> IntroScene::updateScene() {
   SoundCtrl.Update();
   Vector2 mousePos = GetMousePosition();
   bool isLeftClick = IsMouseButtonPressed(MOUSE_BUTTON_LEFT);

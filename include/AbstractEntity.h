@@ -21,6 +21,8 @@ public:
   bool active;
   std::string name;
   std::vector<Unique<Component>> components;
+
+private:
   ComponentArray componentArray;
   ComponentBitSet componentBitset;
 };

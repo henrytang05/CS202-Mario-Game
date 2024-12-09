@@ -1,6 +1,7 @@
 #ifndef SCENE_H
 #define SCENE_H
 
+#include "SoundController.h"
 namespace SceneSpace {
 
 enum Type : uint8_t { INTRO = 0, GAME };

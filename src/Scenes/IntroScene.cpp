@@ -8,6 +8,7 @@ IntroScene::IntroScene() : Scene() {
   changeLoadScreen = false;
   changeRankingScreen = false;
   changeSettingsScreen = false;
+  SoundCtrl.PlayGroundTheme();
 }
 IntroScene::~IntroScene() {
 #ifdef _DEBUG
@@ -19,7 +20,8 @@ IntroScene::~IntroScene() {
   delete SettingsButton;
 }
 
-Shared<Scene> IntroScene::updateScene() {
+Shared<Scene> IntroScene::update() {
+  SoundCtrl.Update();
   Vector2 mousePos = GetMousePosition();
   bool isLeftClick = IsMouseButtonPressed(MOUSE_BUTTON_LEFT);
   NewGameButton->update(mousePos, isLeftClick);

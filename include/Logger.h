@@ -1,13 +1,11 @@
 #ifndef LOGGER_H
 #define LOGGER_H
-#include "pch.h"
 
 using namespace std;
 
 enum LogLevel { DEBUG, INFO, WARNING, ERROR, CRITICAL };
 
 class Logger {
-
 public:
   // Add a mode parameter to specify append or overwrite
   Logger(const string &filename, bool append = true) {
@@ -60,6 +58,7 @@ private:
   }
 };
 
-void Log(const char *filename, LogLevel level, const std::string &message);
+void Log(std::string message, LogLevel level = LogLevel::DEBUG,
+         std::string filename = "log.txt", bool append = false);
 
 #endif

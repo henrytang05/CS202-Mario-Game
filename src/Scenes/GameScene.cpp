@@ -49,7 +49,7 @@ void GameScene::draw() {
 }
 Shared<Scene> GameScene::updateScene() {
   this->update();
-  player->update();
+  //player->update();
   return nullptr;
 }
 void GameScene::update() {

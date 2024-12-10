@@ -14,7 +14,6 @@ GameScene::~GameScene() {
 #endif
 }
 void GameScene::loadResources() { 
-      tileFactory = TileFactory("Map/OverWorld.json", "Map/OverWorld.png"); 
       mapRenderer = MapRenderer("Map/Level1.json", tileFactory);
 }
 void GameScene::start() {

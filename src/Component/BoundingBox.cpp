@@ -17,7 +17,7 @@ void BoundingBoxComponent::init() {
   position = &entity->getComponent<PositionComponent>();
 }
 bool BoundingBoxComponent::isOnTheGround() {
-  return position->getY() + size.y + 0.51 >= ground;
+  return position->getY() + size.y >= ground;
 }
 
 void BoundingBoxComponent::setSize(Vector2 size) { this->size = size; }

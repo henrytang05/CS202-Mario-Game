@@ -36,13 +36,13 @@ GameScene::~GameScene() {
 #endif
 }
 void GameScene::loadResources() {
-  tileFactory = TileFactory("Map/OverWorld.json", "Map/OverWorld.png");
+  std::cerr<<"loadResources"<<endl;
   mapRenderer = MapRenderer("Map/Level1.json", tileFactory);
 }
 void GameScene::draw() {
   BeginMode2D(camera);
 
-  mapRenderer.Render();
+  //mapRenderer.Render();
   player->draw();
 
   EndMode2D();

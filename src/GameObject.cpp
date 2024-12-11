@@ -1,4 +1,23 @@
 #include "GameObject.h"
-void Block::Render() { DrawTexture(texture, position.x, position.y, WHITE); }
+#include "Components/BoundingBox.h"
+#include "Components/Position.h"
+#include "Components/Texture.h"
 
-void Interact::Render() { DrawTexture(texture, position.x, position.y, WHITE); }
+GameObject::GameObject(std::string name): AbstractEntity(name){}
+
+Block::Block(Texture2D texture, Vector2 position)
+: GameObject("Block") {
+    Vector2 size({16, 16});
+    addComponent<PositionComponent>(position);    
+    addComponent<BoundingBoxComponent>(size);
+    addComponent<TextureComponent>(texture);
+}
+
+Block::~Block() {
+    // Destructor implementation (if needed)
+}
+
+void Block::draw() {
+    ASSERT(hasComponent<TextureComponent>());
+    getComponent<TextureComponent>().drawTexture();
+}

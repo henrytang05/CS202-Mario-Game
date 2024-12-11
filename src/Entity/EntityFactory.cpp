@@ -22,3 +22,6 @@ Shared<AbstractEntity> EntityFactory::createGoomba() {
   // return goomba;
   return nullptr;
 }
+Shared<Block> EntityFactory::createBlock(){
+  
+}

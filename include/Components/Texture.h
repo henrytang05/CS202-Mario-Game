@@ -4,22 +4,15 @@
 
 class TextureComponent : public Component {
 public:
-  TextureComponent(std::string filename, int _numFrame);
+  TextureComponent() = default;
   virtual ~TextureComponent() = default;
-  void drawTexture();
-  void updateFrame(int frameIndex);
-  void updateFlip();
+  void addTexture(std::string state, std::string filename);
+  void addTexture(std::string state, Texture2D texture);
+  void drawTexture(std::string state);
   void init() override;
   void update() override;
-
-  bool getIsFlip();
-
 private:
-  int numFrame;
-  int frameWidth;
-  bool isFlip;
-  Rectangle frameRec;
-  Texture2D flipTexture, texture;
+  std::map<std::string, Texture2D> textures;
 };
 
 #endif // TEXTURE_COMPONENT_H

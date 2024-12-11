@@ -1,8 +1,9 @@
 #include "Map.h"
 #include "Logger.h"
-void TileFactory::addTileset(const std::string& tilesetPath, const std::string& imagePath, int firstgid) {
-    std::ifstream file(tilesetPath );
-     if (!file.is_open()) {
+
+void TileFactory::addTileset(const std::string& tilesetPath, const std::string& imagePath, int firstGid) {
+    std::ifstream file(tilesetPath);
+    if (!file.is_open()) {
         std::cerr << "Error: Could not open file " << tilesetPath << std::endl;
         return;
     }
@@ -28,7 +29,7 @@ void TileFactory::addTileset(const std::string& tilesetPath, const std::string& 
         float y = (i / columns) * tileHeight;
         Image tileImage = ImageFromImage(tilesetImageAsImage, { x, y, (float)tileWidth, (float)tileHeight });
         Texture2D tileTexture = LoadTextureFromImage(tileImage);
-        textureMap[i+firstgid] = tileTexture;
+        textureMap[i + firstGid] = tileTexture;
         UnloadImage(tileImage);
     }
 
@@ -36,10 +37,9 @@ void TileFactory::addTileset(const std::string& tilesetPath, const std::string& 
     UnloadTexture(tilesetImage);
 }
 
-std::shared_ptr<GameObject> TileFactory::Create(int tileId, const std::string& type, Vector2 position) {
+std::shared_ptr<GameObject> TileFactory::create(int tileId, const std::string& type, Vector2 position) {
     if (textureMap.find(tileId) != textureMap.end()) {
         if (type == "Block") {
-            std::cerr<<"Block found"<<endl;
             return std::make_shared<Block>(textureMap[tileId], position);
         }
         // else if (type == "Interact") {
@@ -49,14 +49,15 @@ std::shared_ptr<GameObject> TileFactory::Create(int tileId, const std::string& t
     return nullptr;
 }
 
-MapRenderer::MapRenderer(const std::string& mapPath, TileFactory& factory) {
+MapRenderer::MapRenderer(const std::string& mapPath, std::vector<std::vector<std::shared_ptr<AbstractEntity>>>& mapCollision) { 
+    TileFactory factory;
     std::ifstream file(mapPath);
     if (!file.is_open()) {
         std::cerr << "Error: Could not open file " << mapPath << std::endl;
         return;
     }
     json mapData;
-       try {
+    try {
         file >> mapData;
     } catch (const json::parse_error& e) {
         std::cerr << "Parse error: " << e.what() << std::endl;
@@ -73,43 +74,39 @@ MapRenderer::MapRenderer(const std::string& mapPath, TileFactory& factory) {
     tileWidth = mapData["tilewidth"];
     tileHeight = mapData["tileheight"];
     std::cerr << "Map width: " << mapWidth << " Map height: " << mapHeight << std::endl;
-//Load Tilesets
-    const std::string dir= "Map/";
-    for(const auto& tileset: mapData["tilesets"]){
-        int index = 0;
-        int firstgid = tileset["firstgid"];
-        std::cerr<<"firstgid: " << firstgid << std::endl;
-        std::string tilesetPath = tileset["source"];
-        std::cerr<<"tilesetPath: " << tilesetPath << std::endl;
-        std::string imagePath = tilesetPath.substr(0,(int)tilesetPath.size()-5)+".png";
-        std::cerr<<"imagePath: " << imagePath << std::endl;
-        factory.addTileset(dir+tilesetPath, dir+imagePath, firstgid);
-        std::cerr << "Tileset added: " << tilesetPath << std::endl;
-    }
 
+    // Load Tilesets
+    const std::string dir = "Map/";
+    for (const auto& tileset : mapData["tilesets"]) {
+        int firstGid = tileset["firstgid"];
+        std::string tilesetPath = tileset["source"];
+        std::string imagePath = tilesetPath.substr(0, tilesetPath.size() - 5) + ".png";
+        factory.addTileset(dir + tilesetPath, dir + imagePath, firstGid);
+    }
 
     for (const auto& layer : mapData["layers"]) {
         if (layer["type"] == "tilelayer") {
-            LoadLayer(layer, factory);
+            loadLayer(layer, factory);
+        } else if (layer["type"] == "objectgroup") {
+            // loadObjectGroup(layer, factory);
         }
-        else if (layer["type"] == "objectgroup") {
-            //LoadObjectGroup(layer, factory);
-        }
+    }
+
+    // Load mapCollision from objects
+    for (const auto& obj : objects) {
+        auto position = obj->getComponent<PositionComponent>().getPosition();
+        mapCollision[position.x / tileWidth][position.y / tileHeight] = obj;
     }
 }
 
-void MapRenderer::LoadLayer(const json& layer, TileFactory& factory) {
+void MapRenderer::loadLayer(const json& layer, TileFactory& factory) {
     int index = 0;
-    std::cerr<<"LoadLayer"<<index<<std::endl;
     for (const auto& tileIdValue : layer["data"]) {
         if (!tileIdValue.is_null() && tileIdValue.is_number()) {
             int tileId = tileIdValue.get<int>();
             int x = (index % mapWidth) * tileWidth;
             int y = (index / mapWidth) * tileHeight;
-            //std::cerr<<"tileId"<<tileId<<endl;
-            auto obj = factory.Create(tileId, "Block", { (float)x, (float)y });
-            //std::cerr<<"Obj created successfully"<<endl;
-            // std::cerr<<"tileId"<<tileId<<endl;
+            auto obj = factory.create(tileId, "Block", { (float)x, (float)y });
             if (obj) {
                 objects.push_back(obj);
             }
@@ -118,14 +115,12 @@ void MapRenderer::LoadLayer(const json& layer, TileFactory& factory) {
     }
 }
 
-void MapRenderer::LoadObjectGroup(const json &layer, TileFactory &factory)
-{
-
+void MapRenderer::loadObjectGroup(const json& layer, TileFactory& factory) {
+    // For object like coins, enemies, special bricks, etc.
 }
 
-void MapRenderer::Render() {
+void MapRenderer::render() {
     for (const auto& obj : objects) {
         obj->draw();
     }
 }
-

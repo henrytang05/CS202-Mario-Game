@@ -37,12 +37,13 @@ GameScene::~GameScene() {
 }
 void GameScene::loadResources() {
   std::cerr<<"loadResources"<<endl;
-  mapRenderer = MapRenderer("Map/Level1.json", tileFactory);
+  mapCollision.resize(100, std::vector<Shared<AbstractEntity>>(100, nullptr));
+  mapRenderer = MapRenderer("Map/Level1.json", mapCollision);
 }
 void GameScene::draw() {
   BeginMode2D(camera);
 
-  mapRenderer.Render();
+  mapRenderer.render();
   player->draw();
 
   EndMode2D();

@@ -19,8 +19,8 @@ public:
   void init() override;
 
 private:
-  TileFactory tileFactory;
   MapRenderer mapRenderer;
+  std::vector<std::vector<Shared<AbstractEntity>>> mapCollision;// Pseudo map for collision
   Camera2D camera;
   Shared<PlayableEntity> player;
   std::vector<Shared<AbstractEntity>> entities;

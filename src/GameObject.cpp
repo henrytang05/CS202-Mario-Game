@@ -3,11 +3,10 @@
 #include "Components/Position.h"
 #include "Components/Texture.h"
 
-GameObject::GameObject(std::string name): AbstractEntity(name){}
+GameObject::GameObject(std::string name) : AbstractEntity(name) {}
 
 Block::Block(Texture2D texture, Vector2 position)
-: GameObject("Block") {
-
+    : GameObject("Block") {
     Vector2 size({16, 16});
     addComponent<PositionComponent>(position);    
     addComponent<BoundingBoxComponent>(size);
@@ -16,10 +15,14 @@ Block::Block(Texture2D texture, Vector2 position)
 }
 
 Block::~Block() {
-    // Destructor implementation (if needed)
+    // Destructor implementation 
 }
 
 void Block::draw() {
     ASSERT(hasComponent<TextureComponent>());
     getComponent<TextureComponent>().drawTexture("Normal");
+}
+
+void Block::update() {
+    // Implementation of the update function
 }

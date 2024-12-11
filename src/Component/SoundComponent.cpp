@@ -79,7 +79,6 @@ void MarioSoundComponent::PlayGameOverEffect()
 
 void MarioSoundComponent::PlayJumpSmallEffect()
 {
-	std::cout << "Jump!!!!!!!" << std::endl;
     PlaySound(soundsEffects[10]);
 }
 

@@ -26,6 +26,7 @@ void GameScene::init() {
   camera.target.x = player->getComponent<PositionComponent>().getPosition().x;
   camera.target.y = 784.0f - 186.0f;
   camera.zoom = 2.0f;
+  SoundCtrl.PlayGroundTheme();
 }
 
 GameScene::~GameScene() {
@@ -58,6 +59,7 @@ void GameScene::update() {
     camera.target.x = screenWidth / (2.0f * camera.zoom);
   if (camera.target.x >= screenWidth - screenWidth / (2.0f * camera.zoom))
     camera.target.x = screenWidth - screenWidth / (2.0f * camera.zoom);
+  SoundCtrl.Update();
 }
 
 bool GameScene::isFinished() { return gameOver; }

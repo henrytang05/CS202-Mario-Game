@@ -3,6 +3,7 @@
 #include "Components/Components_include.h"
 #include "Entity/PlayableEntity.h"
 #include "Entity/States/CharacterStates.h"
+#include "Components/SoundComponent.h"
 
 PlayableEntity::PlayableEntity(std::string name) : AbstractEntity(name) {}
 
@@ -30,6 +31,7 @@ Luigi::Luigi() : PlayableEntity("Luigi"), state(new DroppingState({0.0f, 1.0f}, 
   addComponent<BoundingBoxComponent>(size);
   addComponent<RigidBodyComponent>();
   addComponent<TextureComponent>();
+  addComponent<MarioSoundComponent>();
 
   getComponent<TextureComponent>().addTexture("SMALL-RIGHT-IDLE", "./assets/Luigi/Small-Right-Idle.png");
   getComponent<TextureComponent>().addTexture("SMALL-RIGHT-MOVING", "./assets/Luigi/Small-Right-Moving.png");
@@ -56,6 +58,8 @@ Luigi::Luigi() : PlayableEntity("Luigi"), state(new DroppingState({0.0f, 1.0f}, 
   getComponent<TextureComponent>().addTexture("LARGE-LEFT-JUMPING", "./assets/Luigi/Large-Left-Jumping.png");
   getComponent<TextureComponent>().addTexture("LARGE-LEFT-DROPPING", "./assets/Luigi/Large-Left-Dropping.png");
   getComponent<TextureComponent>().addTexture("LARGE-LEFT-DUCKLING", "./assets/Luigi/Large-Left-Duckling.png");
+  
+  getComponent<MarioSoundComponent>().LoadSounds();
 }
 void Luigi::update() {
   input();
@@ -90,6 +94,7 @@ Mario::Mario()
   addComponent<BoundingBoxComponent>(size);
   addComponent<RigidBodyComponent>();
   addComponent<TextureComponent>();
+  addComponent<MarioSoundComponent>();
 
   getComponent<TextureComponent>().addTexture("SMALL-RIGHT-IDLE", "./assets/Mario/Small-Right-Idle.png");
   getComponent<TextureComponent>().addTexture("SMALL-RIGHT-MOVING", "./assets/Mario/Small-Right-Moving.png");
@@ -116,6 +121,8 @@ Mario::Mario()
   getComponent<TextureComponent>().addTexture("LARGE-LEFT-JUMPING", "./assets/Mario/Large-Left-Jumping.png");
   getComponent<TextureComponent>().addTexture("LARGE-LEFT-DROPPING", "./assets/Mario/Large-Left-Dropping.png");
   getComponent<TextureComponent>().addTexture("LARGE-LEFT-DUCKLING", "./assets/Mario/Large-Left-Duckling.png");
+
+  getComponent<MarioSoundComponent>().LoadSounds();
 }
 
 void Mario::update() {

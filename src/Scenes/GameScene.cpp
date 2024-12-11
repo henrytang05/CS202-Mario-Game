@@ -42,7 +42,7 @@ void GameScene::loadResources() {
 void GameScene::draw() {
   BeginMode2D(camera);
 
-  //mapRenderer.Render();
+  mapRenderer.Render();
   player->draw();
 
   EndMode2D();

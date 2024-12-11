@@ -39,8 +39,8 @@ void TileFactory::addTileset(const std::string& tilesetPath, const std::string& 
 std::shared_ptr<GameObject> TileFactory::Create(int tileId, const std::string& type, Vector2 position) {
     if (textureMap.find(tileId) != textureMap.end()) {
         if (type == "Block") {
+            std::cerr<<"Block found"<<endl;
             return std::make_shared<Block>(textureMap[tileId], position);
-            std::cerr<<"Block created successfully"<<endl;
         }
         // else if (type == "Interact") {
         //     return std::make_shared<Interact>(textureMap[tileId], position);
@@ -106,9 +106,10 @@ void MapRenderer::LoadLayer(const json& layer, TileFactory& factory) {
             int tileId = tileIdValue.get<int>();
             int x = (index % mapWidth) * tileWidth;
             int y = (index / mapWidth) * tileHeight;
+            //std::cerr<<"tileId"<<tileId<<endl;
             auto obj = factory.Create(tileId, "Block", { (float)x, (float)y });
-            std::cerr<<"Obj created successfully"<<endl;
-            std::cerr<<"tileId"<<tileId<<endl;
+            //std::cerr<<"Obj created successfully"<<endl;
+            // std::cerr<<"tileId"<<tileId<<endl;
             if (obj) {
                 objects.push_back(obj);
             }

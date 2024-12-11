@@ -10,11 +10,9 @@ Shared<Mario> EntityFactory::createMario() {
 
   return mario;
 }
-Shared<AbstractEntity> EntityFactory::createLuigi() {
-  // Shared<Entity> luigi = std::make_shared<Entity>();
-  // // TODO: Add components
-  // return luigi;
-  return nullptr;
+Shared<Luigi> EntityFactory::createLuigi() {
+  Shared<Luigi> luigi = std::make_shared<Luigi>();
+  return luigi;
 }
 Shared<AbstractEntity> EntityFactory::createGoomba() {
   // Shared<Entity> goomba = std::make_shared<Entity>();

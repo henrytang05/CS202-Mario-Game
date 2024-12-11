@@ -20,7 +20,18 @@ public:
   bool isOnTheGround() override;
   void setVelocity(Vector2 newVelocity) override;
 };
+class Luigi : public PlayableEntity {
+public:
+  Luigi();
+  ~Luigi() = default;
 
+  void update() override;
+  void draw() override;
+
+private:
+  void input() override;
+  Unique<CharacterState> state;
+};
 class Mario : public PlayableEntity {
 public:
   Mario();
@@ -31,8 +42,6 @@ public:
 
 private:
   void input() override;
-
-private:
   Unique<CharacterState> state;
 };
 

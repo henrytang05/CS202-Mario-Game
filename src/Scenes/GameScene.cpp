@@ -18,10 +18,8 @@ GameScene::GameScene() : Scene(), camera({0, 0}) { init(); }
 
 void GameScene::init() {
   entityFactory = std::make_unique<EntityFactory>();
-  Shared<Mario> mario = entityFactory->createMario();
-  player = mario;
-  entities.push_back(mario);
-
+  player = entityFactory->createLuigi();
+  entities.push_back(player);
   gameOver = false;
   camera.offset = {screenWidth / 2.0f, screenHeight / 2.0f};
   camera.rotation = 0.0f;
@@ -49,7 +47,6 @@ void GameScene::draw() {
 }
 Shared<Scene> GameScene::updateScene() {
   this->update();
-  //player->update();
   return nullptr;
 }
 void GameScene::update() {

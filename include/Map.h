@@ -21,6 +21,6 @@ public:
     void loadLayer(const json& layer);
     void loadObjectGroup(const json& layer);
     MapRenderer() = default;
-    std::vector<Shared<AbstractEntity>> creatMap(const std::string& mapPath, std::vector<std::vector<std::shared_ptr<AbstractEntity>>>& mapCollision);
+    std::vector<Shared<AbstractEntity>> createMap(const std::string& mapPath);
     void render();
 };

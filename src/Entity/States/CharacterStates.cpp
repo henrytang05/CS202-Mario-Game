@@ -1,5 +1,7 @@
 #include "Entity/PlayableEntity.h"
 #include "Entity/States/CharacterStates.h"
+#include "Components/SoundComponent.h"
+
 StandingState::StandingState(Vector2 _friction, std::string size, std::string facing, std::string state) : CharacterState(size, facing, state) {
   friction = _friction;
 }
@@ -7,9 +9,10 @@ StandingState::StandingState(Vector2 _friction, std::string size, std::string fa
 CharacterState *StandingState::handleInput(PlayableEntity &character) {
   if (IsKeyDown(KEY_UP)) {
     setEnumState("JUMPING");
-    if (!IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_RIGHT))
-        return new JumpingState({JUMPPING_DEC, GRAVITY_DEC}, getSize(), getFacing(), getState());
-    return new JumpingState((Vector2){0.0f, GRAVITY_DEC}, getSize(), getFacing(), getState());
+    character.getComponent<MarioSoundComponent>().PlayJumpSmallEffect();
+    if((IsKeyDown(KEY_LEFT) && getFacing() == "LEFT") || (IsKeyDown(KEY_RIGHT) && getFacing() == "RIGHT"))
+      return new JumpingState((Vector2){0.0f, GRAVITY_DEC}, getSize(), getFacing(), getState());
+    return new JumpingState({JUMPPING_DEC, GRAVITY_DEC}, getSize(), getFacing(), getState());
   }
   Vector2 velocity = character.getVelocity();
   if (IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_RIGHT)) {
@@ -118,6 +121,7 @@ MovingState::MovingState(Vector2 _velocity, std::string size, std::string facing
 CharacterState *MovingState::handleInput(PlayableEntity &character) {
   if (IsKeyDown(KEY_UP)) {
     setEnumState("JUMPING");
+    character.getComponent<MarioSoundComponent>().PlayJumpSmallEffect();
     return new JumpingState({0.0f, GRAVITY_DEC}, getSize(), getFacing(), getState());
   }
   if (IsKeyDown(KEY_LEFT)) {

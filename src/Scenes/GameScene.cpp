@@ -14,8 +14,10 @@
 class TextureComponent;
 namespace SceneSpace {
 
-GameScene::GameScene() : Scene(), camera({0, 0}) {}
+GameScene::GameScene() : Scene(), camera({0, 0}) {
 
+}
+ 
 void GameScene::init() {
   entityFactory = std::make_unique<EntityFactory>();
   player = entityFactory->createMario();
@@ -35,12 +37,14 @@ GameScene::~GameScene() {
 #endif
 }
 void GameScene::loadResources() {
+  Image bImage = LoadImage("Map/BackGroundnew.png");
+  background = LoadTextureFromImage(bImage);
   mapRenderer.createMap("Map/level1.json");
 }
 void GameScene::draw() {
   BeginMode2D(camera);
-
-  //mapRenderer.Render();
+  DrawTexture(background, 0, 0, WHITE);
+  mapRenderer.render();
   player->draw();
 
   EndMode2D();

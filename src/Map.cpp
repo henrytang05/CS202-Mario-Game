@@ -62,7 +62,7 @@ void MapRenderer::addTileset(const std::string& tilesetPath, const std::string& 
 //     return nullptr;
 // }
 
-std::vector<Shared<AbstractEntity>> MapRenderer::createMap(const std::string& mapPath) { 
+std::vector<Shared<Block>> MapRenderer::createMap(const std::string& mapPath) { 
     std::ifstream file(mapPath);
     if (!file.is_open()) {
         std::cerr << "Error: Could not open file " << mapPath << std::endl;
@@ -180,6 +180,6 @@ void MapRenderer::loadObjectGroup(const json& layer) {
 
 void MapRenderer::render() {
     for (const auto& obj : objects) {
-        //obj->draw();
+        obj->draw();
     }
 }

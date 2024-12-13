@@ -4,28 +4,23 @@
 #include "Components/BoundingBox.h"
 #include "Components/Position.h"
 #include "Components/Texture.h"
+#include "Entity/EntityFactory.h"
 using json = nlohmann::json;
 
-// Factory class for creating game objects
-class TileFactory {
-    std::map<int, Texture2D> textureMap;
-
-public:
-    TileFactory() = default;
-    void addTileset(const std::string& tilesetPath, const std::string& imagePath, int firstGid);
-    std::shared_ptr<GameObject> create(int tileId, const std::string& type, Vector2 position);
-};
 
 // MapRenderer class
 class MapRenderer {
 private:
-    std::vector<std::shared_ptr<GameObject>> objects;
+    map<int, pair<string,Texture2D>> textureMap;
+    std::vector<std::shared_ptr<AbstractEntity>> objects;
     int mapWidth, mapHeight, tileWidth, tileHeight;
+    Unique<IFactory> entityFactory;
 
 public:
-    void loadLayer(const json& layer, TileFactory& factory);
-    void loadObjectGroup(const json& layer, TileFactory& factory);
+    void addTileset(const std::string& tilesetPath, const std::string& imagePath, int firstGid);
+    void loadLayer(const json& layer);
+    void loadObjectGroup(const json& layer);
     MapRenderer() = default;
-    MapRenderer(const std::string& mapPath, std::vector<std::vector<std::shared_ptr<AbstractEntity>>>& mapCollision);
+    std::vector<Shared<AbstractEntity>> creatMap(const std::string& mapPath, std::vector<std::vector<std::shared_ptr<AbstractEntity>>>& mapCollision);
     void render();
 };

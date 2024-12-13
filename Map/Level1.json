@@ -73,10 +73,6 @@
         {
          "firstgid":1,
          "source":"OverWorld.json"
-        }, 
-        {
-         "firstgid":71,
-         "source":"CayNam.json"
         }],
  "tilewidth":16,
  "type":"map",

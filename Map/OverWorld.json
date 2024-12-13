@@ -11,23 +11,23 @@
  "tiles":[
         {
          "id":0,
-         "type":"brokenBlock"
+         "type":"BrokenBlock"
         }, 
         {
          "id":1,
-         "type":"normalBlock"
+         "type":"NormalBlock"
         }, 
         {
          "id":2,
-         "type":"hardBlock"
+         "type":"HardBlock"
         }, 
         {
          "id":3,
-         "type":"groundBlock"
+         "type":"GroundBlock"
         }, 
         {
          "id":4,
-         "type":"questionBlock"
+         "type":"QuestionBlock"
         }],
  "tilewidth":16,
  "type":"tileset",

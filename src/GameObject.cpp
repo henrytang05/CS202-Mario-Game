@@ -26,6 +26,7 @@ BrokenBlock::BrokenBlock(Texture2D texture, Vector2 position): AbstractEntity("B
     addComponent<BoundingBoxComponent>(size);
     addComponent<TextureComponent>();
     getComponent<TextureComponent>().addTexture("Normal", texture);
+    std::cerr<<"create broken block"<<std::endl;
 }
 
 void BrokenBlock::draw() {
@@ -43,6 +44,7 @@ HardBlock::HardBlock(Texture2D texture, Vector2 position): AbstractEntity("HardB
     addComponent<BoundingBoxComponent>(size);
     addComponent<TextureComponent>();
     getComponent<TextureComponent>().addTexture("Normal", texture);
+    std::cerr<<"create hard block"<<std::endl;
 }
 
 void HardBlock::draw() {
@@ -60,6 +62,7 @@ GroundBlock::GroundBlock(Texture2D texture, Vector2 position): AbstractEntity("G
     addComponent<BoundingBoxComponent>(size);
     addComponent<TextureComponent>();
     getComponent<TextureComponent>().addTexture("Normal", texture);
+    std::cerr<<"create ground block"<<std::endl;
 }
 
 void GroundBlock::draw() {
@@ -77,6 +80,7 @@ QuestionBlock::QuestionBlock(Texture2D texture, Vector2 position): AbstractEntit
     addComponent<BoundingBoxComponent>(size);
     addComponent<TextureComponent>();
     getComponent<TextureComponent>().addTexture("Normal", texture);
+    std::cerr<<"create question block"<<std::endl;
 }
 
 void QuestionBlock::draw() {

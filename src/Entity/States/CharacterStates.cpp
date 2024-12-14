@@ -95,7 +95,7 @@ DroppingState::DroppingState(Vector2 _friction, std::string size, std::string fa
 }
 CharacterState *DroppingState::handleInput(PlayableEntity &character) {
   Vector2 velocity = character.getVelocity();
-  if (character.isOnTheGround()) {
+  if (false) {
     setEnumState("IDLE");
     return new StandingState({NORMAL_DEC, 0.0f}, getSize(), getFacing(), getState());
   }

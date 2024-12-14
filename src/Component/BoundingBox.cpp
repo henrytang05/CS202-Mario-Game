@@ -35,8 +35,6 @@ void BoundingBoxComponent::update() {
     position->setX(0.0f);
   if (position->getX() + size.x >= screenWidth)
     position->setX(screenWidth - size.x);
-  if (position->getY() + size.y >= ground)
-    position->setY(ground - size.y);
 }
 
 Rectangle BoundingBoxComponent::getBox() const {

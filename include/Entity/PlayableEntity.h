@@ -6,7 +6,6 @@
 #include "Interface.h"
 
 class PlayableEntity : public AbstractEntity,
-                       public IDrawable,
                        public IInputable,
                        public IMovable,
                        public IRigidEntity {

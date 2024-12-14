@@ -5,7 +5,7 @@
 #include "Interface.h"
 #include "Logger.h"
 
-class AbstractEntity : public IUpdatable {
+class AbstractEntity : public IUpdatable, public IDrawable {
 public:
   AbstractEntity() : active(true), name("Unnamed") {}
   AbstractEntity(std::string name) : active(true), name(name) {}

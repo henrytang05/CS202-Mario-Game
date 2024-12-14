@@ -62,7 +62,7 @@ void MapRenderer::addTileset(const std::string& tilesetPath, const std::string& 
 //     return nullptr;
 // }
 
-std::vector<Shared<Block>> MapRenderer::createMap(const std::string& mapPath) { 
+std::vector<Shared<AbstractEntity>> MapRenderer::createMap(const std::string& mapPath) { 
     std::ifstream file(mapPath);
     if (!file.is_open()) {
         std::cerr << "Error: Could not open file " << mapPath << std::endl;
@@ -115,62 +115,25 @@ void MapRenderer::loadLayer(const json& layer) {
   std::cerr<<"load layer"<<std::endl;
     int index = 0;
     for (const auto& tileIdValue : layer["data"]) {
-        if (!tileIdValue.is_null() && tileIdValue.is_number()) {
-            int tileId = tileIdValue.get<int>();
-            int x = (index % mapWidth) * tileWidth;
-            int y = (index / mapWidth) * tileHeight;
-            if(textureMap.find(tileId) == textureMap.end()){
-                index++;
-                continue;
-            }
-            if(textureMap[tileId].first == "Null"){
-                index++;
-                continue;
-            }
-            if(textureMap[tileId].first=="NormalBlock")
-            {
-              auto obj = Shared<NormalBlock>(new NormalBlock(textureMap[tileId].second, { (float)x, (float)y }));
-              if (obj) {
-                objects.push_back(obj);
+      if (!tileIdValue.is_null() && tileIdValue.is_number()) {
+          int tileId = tileIdValue.get<int>();
+          int x = (index % mapWidth) * tileWidth;
+          int y = (index / mapWidth) * tileHeight;
+          if(textureMap.find(tileId) == textureMap.end()){
               index++;
-            }
-            }
-            else if(textureMap[tileId].first=="BrokenBlock")
-            {
-              auto obj = Shared<BrokenBlock>(new BrokenBlock(textureMap[tileId].second, { (float)x, (float)y }));
-              if (obj) {
-                objects.push_back(obj);
+              continue;
+          }
+          if(textureMap[tileId].first == "Null"){
               index++;
-              }
-            }
-            else if(textureMap[tileId].first=="HardBlock")
-            {
-              auto obj = Shared<HardBlock>(new HardBlock(textureMap[tileId].second, { (float)x, (float)y }));
-              if (obj) {
-                objects.push_back(obj);
+              continue;
+          }
+          entityFactory = std::make_unique<EntityFactory>();
+          auto obj = entityFactory->createBlock(textureMap[tileId].first,textureMap[tileId].second, { (float)x, (float)y });
+          if (obj) {
+              objects.push_back(obj);
               index++;
-            }
-            }
-            else if(textureMap[tileId].first=="GroundBlock")
-            {
-              auto obj = Shared<GroundBlock>(new GroundBlock(textureMap[tileId].second, { (float)x, (float)y }));
-              if (obj) {
-                objects.push_back(obj);
-              index++;
-            }
-            }
-            else if(textureMap[tileId].first=="QuestionBlock")
-            {
-              auto obj = Shared<QuestionBlock>(new QuestionBlock(textureMap[tileId].second, { (float)x, (float)y }));
-              if (obj) {
-                objects.push_back(obj);
-              index++;
-            }
-            }
-
-            
+          }
         }
-      
     }
 }
 

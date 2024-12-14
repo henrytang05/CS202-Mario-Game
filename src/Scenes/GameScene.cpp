@@ -39,13 +39,15 @@ GameScene::~GameScene() {
 void GameScene::loadResources() {
   Image bImage = LoadImage("Map/BackGroundnew.png");
   background = LoadTextureFromImage(bImage);
-  mapRenderer.createMap("Map/level1.json");
+  entities = mapRenderer.createMap("Map/level1.json");
 }
 void GameScene::draw() {
   BeginMode2D(camera);
   DrawTexture(background, 0, 0, WHITE);
-  mapRenderer.render();
-  player->draw();
+  for (auto &entity : entities) {
+    if(entity!=nullptr)
+    entity->draw();
+  }
 
   EndMode2D();
 }

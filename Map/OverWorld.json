@@ -14,7 +14,6 @@
          "objectgroup":
             {
              "draworder":"index",
-             "id":2,
              "name":"",
              "objects":[
                     {
@@ -33,14 +32,14 @@
              "visible":true,
              "x":0,
              "y":0
-            }
+            },
+         "type":"BrokenBlock"
         }, 
         {
          "id":1,
          "objectgroup":
             {
              "draworder":"index",
-             "id":2,
              "name":"",
              "objects":[
                     {
@@ -59,14 +58,14 @@
              "visible":true,
              "x":0,
              "y":0
-            }
+            },
+         "type":"NormalBlock"
         }, 
         {
          "id":2,
          "objectgroup":
             {
              "draworder":"index",
-             "id":2,
              "name":"",
              "objects":[
                     {
@@ -85,14 +84,14 @@
              "visible":true,
              "x":0,
              "y":0
-            }
+            },
+         "type":"HardBlock"
         }, 
         {
          "id":3,
          "objectgroup":
             {
              "draworder":"index",
-             "id":2,
              "name":"",
              "objects":[
                     {
@@ -111,14 +110,14 @@
              "visible":true,
              "x":0,
              "y":0
-            }
+            },
+         "type":"GroundBlock"
         }, 
         {
          "id":4,
          "objectgroup":
             {
              "draworder":"index",
-             "id":2,
              "name":"",
              "objects":[
                     {
@@ -137,14 +136,14 @@
              "visible":true,
              "x":0,
              "y":0
-            }
+            },
+         "type":"QuestionBlock"
         }, 
         {
          "id":17,
          "objectgroup":
             {
              "draworder":"index",
-             "id":2,
              "name":"",
              "objects":[
                     {

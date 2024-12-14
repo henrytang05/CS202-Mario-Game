@@ -35,14 +35,20 @@ GameScene::~GameScene() {
 #endif
 }
 void GameScene::loadResources() {
-  tileFactory = TileFactory("Map/OverWorld.json", "Map/OverWorld.png");
-  mapRenderer = MapRenderer("Map/Level1.json", tileFactory);
+  //Loading BackGround
+  Image bImage = LoadImage("Map/BackGroundnew.png");
+  background = LoadTextureFromImage(bImage);
+  UnloadImage(bImage);
+  //Create Map
+  entities = mapRenderer.createMap("Map/level1.json");
 }
 void GameScene::draw() {
   BeginMode2D(camera);
-
-  mapRenderer.Render();
-  player->draw();
+  DrawTexture(background, 0, 0, WHITE);
+  for (auto &entity : entities) {
+    if(entity!=nullptr)
+    entity->draw();
+  }
 
   EndMode2D();
 }

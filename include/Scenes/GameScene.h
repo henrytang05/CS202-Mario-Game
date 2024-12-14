@@ -19,7 +19,7 @@ public:
   void init() override;
 
 private:
-  TileFactory tileFactory;
+  Texture2D background;
   MapRenderer mapRenderer;
   Camera2D camera;
   Shared<PlayableEntity> player;

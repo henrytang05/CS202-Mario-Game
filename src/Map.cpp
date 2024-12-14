@@ -50,17 +50,6 @@ void MapRenderer::addTileset(const std::string& tilesetPath, const std::string& 
     UnloadTexture(tilesetImage);
 }
 
-// std::shared_ptr<GameObject> TileFactory::create(int tileId, const std::string& type, Vector2 position) {
-//     if (textureMap.find(tileId) != textureMap.end()) {
-//         if (type == "Block") {
-//             return std::make_shared<Block>(textureMap[tileId], position);
-//         }
-//         // else if (type == "Interact") {
-//         //     return std::make_shared<Interact>(textureMap[tileId], position);
-//         // }
-//     }
-//     return nullptr;
-// }
 
 std::vector<Shared<AbstractEntity>> MapRenderer::createMap(const std::string& mapPath) { 
     std::ifstream file(mapPath);

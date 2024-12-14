@@ -37,8 +37,11 @@ GameScene::~GameScene() {
 #endif
 }
 void GameScene::loadResources() {
+  //Loading BackGround
   Image bImage = LoadImage("Map/BackGroundnew.png");
   background = LoadTextureFromImage(bImage);
+  UnloadImage(bImage);
+  //Create Map
   entities = mapRenderer.createMap("Map/level1.json");
 }
 void GameScene::draw() {

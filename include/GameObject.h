@@ -7,9 +7,7 @@ using json = nlohmann::json;
 #include "Components/Texture.h"
 
 // Derived class for a normal block
-class NormalBlock : public AbstractEntity,
-                    public IDrawable,
-                    public IUpdatable {
+class NormalBlock : public AbstractEntity {
 public:
     NormalBlock()=default;
     NormalBlock(Texture2D texture, Vector2 position);
@@ -19,9 +17,7 @@ public:
 };
 
 // Derived class for a broken block
-class BrokenBlock : public AbstractEntity,
-                    public IDrawable,
-                    public IUpdatable {
+class BrokenBlock : public AbstractEntity {
 public:
     BrokenBlock()=default;
     BrokenBlock(Texture2D texture, Vector2 position);
@@ -31,9 +27,7 @@ public:
 };
 
 // Derived class for a hard block
-class HardBlock : public AbstractEntity,
-                  public IDrawable,
-                  public IUpdatable {
+class HardBlock : public AbstractEntity {
 public:
     HardBlock()=default;
     HardBlock(Texture2D texture, Vector2 position);
@@ -43,9 +37,7 @@ public:
 };
 
 // Derived class for a ground block
-class GroundBlock : public AbstractEntity,
-                    public IDrawable,
-                    public IUpdatable {
+class GroundBlock : public AbstractEntity {
 public:
     GroundBlock()=default;
     GroundBlock(Texture2D texture, Vector2 position);
@@ -55,9 +47,7 @@ public:
 };
 
 // Derived class for a question block
-class QuestionBlock : public AbstractEntity,
-                      public IDrawable,
-                      public IUpdatable {
+class QuestionBlock : public AbstractEntity {
 public:
     QuestionBlock()=default;
     QuestionBlock(Texture2D texture, Vector2 position);

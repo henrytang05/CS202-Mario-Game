@@ -22,21 +22,23 @@ Shared<AbstractEntity> EntityFactory::createGoomba() {
 }
 Shared<AbstractEntity> EntityFactory::createBlock(string type,Texture2D texture, Vector2 position) {
   std::cerr<<"Still good get into createBlock"<<std::endl; 
+  Shared<AbstractEntity> block = nullptr;
   if(type == "NormalBlock"){
-    return std::make_shared<NormalBlock>(texture, position);
+    block = std::make_shared<NormalBlock>(texture, position);
   }
   else if(type == "BrokenBlock"){
-    return std::make_shared<BrokenBlock>(texture, position);
+    block = std::make_shared<BrokenBlock>(texture, position);
   }
   else if(type == "HardBlock"){
-    return std::make_shared<HardBlock>(texture, position);
+    block = std::make_shared<HardBlock>(texture, position);
   }
   else if(type == "GroundBlock"){
-    return std::make_shared<GroundBlock>(texture, position);
+    block = std::make_shared<GroundBlock>(texture, position);
   }
   else if(type == "QuestionBlock"){
-    return std::make_shared<QuestionBlock>(texture, position);
+    block = std::make_shared<QuestionBlock>(texture, position);
   }
+  return block;
 }
 
 

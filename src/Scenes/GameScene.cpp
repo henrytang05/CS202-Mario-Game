@@ -14,7 +14,7 @@
 class TextureComponent;
 namespace SceneSpace {
 
-GameScene::GameScene() : Scene(), camera({0, 0}) { init(); }
+GameScene::GameScene() : Scene(), camera({0, 0}) {}
 
 void GameScene::init() {
   entityFactory = std::make_unique<EntityFactory>();

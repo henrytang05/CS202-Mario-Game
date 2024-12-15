@@ -10,27 +10,27 @@
 #include "Logger.h"
 #include "Scenes/IntroScene.h"
 #include "globals.h"
-class TextureComponent;
+class TextureComponent; 
 namespace SceneSpace {
 
 GameScene::GameScene() : Scene(), camera({0, 0}) {
-
-}
+ 
+} 
  
 void GameScene::init() {
   entityFactory = std::make_unique<EntityFactory>();
   player = entityFactory->createMario();
   entities.push_back(player);
-  gameOver = false;
+  gameOver = false; 
   camera.offset = {screenWidth / 2.0f, screenHeight / 2.0f};
-  camera.rotation = 0.0f;
+  camera.rotation = 0.0f; 
   camera.target.x = player->getComponent<PositionComponent>().getPosition().x;
-  camera.target.y = 784.0f - 186.0f;
-  camera.zoom = 2.0f;
+  camera.target.y = 784.0f - 186.0f; 
+  camera.zoom = 2.0f;  
   SoundCtrl.PlayGroundTheme();
   for(auto &entity : entities) {
     if(entity->hasComponent<CollisionComponent>()) {
-      entity->getComponent<CollisionComponent>().setEntities(&entities);
+      entity->getComponent<CollisionComponent>().setEntities(Shared<std::vector<Shared<AbstractEntity>>>(&entities));
     }
   }
 }

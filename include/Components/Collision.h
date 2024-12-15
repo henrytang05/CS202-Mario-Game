@@ -8,11 +8,15 @@ class CollisionComponent : public Component {
 public:
     void init() override;
     void update() override;
-    void setEntities(std::vector<Shared<AbstractEntity>> *_entities);
+    void setEntities(Shared<std::vector<Shared<AbstractEntity>>> _entities);
+    Shared<AbstractEntity> standingOn();
+    Shared<AbstractEntity> collisionAbove();
+    Shared<AbstractEntity> collisionSide();
     CollisionComponent();
-    CollisionComponent(std::vector<Shared<AbstractEntity>> *_entities);
+    ~CollisionComponent();
+    CollisionComponent(Shared<std::vector<Shared<AbstractEntity>>> _entities);
 private:
-    std::vector<Shared<AbstractEntity>> *entities;
+    Shared<std::vector<Shared<AbstractEntity>>> entities;
 };
 
 #endif // COLLISION_COMPONENT_H

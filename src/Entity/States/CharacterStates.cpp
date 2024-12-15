@@ -1,7 +1,8 @@
 #include "Entity/PlayableEntity.h"
+#include "globals.h"
 #include "Entity/States/CharacterStates.h"
 #include "Components/SoundComponent.h"
-
+#include "Components/Position.h"
 StandingState::StandingState(Vector2 _friction, std::string size, std::string facing, std::string state) : CharacterState(size, facing, state) {
   friction = _friction;
 }

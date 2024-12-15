@@ -26,10 +26,4 @@ public:
   virtual Vector2 getVelocity() = 0;
 };
 
-class IRigidEntity {
-public:
-  virtual ~IRigidEntity() = default;
-  virtual bool isOnTheGround() = 0;
-};
-
 #endif // INTERFACES_H

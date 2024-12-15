@@ -18,13 +18,13 @@ public:
   virtual ~Component();
   virtual void update();
   virtual void draw();
-  void setEntity(AbstractEntity *e);
+  void setEntity(Shared<AbstractEntity> e);
 
 private:
   virtual void init();
 
 protected:
-  AbstractEntity *entity;
+  Shared<AbstractEntity> entity;
 
 public:
   const std::string name;

@@ -13,9 +13,9 @@ PositionComponent::PositionComponent(Vector2 pos)
 void PositionComponent::init() {}
 
 void PositionComponent::setPosition(Vector2 pos) { position = pos; }
-Vector2 PositionComponent::getPosition() const { return position; }
-float PositionComponent::getX() const { return position.x; }
-float PositionComponent::getY() const { return position.y; }
+Vector2 PositionComponent::getPosition() { return position; }
+float PositionComponent::getX() { return position.x; }
+float PositionComponent::getY() { return position.y; }
 
 void PositionComponent::setX(float x) { position.x = x; }
 void PositionComponent::setY(float y) { position.y = y; }

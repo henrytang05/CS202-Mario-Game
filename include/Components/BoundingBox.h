@@ -13,17 +13,10 @@ public:
   void init() override;
   void setSize(Vector2 size);
   void update() override;
-  Vector2 getPos();
-  void setPos(Vector2 pos);
-  float getX() const;
-  float getY() const;
-  void setX(float x);
-  void setY(float y);
-
-  bool checkCollision(const BoundingBoxComponent &other) const;
-  bool isOnTheGround();
-
-  Rectangle getBox() const;
+  Rectangle getTopLeft();
+  Rectangle getTopRight();
+  Rectangle getBotLeft();
+  Rectangle getBotRight();
 
 private:
   PositionComponent *position;

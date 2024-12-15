@@ -2,7 +2,6 @@
 
 #include <memory>
 
-#include "Components/Camera.h"
 #include "Components/Components_include.h"
 #include "Components/Position.h"
 #include "Components/Texture.h"
@@ -29,6 +28,11 @@ void GameScene::init() {
   camera.target.y = 784.0f - 186.0f;
   camera.zoom = 2.0f;
   SoundCtrl.PlayGroundTheme();
+  for(auto &entity : entities) {
+    if(entity->hasComponent<CollisionComponent>()) {
+      entity->getComponent<CollisionComponent>().setEntities(&entities);
+    }
+  }
 }
 
 GameScene::~GameScene() {

@@ -1,9 +1,8 @@
 #ifndef GAME_H
 #define GAME_H
-
-#include "Components/Camera.h"
 #include "Scenes/Scene.h"
-
+class IUpdatable;
+class IDrawable;
 using namespace SceneSpace;
 class Game : public IUpdatable, public IDrawable {
 public:
@@ -17,7 +16,6 @@ public:
 
 private:
   Shared<SceneSpace::Scene> currentScene;
-  CameraComponent camera;
 };
 
 #endif // GAME_H

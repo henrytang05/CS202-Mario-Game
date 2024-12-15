@@ -11,9 +11,9 @@ public:
   PositionComponent();
   PositionComponent(Vector2 pos);
   void setPosition(Vector2 pos);
-  Vector2 getPosition() const;
-  float getX() const;
-  float getY() const;
+  Vector2 getPosition();
+  float getX();
+  float getY();
   void setX(float x);
   void setY(float y);
   void init() override;

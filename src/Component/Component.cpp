@@ -14,4 +14,4 @@ Component::~Component() {
 void Component::init() {}
 void Component::update() {}
 void Component::draw() {}
-void Component::setEntity(AbstractEntity *entity) { this->entity = entity; }
+void Component::setEntity(Shared<AbstractEntity> _entity) { this->entity = _entity; }

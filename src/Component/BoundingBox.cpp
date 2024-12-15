@@ -16,6 +16,7 @@ void BoundingBoxComponent::init() {
 
   position = &entity->getComponent<PositionComponent>();
 }
+Vector2 BoundingBoxComponent::getSize() { return this->size;}
 void BoundingBoxComponent::setSize(Vector2 size) { this->size = size; }
 Rectangle BoundingBoxComponent::getTopLeft() {
   Rectangle result;

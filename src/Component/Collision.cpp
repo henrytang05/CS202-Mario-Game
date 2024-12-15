@@ -11,11 +11,7 @@ void CollisionComponent::init() {}
 bool isCollision(Rectangle a, Rectangle b) {
     
 }
-void CollisionComponent::update() {
-    for(auto &e : *entities) if(e != entity) {
-        
-    }
-}
+void CollisionComponent::update() {}
 void CollisionComponent::setEntities(std::vector<Shared<AbstractEntity>> *_entities) {
     entities = _entities;
 }

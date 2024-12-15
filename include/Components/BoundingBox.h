@@ -13,6 +13,7 @@ public:
   void init() override;
   void setSize(Vector2 size);
   void update() override;
+  Vector2 getSize();
   Rectangle getTopLeft();
   Rectangle getTopRight();
   Rectangle getBotLeft();

@@ -1,15 +1,8 @@
-#include "SoundController.h"
-
-void SoundController::LoadBackgroundTracks()
+#include "Components/SoundComponent.h"
+MarioSoundComponent::MarioSoundComponent() : Component("SoundComponent") {}
+void MarioSoundComponent::LoadSounds()
 {
-	backgroundTracks[0] = LoadMusicStream("./assets/sounds/01. Ground Theme.wav");
-	backgroundTracks[1] = LoadMusicStream("./assets/sounds/02. Underground Theme.wav");
-	bg = backgroundTracks[0];
-}
-
-void SoundController::LoadSoundEffects()
-{
-	soundsEffects[0] = LoadSound("./assets/sounds/smb_1-up.wav");
+    soundsEffects[0] = LoadSound("./assets/sounds/smb_1-up.wav");
 	soundsEffects[1] = LoadSound("./assets/sounds/smb_bowserfalls.wav");
 	soundsEffects[2] = LoadSound("./assets/sounds/smb_bowserfire.wav");
 	soundsEffects[3] = LoadSound("./assets/sounds/smb_breakblock.wav");
@@ -35,153 +28,122 @@ void SoundController::LoadSoundEffects()
 	soundsEffects[23] = LoadSound("./assets/sounds/smb_ting_sound.wav");
 }
 
-SoundController::~SoundController()
-{
-	for(auto& it : backgroundTracks) UnloadMusicStream(it);
-	for(auto& it : soundsEffects) UnloadSound(it);
-}
-
-void SoundController::LoadSounds()
-{
-	LoadBackgroundTracks();
-	LoadSoundEffects();
-}
-
-void SoundController::PlayGroundTheme()
-{
-	bg = backgroundTracks[0];
-	SetMusicVolume(bg, volume);
-	PlayMusicStream(bg);
-}
-
-void SoundController::PlayUndergroundTheme()
-{
-	bg = backgroundTracks[1];
-	SetMusicVolume(bg, volume);
-	PlayMusicStream(bg);
-}
-
-void SoundController::Play1upEffect()
+void MarioSoundComponent::Play1upEffect()
 {
 	PlaySound(soundsEffects[0]);
 }
 
-void SoundController::PlayBowserFallsEffect()
+void MarioSoundComponent::PlayBowserFallsEffect()
 {
 	PlaySound(soundsEffects[1]);
 }
 
-void SoundController::PlayBowserFireEffect()
+void MarioSoundComponent::PlayBowserFireEffect()
 {
 	PlaySound(soundsEffects[2]);
 }
 
-void SoundController::PlayBreakBlockEffect()
+void MarioSoundComponent::PlayBreakBlockEffect()
 {
 	PlaySound(soundsEffects[3]);
 }
 
-void SoundController::PlayBumpEffect()
+void MarioSoundComponent::PlayBumpEffect()
 {
 	PlaySound(soundsEffects[4]);
 }
 
-void SoundController::PlayCoinEffect()
+void MarioSoundComponent::PlayCoinEffect()
 {
 	PlaySound(soundsEffects[5]);
 }
 
-void SoundController::PlayFireballEffect()
+void MarioSoundComponent::PlayFireballEffect()
 {
     PlaySound(soundsEffects[6]);
 }
 
-void SoundController::PlayFireworksEffect()
+void MarioSoundComponent::PlayFireworksEffect()
 {
     PlaySound(soundsEffects[7]);
 }
 
-void SoundController::PlayFlagpoleEffect()
+void MarioSoundComponent::PlayFlagpoleEffect()
 {
     PlaySound(soundsEffects[8]);
 }
 
-void SoundController::PlayGameOverEffect()
+void MarioSoundComponent::PlayGameOverEffect()
 {
     PlaySound(soundsEffects[9]);
 }
 
-void SoundController::PlayJumpSmallEffect()
+void MarioSoundComponent::PlayJumpSmallEffect()
 {
     PlaySound(soundsEffects[10]);
 }
 
-void SoundController::PlayJumpSuperEffect()
+void MarioSoundComponent::PlayJumpSuperEffect()
 {
     PlaySound(soundsEffects[11]);
 }
 
-void SoundController::PlayKickEffect()
+void MarioSoundComponent::PlayKickEffect()
 {
     PlaySound(soundsEffects[12]);
 }
 
-void SoundController::PlayMarioDieEffect()
+void MarioSoundComponent::PlayMarioDieEffect()
 {
     PlaySound(soundsEffects[13]);
 }
 
-void SoundController::PlayPauseEffect()
+void MarioSoundComponent::PlayPauseEffect()
 {
     PlaySound(soundsEffects[14]);
 }
 
-void SoundController::PlayPipeEffect()
+void MarioSoundComponent::PlayPipeEffect()
 {
     PlaySound(soundsEffects[15]);
 }
 
-void SoundController::PlayPowerupEffect()
+void MarioSoundComponent::PlayPowerupEffect()
 {
     PlaySound(soundsEffects[16]);
 }
 
-void SoundController::PlayPowerupAppearsEffect()
+void MarioSoundComponent::PlayPowerupAppearsEffect()
 {
     PlaySound(soundsEffects[17]);
 }
 
-void SoundController::PlayStageClearEffect()
+void MarioSoundComponent::PlayStageClearEffect()
 {
     PlaySound(soundsEffects[18]);
 }
 
-void SoundController::PlayStompEffect()
+void MarioSoundComponent::PlayStompEffect()
 {
     PlaySound(soundsEffects[19]);
 }
 
-void SoundController::PlayVineEffect()
+void MarioSoundComponent::PlayVineEffect()
 {
     PlaySound(soundsEffects[20]);
 }
 
-void SoundController::PlayWarningEffect()
+void MarioSoundComponent::PlayWarningEffect()
 {
     PlaySound(soundsEffects[21]);
 }
 
-void SoundController::PlayWorldClearEffect()
+void MarioSoundComponent::PlayWorldClearEffect()
 {
     PlaySound(soundsEffects[22]);
 }
 
-void SoundController::PlayTingSound()
+void MarioSoundComponent::PlayTingSound()
 {
 	PlaySound(soundsEffects[23]);
-}
-
-void SoundController::Update()
-{
-	UpdateMusicStream(bg);
 }

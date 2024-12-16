@@ -30,12 +30,36 @@ Shared<Scene> IntroScene::update() {
   RankingButton->update(mousePos, isLeftClick);
   SettingsButton->update(mousePos, isLeftClick);
 
+<<<<<<< Updated upstream
   if(NewGameButton->isPressed()) changeGameScreen = true;
   if(LoadGameButton->isPressed()) changeLoadScreen = true;
   if(RankingButton->isPressed()) changeRankingScreen = true;
   if(SettingsButton->isPressed()) changeSettingsScreen = true;
 
   if(changeGameScreen)
+=======
+  if (NewGameButton->isPressed())
+  {
+    changeGameScreen = true;
+    SoundCtrl.PlayTingSound();
+  }
+  if (LoadGameButton->isPressed())
+  {
+    changeGameScreen = true;
+    SoundCtrl.PlayTingSound();
+  }  
+  if (RankingButton->isPressed())
+  {
+    changeGameScreen = true;
+    SoundCtrl.PlayTingSound();
+  }  
+  if (SettingsButton->isPressed())
+  {
+    changeGameScreen = true;
+    SoundCtrl.PlayTingSound();
+  }
+  if (changeGameScreen)
+>>>>>>> Stashed changes
     return std::make_shared<SceneSpace::GameScene>();
   return nullptr;
 }

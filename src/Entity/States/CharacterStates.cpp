@@ -13,7 +13,7 @@ CharacterState *StandingState::handleInput(PlayableEntity &character) {
   if(character.getComponent<CollisionComponent>().standingOn() == nullptr) {
     return new DroppingState({friction.x, GRAVITY_DEC}, getSize(), getFacing(), getState());
   }
-  if (IsKeyDown(KEY_UP)) {
+  if (IsKeyPressed(KEY_UP)) {
     setEnumState("JUMPING");
     character.getComponent<MarioSoundComponent>().PlayJumpSmallEffect();
     if((IsKeyDown(KEY_LEFT) && getFacing() == "LEFT") || (IsKeyDown(KEY_RIGHT) && getFacing() == "RIGHT"))
@@ -138,7 +138,7 @@ CharacterState *MovingState::handleInput(PlayableEntity &character) {
   if(character.getComponent<CollisionComponent>().standingOn() == nullptr) {
     return new DroppingState({NORMAL_DEC, GRAVITY_DEC}, getSize(), getFacing(), getState());
   }
-  if (IsKeyDown(KEY_UP)) {
+  if (IsKeyPressed(KEY_UP)) {
     setEnumState("JUMPING");
     character.getComponent<MarioSoundComponent>().PlayJumpSmallEffect();
     return new JumpingState({0.0f, GRAVITY_DEC}, getSize(), getFacing(), getState());

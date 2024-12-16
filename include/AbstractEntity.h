@@ -4,18 +4,28 @@
 #include "Components/Component.h"
 #include "Interface.h"
 #include "Logger.h"
+#include <cstdint>
 
 class AbstractEntity : public IUpdatable, public IDrawable {
 public:
-  AbstractEntity() : active(true), name("Unnamed") {}
-  AbstractEntity(std::string name) : active(true), name(name) {}
+  AbstractEntity() : active(true), name("Unnamed") { id = nextID(); }
+  AbstractEntity(std::string name) : active(true), name(name) { id = nextID(); }
   virtual ~AbstractEntity() = default;
   template <typename T> bool hasComponent() const;
   template <typename T, typename... TArgs> T &addComponent(TArgs &&...mArgs);
   template <typename T> T &getComponent() const;
 
+  bool operator==(const AbstractEntity &other) const;
+  bool operator!=(const AbstractEntity &other) const;
+
   bool isActive() const { return active; }
   void destroy() { active = false; }
+
+private:
+  uint32_t nextID() const {
+    static uint32_t id = 0;
+    return id++;
+  }
 
 public:
   bool active;
@@ -23,6 +33,7 @@ public:
   std::vector<Unique<Component>> components;
 
 private:
+  int id;
   ComponentArray componentArray;
   ComponentBitSet componentBitset;
 };
@@ -64,4 +75,13 @@ template <typename T> inline T &AbstractEntity::getComponent() const {
   auto ptr(componentArray[getComponentTypeID<T>()]);
   return *static_cast<T *>(ptr);
 }
+
+bool AbstractEntity::operator==(const AbstractEntity &other) const {
+  return id == other.id;
+}
+
+bool AbstractEntity::operator!=(const AbstractEntity &other) const {
+  return !(*this == other);
+}
+
 #endif // ABSTRACTENTITY_H

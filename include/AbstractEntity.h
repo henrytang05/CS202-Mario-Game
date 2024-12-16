@@ -24,8 +24,8 @@ public:
 
 private:
   uint32_t nextID() const {
-    static uint32_t id = 0;
-    return id++;
+    static uint32_t nextID = 0;
+    return nextID++;
   }
 
 public:
@@ -34,7 +34,7 @@ public:
   std::vector<Unique<Component>> components;
 
 private:
-  int id;
+  uint32_t id;
   ComponentArray componentArray;
   ComponentBitSet componentBitset;
 };

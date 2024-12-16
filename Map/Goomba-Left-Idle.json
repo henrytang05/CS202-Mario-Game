@@ -1,0 +1,19 @@
+{ "columns":1,
+ "image":"..\/..\/..\/Users\/LENOVO\/Desktop\/MapMario\/Goomba\/Goomba-Left-Idle.png",
+ "imageheight":16,
+ "imagewidth":16,
+ "margin":0,
+ "name":"Goomba-Left-Idle",
+ "spacing":0,
+ "tilecount":1,
+ "tiledversion":"1.11.0",
+ "tileheight":16,
+ "tiles":[
+        {
+         "id":0,
+         "type":"Goomba"
+        }],
+ "tilewidth":16,
+ "type":"tileset",
+ "version":"1.10"
+}

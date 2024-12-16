@@ -90,7 +90,7 @@ std::vector<Shared<AbstractEntity>> MapRenderer::createMap(const std::string& ma
         if (layer["type"] == "tilelayer") {
             loadLayer(layer);
         } else if (layer["type"] == "objectgroup") {
-            // loadObjectGroup(layer, factory);
+            loadObjectGroup(layer);
         }
     }
 
@@ -127,7 +127,39 @@ void MapRenderer::loadLayer(const json& layer) {
 }
 
 void MapRenderer::loadObjectGroup(const json& layer) {
-    // For object like coins, enemies, special bricks, etc.
+    if (layer["type"] != "objectgroup") {
+        std::cerr << "Layer is not of type objectgroup" << std::endl;
+        return;
+    }
+    string name = layer["name"];
+    const auto& object_layers = layer["objects"];
+    for (const auto& object_layer : object_layers) {
+        
+        float x = object_layer["x"];
+        float y = object_layer["y"];
+        float width = object_layer["width"];
+        float height = object_layer["height"];
+
+        //Create game objects based on type
+        if (name == "Pipe") {
+            entityFactory = std::make_unique<EntityFactory>();
+            auto obj = entityFactory->createPipe({x, y}, {width, height});
+            if (obj) {
+                objects.push_back(obj);
+            }
+        } else if (name == "Flag") {
+            // Create an enemy object
+            entityFactory = std::make_unique<EntityFactory>();
+            auto obj = entityFactory->createFlag({x, y});
+            if (obj) {
+                objects.push_back(obj);
+            }
+        } 
+        else 
+        {
+            return;
+        }
+    }
 }
 
 void MapRenderer::render() {

@@ -41,4 +41,13 @@ Shared<AbstractEntity> EntityFactory::createBlock(string type,Texture2D texture,
   return block;
 }
 
+Shared<AbstractEntity> EntityFactory::createPipe(Vector2 position, Vector2 size) {
+  Shared<AbstractEntity> pipe = std::make_shared<Pipe>(position, size);
+  return pipe;
+}
 
+Shared<AbstractEntity> EntityFactory::createFlag(Vector2 position)
+{
+  Shared<AbstractEntity> flag = std::make_shared<Flag>(position);
+  return flag;
+}

@@ -36,17 +36,17 @@ Shared<Scene> IntroScene::updateScene() {
   }
   if (LoadGameButton->isPressed())
   {
-    changeGameScreen = true;
+    changeLoadScreen = true;
     SoundCtrl.PlayTingSound();
   }  
   if (RankingButton->isPressed())
   {
-    changeGameScreen = true;
+    changeRankingScreen = true;
     SoundCtrl.PlayTingSound();
   }  
   if (SettingsButton->isPressed())
   {
-    changeGameScreen = true;
+    changeSettingsScreen = true;
     SoundCtrl.PlayTingSound();
   }
   if (changeGameScreen)

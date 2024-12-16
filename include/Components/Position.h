@@ -9,11 +9,12 @@ Vector2 operator+(const Vector2 &v1, const Vector2 &v2);
 class PositionComponent : public Component {
 public:
   PositionComponent();
+  ~PositionComponent() = default;
   PositionComponent(Vector2 pos);
   void setPosition(Vector2 pos);
-  Vector2 getPosition() const;
-  float getX() const;
-  float getY() const;
+  Vector2 getPosition();
+  float getX();
+  float getY();
   void setX(float x);
   void setY(float y);
   void init() override;

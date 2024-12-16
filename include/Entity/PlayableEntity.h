@@ -7,8 +7,7 @@
 
 class PlayableEntity : public AbstractEntity,
                        public IInputable,
-                       public IMovable,
-                       public IRigidEntity {
+                       public IMovable {
 
 public:
   PlayableEntity() = default;
@@ -16,7 +15,6 @@ public:
 
   virtual ~PlayableEntity() = default;
   Vector2 getVelocity() override;
-  bool isOnTheGround() override;
   void setVelocity(Vector2 newVelocity) override;
 };
 class Luigi : public PlayableEntity {

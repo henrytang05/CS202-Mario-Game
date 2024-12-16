@@ -16,41 +16,38 @@ void BoundingBoxComponent::init() {
 
   position = &entity->getComponent<PositionComponent>();
 }
-bool BoundingBoxComponent::isOnTheGround() {
-  return position->getY() + size.y >= ground;
-}
-
+Vector2 BoundingBoxComponent::getSize() { return this->size;}
 void BoundingBoxComponent::setSize(Vector2 size) { this->size = size; }
-
-Vector2 BoundingBoxComponent::getPos() { return position->getPosition(); }
-void BoundingBoxComponent::setPos(Vector2 pos) { position->setPosition(pos); }
-
-float BoundingBoxComponent::getX() const { return position->getX(); }
-float BoundingBoxComponent::getY() const { return position->getY(); }
-void BoundingBoxComponent::setX(float x) { position->setX(x); }
-void BoundingBoxComponent::setY(float y) { position->setY(y); }
-
-void BoundingBoxComponent::update() {
-  if (position->getX() <= 0)
-    position->setX(0.0f);
-  if (position->getX() + size.x >= screenWidth)
-    position->setX(screenWidth - size.x);
-  if (position->getY() + size.y >= ground)
-    position->setY(ground - size.y);
+Rectangle BoundingBoxComponent::getTopLeft() {
+  Rectangle result;
+  result.x = position->getX();
+  result.y = position->getY();
+  result.width = size.x / 2.0f;
+  result.height = size.y / 2.0f;
+  return result;
 }
-
-Rectangle BoundingBoxComponent::getBox() const {
-  return (Rectangle){position->getX(), position->getY(), size.x, size.y};
+Rectangle BoundingBoxComponent::getTopRight() {
+  Rectangle result;
+  result.x = position->getX() + getTopLeft().width;
+  result.y = position->getY();
+  result.width = size.x - getTopLeft().width;
+  result.height = size.y / 2.0f;
+  return result;
 }
-
-bool BoundingBoxComponent::checkCollision(
-    const BoundingBoxComponent &other) const {
-
-  Rectangle box = this->getBox();
-  Rectangle otherBox = other.getBox();
-
-  return (box.x <= otherBox.x + otherBox.width &&
-          box.x + box.width >= otherBox.x &&
-          box.y <= otherBox.y + otherBox.height &&
-          box.y + box.height >= otherBox.y);
+Rectangle BoundingBoxComponent::getBotLeft() {
+  Rectangle result;
+  result.x = position->getX();
+  result.y = position->getY() + getTopLeft().height;
+  result.width = size.x / 2.0f;
+  result.height = size.y - getTopLeft().height;
+  return result;
 }
+Rectangle BoundingBoxComponent::getBotRight() {
+  Rectangle result;
+  result.x = position->getX() + getTopLeft().width;
+  result.y = position->getY() + getTopLeft().height;
+  result.width = size.x - getTopLeft().width;
+  result.height = size.y - getTopLeft().height;
+  return result;
+}
+void BoundingBoxComponent::update() {}

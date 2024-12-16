@@ -1,6 +1,7 @@
 #include "Components/Texture.h"
 #include "AbstractEntity.h"
 #include "Components/Position.h"
+TextureComponent::TextureComponent() : Component("TextureComponent") {}
 void TextureComponent::init() {}
 void TextureComponent::update() {}
 void TextureComponent::drawTexture(std::string state) {

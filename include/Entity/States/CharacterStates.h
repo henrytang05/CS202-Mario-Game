@@ -4,15 +4,15 @@
 class PlayableEntity;
 const float WALKING_ACC = 0.1f;
 const float RUNNING_ACC = 0.1f;
-const float SKIDDING_DEC = 0.1f;
+const float SKIDDING_DEC = 0.3f;
 const float NORMAL_DEC = 0.3f;
 const float JUMPPING_DEC = 5.0f;
 const float JUMPING_ACC = 0.15f;
-const float JUMPING_MOVING_ACC = 0.15f;
+const float JUMPING_MOVING_ACC = 0.1f;
 const float GRAVITY_DEC = 0.3f;
-const float MAX_WALKING_VELO = 3.0f;
-const float MAX_RUNNING_VELO = 4.0f;
-const float MAX_JUMPING_VELO = 3.0f;
+const float MAX_WALKING_VELO = 2.0f;
+const float MAX_RUNNING_VELO = 3.0f;
+const float MAX_JUMPING_VELO = 2.3f;
 class EnumCharacterState {
 private:
   enum FACING {

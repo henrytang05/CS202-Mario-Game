@@ -7,6 +7,7 @@ class MarioSoundComponent : public Component {
     private:
     std::array<Sound, 23> soundsEffects;
     public:
+    MarioSoundComponent();
     void init() override {};
     void LoadSounds();
     void Play1upEffect();

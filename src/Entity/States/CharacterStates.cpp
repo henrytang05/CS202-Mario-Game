@@ -1,12 +1,18 @@
 #include "Entity/PlayableEntity.h"
+#include "globals.h"
 #include "Entity/States/CharacterStates.h"
 #include "Components/SoundComponent.h"
-
+#include "Components/Position.h"
+#include "Components/Collision.h"
+#include "Components/BoundingBox.h"
 StandingState::StandingState(Vector2 _friction, std::string size, std::string facing, std::string state) : CharacterState(size, facing, state) {
-  friction = _friction;
+  friction = _friction; 
 }
 
 CharacterState *StandingState::handleInput(PlayableEntity &character) {
+  if(character.getComponent<CollisionComponent>().standingOn() == nullptr) {
+    return new DroppingState({friction.x, GRAVITY_DEC}, getSize(), getFacing(), getState());
+  }
   if (IsKeyDown(KEY_UP)) {
     setEnumState("JUMPING");
     character.getComponent<MarioSoundComponent>().PlayJumpSmallEffect();
@@ -72,7 +78,14 @@ JumpingState::JumpingState(Vector2 _friction, std::string size, std::string faci
 
 CharacterState *JumpingState::handleInput(PlayableEntity &character) {
   Vector2 velocity = character.getVelocity();
-  if (IsKeyReleased(KEY_UP) || velocity.y <= -MAX_JUMPING_VELO)
+  Shared<AbstractEntity> e = character.getComponent<CollisionComponent>().collisionAbove();
+  if(e != nullptr) { 
+    setEnumState("DROPPING");  
+    character.getComponent<PositionComponent>().setPosition((Vector2){character.getComponent<PositionComponent>().getX(), 
+    e->getComponent<PositionComponent>().getY() + e->getComponent<BoundingBoxComponent>().getSize().y});
+    return new DroppingState({friction.x, GRAVITY_DEC + 1.0f}, getSize(), getFacing(), getState());
+  }
+  if (IsKeyReleased(KEY_UP) || velocity.y <= -MAX_JUMPING_VELO || (e != nullptr))
   {
     setEnumState("DROPPING");
     return new DroppingState({friction.x, GRAVITY_DEC}, getSize(), getFacing(), getState());
@@ -95,9 +108,12 @@ DroppingState::DroppingState(Vector2 _friction, std::string size, std::string fa
 }
 CharacterState *DroppingState::handleInput(PlayableEntity &character) {
   Vector2 velocity = character.getVelocity();
-  if (character.isOnTheGround()) {
+  Shared<AbstractEntity> e = character.getComponent<CollisionComponent>().standingOn();
+  if (e) {
     setEnumState("IDLE");
-    return new StandingState({NORMAL_DEC, 0.0f}, getSize(), getFacing(), getState());
+    character.getComponent<PositionComponent>().setPosition((Vector2){character.getComponent<PositionComponent>().getX(), 
+    e->getComponent<PositionComponent>().getY() - character.getComponent<BoundingBoxComponent>().getSize().y});
+    return new StandingState({NORMAL_DEC, GRAVITY_DEC}, getSize(), getFacing(), getState());
   }
   setEnumState("DROPPING");
   return nullptr;
@@ -119,6 +135,9 @@ MovingState::MovingState(Vector2 _velocity, std::string size, std::string facing
 }
 
 CharacterState *MovingState::handleInput(PlayableEntity &character) {
+  if(character.getComponent<CollisionComponent>().standingOn() == nullptr) {
+    return new DroppingState({NORMAL_DEC, GRAVITY_DEC}, getSize(), getFacing(), getState());
+  }
   if (IsKeyDown(KEY_UP)) {
     setEnumState("JUMPING");
     character.getComponent<MarioSoundComponent>().PlayJumpSmallEffect();

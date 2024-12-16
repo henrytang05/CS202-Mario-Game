@@ -17,12 +17,8 @@ Vector2 PlayableEntity::getVelocity() {
   return getComponent<TransformComponent>().getVelocity();
 }
 
-bool PlayableEntity::isOnTheGround() {
-  ASSERT(hasComponent<BoundingBoxComponent>());
-  return getComponent<BoundingBoxComponent>().isOnTheGround();
-}
 Luigi::Luigi() : PlayableEntity("Luigi"), state(new DroppingState({0.0f, 1.0f}, "LARGE", "RIGHT", "DROPPING")) {
-  Vector2 size({16, 23});
+  Vector2 size({16, 20});
   Vector2 position = {0, (float)ground - size.y};
   Vector2 velocity = {0, 0};
 
@@ -32,6 +28,7 @@ Luigi::Luigi() : PlayableEntity("Luigi"), state(new DroppingState({0.0f, 1.0f}, 
   addComponent<RigidBodyComponent>();
   addComponent<TextureComponent>();
   addComponent<MarioSoundComponent>();
+  addComponent<CollisionComponent>();
 
   getComponent<TextureComponent>().addTexture("SMALL-RIGHT-IDLE", "./assets/Luigi/Small-Right-Idle.png");
   getComponent<TextureComponent>().addTexture("SMALL-RIGHT-MOVING", "./assets/Luigi/Small-Right-Moving.png");
@@ -85,7 +82,7 @@ void Luigi::draw() {
 }
 Mario::Mario()
     : PlayableEntity("Mario"), state(new DroppingState({0.0f, 1.0f}, "SMALL", "RIGHT", "DROPPING")) {
-  Vector2 size({16, 23});
+  Vector2 size({16, 20});
   Vector2 position = {0, (float)ground - size.y};
   Vector2 velocity = {0, 0};
 
@@ -95,6 +92,7 @@ Mario::Mario()
   addComponent<RigidBodyComponent>();
   addComponent<TextureComponent>();
   addComponent<MarioSoundComponent>();
+  addComponent<CollisionComponent>();
 
   getComponent<TextureComponent>().addTexture("SMALL-RIGHT-IDLE", "./assets/Mario/Small-Right-Idle.png");
   getComponent<TextureComponent>().addTexture("SMALL-RIGHT-MOVING", "./assets/Mario/Small-Right-Moving.png");
@@ -141,7 +139,7 @@ void Mario::input() {
   if (CharacterState *newState = state->handleInput(*this)) {
     state = Unique<CharacterState>(newState);
   }
-}
+} 
 
 void Mario::draw() {
   ASSERT(hasComponent<TextureComponent>());

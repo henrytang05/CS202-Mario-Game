@@ -98,7 +98,7 @@ std::vector<Shared<AbstractEntity>> MapRenderer::createMap(const std::string& ma
    
 }
 vector<Shared<AbstractEntity>> loadEntity() {
-
+    return vector<Shared<AbstractEntity>>();
 }
 void MapRenderer::loadLayer(const json& layer) {
   std::cerr<<"load layer"<<std::endl;

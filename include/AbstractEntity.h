@@ -15,8 +15,9 @@ public:
   template <typename T, typename... TArgs> T &addComponent(TArgs &&...mArgs);
   template <typename T> T &getComponent() const;
 
-  bool operator==(const AbstractEntity &other) const;
-  bool operator!=(const AbstractEntity &other) const;
+  uint32_t getId() const { return id; }
+  bool operator==(const AbstractEntity &other) const { return id == other.id; }
+  bool operator!=(const AbstractEntity &other) const { return id != other.id; }
 
   bool isActive() const { return active; }
   void destroy() { active = false; }
@@ -74,14 +75,6 @@ inline T &AbstractEntity::addComponent(TArgs &&...mArgs) {
 template <typename T> inline T &AbstractEntity::getComponent() const {
   auto ptr(componentArray[getComponentTypeID<T>()]);
   return *static_cast<T *>(ptr);
-}
-
-bool AbstractEntity::operator==(const AbstractEntity &other) const {
-  return id == other.id;
-}
-
-bool AbstractEntity::operator!=(const AbstractEntity &other) const {
-  return !(*this == other);
 }
 
 #endif // ABSTRACTENTITY_H

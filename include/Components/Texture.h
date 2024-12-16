@@ -4,7 +4,7 @@
 
 class TextureComponent : public Component {
 public:
-  TextureComponent() = default;
+  TextureComponent();
   virtual ~TextureComponent() = default;
   void addTexture(std::string state, std::string filename);
   void addTexture(std::string state, Texture2D texture);

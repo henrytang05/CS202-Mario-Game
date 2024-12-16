@@ -1,5 +1,5 @@
 #include "Components/SoundComponent.h"
-
+MarioSoundComponent::MarioSoundComponent() : Component("SoundComponent") {}
 void MarioSoundComponent::LoadSounds()
 {
     soundsEffects[0] = LoadSound("./assets/sounds/smb_1-up.wav");

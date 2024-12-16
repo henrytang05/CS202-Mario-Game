@@ -44,7 +44,7 @@ inline T &AbstractEntity::addComponent(TArgs &&...mArgs) {
     throw std::runtime_error("Exceeded maximum number of components");
   }
   T *c(new T(std::forward<TArgs>(mArgs)...));
-  c->setEntity(Shared<AbstractEntity>(this));
+  c->setEntity(this);
 
   // Unique<Component> uPtr{c};
   // components.emplace_back(std::move(uPtr));

@@ -19,6 +19,7 @@ public:
   void init() override;
 
 private:
+  double time;
   Texture2D background;
   MapRenderer mapRenderer;
   Camera2D camera;

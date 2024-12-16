@@ -16,6 +16,7 @@ namespace SceneSpace {
 GameScene::GameScene() : Scene(), camera({0, 0}) {}
 
 void GameScene::init() {
+  time = 360.f;
   entityFactory = std::make_unique<EntityFactory>();
   player = entityFactory->createMario();
   entities.push_back(player);
@@ -54,14 +55,15 @@ void GameScene::draw() {
     if (entity != nullptr)
       entity->draw();
   }
-
   EndMode2D();
+  DrawText(TextFormat("Time: %03i", (int)time), 1200, 35, GAMEPLAY_TEXT_SIZE, WHITE);
 }
 Shared<Scene> GameScene::updateScene() {
   this->update();
   return nullptr;
 }
 void GameScene::update() {
+  time -= GUI::get_delta_time();
   for (auto &entity : entities) {
     entity->update();
   }
@@ -70,7 +72,7 @@ void GameScene::update() {
     camera.target.x = screenWidth / (2.0f * camera.zoom);
   if (camera.target.x >= screenWidth - screenWidth / (2.0f * camera.zoom))
     camera.target.x = screenWidth - screenWidth / (2.0f * camera.zoom);
-  SoundCtrl.Update();
+  SoundCtrl.Update((int)time);
 }
 
 bool GameScene::isFinished() { return gameOver; }

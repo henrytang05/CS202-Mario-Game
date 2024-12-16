@@ -1,8 +1,7 @@
-#include "Logger.h"
-#include "Scenes/Scene.h"
 #include "Scenes/IntroScene.h"
+#include "Logger.h"
 #include "Scenes/GameScene.h"
-#include "InputHandler.h"
+#include "Scenes/Scene.h"
 namespace SceneSpace {
 IntroScene::IntroScene() : Scene() {
   changeGameScreen = false;
@@ -13,7 +12,7 @@ IntroScene::IntroScene() : Scene() {
 }
 IntroScene::~IntroScene() {
 #ifdef _DEBUG
-  Log("log.txt", LogLevel::INFO, "IntroScene destroyed");
+  Log("IntroScene destroyed");
 #endif
   delete NewGameButton;
   delete LoadGameButton;
@@ -21,7 +20,7 @@ IntroScene::~IntroScene() {
   delete SettingsButton;
 }
 
-Shared<Scene> IntroScene::update() {
+Shared<Scene> IntroScene::updateScene() {
   SoundCtrl.Update();
   Vector2 mousePos = GetMousePosition();
   bool isLeftClick = IsMouseButtonPressed(MOUSE_BUTTON_LEFT);
@@ -64,25 +63,24 @@ Shared<Scene> IntroScene::update() {
   return nullptr;
 }
 void IntroScene::draw() {
-  DrawTexture(background,0,0,WHITE);
+  DrawTexture(background, 0, 0, WHITE);
   NewGameButton->draw();
   LoadGameButton->draw();
   RankingButton->draw();
   SettingsButton->draw();
 }
-
-void IntroScene::acceptInputHandler(InputHandler inputHandler) {
-  inputHandler.inputHandleForIntroScene(*this);
-}
 void IntroScene::loadResources() {
   background = LoadTexture("./assets/MenuBackground.png");
-  NewGameButton = new GUI::ImageButton(545, 340, "./assets/NewGameButton.png", "./assets/Hover_NewGameButton.png");
-  LoadGameButton = new GUI::ImageButton(545, 425, "./assets/LoadGameButton.png", "./assets/Hover_LoadGameButton.png");
-  RankingButton = new GUI::ImageButton(545, 510, "./assets/RankingButton.png", "./assets/Hover_RankingButton.png");
-  SettingsButton = new GUI::ImageButton(545, 595, "./assets/SettingsButton.png", "./assets/Hover_SettingsButton.png");
-
+  NewGameButton = new GUI::ImageButton(545, 340, "./assets/NewGameButton.png",
+                                       "./assets/Hover_NewGameButton.png");
+  LoadGameButton = new GUI::ImageButton(545, 425, "./assets/LoadGameButton.png",
+                                        "./assets/Hover_LoadGameButton.png");
+  RankingButton = new GUI::ImageButton(545, 510, "./assets/RankingButton.png",
+                                       "./assets/Hover_RankingButton.png");
+  SettingsButton = new GUI::ImageButton(545, 595, "./assets/SettingsButton.png",
+                                        "./assets/Hover_SettingsButton.png");
 };
-void IntroScene::start() {
+void IntroScene::init() {
   changeGameScreen = false;
   changeLoadScreen = false;
   changeRankingScreen = false;

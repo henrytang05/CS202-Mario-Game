@@ -1,9 +1,8 @@
 #pragma once
-#include <array>
 #include "raylib.h"
+#include <array>
 
-class SoundController
-{
+class SoundController {
 private:
 <<<<<<< Updated upstream
 	std::array<Music, 2> backgroundTracks;

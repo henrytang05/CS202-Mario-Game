@@ -1,98 +1,76 @@
-#include "Scenes/Scene.h"
 #include "Scenes/GameScene.h"
-#include "Scenes/IntroScene.h"
-#include "InputHandler.h"
+
+#include <memory>
+
+#include "Components/Components_include.h"
+#include "Components/Position.h"
+#include "Components/Texture.h"
+#include "Entity/EntityFactory.h"
+#include "Entity/PlayableEntity.h"
 #include "Logger.h"
+#include "Scenes/IntroScene.h"
 #include "globals.h"
+class TextureComponent;
 namespace SceneSpace {
 
-GameScene::GameScene() : Scene() {
+GameScene::GameScene() : Scene(), camera({0, 0}) {}
+
+void GameScene::init() {
+  entityFactory = std::make_unique<EntityFactory>();
+  player = entityFactory->createMario();
+  entities.push_back(player);
+  gameOver = false;
+  camera.offset = {screenWidth / 2.0f, screenHeight / 2.0f};
+  camera.rotation = 0.0f;
+  camera.target.x = player->getComponent<PositionComponent>().getPosition().x;
+  camera.target.y = 784.0f - 186.0f;
+  camera.zoom = 2.0f;
+  SoundCtrl.PlayGroundTheme();
+  for (auto &entity : entities) {
+    if (entity->hasComponent<CollisionComponent>()) {
+      entity->getComponent<CollisionComponent>().setEntities(
+          Shared<std::vector<Shared<AbstractEntity>>>(&entities));
+    }
+  }
 }
+
 GameScene::~GameScene() {
 #ifdef _DEBUG
-  Log("log.txt", LogLevel::INFO, "GameScene destroyed");
+  Log("GameScene destroyed");
 #endif
 }
 void GameScene::loadResources() {
-  characters = {make_shared<TextureSmallCharacter>("./assets/Luigi-Small")};
-}
-void GameScene::start() {
-  gameOver = false; 
-  velocity = {0, 0};
-  ground = 3 * screenHeight / 4;
-  position = {0, (float)ground};
-  frameIndex = frameDelayCounter = 0;
-  frameDelay = 10;
-  gravity = 1;
-}
-void GameScene::acceptInputHandler(InputHandler inputHandler) {
-  inputHandler.inputHandleForGameScene(*this);
+  // Loading BackGround
+  Image bImage = LoadImage("Map/BackGroundnew.png");
+  background = LoadTextureFromImage(bImage);
+  UnloadImage(bImage);
+  // Create Map
+  entities = mapRenderer.createMap("Map/Level1.json");
 }
 void GameScene::draw() {
-  characters[0]->drawTexture(position);
+  BeginMode2D(camera);
+  DrawTexture(background, 0, 0, WHITE);
+  for (auto &entity : entities) {
+    if (entity != nullptr)
+      entity->draw();
+  }
+
+  EndMode2D();
 }
-void GameScene::pressUp() {
-  if(position.y >= ground) {
-    velocity.y = -15;
-    SoundCtrl.PlayJumpSmallEffect();  
-  }
-}
-void GameScene::pressLeft() {
-  if(position.y >= ground) {
-    velocity.x = -2;
-    if(!characters[0]->getIsFlip()) {
-      characters[0]->updateFlip();
-      characters[0]->updateFrame(frameIndex);
-    }
-  }
-}
-void GameScene::pressRight() {
-  if(position.y >= ground) {
-    velocity.x = 2;
-    if(characters[0]->getIsFlip()) {
-      characters[0]->updateFlip();
-      characters[0]->updateFrame(frameIndex);
-    }
-  }
-}
-void GameScene::pressNothing() {
-  if(position.y >= ground) {
-    velocity.x = 0;
-    frameIndex = 0;
-  }
-}
-Shared<Scene> GameScene::update() {
-  position.x += velocity.x;
-  position.y += velocity.y;
-  bool isOnTheGround = (position.y >= ground);
-  if(isOnTheGround) {
-    velocity.y = 0;
-    position.y = ground;  
-  }
-  else {
-    velocity.y += gravity;
-  }
-  bool isMoving = ((velocity.x != 0)||(velocity.y != 0));
-  frameDelayCounter += 1;
-  if(frameDelayCounter > frameDelay) {
-    frameDelayCounter = 0;
-    if(isMoving) {
-      if(isOnTheGround) {
-        frameIndex += 1;
-        frameIndex %= 2;
-      }
-      else {
-        if(velocity.y < 0) {
-          frameIndex = 4;
-        }
-        else {
-          frameIndex = 5;
-        }
-      }
-    }
-    characters[0]->updateFrame(frameIndex);
-  }
+Shared<Scene> GameScene::updateScene() {
+  this->update();
   return nullptr;
+}
+void GameScene::update() {
+  for (auto &entity : entities) {
+    entity->update();
+  }
+  camera.target.x = player->getComponent<PositionComponent>().getPosition().x;
+  if (camera.target.x <= screenWidth / (2.0f * camera.zoom))
+    camera.target.x = screenWidth / (2.0f * camera.zoom);
+  if (camera.target.x >= screenWidth - screenWidth / (2.0f * camera.zoom))
+    camera.target.x = screenWidth - screenWidth / (2.0f * camera.zoom);
+  SoundCtrl.Update();
 }
 
 bool GameScene::isFinished() { return gameOver; }

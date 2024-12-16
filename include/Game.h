@@ -1,23 +1,21 @@
 #ifndef GAME_H
 #define GAME_H
-
-#include "pch.h"
-#include "globals.h"
-#include <unordered_map>
-#include "InputHandler.h"
+#include "Scenes/Scene.h"
+class IUpdatable;
+class IDrawable;
 using namespace SceneSpace;
-class Scene;
-class Game {
+class Game : public IUpdatable, public IDrawable {
 public:
   Game();
   ~Game();
   void init();
   void clean();
   void run();
+  void update() override;
+  void draw() override;
 
 private:
   Shared<SceneSpace::Scene> currentScene;
-  InputHandler inputHandler;
 };
 
 #endif // GAME_H

@@ -1,31 +1,31 @@
 #ifndef GAMESCENE_H
 #define GAMESCENE_H
-#include "Texture.h"
+#include "AbstractEntity.h"
+#include "Entity/EntityFactory.h"
+#include "Entity/PlayableEntity.h"
+#include "Map.h"
+#include "Scenes/Scene.h"
+
 namespace SceneSpace {
-class Scene;
-class GameScene : public Scene {
+class GameScene : public Scene, public AbstractEntity {
 public:
   GameScene();
   ~GameScene();
-  Shared<Scene> update() override;
+  Shared<Scene> updateScene() override;
+  void update() override;
   void draw() override;
-  void acceptInputHandler(InputHandler inputHandler) override;
   void loadResources() override;
-  void start() override;
   bool isFinished();
-  void pressUp() override;
-  void pressNothing() override;
-  void pressLeft() override;
-  void pressRight() override;
+  void init() override;
+
 private:
-  int frameIndex;
-  int frameDelay;
-  int frameDelayCounter;
-  int gravity;
-  float ground;
-  Vector2 velocity, position;
+  Texture2D background;
+  MapRenderer mapRenderer;
+  Camera2D camera;
+  Shared<PlayableEntity> player;
+  std::vector<Shared<AbstractEntity>> entities;
+  Unique<IFactory> entityFactory;
   bool gameOver;
-  std::vector<Shared<TextureSmallCharacter>> characters;
 };
 } // namespace SceneSpace
 

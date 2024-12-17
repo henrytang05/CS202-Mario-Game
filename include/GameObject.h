@@ -15,7 +15,7 @@ public:
     NormalBlock(Texture2D texture, Vector2 position);
     ~NormalBlock()=default;
     void draw() override;
-    void update() override;
+    void update(float deltaTime) override;
 };
 
 // Derived class for a broken block
@@ -27,7 +27,7 @@ public:
     BrokenBlock(Texture2D texture, Vector2 position);
     ~BrokenBlock()=default;
     void draw() override;
-    void update() override;
+    void update(float deltaTime) override;
 };
 
 // Derived class for a hard block
@@ -39,7 +39,7 @@ public:
     HardBlock(Texture2D texture, Vector2 position);
     ~HardBlock()=default;
     void draw() override;
-    void update() override;
+    void update(float deltaTime) override;
 };
 
 // Derived class for a ground block
@@ -51,7 +51,7 @@ public:
     GroundBlock(Texture2D texture, Vector2 position);
     ~GroundBlock()=default;
     void draw() override;
-    void update() override;
+    void update(float deltaTime) override;
 };
 
 // Derived class for a question block
@@ -63,7 +63,7 @@ public:
     QuestionBlock(Texture2D texture, Vector2 position);
     ~QuestionBlock()=default;
     void draw() override;
-    void update() override;
+    void update(float deltaTime) override;
 };
 
 class Pipe : public AbstractEntity {
@@ -74,7 +74,7 @@ public:
     Pipe(Vector2 position, Vector2 size);
     ~Pipe()=default;
     void draw() override;
-    void update() override;
+    void update(float deltaTime) override;
 };
 class Flag: public AbstractEntity {
 private:
@@ -84,7 +84,7 @@ public:
     Flag(Vector2 position);
     ~Flag()=default;
     void draw() override;
-    void update() override;
+    void update(float deltaTime) override;
 };
 //-----------------------OLD--------
 //class Block : public AbstractEntity,

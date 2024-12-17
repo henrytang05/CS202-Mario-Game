@@ -22,7 +22,7 @@ public:
   Luigi();
   ~Luigi() = default;
 
-  void update() override;
+  void update(float deltaTime) override;
   void draw() override;
 
 private:
@@ -34,7 +34,7 @@ public:
   Mario();
   ~Mario() = default;
 
-  void update() override;
+  void update(float deltaTime) override;
   void draw() override;
 
 private:

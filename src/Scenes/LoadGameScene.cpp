@@ -6,7 +6,7 @@ SceneSpace::LoadGameScene::~LoadGameScene()
 {
 }
 
-Shared<SceneSpace::Scene> SceneSpace::LoadGameScene::updateScene()
+Shared<SceneSpace::Scene> SceneSpace::LoadGameScene::updateScene(float deltaTime)
 {
     return NULL;
 }

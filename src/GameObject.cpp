@@ -16,7 +16,7 @@ void NormalBlock::draw() {
     getComponent<TextureComponent>().drawTexture("Normal");
 }
 
-void NormalBlock::update() {
+void NormalBlock::update(float deltaTime) {
     // Implementation of the update function
 }
 
@@ -34,7 +34,7 @@ void BrokenBlock::draw() {
     getComponent<TextureComponent>().drawTexture("Normal");
 }
 
-void BrokenBlock::update() {
+void BrokenBlock::update(float deltaTime) {
     // Implementation of the update function
 }
 
@@ -52,7 +52,7 @@ void HardBlock::draw() {
     getComponent<TextureComponent>().drawTexture("Normal");
 }
 
-void HardBlock::update() {
+void HardBlock::update(float deltaTime) {
     // Implementation of the update function
 }
 
@@ -70,7 +70,7 @@ void GroundBlock::draw() {
     getComponent<TextureComponent>().drawTexture("Normal");
 }
 
-void GroundBlock::update() {
+void GroundBlock::update(float deltaTime) {
     // Implementation of the update function
 }
 
@@ -88,7 +88,7 @@ void QuestionBlock::draw() {
     getComponent<TextureComponent>().drawTexture("Normal");
 }
 
-void QuestionBlock::update() {
+void QuestionBlock::update(float deltaTime) {
     // Implementation of the update function
 }
 
@@ -103,7 +103,7 @@ void Pipe::draw() {
     // getComponent<TextureComponent>().drawTexture("Normal");
 }
 
-void Pipe::update() {
+void Pipe::update(float deltaTime) {
     // Implementation of the update function
 }
 
@@ -124,6 +124,6 @@ void Flag::draw() {
     getComponent<TextureComponent>().drawTexture("Normal");
 }
 
-void Flag::update() {
+void Flag::update(float deltaTime) {
     // Implementation of the update function
 }

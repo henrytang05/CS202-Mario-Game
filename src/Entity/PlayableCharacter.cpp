@@ -58,7 +58,7 @@ Luigi::Luigi() : PlayableEntity("Luigi"), state(new DroppingState({0.0f, 1.0f}, 
   
   getComponent<MarioSoundComponent>().LoadSounds();
 }
-void Luigi::update() {
+void Luigi::update(float deltaTime) {
   input();
   state->update(*this);
   for (auto &component : components) {
@@ -123,7 +123,7 @@ Mario::Mario()
   getComponent<MarioSoundComponent>().LoadSounds();
 }
 
-void Mario::update() {
+void Mario::update(float deltaTime) {
   input();
   state->update(*this);
   for (auto &component : components) {

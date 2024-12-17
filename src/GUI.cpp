@@ -30,3 +30,14 @@ bool GUI::ImageButton::isPressed()
 	if (buttonState == BTN_PRESSED) return true;
 	return false;
 }
+
+double GUI::get_delta_time()
+{
+    static auto lastTime = std::chrono::steady_clock::now();
+    auto currentTime = std::chrono::steady_clock::now();
+
+    double delta = std::chrono::duration<double>(currentTime - lastTime).count();
+    lastTime = currentTime;
+
+    return delta;
+}

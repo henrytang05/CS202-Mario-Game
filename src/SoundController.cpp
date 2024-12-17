@@ -181,7 +181,15 @@ void SoundController::PlayTingSound()
 	PlaySound(soundsEffects[23]);
 }
 
+void SoundController::Update(int time)
+{
+	if(time == 345) {
+		SetMusicPitch(bg, 1.5);
+	}
+	UpdateMusicStream(bg);
+}
+
 void SoundController::Update()
 {
-	UpdateMusicStream(bg);
+	Update(0);
 }

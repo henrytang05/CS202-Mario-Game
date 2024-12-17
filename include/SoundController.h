@@ -40,5 +40,6 @@ public:
   void PlayWarningEffect();
   void PlayWorldClearEffect();
   void PlayTingSound();
+  void Update(int time);
   void Update();
 };

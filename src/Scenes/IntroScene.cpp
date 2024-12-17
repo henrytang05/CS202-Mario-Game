@@ -1,6 +1,7 @@
 #include "Scenes/IntroScene.h"
 #include "Logger.h"
 #include "Scenes/GameScene.h"
+#include "Scenes/LoadGameScene.h"
 #include "Scenes/Scene.h"
 namespace SceneSpace {
 IntroScene::IntroScene() : Scene() {
@@ -51,6 +52,8 @@ Shared<Scene> IntroScene::updateScene() {
   }
   if (changeGameScreen)
     return std::make_shared<SceneSpace::GameScene>();
+  if (changeLoadScreen)
+    return std::make_shared<SceneSpace::LoadGameScene>();
   return nullptr;
 }
 void IntroScene::draw() {

@@ -103,16 +103,12 @@ bool CollisionComponent::ResolveDynamicRectVsRect(const float deltaTime, Shared<
     if (DynamicRectVsRect(deltaTime, bbOtherEntity, contact_point, contact_normal, contact_time))
     {
         if (contact_normal.y > 0.0f) contact[0] = r_static; 
-        else contact[0] = nullptr;
 
         if (contact_normal.x < 0.0f) contact[1] = r_static;
-        else contact[1] = nullptr;
 
         if (contact_normal.y < 0.0f) contact[2] = r_static;
-        else contact[2] = nullptr;
 
         if (contact_normal.x > 0.0f) contact[3] = r_static;
-        else contact[3] = nullptr;
 
         Vector2 velocity = entity->getComponent<TransformComponent>().getVelocity();
         velocity = velocity + (Vector2){contact_normal.x * std::fabs(velocity.x) * (1 - contact_time), contact_normal.y * std::fabs(velocity.y) * (1 - contact_time)};
@@ -123,6 +119,8 @@ bool CollisionComponent::ResolveDynamicRectVsRect(const float deltaTime, Shared<
     return false;
 }
 void CollisionComponent::update(float deltaTime) {
+    for(int i = 0; i < 4; i++)
+        contact[i] = nullptr;
     std::vector<pair<int, float>> col;
     auto &otherEntity = *(entities);
     
@@ -142,9 +140,6 @@ void CollisionComponent::update(float deltaTime) {
     });
     for(auto x : col)
         ResolveDynamicRectVsRect(deltaTime, otherEntity[x.first]);
-    if(col.empty())
-        for(int i = 0; i < 4; i++)
-            contact[i] = nullptr;
 }
 Shared<AbstractEntity> CollisionComponent::getBelow() {
     return contact[2];

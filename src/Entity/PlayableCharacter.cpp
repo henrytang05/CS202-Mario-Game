@@ -19,7 +19,7 @@ Vector2 PlayableEntity::getVelocity() {
 
 Luigi::Luigi() : PlayableEntity("Luigi"), state(new DroppingState({0.0f, 1.0f}, "LARGE", "RIGHT", "DROPPING")) {
   Vector2 size({16, 20});
-  Vector2 position = {0, (float)ground - size.y};
+  Vector2 position = {0.0f, 0.0f};
   Vector2 velocity = {0, 0};
 
   addComponent<PositionComponent>(position);
@@ -83,7 +83,7 @@ void Luigi::draw() {
 Mario::Mario()
     : PlayableEntity("Mario"), state(new DroppingState({0.0f, 1.0f}, "SMALL", "RIGHT", "DROPPING")) {
   Vector2 size({16, 20});
-  Vector2 position = {0, (float)ground - size.y};
+  Vector2 position = {0.0f, 0.0f};
   Vector2 velocity = {0, 0};
 
   addComponent<PositionComponent>(position);

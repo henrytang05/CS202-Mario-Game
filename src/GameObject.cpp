@@ -91,3 +91,39 @@ void QuestionBlock::draw() {
 void QuestionBlock::update() {
     // Implementation of the update function
 }
+
+Pipe::Pipe(Vector2 position, Vector2 size): AbstractEntity("Pipe") {
+    addComponent<PositionComponent>(position);    
+    addComponent<BoundingBoxComponent>(size);
+    std::cerr<<"create pipe"<<std::endl;
+}
+
+void Pipe::draw() {
+    // ASSERT(hasComponent<TextureComponent>());
+    // getComponent<TextureComponent>().drawTexture("Normal");
+}
+
+void Pipe::update() {
+    // Implementation of the update function
+}
+
+//
+Flag::Flag(Vector2 position): AbstractEntity("Flag") {
+    Vector2 position_fix = {position.x, position.y};
+    Vector2 size = {2, 128};
+    addComponent<PositionComponent>(position_fix);    
+    addComponent<BoundingBoxComponent>(size);
+    addComponent<TextureComponent>();
+    getComponent<TextureComponent>().addTexture("Normal", LoadTexture("Map/Flag.png"));
+
+    std::cerr<<"create flag"<<std::endl;
+}
+
+void Flag::draw() {
+    ASSERT(hasComponent<TextureComponent>());
+    getComponent<TextureComponent>().drawTexture("Normal");
+}
+
+void Flag::update() {
+    // Implementation of the update function
+}

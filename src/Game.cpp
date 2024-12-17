@@ -35,7 +35,6 @@ void Game::run() {
   }
 }
 void Game::update(float deltaTime) {
-  cerr << deltaTime * 60.0f << '\n';
   Shared<SceneSpace::Scene> nextScene = currentScene->updateScene(deltaTime);
   if (nextScene) {
     currentScene = nextScene;

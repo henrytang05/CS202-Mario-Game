@@ -12,7 +12,7 @@ public:
 
   void init() override;
   void setSize(Vector2 size);
-  void update() override;
+  void update(float deltaTime) override;
   Vector2 getSize();
   Rectangle getTopLeft();
   Rectangle getTopRight();

@@ -5,7 +5,7 @@
 
 class MarioSoundComponent : public Component {
     private:
-    std::array<Sound, 23> soundsEffects;
+    std::array<Sound, 24> soundsEffects;
     public:
     MarioSoundComponent();
     void init() override {};
@@ -33,4 +33,5 @@ class MarioSoundComponent : public Component {
     void PlayVineEffect();
     void PlayWarningEffect();
     void PlayWorldClearEffect();
+    void PlayTingSound();
 };

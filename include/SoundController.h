@@ -5,7 +5,7 @@
 class SoundController {
 private:
   std::array<Music, 2> backgroundTracks;
-  std::array<Sound, 23> soundsEffects;
+  std::array<Sound, 24> soundsEffects;
   Music bg;
   void LoadBackgroundTracks();
   void LoadSoundEffects();
@@ -39,5 +39,7 @@ public:
   void PlayVineEffect();
   void PlayWarningEffect();
   void PlayWorldClearEffect();
+  void PlayTingSound();
+  void Update(int time);
   void Update();
 };

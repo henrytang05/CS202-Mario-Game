@@ -18,7 +18,7 @@ bool isCollision(Rectangle a, Rectangle b) {
 }
 Shared<AbstractEntity> CollisionComponent::standingOn() {
     BoundingBoxComponent &thisBoundingBox = entity->getComponent<BoundingBoxComponent>();
-    for(auto &e : *entities) if(e->name != entity->name) {
+    for(auto &e : *entities) if(*e != *entity) {
         BoundingBoxComponent &otherBoundingBox = e->getComponent<BoundingBoxComponent>();
         if(isCollision(thisBoundingBox.getBotLeft(), otherBoundingBox.getBotRight()) && isCollision(thisBoundingBox.getTopLeft(), otherBoundingBox.getTopRight())) continue;
         if(isCollision(thisBoundingBox.getBotRight(), otherBoundingBox.getBotLeft()) && isCollision(thisBoundingBox.getTopRight(), otherBoundingBox.getTopLeft())) continue;
@@ -31,7 +31,7 @@ Shared<AbstractEntity> CollisionComponent::standingOn() {
 }
 Shared<AbstractEntity> CollisionComponent::collisionAbove() {
     BoundingBoxComponent &thisBoundingBox = entity->getComponent<BoundingBoxComponent>();
-    for(auto &e : *entities) if(e->name != entity->name) {
+    for(auto &e : *entities) if(*e != *entity) {
         BoundingBoxComponent &otherBoundingBox = e->getComponent<BoundingBoxComponent>();
         if(isCollision(thisBoundingBox.getBotLeft(), otherBoundingBox.getBotRight()) && isCollision(thisBoundingBox.getTopLeft(), otherBoundingBox.getTopRight())) continue;
         if(isCollision(thisBoundingBox.getBotRight(), otherBoundingBox.getBotLeft()) && isCollision(thisBoundingBox.getTopRight(), otherBoundingBox.getTopLeft())) continue;
@@ -44,8 +44,8 @@ Shared<AbstractEntity> CollisionComponent::collisionAbove() {
 }
 Shared<AbstractEntity> CollisionComponent::collisionSide() {
     BoundingBoxComponent &thisBoundingBox = entity->getComponent<BoundingBoxComponent>();
-    for(auto &e : *entities) if(e->name != entity->name) {
-        ASSERT(e->name != entity->name);
+    for(auto &e : *entities) if(*e != *entity) {
+        ASSERT(*e != *entity);
         BoundingBoxComponent &otherBoundingBox = e->getComponent<BoundingBoxComponent>();
         if(isCollision(thisBoundingBox.getBotLeft(), otherBoundingBox.getBotRight()) && isCollision(thisBoundingBox.getTopLeft(), otherBoundingBox.getTopRight())) return e;
         if(isCollision(thisBoundingBox.getBotRight(), otherBoundingBox.getBotLeft()) && isCollision(thisBoundingBox.getTopRight(), otherBoundingBox.getTopLeft())) return e;

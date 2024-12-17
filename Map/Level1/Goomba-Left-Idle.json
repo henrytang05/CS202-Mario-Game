@@ -1,5 +1,5 @@
 { "columns":1,
- "image":"..\/..\/..\/Users\/LENOVO\/Desktop\/MapMario\/Goomba\/Goomba-Left-Idle.png",
+ "image":"Goomba-Left-Idle.png",
  "imageheight":16,
  "imagewidth":16,
  "margin":0,
@@ -14,7 +14,6 @@
          "objectgroup":
             {
              "draworder":"index",
-             "id":2,
              "name":"",
              "objects":[
                     {

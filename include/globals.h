@@ -2,6 +2,7 @@
 #define GLOBAL_H
 
 const int screenWidth = 1440;
+const int gameWidth = 2624;
 const int screenHeight = 810;
 
 #define ASSERT(condition) assert((condition) && "Assertion failed: " #condition)

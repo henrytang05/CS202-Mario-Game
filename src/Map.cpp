@@ -139,9 +139,10 @@ void MapRenderer::loadObjectGroup(const json& layer) {
         float y = object_layer["y"];
         float width = object_layer["width"];
         float height = object_layer["height"];
-
+        y = y - height;// Silly adjustment
         //Create game objects based on type
         if (name == "Pipe") {
+            y = y + height;
             entityFactory = std::make_unique<EntityFactory>();
             auto obj = entityFactory->createPipe({x, y}, {width, height});
             if (obj) {

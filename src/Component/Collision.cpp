@@ -1,14 +1,16 @@
-#include "Components/Collision.h"
 #include "Components/BoundingBox.h"
 #include "AbstractEntity.h"
 #include "globals.h"
+#include "Components/Collision.h"
 
 CollisionComponent::CollisionComponent()
     : Component("CollisionComponent"), entities(nullptr) {}
 CollisionComponent::CollisionComponent(Shared<std::vector<Shared<AbstractEntity>>> _entities)
     : Component("CollisionComponent"), entities(_entities) {}
 
-CollisionComponent::~CollisionComponent() {}
+CollisionComponent::~CollisionComponent() {
+    entities = nullptr;
+}
 void CollisionComponent::init() {}
 bool isCollision(Rectangle a, Rectangle b) {
     return (a.x <= b.x + b.width &&

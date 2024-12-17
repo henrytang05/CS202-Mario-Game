@@ -180,7 +180,7 @@
   <object id="59" x="400" y="704" width="32" height="80"/>
   <object id="60" x="1600" y="720" width="32" height="64"/>
  </objectgroup>
- <objectgroup id="7" name="Goomba" visible="0">
+ <objectgroup id="7" name="Goomba">
   <object id="5" gid="71" x="304" y="784" width="16" height="16"/>
   <object id="6" gid="71" x="592" y="784" width="16" height="16"/>
   <object id="7" gid="71" x="576" y="784" width="16" height="16"/>
@@ -189,7 +189,7 @@
   <object id="15" gid="71" x="1776" y="784" width="16" height="16"/>
   <object id="16" gid="71" x="1792" y="784" width="16" height="16"/>
  </objectgroup>
- <objectgroup id="8" name="Koopa" visible="0">
+ <objectgroup id="8" name="Koopa">
   <object id="11" gid="72" x="1040" y="784" width="16" height="27"/>
   <object id="13" gid="72" x="992" y="784" width="16" height="27"/>
  </objectgroup>

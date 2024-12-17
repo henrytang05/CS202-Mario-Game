@@ -58,7 +58,7 @@
          "name":"Sky",
          "opacity":1,
          "type":"tilelayer",
-         "visible":false,
+         "visible":true,
          "width":164,
          "x":0,
          "y":0
@@ -180,7 +180,7 @@
          "name":"Ground",
          "opacity":1,
          "type":"tilelayer",
-         "visible":true,
+         "visible":false,
          "width":164,
          "x":0,
          "y":0
@@ -199,12 +199,12 @@
                  "type":"",
                  "visible":true,
                  "width":16,
-                 "x":2486.63636363636,
-                 "y":697.121212121212
+                 "x":2487.03125,
+                 "y":704.0625
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":true,
+         "visible":false,
          "x":0,
          "y":0
         }, 

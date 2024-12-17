@@ -107,9 +107,8 @@ void Pipe::update() {
     // Implementation of the update function
 }
 
+//
 Flag::Flag(Vector2 position): AbstractEntity("Flag") {
-    //Actually the flag is a pole. 
-    //So I want to create the bounding box of flag as a pole not a flag :3
     Vector2 position_fix = {position.x, position.y};
     Vector2 size = {2, 128};
     addComponent<PositionComponent>(position_fix);    

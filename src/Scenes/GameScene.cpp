@@ -22,7 +22,7 @@ void GameScene::init() {
   player = entityFactory->createMario();
   entities.push_back(player);
   gameOver = false; 
-  camera.offset = {screenWidth / 2.0f, screenHeight / 2.0f};
+  camera.offset = {gameWidth / 4.0f, screenHeight / 2.0f};
   camera.rotation = 0.0f; 
   camera.target.x = player->getComponent<PositionComponent>().getPosition().x;
   camera.target.y = 784.0f - 186.0f; 
@@ -67,10 +67,10 @@ void GameScene::update() {
     entity->update();
   }
   camera.target.x = player->getComponent<PositionComponent>().getPosition().x;
-  if (camera.target.x <= gameWidth / (2.0f * camera.zoom))
-    camera.target.x = gameWidth / (2.0f * camera.zoom);
-  if (camera.target.x >= gameWidth - gameWidth / (2.0f * camera.zoom))
-    camera.target.x = gameWidth - gameWidth / (2.0f * camera.zoom);
+  if (camera.target.x <= gameWidth / (4.0f * camera.zoom))
+    camera.target.x = gameWidth / (4.0f * camera.zoom);
+  if (camera.target.x >= gameWidth - gameWidth / (3.5f * camera.zoom))
+    camera.target.x = gameWidth - gameWidth / (3.5f * camera.zoom);
   SoundCtrl.Update();
 }
 

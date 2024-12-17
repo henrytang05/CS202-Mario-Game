@@ -147,6 +147,9 @@ void MapRenderer::loadObjectGroup(const json& layer) {
             if (obj) {
                 objects.push_back(obj);
             }
+            std::cerr<<"x: "<<x<<" y: "<<y<<std::endl;
+            std::cerr<<"width: "<<width<<" height: "<<height<<std::endl;
+            
         } else if (name == "Flag") {
             // Create an enemy object
             entityFactory = std::make_unique<EntityFactory>();

@@ -6,6 +6,8 @@
 #include "Map.h"
 #include "Scenes/Scene.h"
 
+#include "Entity/EnemySystem.h"
+
 namespace SceneSpace {
 class GameScene : public Scene, public AbstractEntity {
 public:
@@ -27,6 +29,19 @@ private:
   std::vector<Shared<AbstractEntity>> entities;
   Unique<IFactory> entityFactory;
   bool gameOver;
+
+  // just a small test
+
+  // TODO: remove this later
+private:
+  void testEnemyCreated();
+  void updateEnemies();
+  void drawEnemies();
+
+  std::vector<Shared<AbstractEntity>> enemies;
+  EnemyAISystem enemyAISystem;
+  EnemyRenderSystem enemyRenderSystem;
+  EnemyCollisionSystem enemyCollisionSystem;
 };
 } // namespace SceneSpace
 

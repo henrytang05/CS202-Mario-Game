@@ -10,7 +10,11 @@ class AbstractEntity : public IUpdatable, public IDrawable {
 public:
   AbstractEntity() : active(true), name("Unnamed") { id = nextID(); }
   AbstractEntity(std::string name) : active(true), name(name) { id = nextID(); }
-  virtual ~AbstractEntity() = default;
+  virtual ~AbstractEntity() {
+#ifdef _DEBUG
+    Log(name + " created: " + std::to_string(id));
+#endif
+  }
   template <typename T> bool hasComponent() const;
   template <typename T, typename... TArgs> T &addComponent(TArgs &&...mArgs);
   template <typename T> T &getComponent() const;

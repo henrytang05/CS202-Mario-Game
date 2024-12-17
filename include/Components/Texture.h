@@ -11,7 +11,8 @@ public:
   void drawTexture(std::string state);
   void init() override;
   void update() override;
-private:
+  // TODO: fix this to private?
+public:
   std::map<std::string, Texture2D> textures;
 };
 

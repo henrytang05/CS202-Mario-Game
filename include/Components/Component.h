@@ -5,7 +5,7 @@ class AbstractEntity;
 class Component;
 using ComponentTypeID = std::size_t;
 
-constexpr std::size_t maxComponents = 32;
+constexpr std::size_t maxComponents = 64;
 
 using ComponentBitSet = std::bitset<maxComponents>;
 using ComponentArray = std::array<Component *, maxComponents>;
@@ -20,9 +20,9 @@ public:
   virtual void draw();
   void setEntity(AbstractEntity *e);
 
-private:
   virtual void init();
 
+private:
 protected:
   AbstractEntity *entity;
 

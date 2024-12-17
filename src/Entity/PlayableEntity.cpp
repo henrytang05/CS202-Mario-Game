@@ -131,7 +131,7 @@ void Mario::input() {}
 void Mario::draw() {
   ASSERT(hasComponent<TextureComponent>());
   std::string currentState = state->getCurrentState();
-  cerr << state->getCurrentState() << '\n';
+  //cerr << state->getCurrentState() << '\n';
   getComponent<TextureComponent>().drawTexture(currentState);
 }
 PlayableEntity::PlayableEntity() {
@@ -211,9 +211,9 @@ void PlayableEntity::handleInput(Shared<CharacterState> &state, float deltaTime)
       else velocity.x -= WALKING_ACC * deltaTime;
     }
     if(velocity.y > 0.0f && state->getState() != "DROPPING") state = make_shared<DroppingState>(state->getSize(), state->getFacing());
-    if(getComponent<CollisionComponent>().getBelow()) { 
+    if(getComponent<CollisionComponent>().getBelow() && state->getState() == "DROPPING") { 
       state = make_shared<StandingState>(state->getSize(), state->getFacing());
-      fallAcc = GRAVITY_DEC;
+      //fallAcc = GRAVITY_DEC;
     }
     velocity.y += fallAcc * deltaTime;
   }
@@ -226,6 +226,6 @@ void PlayableEntity::handleInput(Shared<CharacterState> &state, float deltaTime)
   if (velocity.x <= -MAX_WALKING_VELO && !IsKeyDown(KEY_LEFT_SHIFT)) velocity.x = -MAX_WALKING_VELO;
   if(velocity.x < 0.0f) state->setFacingState("LEFT");
   if(velocity.x > 0.0f) state->setFacingState("RIGHT");
-  if(velocity.x == 0.0f) state = make_shared<StandingState>(state->getSize(), state->getFacing());
+  //if(velocity.x == 0.0f && (state->getState() == "MOVING" || state->getState() == "SKIDDING")) state = make_shared<StandingState>(state->getSize(), state->getFacing());
   setVelocity(velocity);
 }

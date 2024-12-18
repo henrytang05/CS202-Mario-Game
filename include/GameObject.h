@@ -8,55 +8,84 @@ using json = nlohmann::json;
 
 // Derived class for a normal block
 class NormalBlock : public AbstractEntity {
+private:
+    bool isCollision = false;
 public:
     NormalBlock()=default;
     NormalBlock(Texture2D texture, Vector2 position);
     ~NormalBlock()=default;
     void draw() override;
-    void update() override;
+    void update(float deltaTime) override;
 };
 
 // Derived class for a broken block
 class BrokenBlock : public AbstractEntity {
+private:
+    bool isCollision = false;
 public:
     BrokenBlock()=default;
     BrokenBlock(Texture2D texture, Vector2 position);
     ~BrokenBlock()=default;
     void draw() override;
-    void update() override;
+    void update(float deltaTime) override;
 };
 
 // Derived class for a hard block
 class HardBlock : public AbstractEntity {
+private:
+    bool isCollision = false;
 public:
     HardBlock()=default;
     HardBlock(Texture2D texture, Vector2 position);
     ~HardBlock()=default;
     void draw() override;
-    void update() override;
+    void update(float deltaTime) override;
 };
 
 // Derived class for a ground block
 class GroundBlock : public AbstractEntity {
+private:
+    bool isCollision = false;
 public:
     GroundBlock()=default;
     GroundBlock(Texture2D texture, Vector2 position);
     ~GroundBlock()=default;
     void draw() override;
-    void update() override;
+    void update(float deltaTime) override;
 };
 
 // Derived class for a question block
 class QuestionBlock : public AbstractEntity {
+private:
+    bool isCollision = false;
 public:
     QuestionBlock()=default;
     QuestionBlock(Texture2D texture, Vector2 position);
     ~QuestionBlock()=default;
     void draw() override;
-    void update() override;
+    void update(float deltaTime) override;
 };
 
-
+class Pipe : public AbstractEntity {
+private:
+    bool isCollision = false;
+public:
+    Pipe()=default;
+    Pipe(Vector2 position, Vector2 size);
+    ~Pipe()=default;
+    void draw() override;
+    void update(float deltaTime) override;
+};
+class Flag: public AbstractEntity {
+private:
+    bool isCollision = false;
+public:
+    Flag()=default;
+    Flag(Vector2 position);
+    ~Flag()=default;
+    void draw() override;
+    void update(float deltaTime) override;
+};
 //-----------------------OLD--------
 //class Block : public AbstractEntity,
 //               public IDrawable,

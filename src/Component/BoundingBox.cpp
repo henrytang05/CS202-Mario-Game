@@ -50,4 +50,4 @@ Rectangle BoundingBoxComponent::getBotRight() {
   result.height = size.y - getTopLeft().height;
   return result;
 }
-void BoundingBoxComponent::update() {}
+void BoundingBoxComponent::update(float deltaTime) {}

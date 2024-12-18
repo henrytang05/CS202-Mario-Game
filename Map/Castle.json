@@ -1,0 +1,14 @@
+{ "columns":1,
+ "image":"Castle.png",
+ "imageheight":83,
+ "imagewidth":80,
+ "margin":0,
+ "name":"Castle",
+ "spacing":0,
+ "tilecount":1,
+ "tiledversion":"1.11.0",
+ "tileheight":83,
+ "tilewidth":80,
+ "type":"tileset",
+ "version":"1.10"
+}

@@ -5,7 +5,7 @@
 #include "Entity/States/CharacterStates.h"
 #include "Components/SoundComponent.h"
 
-PlayableEntity::PlayableEntity(std::string name) : AbstractEntity(name), fallAcc(GRAVITY_DEC) {}
+PlayableEntity::PlayableEntity(std::string name) : AbstractEntity(name), fallAcc(GRAVITY_DEC), timeFrameCounter(0.0f) {}
 
 void PlayableEntity::setVelocity(Vector2 newVelocity) {
   ASSERT(hasComponent<TransformComponent>());
@@ -63,9 +63,15 @@ void Luigi::update(float deltaTime) {
     component->update(deltaTime);
   }
 
-  // check collision
-  // for ( .. )
-  // getComponent<BoundingBoxComponent>().checkCollision()
+  // resolve collision
+  if(getComponent<CollisionComponent>().getAbove())
+    cerr << getComponent<CollisionComponent>().getAbove()->name << '\n';
+  if(getComponent<CollisionComponent>().getBelow())
+    cerr << getComponent<CollisionComponent>().getBelow()->name << '\n';
+  if(getComponent<CollisionComponent>().getLeft())
+    cerr << getComponent<CollisionComponent>().getLeft()->name << '\n';
+  if(getComponent<CollisionComponent>().getRight())
+    cerr << getComponent<CollisionComponent>().getRight()->name << '\n';
 }
 void Luigi::input() {}
 
@@ -121,9 +127,16 @@ void Mario::update(float deltaTime) {
   for (auto &component : components) {
     component->update(deltaTime);
   }
-  // check collision
-  // for ( .. )
-  // getComponent<BoundingBoxComponent>().checkCollision()
+
+  // resolve collision
+  if(getComponent<CollisionComponent>().getAbove())
+    cerr << getComponent<CollisionComponent>().getAbove()->name << '\n';
+  if(getComponent<CollisionComponent>().getBelow())
+    cerr << getComponent<CollisionComponent>().getBelow()->name << '\n';
+  if(getComponent<CollisionComponent>().getLeft())
+    cerr << getComponent<CollisionComponent>().getLeft()->name << '\n';
+  if(getComponent<CollisionComponent>().getRight())
+    cerr << getComponent<CollisionComponent>().getRight()->name << '\n';
 }
 
 void Mario::input() {} 
@@ -135,6 +148,7 @@ void Mario::draw() {
   getComponent<TextureComponent>().drawTexture(currentState);
 }
 PlayableEntity::PlayableEntity() {
+  timeFrameCounter = 0.0f;
   fallAcc = GRAVITY_DEC;
 }
 void PlayableEntity::handleInput(Shared<CharacterState> &state, float deltaTime) {
@@ -224,8 +238,28 @@ void PlayableEntity::handleInput(Shared<CharacterState> &state, float deltaTime)
   if (velocity.x <= -MAX_RUNNING_VELO) velocity.x = -MAX_RUNNING_VELO;
   if (velocity.x >= MAX_WALKING_VELO && !IsKeyDown(KEY_LEFT_SHIFT)) velocity.x = MAX_WALKING_VELO;
   if (velocity.x <= -MAX_WALKING_VELO && !IsKeyDown(KEY_LEFT_SHIFT)) velocity.x = -MAX_WALKING_VELO;
+
   if(velocity.x < 0.0f) state->setFacingState("LEFT");
   if(velocity.x > 0.0f) state->setFacingState("RIGHT");
-  //if(velocity.x == 0.0f && (state->getState() == "MOVING" || state->getState() == "SKIDDING")) state = make_shared<StandingState>(state->getSize(), state->getFacing());
+  if(state->getState() == "SKIDDING") {
+    if(std::fabs(velocity.x) < MIN_SKIDDING)
+      state = make_shared<StandingState>(state->getSize(), state->getFacing());
+  } 
+  else if(state->getState() != "JUMPING" && state->getState() != "DROPPING") {
+    if(std::fabs(velocity.x) >= MIN_WALKING_VELO) {
+      timeFrameCounter += deltaTime;
+      if(timeFrameCounter >= 0.1f) {
+        if(state->getState() == "IDLE")
+          state = make_shared<MovingState>(state->getSize(), state->getFacing());
+        else 
+          state = make_shared<StandingState>(state->getSize(), state->getFacing());
+        timeFrameCounter = 0.0f;
+      }
+    }
+    else {
+      state = make_shared<StandingState>(state->getSize(), state->getFacing());
+      timeFrameCounter = 0.0f;
+    }
+  }
   setVelocity(velocity);
 }

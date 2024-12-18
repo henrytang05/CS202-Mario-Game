@@ -41,6 +41,7 @@ class PlayableEntity : public AbstractEntity,
                        public IMovable {
 private:
   float fallAcc;
+  float timeFrameCounter;
 public:
   PlayableEntity();
   PlayableEntity(std::string name);

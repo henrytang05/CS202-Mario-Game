@@ -3,11 +3,11 @@
  <editorsettings>
   <export target="Level1new.json" format="json"/>
  </editorsettings>
- <tileset firstgid="1" source="Level1/OverWorld.json"/>
- <tileset firstgid="71" source="Level1/Goomba-Left-Idle.json"/>
+ <tileset firstgid="1" source="OverWorld.json"/>
+ <tileset firstgid="71" source="Goomba-Left-Idle.json"/>
  <tileset firstgid="72" source="Koopa-Left-Idle.json"/>
- <tileset firstgid="73" source="Level1/Castle.json"/>
- <tileset firstgid="74" source="Level1/Checkpoint.json"/>
+ <tileset firstgid="73" source="Castle.json"/>
+ <tileset firstgid="74" source="Checkpoint.json"/>
  <layer id="13" name="Sky" width="164" height="50" visible="0">
   <data encoding="csv">
 32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,

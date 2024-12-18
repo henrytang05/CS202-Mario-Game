@@ -59,6 +59,6 @@ private:
 };
 
 void Log(std::string message, LogLevel level = LogLevel::DEBUG,
-         std::string filename = "log.txt", bool append = false);
+         std::string filename = "log.txt", bool append = true);
 
 #endif

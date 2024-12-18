@@ -64,8 +64,12 @@ void Luigi::update(float deltaTime) {
   }
 
   // resolve collision
-  if(getComponent<CollisionComponent>().getAbove())
-    cerr << getComponent<CollisionComponent>().getAbove()->name << '\n';
+  if(getComponent<CollisionComponent>().getAbove()) {
+    Shared<AbstractEntity> aboveBlock = getComponent<CollisionComponent>().getAbove();
+    if(aboveBlock->name == "BrokenBlock") {
+      aboveBlock->getComponent<BlockTriggerComponent>().setTrigger(new TriggerBrokenBlockWhenHitBySmall());
+    }
+  }
   if(getComponent<CollisionComponent>().getBelow())
     cerr << getComponent<CollisionComponent>().getBelow()->name << '\n';
   if(getComponent<CollisionComponent>().getLeft())
@@ -129,14 +133,18 @@ void Mario::update(float deltaTime) {
   }
 
   // resolve collision
-  if(getComponent<CollisionComponent>().getAbove())
-    cerr << getComponent<CollisionComponent>().getAbove()->name << '\n';
-  if(getComponent<CollisionComponent>().getBelow())
-    cerr << getComponent<CollisionComponent>().getBelow()->name << '\n';
-  if(getComponent<CollisionComponent>().getLeft())
-    cerr << getComponent<CollisionComponent>().getLeft()->name << '\n';
-  if(getComponent<CollisionComponent>().getRight())
-    cerr << getComponent<CollisionComponent>().getRight()->name << '\n';
+  if(getComponent<CollisionComponent>().getAbove()) {
+    Shared<AbstractEntity> aboveBlock = getComponent<CollisionComponent>().getAbove();
+    if(aboveBlock->name == "BrokenBlock") {
+      aboveBlock->getComponent<BlockTriggerComponent>().setTrigger(new TriggerBrokenBlockWhenHitBySmall(aboveBlock->getComponent<PositionComponent>().getPosition()));
+    }
+  }
+  // if(getComponent<CollisionComponent>().getBelow())
+  //   cerr << getComponent<CollisionComponent>().getBelow()->name << '\n';
+  // if(getComponent<CollisionComponent>().getLeft())
+  //   cerr << getComponent<CollisionComponent>().getLeft()->name << '\n';
+  // if(getComponent<CollisionComponent>().getRight())
+  //   cerr << getComponent<CollisionComponent>().getRight()->name << '\n';
 }
 
 void Mario::input() {} 

@@ -6,4 +6,5 @@
 #include "Components/Texture.h"
 #include "Components/Transform.h"
 #include "Components/Collision.h"
+#include "Components/BlockTrigger.h"
 #endif // COMPONENTS_H

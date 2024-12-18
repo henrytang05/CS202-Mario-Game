@@ -42,11 +42,11 @@ GameScene::~GameScene() {
 }
 void GameScene::loadResources() {
   //Loading BackGround
-  Image bImage = LoadImage("Map/BackGround.png");
+  Image bImage = LoadImage("assets/Level1/BackGround.png");
   background = LoadTextureFromImage(bImage);
   UnloadImage(bImage);
   //Create Map
-  entities = mapRenderer.createMap("Map/Level1new.json");
+  entities = mapRenderer.createMap("assets/Level1/Level1.json");
 }
 void GameScene::draw() {
   BeginMode2D(camera);

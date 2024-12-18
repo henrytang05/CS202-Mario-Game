@@ -2,13 +2,13 @@
 #include "Components/BoundingBox.h"
 #include "Components/Position.h"
 #include "Components/Texture.h"
-
-NormalBlock::NormalBlock(Texture2D texture, Vector2 position): AbstractEntity("NormalBlock") {
+ 
+NormalBlock::NormalBlock(Vector2 position): AbstractEntity("NormalBlock") {
     Vector2 size({16, 16});
     addComponent<PositionComponent>(position);    
     addComponent<BoundingBoxComponent>(size);
     addComponent<TextureComponent>();
-    getComponent<TextureComponent>().addTexture("Normal", texture);
+    getComponent<TextureComponent>().addTexture("Normal", TextureManager::getInstance().getTexture("NormalBlock"));
 }
 
 void NormalBlock::draw() {
@@ -20,13 +20,12 @@ void NormalBlock::update() {
     // Implementation of the update function
 }
 
-BrokenBlock::BrokenBlock(Texture2D texture, Vector2 position): AbstractEntity("BrokenBlock") {
+BrokenBlock::BrokenBlock(Vector2 position): AbstractEntity("BrokenBlock") {
     Vector2 size({16, 16});
     addComponent<PositionComponent>(position);    
     addComponent<BoundingBoxComponent>(size);
     addComponent<TextureComponent>();
-    getComponent<TextureComponent>().addTexture("Normal", texture);
-    std::cerr<<"create broken block"<<std::endl;
+    getComponent<TextureComponent>().addTexture("Normal", TextureManager::getInstance().getTexture("BrokenBlock"));
 }
 
 void BrokenBlock::draw() {
@@ -38,13 +37,12 @@ void BrokenBlock::update() {
     // Implementation of the update function
 }
 
-HardBlock::HardBlock(Texture2D texture, Vector2 position): AbstractEntity("HardBlock") {
+HardBlock::HardBlock(Vector2 position): AbstractEntity("HardBlock") {
     Vector2 size({16, 16});
     addComponent<PositionComponent>(position);    
     addComponent<BoundingBoxComponent>(size);
     addComponent<TextureComponent>();
-    getComponent<TextureComponent>().addTexture("Normal", texture);
-    std::cerr<<"create hard block"<<std::endl;
+    getComponent<TextureComponent>().addTexture("Normal", TextureManager::getInstance().getTexture("HardBlock"));
 }
 
 void HardBlock::draw() {
@@ -56,13 +54,12 @@ void HardBlock::update() {
     // Implementation of the update function
 }
 
-GroundBlock::GroundBlock(Texture2D texture, Vector2 position): AbstractEntity("GroundBlock") {
+GroundBlock::GroundBlock(Vector2 position): AbstractEntity("GroundBlock") {
     Vector2 size({16, 16});
     addComponent<PositionComponent>(position);    
     addComponent<BoundingBoxComponent>(size);
     addComponent<TextureComponent>();
-    getComponent<TextureComponent>().addTexture("Normal", texture);
-    std::cerr<<"create ground block"<<std::endl;
+    getComponent<TextureComponent>().addTexture("Normal", TextureManager::getInstance().getTexture("GroundBlock"));
 }
 
 void GroundBlock::draw() {
@@ -74,13 +71,12 @@ void GroundBlock::update() {
     // Implementation of the update function
 }
 
-QuestionBlock::QuestionBlock(Texture2D texture, Vector2 position): AbstractEntity("QuestionBlock") {
+QuestionBlock::QuestionBlock(Vector2 position): AbstractEntity("QuestionBlock") {
     Vector2 size({16, 16});
     addComponent<PositionComponent>(position);    
     addComponent<BoundingBoxComponent>(size);
     addComponent<TextureComponent>();
-    getComponent<TextureComponent>().addTexture("Normal", texture);
-    std::cerr<<"create question block"<<std::endl;
+    getComponent<TextureComponent>().addTexture("Normal", TextureManager::getInstance().getTexture("QuestionBlock"));
 }
 
 void QuestionBlock::draw() {
@@ -114,7 +110,7 @@ Flag::Flag(Vector2 position): AbstractEntity("Flag") {
     addComponent<PositionComponent>(position_fix);    
     addComponent<BoundingBoxComponent>(size);
     addComponent<TextureComponent>();
-    getComponent<TextureComponent>().addTexture("Normal", LoadTexture("Map/Flag.png"));
+    getComponent<TextureComponent>().addTexture("Normal", TextureManager::getInstance().getTexture("Flag") );
 
     std::cerr<<"create flag"<<std::endl;
 }

@@ -3,7 +3,7 @@
 #include "Components/Position.h"
 TextureComponent::TextureComponent() : Component("TextureComponent") {}
 void TextureComponent::init() {}
-void TextureComponent::update() {}
+void TextureComponent::update(float deltaTime) {}
 void TextureComponent::drawTexture(std::string state) {
   Vector2 position = entity->getComponent<PositionComponent>().getPosition();
   DrawTexture(textures[state], position.x, position.y, WHITE);

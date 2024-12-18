@@ -10,7 +10,7 @@ class Scene {
 public:
   Scene();
   virtual ~Scene();
-  virtual Shared<Scene> updateScene() = 0;
+  virtual Shared<Scene> updateScene(float deltaTime) = 0;
   virtual void draw() = 0;
   virtual void loadResources() = 0;
   virtual void init() = 0;

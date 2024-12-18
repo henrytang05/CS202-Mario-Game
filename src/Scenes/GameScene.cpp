@@ -46,7 +46,7 @@ void GameScene::loadResources() {
   background = LoadTextureFromImage(bImage);
   UnloadImage(bImage);
   // Create Map
-  entities = mapRenderer.createMap("Map/Level1.json");
+  entities = mapRenderer.createMap("Map/Level1new.json");
 }
 void GameScene::draw() {
   BeginMode2D(camera);
@@ -58,14 +58,14 @@ void GameScene::draw() {
   EndMode2D();
   DrawText(TextFormat("Time: %03i", (int)time), 1200, 35, GAMEPLAY_TEXT_SIZE, WHITE);
 }
-Shared<Scene> GameScene::updateScene() {
-  this->update();
+Shared<Scene> GameScene::updateScene(float deltaTime) {
+  this->update(deltaTime);
   return nullptr;
 }
-void GameScene::update() {
+void GameScene::update(float deltaTime) {
   time -= GUI::get_delta_time();
   for (auto &entity : entities) {
-    entity->update();
+    entity->update(deltaTime);
   }
   camera.target.x = player->getComponent<PositionComponent>().getPosition().x;
   if (camera.target.x <= screenWidth / (2.0f * camera.zoom))

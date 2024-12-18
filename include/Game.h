@@ -11,7 +11,7 @@ public:
   void init();
   void clean();
   void run();
-  void update() override;
+  void update(float deltaTime) override;
   void draw() override;
 
 private:

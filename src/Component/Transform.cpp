@@ -14,22 +14,9 @@ void TransformComponent::init() {
     entity->addComponent<PositionComponent>();
 }
 
-void TransformComponent::update() {
+void TransformComponent::update(float deltaTime) {
   PositionComponent &position = entity->getComponent<PositionComponent>();
-  position.setPosition(position.getPosition() + velocity);
-  if(entity->hasComponent<CollisionComponent>()) {
-    Shared<AbstractEntity> e = entity->getComponent<CollisionComponent>().collisionSide();
-    if(e != nullptr) {
-      if(e->getComponent<PositionComponent>().getX() <= position.getX()) {
-        position.setPosition((Vector2){e->getComponent<PositionComponent>().getX() + e->getComponent<BoundingBoxComponent>().getSize().x + 1, 
-                                       position.getY()});
-      }
-      else {
-        position.setPosition((Vector2){e->getComponent<PositionComponent>().getX() - entity->getComponent<BoundingBoxComponent>().getSize().x - 1, 
-                                       position.getY()});
-      }
-    }
-  }
+  position.setPosition((Vector2){position.getPosition().x + velocity.x * deltaTime, position.getPosition().y + velocity.y * deltaTime});
 }
 
 void TransformComponent::setVelocity(Vector2 newVelocity) {

@@ -6,18 +6,21 @@
 
 class CollisionComponent : public Component {
 public:
-  void init() override;
-  void update() override;
-  void setEntities(Shared<std::vector<Shared<AbstractEntity>>> _entities);
-  Shared<AbstractEntity> standingOn();
-  Shared<AbstractEntity> collisionAbove();
-  Shared<AbstractEntity> collisionSide();
-  CollisionComponent();
-  ~CollisionComponent();
-  CollisionComponent(Shared<std::vector<Shared<AbstractEntity>>> _entities);
-
+    void init() override;
+    void update(float deltaTime) override;
+    void setEntities(Shared<std::vector<Shared<AbstractEntity>>> _entities);
+    bool DynamicRectVsRect(const float deltaTime, const Rectangle &r_static, Vector2& contact_point, Vector2& contact_normal, float& contact_time);
+    bool ResolveDynamicRectVsRect(const float deltaTime, Shared<AbstractEntity> r_static);
+    Shared<AbstractEntity> getBelow();
+    Shared<AbstractEntity> getAbove();
+    Shared<AbstractEntity> getRight();
+    Shared<AbstractEntity> getLeft();
+    CollisionComponent();
+    ~CollisionComponent();
+    CollisionComponent(Shared<std::vector<Shared<AbstractEntity>>> _entities);
 private:
-  Shared<std::vector<Shared<AbstractEntity>>> entities;
+    std::vector<Shared<AbstractEntity>> contact;
+    Shared<std::vector<Shared<AbstractEntity>>> entities;
 };
 
 #endif // COLLISION_COMPONENT_H

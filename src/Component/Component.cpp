@@ -12,6 +12,6 @@ Component::~Component() {
 }
 
 void Component::init() {}
-void Component::update() {}
+void Component::update(float deltaTime) {}
 void Component::draw() {}
 void Component::setEntity(AbstractEntity *_entity) { this->entity = _entity; }

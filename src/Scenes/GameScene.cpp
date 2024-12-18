@@ -57,40 +57,6 @@ void GameScene::loadResources() {
   UnloadImage(bImage);
   // Create Map
   entities = mapRenderer.createMap("Map/Level1new.json");
-
-  // TODO: remove this later
-
-  testEnemyCreated();
-}
-
-// TODO: remove this later
-void GameScene::testEnemyCreated() {
-  std::vector<std::vector<Shared<AbstractEntity>>::iterator> its;
-  for (auto it = entities.begin(); it != entities.end(); ++it) {
-    Shared<AbstractEntity> entity = *it;
-    if (!entity)
-      continue;
-    if (entity->hasComponent<EnemyTag>()) {
-      enemies.push_back(entity);
-      entity->getComponent<CollisionComponent>().setEntities(
-          (Shared<std::vector<Shared<AbstractEntity>>>)&entities);
-      its.push_back(it);
-    }
-  }
-  for (auto it : its) {
-    entities.erase(it);
-  }
-}
-
-void GameScene::drawEnemies() {
-  for (auto &enemy : enemies) {
-    if (!enemy->isActive())
-      continue;
-    EnemyPosition &position = enemy->getComponent<EnemyPosition>();
-    EnemyVelocity &velocity = enemy->getComponent<EnemyVelocity>();
-    TextureComponent &texture = enemy->getComponent<TextureComponent>();
-    enemyRenderSystem(position, velocity, texture, time);
-  }
 }
 void GameScene::draw() {
   BeginMode2D(camera);
@@ -106,34 +72,17 @@ void GameScene::draw() {
   DrawText(TextFormat("Time: %03i", (int)time), 1200, 35, GAMEPLAY_TEXT_SIZE,
            WHITE);
 }
-Shared<Scene> GameScene::updateScene() {
-  this->update();
+Shared<Scene> GameScene::updateScene(float deltaTime) {
+  this->update(deltaTime);
   return nullptr;
 }
-
-// TODO: remove this later
-void GameScene::updateEnemies() {
-  for (auto &enemy : enemies) {
-    if (!enemy->isActive())
-      continue;
-    EnemyPosition &position = enemy->getComponent<EnemyPosition>();
-    EnemyVelocity &velocity = enemy->getComponent<EnemyVelocity>();
-    EnemySize &size = enemy->getComponent<EnemySize>();
-    CollisionComponent &collision = enemy->getComponent<CollisionComponent>();
-    TextureComponent &texture = enemy->getComponent<TextureComponent>();
-    this->enemyAISystem(position, velocity, size);
-    // this->enemyCollisionSystem(collision, position, velocity, texture,
-    // *enemy);
-  }
-}
-void GameScene::update() {
+void GameScene::update(float deltaTime) {
   time -= GUI::get_delta_time();
 
   updateEnemies();
 
   for (auto &entity : entities) {
-    if (entity->isActive())
-      entity->update();
+    entity->update(deltaTime);
   }
 
   camera.target.x = player->getComponent<PositionComponent>().getPosition().x;

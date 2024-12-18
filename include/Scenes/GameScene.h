@@ -9,12 +9,12 @@
 #include "Entity/EnemySystem.h"
 
 namespace SceneSpace {
-class GameScene : public Scene, public AbstractEntity {
+class GameScene : public Scene {
 public:
   GameScene();
   ~GameScene();
-  Shared<Scene> updateScene() override;
-  void update() override;
+  Shared<Scene> updateScene(float deltaTime) override;
+  void update(float deltaTime);
   void draw() override;
   void loadResources() override;
   bool isFinished();

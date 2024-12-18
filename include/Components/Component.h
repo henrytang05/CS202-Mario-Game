@@ -16,7 +16,7 @@ public:
   Component();
   Component(std::string name);
   virtual ~Component();
-  virtual void update();
+  virtual void update(float deltaTime);
   virtual void draw();
   void setEntity(AbstractEntity *e);
 

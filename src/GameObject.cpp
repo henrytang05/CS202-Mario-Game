@@ -2,7 +2,9 @@
 #include "Components/BoundingBox.h"
 #include "Components/Position.h"
 #include "Components/Texture.h"
- 
+#include "Components/Transform.h"
+#include "Components/BlockTrigger.h"
+
 NormalBlock::NormalBlock(Vector2 position): AbstractEntity("NormalBlock") {
     Vector2 size({16, 16});
     addComponent<PositionComponent>(position);    
@@ -16,14 +18,17 @@ void NormalBlock::draw() {
     getComponent<TextureComponent>().drawTexture("Normal");
 }
 
-void NormalBlock::update() {
-    // Implementation of the update function
+void NormalBlock::update(float deltaTime) {
+    for(auto &comp : components)
+        comp->update(deltaTime);
 }
 
 BrokenBlock::BrokenBlock(Vector2 position): AbstractEntity("BrokenBlock") {
     Vector2 size({16, 16});
     addComponent<PositionComponent>(position);    
     addComponent<BoundingBoxComponent>(size);
+    addComponent<BlockTriggerComponent>();
+    addComponent<TransformComponent>((Vector2){0.0f, 0.0f});
     addComponent<TextureComponent>();
     getComponent<TextureComponent>().addTexture("Normal", TextureManager::getInstance().getTexture("BrokenBlock"));
 }
@@ -33,8 +38,9 @@ void BrokenBlock::draw() {
     getComponent<TextureComponent>().drawTexture("Normal");
 }
 
-void BrokenBlock::update() {
-    // Implementation of the update function
+void BrokenBlock::update(float deltaTime) {
+    for(auto &comp : components)
+        comp->update(deltaTime);
 }
 
 HardBlock::HardBlock(Vector2 position): AbstractEntity("HardBlock") {
@@ -50,8 +56,9 @@ void HardBlock::draw() {
     getComponent<TextureComponent>().drawTexture("Normal");
 }
 
-void HardBlock::update() {
-    // Implementation of the update function
+void HardBlock::update(float deltaTime) {
+    for(auto &comp : components)
+        comp->update(deltaTime);
 }
 
 GroundBlock::GroundBlock(Vector2 position): AbstractEntity("GroundBlock") {
@@ -67,14 +74,16 @@ void GroundBlock::draw() {
     getComponent<TextureComponent>().drawTexture("Normal");
 }
 
-void GroundBlock::update() {
-    // Implementation of the update function
+void GroundBlock::update(float deltaTime) {
+    for(auto &comp : components)
+        comp->update(deltaTime);
 }
 
 QuestionBlock::QuestionBlock(Vector2 position): AbstractEntity("QuestionBlock") {
     Vector2 size({16, 16});
     addComponent<PositionComponent>(position);    
     addComponent<BoundingBoxComponent>(size);
+    addComponent<TransformComponent>((Vector2){0.0f, 0.0f});
     addComponent<TextureComponent>();
     getComponent<TextureComponent>().addTexture("Normal", TextureManager::getInstance().getTexture("QuestionBlock"));
 }
@@ -84,8 +93,9 @@ void QuestionBlock::draw() {
     getComponent<TextureComponent>().drawTexture("Normal");
 }
 
-void QuestionBlock::update() {
-    // Implementation of the update function
+void QuestionBlock::update(float deltaTime) {
+    for(auto &comp : components)
+        comp->update(deltaTime);
 }
 
 Pipe::Pipe(Vector2 position, Vector2 size): AbstractEntity("Pipe") {
@@ -99,8 +109,9 @@ void Pipe::draw() {
     // getComponent<TextureComponent>().drawTexture("Normal");
 }
 
-void Pipe::update() {
-    // Implementation of the update function
+void Pipe::update(float deltaTime) {
+    for(auto &comp : components)
+        comp->update(deltaTime);
 }
 
 //
@@ -120,6 +131,7 @@ void Flag::draw() {
     getComponent<TextureComponent>().drawTexture("Normal");
 }
 
-void Flag::update() {
-    // Implementation of the update function
+void Flag::update(float deltaTime) {
+    for(auto &comp : components)
+        comp->update(deltaTime);
 }

@@ -9,9 +9,10 @@ Component::~Component() {
 #ifdef _DEBUG
   Log("Component destroyed: " + name);
 #endif
+  entity = nullptr;
 }
 
 void Component::init() {}
-void Component::update() {}
+void Component::update(float deltaTime) {}
 void Component::draw() {}
 void Component::setEntity(AbstractEntity *_entity) { this->entity = _entity; }

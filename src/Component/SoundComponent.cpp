@@ -25,6 +25,7 @@ void MarioSoundComponent::LoadSounds()
 	soundsEffects[20] = LoadSound("./assets/sounds/smb_vine.wav");
 	soundsEffects[21] = LoadSound("./assets/sounds/smb_warning.wav");
 	soundsEffects[22] = LoadSound("./assets/sounds/smb_world_clear.wav");
+	soundsEffects[23] = LoadSound("./assets/sounds/smb_ting_sound.wav");
 }
 
 void MarioSoundComponent::Play1upEffect()
@@ -140,4 +141,9 @@ void MarioSoundComponent::PlayWarningEffect()
 void MarioSoundComponent::PlayWorldClearEffect()
 {
     PlaySound(soundsEffects[22]);
+}
+
+void MarioSoundComponent::PlayTingSound()
+{
+	PlaySound(soundsEffects[23]);
 }

@@ -1,6 +1,7 @@
 #include "Scenes/IntroScene.h"
 #include "Logger.h"
 #include "Scenes/GameScene.h"
+#include "Scenes/LoadGameScene.h"
 #include "Scenes/Scene.h"
 namespace SceneSpace {
 IntroScene::IntroScene() : Scene() {
@@ -20,7 +21,7 @@ IntroScene::~IntroScene() {
   delete SettingsButton;
 }
 
-Shared<Scene> IntroScene::updateScene() {
+Shared<Scene> IntroScene::updateScene(float deltaTime) {
   SoundCtrl.Update();
   Vector2 mousePos = GetMousePosition();
   bool isLeftClick = IsMouseButtonPressed(MOUSE_BUTTON_LEFT);
@@ -30,16 +31,29 @@ Shared<Scene> IntroScene::updateScene() {
   SettingsButton->update(mousePos, isLeftClick);
 
   if (NewGameButton->isPressed())
+  {
     changeGameScreen = true;
+    SoundCtrl.PlayTingSound();
+  }
   if (LoadGameButton->isPressed())
+  {
     changeLoadScreen = true;
+    SoundCtrl.PlayTingSound();
+  }  
   if (RankingButton->isPressed())
+  {
     changeRankingScreen = true;
+    SoundCtrl.PlayTingSound();
+  }  
   if (SettingsButton->isPressed())
+  {
     changeSettingsScreen = true;
-
+    SoundCtrl.PlayTingSound();
+  }
   if (changeGameScreen)
     return std::make_shared<SceneSpace::GameScene>();
+  if (changeLoadScreen)
+    return std::make_shared<SceneSpace::LoadGameScene>();
   return nullptr;
 }
 void IntroScene::draw() {

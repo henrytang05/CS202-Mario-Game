@@ -17,7 +17,7 @@ public:
     NormalBlock(Vector2 position);
     ~NormalBlock() = default;
     void draw() override;
-    void update() override;
+    void update(float deltaTime) override;
 };
 
 // Derived class for a broken block
@@ -29,7 +29,7 @@ public:
     BrokenBlock(Vector2 position);
     ~BrokenBlock() = default;
     void draw() override;
-    void update() override;
+    void update(float deltaTime) override;
 };
 
 // Derived class for a hard block
@@ -41,7 +41,7 @@ public:
     HardBlock(Vector2 position);
     ~HardBlock() = default;
     void draw() override;
-    void update() override;
+    void update(float deltaTime) override;
 };
 
 // Derived class for a ground block
@@ -53,7 +53,7 @@ public:
     GroundBlock(Vector2 position);
     ~GroundBlock() = default;
     void draw() override;
-    void update() override;
+    void update(float deltaTime) override;
 };
 
 // Derived class for a question block
@@ -65,7 +65,7 @@ public:
     QuestionBlock(Vector2 position);
     ~QuestionBlock() = default;
     void draw() override;
-    void update() override;
+    void update(float deltaTime) override;
 };
 
 // Derived class for a pipe
@@ -77,7 +77,7 @@ public:
     Pipe(Vector2 position, Vector2 size);
     ~Pipe() = default;
     void draw() override;
-    void update() override;
+    void update(float deltaTime) override;
 };
 
 // Derived class for a flag
@@ -89,5 +89,5 @@ public:
     Flag(Vector2 position);
     ~Flag() = default;
     void draw() override;
-    void update() override;
+    void update(float deltaTime) override;
 };

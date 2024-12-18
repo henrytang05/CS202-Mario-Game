@@ -7,18 +7,19 @@
 #include "Scenes/Scene.h"
 
 namespace SceneSpace {
-class GameScene : public Scene, public AbstractEntity {
+class GameScene : public Scene {
 public:
   GameScene();
   ~GameScene();
-  Shared<Scene> updateScene() override;
-  void update() override;
+  Shared<Scene> updateScene(float deltaTime) override;
+  void update(float deltaTime);
   void draw() override;
   void loadResources() override;
   bool isFinished();
   void init() override;
 
 private:
+  double time;
   Texture2D background;
   MapRenderer mapRenderer;
   Camera2D camera;

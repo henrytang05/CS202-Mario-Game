@@ -4,7 +4,8 @@
 const int screenWidth = 1440;
 const int gameWidth = 2624;
 const int screenHeight = 810;
-const float ground = 3.0 * screenHeight / 4;
+
+const int GAMEPLAY_TEXT_SIZE = 35;
 
 #define ASSERT(condition) assert((condition) && "Assertion failed: " #condition)
 

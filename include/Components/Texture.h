@@ -10,7 +10,7 @@ public:
   void addTexture(std::string state, Texture2D texture);
   void drawTexture(std::string state);
   void init() override;
-  void update() override;
+  void update(float deltaTime) override;
 private:
   std::map<std::string, Texture2D> textures;
 };

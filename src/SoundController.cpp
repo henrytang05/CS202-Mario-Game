@@ -32,6 +32,7 @@ void SoundController::LoadSoundEffects()
 	soundsEffects[20] = LoadSound("./assets/sounds/smb_vine.wav");
 	soundsEffects[21] = LoadSound("./assets/sounds/smb_warning.wav");
 	soundsEffects[22] = LoadSound("./assets/sounds/smb_world_clear.wav");
+	soundsEffects[23] = LoadSound("./assets/sounds/smb_ting_sound.wav");
 }
 
 SoundController::~SoundController()
@@ -175,7 +176,20 @@ void SoundController::PlayWorldClearEffect()
     PlaySound(soundsEffects[22]);
 }
 
+void SoundController::PlayTingSound()
+{
+	PlaySound(soundsEffects[23]);
+}
+
+void SoundController::Update(int time)
+{
+	if(time == 345) {
+		SetMusicPitch(bg, 1.5);
+	}
+	UpdateMusicStream(bg);
+}
+
 void SoundController::Update()
 {
-	UpdateMusicStream(bg);
+	Update(0);
 }

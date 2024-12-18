@@ -67,15 +67,16 @@ void Luigi::update(float deltaTime) {
   if(getComponent<CollisionComponent>().getAbove()) {
     Shared<AbstractEntity> aboveBlock = getComponent<CollisionComponent>().getAbove();
     if(aboveBlock->name == "BrokenBlock") {
-      aboveBlock->getComponent<BlockTriggerComponent>().setTrigger(new TriggerBrokenBlockWhenHitBySmall());
+      if(state->getSize() == "SMALL")
+        aboveBlock->getComponent<BlockTriggerComponent>().setTrigger(new TriggerBrokenBlockWhenHitBySmall(aboveBlock->getComponent<PositionComponent>().getPosition()));
     }
   }
-  if(getComponent<CollisionComponent>().getBelow())
-    cerr << getComponent<CollisionComponent>().getBelow()->name << '\n';
-  if(getComponent<CollisionComponent>().getLeft())
-    cerr << getComponent<CollisionComponent>().getLeft()->name << '\n';
-  if(getComponent<CollisionComponent>().getRight())
-    cerr << getComponent<CollisionComponent>().getRight()->name << '\n';
+  // if(getComponent<CollisionComponent>().getBelow())
+  //   cerr << getComponent<CollisionComponent>().getBelow()->name << '\n';
+  // if(getComponent<CollisionComponent>().getLeft())
+  //   cerr << getComponent<CollisionComponent>().getLeft()->name << '\n';
+  // if(getComponent<CollisionComponent>().getRight())
+  //   cerr << getComponent<CollisionComponent>().getRight()->name << '\n';
 }
 void Luigi::input() {}
 
@@ -136,7 +137,9 @@ void Mario::update(float deltaTime) {
   if(getComponent<CollisionComponent>().getAbove()) {
     Shared<AbstractEntity> aboveBlock = getComponent<CollisionComponent>().getAbove();
     if(aboveBlock->name == "BrokenBlock") {
-      aboveBlock->getComponent<BlockTriggerComponent>().setTrigger(new TriggerBrokenBlockWhenHitBySmall(aboveBlock->getComponent<PositionComponent>().getPosition()));
+      if(state->getSize() == "SMALL") {
+        aboveBlock->getComponent<BlockTriggerComponent>().setTrigger(new TriggerBrokenBlockWhenHitBySmall(aboveBlock->getComponent<PositionComponent>().getPosition()));
+      }
     }
   }
   // if(getComponent<CollisionComponent>().getBelow())
@@ -210,7 +213,7 @@ void PlayableEntity::handleInput(Shared<CharacterState> &state, float deltaTime)
     }
     velocity.y += fallAcc * deltaTime;
 
-    if(IsKeyPressed(KEY_UP) && state->getState() != "DROPPING") {
+    if(IsKeyPressed(KEY_UP)) {
       velocity.y = JUMPING_VELO;
       fallAcc = FALL_ACC;
       state = make_shared<JumpingState>(state->getSize(), state->getFacing());
@@ -218,6 +221,17 @@ void PlayableEntity::handleInput(Shared<CharacterState> &state, float deltaTime)
         getComponent<MarioSoundComponent>().PlayJumpSmallEffect();
       else if(state->getSize() == "LARGE")
         getComponent<MarioSoundComponent>().PlayJumpSuperEffect();
+    }
+
+    if(keyDown && std::fabs(velocity.x) < MIN_WALKING_VELO && state->getSize() == "LARGE" && state->getState() != "DUCKLING") {
+      state = make_shared<DucklingState>(state->getSize(), state->getFacing());
+      getComponent<BoundingBoxComponent>().setSize({16.0f, 15.0f});
+      getComponent<PositionComponent>().setPosition({getComponent<PositionComponent>().getX(), getComponent<PositionComponent>().getY() + 13.0f});
+    }
+    if(IsKeyReleased(KEY_DOWN)) {
+      state = make_shared<StandingState>(state->getSize(), state->getFacing());
+      getComponent<BoundingBoxComponent>().setSize({16.0f, 28.0f});
+      getComponent<PositionComponent>().setPosition({getComponent<PositionComponent>().getX(), getComponent<PositionComponent>().getY() - 13.0f});
     }
   }
   else {
@@ -253,7 +267,7 @@ void PlayableEntity::handleInput(Shared<CharacterState> &state, float deltaTime)
     if(std::fabs(velocity.x) < MIN_SKIDDING)
       state = make_shared<StandingState>(state->getSize(), state->getFacing());
   } 
-  else if(state->getState() != "JUMPING" && state->getState() != "DROPPING") {
+  else if(state->getState() != "JUMPING" && state->getState() != "DROPPING" && state->getState() != "DUCKLING") {
     if(std::fabs(velocity.x) >= MIN_WALKING_VELO) {
       timeFrameCounter += deltaTime;
       if(timeFrameCounter >= 0.1f) {

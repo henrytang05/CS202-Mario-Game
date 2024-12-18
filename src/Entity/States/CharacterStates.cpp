@@ -20,6 +20,9 @@ DroppingState::DroppingState(std::string size, std::string facing) : CharacterSt
 SkiddingState::SkiddingState(std::string size, std::string facing) : CharacterState(size, facing) {
   enumState = SKIDDING;
 }
+DucklingState::DucklingState(std::string size, std::string facing) : CharacterState(size, facing) {
+  enumState = DUCKLING;
+}
 std::string StandingState::getState() {
   return "IDLE";
 }
@@ -34,6 +37,9 @@ std::string DroppingState::getState() {
 }
 std::string SkiddingState::getState() {
   return "SKIDDING";
+}
+std::string DucklingState::getState() {
+  return "DUCKLING";
 }
 std::string CharacterState::getCurrentState()
 {
@@ -56,6 +62,8 @@ std::string CharacterState::getCurrentState()
         result += "JUMPING";
     if (enumState == DROPPING)
         result += "DROPPING";
+    if(enumState == DUCKLING)
+        result += "DUCKLING";
     return result;
 }
 

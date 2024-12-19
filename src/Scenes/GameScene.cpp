@@ -8,11 +8,13 @@
 #include "Components/EnemyComponents.h"
 #include "Components/Position.h"
 #include "Components/Texture.h"
+#include "Components/Transform.h"
 #include "Entity/EnemySystem.h"
 #include "Entity/EntityFactory.h"
 #include "Entity/PlayableEntity.h"
 #include "Logger.h"
 #include "Scenes/IntroScene.h"
+#include "System/System.h"
 #include "globals.h"
 #include "pch.h"
 class TextureComponent;
@@ -20,9 +22,8 @@ namespace SceneSpace {
 
 GameScene::GameScene() : Scene(), camera({0, 0}) {
   // TODO: remove this later
-  enemyAISystem = createEnemyAISystem();
-  enemyRenderSystem = createEnemyRenderSystem();
-  enemyCollisionSystem = createEnemyCollisionSystem();
+  systems.push_back(std::make_unique<TransformSystem>());
+  systems.push_back(std::make_unique<AnimationSystem>());
 }
 
 void GameScene::init() {
@@ -59,16 +60,19 @@ void GameScene::loadResources() {
   entities = mapRenderer.createMap("Map/Level1new.json");
 }
 void GameScene::draw() {
+  float dt = GUI::get_delta_time();
   BeginMode2D(camera);
   DrawTexture(background, 0, 0, WHITE);
-  // TODO: remove this later
-  drawEnemies();
   for (auto &entity : entities) {
-    if (entity != nullptr && entity->isActive())
-      entity->draw();
+    if (!entity->isActive())
+      continue;
+    if (entity->hasAllComponents<TextureComponent2, PositionComponent,
+                                 EnemyTag>()) {
+      systems[1]->update(entity, dt);
+    }
+    entity->draw();
   }
   EndMode2D();
-  // TODO: remove this later
   DrawText(TextFormat("Time: %03i", (int)time), 1200, 35, GAMEPLAY_TEXT_SIZE,
            WHITE);
 }
@@ -79,9 +83,11 @@ Shared<Scene> GameScene::updateScene(float deltaTime) {
 void GameScene::update(float deltaTime) {
   time -= GUI::get_delta_time();
 
-  updateEnemies();
-
   for (auto &entity : entities) {
+    if (!entity->isActive())
+      continue;
+    if (entity->hasAllComponents<PositionComponent, TransformComponent>())
+      systems[0]->update(entity, deltaTime);
     entity->update(deltaTime);
   }
 

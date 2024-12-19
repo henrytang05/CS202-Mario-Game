@@ -42,9 +42,12 @@ class PlayableEntity : public AbstractEntity,
 private:
   float fallAcc;
   float timeFrameCounter;
+
 public:
   PlayableEntity();
   PlayableEntity(std::string name);
+
+  virtual void update(float deltaTime) override;
 
   virtual ~PlayableEntity() = default;
   Vector2 getVelocity() override;

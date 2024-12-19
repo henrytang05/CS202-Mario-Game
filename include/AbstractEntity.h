@@ -16,6 +16,7 @@ public:
 #endif
   }
   template <typename T> bool hasComponent() const;
+  template <typename... TArgs> bool hasAllComponents() const;
   template <typename T, typename... TArgs> T &addComponent(TArgs &&...mArgs);
   template <typename T> T &getComponent() const;
 
@@ -51,6 +52,11 @@ template <typename T> inline bool AbstractEntity::hasComponent() const {
     return false;
   }
   return this->componentBitset.test(typeID);
+}
+
+template <typename... TArgs>
+inline bool AbstractEntity::hasAllComponents() const {
+  return (hasComponent<TArgs>() && ...);
 }
 
 template <typename T, typename... TArgs>

@@ -1,9 +1,13 @@
 #include "Entity/EntityFactory.h"
 
+#include "Components/BoundingBox.h"
 #include "Components/Collision.h"
 #include "Components/Components_include.h"
 #include "Components/EnemyComponents.h"
+#include "Components/Gravity.h"
+#include "Components/Position.h"
 #include "Components/Texture.h"
+#include "Components/Transform.h"
 #include "Entity/PlayableEntity.h"
 #include "pch.h"
 #include <memory>
@@ -26,28 +30,47 @@ Shared<AbstractEntity> EntityFactory::createGoomba() {
 
 Shared<Enemy> EntityFactory::createEnemy(Vector2 position, Vector2 size) {
   static int cnt = 1;
+  position = {position.x - cnt, position.y};
   std::string name = "Goomba" + std::to_string(cnt++);
   Shared<Enemy> enemy = std::make_shared<Enemy>(name);
 
-  enemy->addComponent<EnemyPosition>(position);
-  enemy->addComponent<EnemyVelocity>(Vector2{-1.0f, 0});
-  enemy->addComponent<EnemySize>(size);
   enemy->addComponent<CollisionComponent>();
+  enemy->addComponent<PositionComponent>(position);
+  enemy->addComponent<TransformComponent>(Vector2{-10.0f * cnt, 0});
+  enemy->addComponent<BoundingBoxComponent>(size);
   enemy->addComponent<EnemyTag>();
+  enemy->addComponent<Gravity>();
 
-  enemy->addComponent<TextureComponent>();
-  enemy->getComponent<TextureComponent>().addTexture(
-      "Goomba-Die", "./assets/Goomba/Goomba-Die.png");
+  auto &texture =
+      enemy->addComponent<TextureComponent2>(0.05f, true, "Goomba-Idle-Left");
 
-  enemy->getComponent<TextureComponent>().addTexture(
-      "Goomba-Left-Idle", "./assets/Goomba/Goomba-Left-Idle.png");
-  enemy->getComponent<TextureComponent>().addTexture(
-      "Goomba-Right-Idle", "./assets/Goomba/Goomba-Right-Idle.png");
+  std::vector<Texture2D> textures;
+  textures.push_back(LoadTexture("./assets/Goomba/Goomba-Left-Idle.png"));
+  textures.push_back(LoadTexture("./assets/Goomba/Goomba-Left-Moving.png"));
 
-  enemy->getComponent<TextureComponent>().addTexture(
-      "Goomba-Left-Moving", "./assets/Goomba/Goomba-Left-Moving.png");
-  enemy->getComponent<TextureComponent>().addTexture(
-      "Goomba-Right-Moving", "./assets/Goomba/Goomba-Right-Moving.png");
+  texture.addTextures("Goomba-Idle-Left", textures);
+
+  textures.clear();
+  textures.push_back(LoadTexture("./assets/Goomba/Goomba-Right-Moving.png"));
+  textures.push_back(LoadTexture("./assets/Goomba/Goomba-Right-Idle.png"));
+  texture.addTextures("Goomba-Idle-Right", textures);
+
+  textures.clear();
+  textures.push_back(LoadTexture("./assets/Goomba/Goomba-Die.png"));
+  texture.addTextures("Goomba-Die", textures);
+
+  // enemy->getComponent<TextureComponent2>().addTexture(
+  //     "Goomba-Die", "./assets/Goomba/Goomba-Die.png");
+  //
+  // enemy->getComponent<TextureComponent2>().addTexture(
+  //     "Goomba-Left-Idle", "./assets/Goomba/Goomba-Left-Idle.png");
+  // enemy->getComponent<TextureComponent2>().addTexture(
+  //     "Goomba-Right-Idle", "./assets/Goomba/Goomba-Right-Idle.png");
+  //
+  // enemy->getComponent<TextureComponent2>().addTexture(
+  //     "Goomba-Left-Moving", "./assets/Goomba/Goomba-Left-Moving.png");
+  // enemy->getComponent<TextureComponent2>().addTexture(
+  //     "Goomba-Right-Moving", "./assets/Goomba/Goomba-Right-Moving.png");
   return enemy;
 }
 

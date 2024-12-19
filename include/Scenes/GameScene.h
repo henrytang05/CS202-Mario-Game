@@ -5,6 +5,7 @@
 #include "Entity/PlayableEntity.h"
 #include "Map.h"
 #include "Scenes/Scene.h"
+#include "System/System.h"
 
 #include "Entity/EnemySystem.h"
 
@@ -30,18 +31,9 @@ private:
   Unique<IFactory> entityFactory;
   bool gameOver;
 
-  // just a small test
-
   // TODO: remove this later
 private:
-  void testEnemyCreated();
-  void updateEnemies();
-  void drawEnemies();
-
-  std::vector<Shared<AbstractEntity>> enemies;
-  EnemyAISystem enemyAISystem;
-  EnemyRenderSystem enemyRenderSystem;
-  EnemyCollisionSystem enemyCollisionSystem;
+  std::vector<Unique<System>> systems;
 };
 } // namespace SceneSpace
 

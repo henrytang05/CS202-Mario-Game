@@ -69,6 +69,7 @@ void Luigi::update(float deltaTime) {
     if(aboveBlock->name == "BrokenBlock") {
       if(state->getSize() == "SMALL")
         aboveBlock->getComponent<BlockTriggerComponent>().setTrigger(new TriggerBrokenBlockWhenHitBySmall(aboveBlock->getComponent<PositionComponent>().getPosition()));
+        getComponent<MarioSoundComponent>().PlayBumpEffect();
     }
   }
   // if(getComponent<CollisionComponent>().getBelow())
@@ -139,6 +140,7 @@ void Mario::update(float deltaTime) {
     if(aboveBlock->name == "BrokenBlock") {
       if(state->getSize() == "SMALL") {
         aboveBlock->getComponent<BlockTriggerComponent>().setTrigger(new TriggerBrokenBlockWhenHitBySmall(aboveBlock->getComponent<PositionComponent>().getPosition()));
+        getComponent<MarioSoundComponent>().PlayBumpEffect();
       }
     }
   }

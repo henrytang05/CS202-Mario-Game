@@ -228,7 +228,7 @@ void PlayableEntity::handleInput(Shared<CharacterState> &state, float deltaTime)
       getComponent<BoundingBoxComponent>().setSize({16.0f, 15.0f});
       getComponent<PositionComponent>().setPosition({getComponent<PositionComponent>().getX(), getComponent<PositionComponent>().getY() + 13.0f});
     }
-    if(IsKeyReleased(KEY_DOWN)) {
+    if(IsKeyReleased(KEY_DOWN) && state->getState() == "DUCKLING") {
       state = make_shared<StandingState>(state->getSize(), state->getFacing());
       getComponent<BoundingBoxComponent>().setSize({16.0f, 28.0f});
       getComponent<PositionComponent>().setPosition({getComponent<PositionComponent>().getX(), getComponent<PositionComponent>().getY() - 13.0f});

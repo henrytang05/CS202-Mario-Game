@@ -17,6 +17,7 @@
 #include "System/System.h"
 #include "globals.h"
 #include "pch.h"
+#include "raylib.h"
 class TextureComponent;
 namespace SceneSpace {
 
@@ -60,7 +61,7 @@ void GameScene::loadResources() {
   entities = mapRenderer.createMap("Map/Level1new.json");
 }
 void GameScene::draw() {
-  float dt = GUI::get_delta_time();
+  float dt = GetFrameTime();
   BeginMode2D(camera);
   DrawTexture(background, 0, 0, WHITE);
   for (auto &entity : entities) {
@@ -86,9 +87,10 @@ void GameScene::update(float deltaTime) {
   for (auto &entity : entities) {
     if (!entity->isActive())
       continue;
-    if (entity->hasAllComponents<PositionComponent, TransformComponent>())
-      systems[0]->update(entity, deltaTime);
     entity->update(deltaTime);
+    if (entity->hasAllComponents<PositionComponent, TransformComponent,
+                                 EnemyTag>())
+      systems[0]->update(entity, deltaTime);
   }
 
   camera.target.x = player->getComponent<PositionComponent>().getPosition().x;

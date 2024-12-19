@@ -15,10 +15,11 @@ public:
     Log(name + " created: " + std::to_string(id));
 #endif
   }
-  template <typename T> bool hasComponent() const;
-  template <typename... TArgs> bool hasAllComponents() const;
-  template <typename T, typename... TArgs> T &addComponent(TArgs &&...mArgs);
-  template <typename T> T &getComponent() const;
+  template <typename T> inline bool hasComponent() const;
+  template <typename... TArgs> inline bool hasAllComponents() const;
+  template <typename T, typename... TArgs>
+  inline T &addComponent(TArgs &&...mArgs);
+  template <typename T> inline T &getComponent() const;
 
   uint32_t getId() const { return id; }
   bool operator==(const AbstractEntity &other) const { return id == other.id; }

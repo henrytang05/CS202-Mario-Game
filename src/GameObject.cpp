@@ -2,6 +2,8 @@
 #include "Components/BoundingBox.h"
 #include "Components/Position.h"
 #include "Components/Texture.h"
+#include "Components/Transform.h"
+#include "Components/BlockTrigger.h"
 
 NormalBlock::NormalBlock(Texture2D texture, Vector2 position): AbstractEntity("NormalBlock") {
     Vector2 size({16, 16});
@@ -17,13 +19,16 @@ void NormalBlock::draw() {
 }
 
 void NormalBlock::update(float deltaTime) {
-    // Implementation of the update function
+    for(auto &comp : components)
+        comp->update(deltaTime);
 }
 
 BrokenBlock::BrokenBlock(Texture2D texture, Vector2 position): AbstractEntity("BrokenBlock") {
     Vector2 size({16, 16});
     addComponent<PositionComponent>(position);    
     addComponent<BoundingBoxComponent>(size);
+    addComponent<BlockTriggerComponent>();
+    addComponent<TransformComponent>((Vector2){0.0f, 0.0f});
     addComponent<TextureComponent>();
     getComponent<TextureComponent>().addTexture("Normal", texture);
     std::cerr<<"create broken block"<<std::endl;
@@ -35,7 +40,8 @@ void BrokenBlock::draw() {
 }
 
 void BrokenBlock::update(float deltaTime) {
-    // Implementation of the update function
+    for(auto &comp : components)
+        comp->update(deltaTime);
 }
 
 HardBlock::HardBlock(Texture2D texture, Vector2 position): AbstractEntity("HardBlock") {
@@ -53,7 +59,8 @@ void HardBlock::draw() {
 }
 
 void HardBlock::update(float deltaTime) {
-    // Implementation of the update function
+    for(auto &comp : components)
+        comp->update(deltaTime);
 }
 
 GroundBlock::GroundBlock(Texture2D texture, Vector2 position): AbstractEntity("GroundBlock") {
@@ -71,13 +78,15 @@ void GroundBlock::draw() {
 }
 
 void GroundBlock::update(float deltaTime) {
-    // Implementation of the update function
+    for(auto &comp : components)
+        comp->update(deltaTime);
 }
 
 QuestionBlock::QuestionBlock(Texture2D texture, Vector2 position): AbstractEntity("QuestionBlock") {
     Vector2 size({16, 16});
     addComponent<PositionComponent>(position);    
     addComponent<BoundingBoxComponent>(size);
+    addComponent<TransformComponent>((Vector2){0.0f, 0.0f});
     addComponent<TextureComponent>();
     getComponent<TextureComponent>().addTexture("Normal", texture);
     std::cerr<<"create question block"<<std::endl;
@@ -89,7 +98,8 @@ void QuestionBlock::draw() {
 }
 
 void QuestionBlock::update(float deltaTime) {
-    // Implementation of the update function
+    for(auto &comp : components)
+        comp->update(deltaTime);
 }
 
 Pipe::Pipe(Vector2 position, Vector2 size): AbstractEntity("Pipe") {
@@ -104,7 +114,8 @@ void Pipe::draw() {
 }
 
 void Pipe::update(float deltaTime) {
-    // Implementation of the update function
+    for(auto &comp : components)
+        comp->update(deltaTime);
 }
 
 //
@@ -125,5 +136,6 @@ void Flag::draw() {
 }
 
 void Flag::update(float deltaTime) {
-    // Implementation of the update function
+    for(auto &comp : components)
+        comp->update(deltaTime);
 }

@@ -29,7 +29,7 @@ GameScene::GameScene() : Scene(), camera({0, 0}) {
 void GameScene::init() {
   time = 360.f;
   entityFactory = std::make_unique<EntityFactory>();
-  player = entityFactory->createMario();
+  player = entityFactory->createLuigi();
   entities.push_back(player);
   gameOver = false;
   camera.offset = {screenWidth / 2.0f, screenHeight / 2.0f};

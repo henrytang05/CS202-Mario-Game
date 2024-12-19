@@ -9,6 +9,7 @@ Component::~Component() {
 #ifdef _DEBUG
   Log("Component destroyed: " + name);
 #endif
+  entity = nullptr;
 }
 
 void Component::init() {}

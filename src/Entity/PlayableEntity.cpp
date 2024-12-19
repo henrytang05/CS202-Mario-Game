@@ -98,14 +98,19 @@ void Luigi::update(float deltaTime) {
   }
 
   // resolve collision
-  if (getComponent<CollisionComponent>().getAbove())
-    cerr << getComponent<CollisionComponent>().getAbove()->name << '\n';
-  if (getComponent<CollisionComponent>().getBelow())
-    cerr << getComponent<CollisionComponent>().getBelow()->name << '\n';
-  if (getComponent<CollisionComponent>().getLeft())
-    cerr << getComponent<CollisionComponent>().getLeft()->name << '\n';
-  if (getComponent<CollisionComponent>().getRight())
-    cerr << getComponent<CollisionComponent>().getRight()->name << '\n';
+  if(getComponent<CollisionComponent>().getAbove()) {
+    Shared<AbstractEntity> aboveBlock = getComponent<CollisionComponent>().getAbove();
+    if(aboveBlock->name == "BrokenBlock") {
+      if(state->getSize() == "SMALL")
+        aboveBlock->getComponent<BlockTriggerComponent>().setTrigger(new TriggerBrokenBlockWhenHitBySmall(aboveBlock->getComponent<PositionComponent>().getPosition()));
+    }
+  }
+  // if(getComponent<CollisionComponent>().getBelow())
+  //   cerr << getComponent<CollisionComponent>().getBelow()->name << '\n';
+  // if(getComponent<CollisionComponent>().getLeft())
+  //   cerr << getComponent<CollisionComponent>().getLeft()->name << '\n';
+  // if(getComponent<CollisionComponent>().getRight())
+  //   cerr << getComponent<CollisionComponent>().getRight()->name << '\n';
 }
 void Luigi::input() {}
 
@@ -186,14 +191,20 @@ void Mario::update(float deltaTime) {
   }
 
   // resolve collision
-  if (getComponent<CollisionComponent>().getAbove())
-    cerr << getComponent<CollisionComponent>().getAbove()->name << '\n';
-  if (getComponent<CollisionComponent>().getBelow())
-    cerr << getComponent<CollisionComponent>().getBelow()->name << '\n';
-  if (getComponent<CollisionComponent>().getLeft())
-    cerr << getComponent<CollisionComponent>().getLeft()->name << '\n';
-  if (getComponent<CollisionComponent>().getRight())
-    cerr << getComponent<CollisionComponent>().getRight()->name << '\n';
+  if(getComponent<CollisionComponent>().getAbove()) {
+    Shared<AbstractEntity> aboveBlock = getComponent<CollisionComponent>().getAbove();
+    if(aboveBlock->name == "BrokenBlock") {
+      if(state->getSize() == "SMALL") {
+        aboveBlock->getComponent<BlockTriggerComponent>().setTrigger(new TriggerBrokenBlockWhenHitBySmall(aboveBlock->getComponent<PositionComponent>().getPosition()));
+      }
+    }
+  }
+  // if(getComponent<CollisionComponent>().getBelow())
+  //   cerr << getComponent<CollisionComponent>().getBelow()->name << '\n';
+  // if(getComponent<CollisionComponent>().getLeft())
+  //   cerr << getComponent<CollisionComponent>().getLeft()->name << '\n';
+  // if(getComponent<CollisionComponent>().getRight())
+  //   cerr << getComponent<CollisionComponent>().getRight()->name << '\n';
 }
 
 void Mario::input() {}
@@ -258,7 +269,7 @@ void PlayableEntity::handleInput(Shared<CharacterState> &state,
     }
     velocity.y += fallAcc * deltaTime;
 
-    if (IsKeyPressed(KEY_UP) && state->getState() != "DROPPING") {
+    if(IsKeyPressed(KEY_UP)) {
       velocity.y = JUMPING_VELO;
       fallAcc = FALL_ACC;
       state = make_shared<JumpingState>(state->getSize(), state->getFacing());
@@ -267,8 +278,20 @@ void PlayableEntity::handleInput(Shared<CharacterState> &state,
       else if (state->getSize() == "LARGE")
         getComponent<MarioSoundComponent>().PlayJumpSuperEffect();
     }
-  } else {
-    if (velocity.y < 0.0f && IsKeyDown(KEY_UP)) {
+
+    if(keyDown && std::fabs(velocity.x) < MIN_WALKING_VELO && state->getSize() == "LARGE" && state->getState() != "DUCKLING") {
+      state = make_shared<DucklingState>(state->getSize(), state->getFacing());
+      getComponent<BoundingBoxComponent>().setSize({16.0f, 15.0f});
+      getComponent<PositionComponent>().setPosition({getComponent<PositionComponent>().getX(), getComponent<PositionComponent>().getY() + 13.0f});
+    }
+    if(IsKeyReleased(KEY_DOWN) && state->getState() == "DUCKLING") {
+      state = make_shared<StandingState>(state->getSize(), state->getFacing());
+      getComponent<BoundingBoxComponent>().setSize({16.0f, 28.0f});
+      getComponent<PositionComponent>().setPosition({getComponent<PositionComponent>().getX(), getComponent<PositionComponent>().getY() - 13.0f});
+    }
+  }
+  else {
+    if(velocity.y < 0.0f && IsKeyDown(KEY_UP)) {
       velocity.y -= (FALL_ACC - FALL_ACC_A) * deltaTime;
     }
     if (keyRight && !keyLeft) {
@@ -312,9 +335,9 @@ void PlayableEntity::handleInput(Shared<CharacterState> &state,
   if (state->getState() == "SKIDDING") {
     if (std::fabs(velocity.x) < MIN_SKIDDING)
       state = make_shared<StandingState>(state->getSize(), state->getFacing());
-  } else if (state->getState() != "JUMPING" &&
-             state->getState() != "DROPPING") {
-    if (std::fabs(velocity.x) >= MIN_WALKING_VELO) {
+  } 
+  else if(state->getState() != "JUMPING" && state->getState() != "DROPPING" && state->getState() != "DUCKLING") {
+    if(std::fabs(velocity.x) >= MIN_WALKING_VELO) {
       timeFrameCounter += deltaTime;
       if (timeFrameCounter >= 0.1f) {
         if (state->getState() == "IDLE")

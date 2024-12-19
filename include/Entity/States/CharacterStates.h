@@ -21,7 +21,8 @@ protected:
     MOVING,
     SKIDDING,
     JUMPING,
-    DROPPING
+    DROPPING,
+    DUCKLING
   };
   enum SIZE {
     SMALL = 0,
@@ -70,4 +71,11 @@ public:
   std::string getState() override;
 };
 
+class DucklingState : public CharacterState {
+public:
+  DucklingState() = default;
+  ~DucklingState() = default;
+  DucklingState(std::string size, std::string facing);
+  std::string getState() override;
+};
 #endif // CHARACTER_STATE_H

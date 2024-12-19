@@ -26,12 +26,12 @@ std::vector<Shared<AbstractEntity>> MapRenderer::createMap(const std::string& ma
     tileHeight = mapData["tileheight"];
 
     string Level;
-   for (const auto &properties : mapData["properties"]) {
-        if (properties["name"] == "Level") {
-            Level = properties["value"];
-            break;
+    for (const auto &properties : mapData["properties"]) {
+            if (properties["name"] == "Level") {
+                Level = properties["value"];
+                break;
+            }
         }
-    }
 
 
     //Load Tilesets

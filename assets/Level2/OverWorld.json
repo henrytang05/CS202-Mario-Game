@@ -8,6 +8,11 @@
  "tilecount":5,
  "tiledversion":"1.11.0",
  "tileheight":16,
+ "tiles":[
+        {
+         "id":3,
+         "type":"GroundBlock"
+        }],
  "tilewidth":16,
  "type":"tileset",
  "version":"1.10"

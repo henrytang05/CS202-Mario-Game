@@ -50,7 +50,7 @@ void GameScene::loadResources() {
 }
 void GameScene::draw() {
   BeginMode2D(camera);
-  DrawTexture(background, 0, 0, WHITE);
+  //DrawTexture(background, 0, 0, WHITE);
   for (auto &entity : entities) {
     if (entity != nullptr)
       entity->draw();
@@ -70,8 +70,8 @@ void GameScene::update(float deltaTime) {
   camera.target.x = player->getComponent<PositionComponent>().getPosition().x;
   if (camera.target.x <= screenWidth / (2.0f * camera.zoom))
     camera.target.x = screenWidth / (2.0f * camera.zoom);
-  if (camera.target.x >= screenWidth - screenWidth / (2.0f * camera.zoom))
-    camera.target.x = screenWidth - screenWidth / (2.0f * camera.zoom);
+  if (camera.target.x >= gameWidth - screenWidth / (2.0f * camera.zoom))
+    camera.target.x = gameWidth - screenWidth / (2.0f * camera.zoom);
   SoundCtrl.Update((int)time);
 }
 

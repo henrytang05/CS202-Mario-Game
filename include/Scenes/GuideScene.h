@@ -19,9 +19,9 @@ public:
 private:
   Texture background;
   GUI::ImageButton* QuitButton;
-  Shared<PlayableEntity> player;
-  std::vector<Shared<AbstractEntity>> entities;
-  Unique<IFactory> entityFactory;
+  // Shared<PlayableEntity> player;
+  // std::vector<Shared<AbstractEntity>> entities;
+  // Unique<IFactory> entityFactory;
 };
 } // namespace SceneSpace
 #endif // GUIDESCENE_HH

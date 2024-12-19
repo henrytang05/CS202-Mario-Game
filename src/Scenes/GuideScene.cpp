@@ -21,9 +21,9 @@ SceneSpace::GuideScene::~GuideScene()
 Shared<SceneSpace::Scene> SceneSpace::GuideScene::updateScene(float deltaTime)
 {
     SoundCtrl.Update();
-    for (auto &entity : entities) {
-        entity->update(deltaTime);
-    }
+    // for (auto &entity : entities) {
+    //     entity->update(deltaTime);
+    // }
     Vector2 mousePos = GetMousePosition();
     bool isLeftClick = IsMouseButtonPressed(MOUSE_BUTTON_LEFT);
     QuitButton->update(mousePos, isLeftClick);
@@ -40,10 +40,10 @@ void SceneSpace::GuideScene::draw()
 {
     DrawTexture(background, 0, 0, WHITE);
     QuitButton->draw();
-    for (auto &entity : entities) {
-        if (entity != nullptr)
-        entity->draw();
-    }
+    // for (auto &entity : entities) {
+    //     if (entity != nullptr)
+    //     entity->draw();
+    // }
 }
 
 void SceneSpace::GuideScene::loadResources()
@@ -55,14 +55,14 @@ void SceneSpace::GuideScene::loadResources()
 
 void SceneSpace::GuideScene::init()
 {
-    entityFactory = std::make_unique<EntityFactory>();
-    player = entityFactory->createMario();
-    entities.push_back(player);
-    for (auto &entity : entities) {
-        if (entity->hasComponent<CollisionComponent>()) {
-        entity->getComponent<CollisionComponent>().setEntities(
-            Shared<std::vector<Shared<AbstractEntity>>>(&entities));
-        }
-    }
+    // entityFactory = std::make_unique<EntityFactory>();
+    // player = entityFactory->createMario();
+    // entities.push_back(player);
+    // for (auto &entity : entities) {
+    //     if (entity->hasComponent<CollisionComponent>()) {
+    //     entity->getComponent<CollisionComponent>().setEntities(
+    //         Shared<std::vector<Shared<AbstractEntity>>>(&entities));
+    //     }
+    // }
 }
 

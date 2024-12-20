@@ -7,7 +7,7 @@
 #include "Entity/States/CharacterStates.h"
 
 PlayableEntity::PlayableEntity(std::string name)
-    : AbstractEntity(name), fallAcc(GRAVITY_DEC), timeFrameCounter(0.0f) {
+    : AbstractEntity(name), fallAcc(GRAVITY_DEC), timeFrameCounter(0.0f), state(make_shared<DroppingState>("SMALL", "RIGHT")) {
   addComponent<PlayerTag>();
 }
 
@@ -20,89 +20,28 @@ Vector2 PlayableEntity::getVelocity() {
   ASSERT(hasComponent<TransformComponent>());
   return getComponent<TransformComponent>().getVelocity();
 }
-
 void PlayableEntity::update(float deltaTime) {
-  for (auto &component : components) {
-    component->update(deltaTime);
-  }
-}
-
-Luigi::Luigi()
-    : PlayableEntity("Luigi"),
-      state(make_shared<DroppingState>("SMALL", "RIGHT")) {
-  Vector2 size({16, 20});
-  Vector2 position = {0.0f, 0.0f};
-  Vector2 velocity = {0, 0};
-
-  addComponent<CollisionComponent>();
-  addComponent<PositionComponent>(position);
-  addComponent<TransformComponent>(velocity);
-  addComponent<BoundingBoxComponent>(size);
-  addComponent<TextureComponent>();
-  addComponent<MarioSoundComponent>();
-
-  getComponent<TextureComponent>().addTexture(
-      "SMALL-RIGHT-IDLE", "./assets/Luigi/Small-Right-Idle.png");
-  getComponent<TextureComponent>().addTexture(
-      "SMALL-RIGHT-MOVING", "./assets/Luigi/Small-Right-Moving.png");
-  getComponent<TextureComponent>().addTexture(
-      "SMALL-RIGHT-SKIDDING", "./assets/Luigi/Small-Right-Skidding.png");
-  getComponent<TextureComponent>().addTexture(
-      "SMALL-RIGHT-JUMPING", "./assets/Luigi/Small-Right-Jumping.png");
-  getComponent<TextureComponent>().addTexture(
-      "SMALL-RIGHT-DROPPING", "./assets/Luigi/Small-Right-Dropping.png");
-
-  getComponent<TextureComponent>().addTexture(
-      "SMALL-LEFT-IDLE", "./assets/Luigi/Small-Left-Idle.png");
-  getComponent<TextureComponent>().addTexture(
-      "SMALL-LEFT-MOVING", "./assets/Luigi/Small-Left-Moving.png");
-  getComponent<TextureComponent>().addTexture(
-      "SMALL-LEFT-SKIDDING", "./assets/Luigi/Small-Left-Skidding.png");
-  getComponent<TextureComponent>().addTexture(
-      "SMALL-LEFT-JUMPING", "./assets/Luigi/Small-Left-Jumping.png");
-  getComponent<TextureComponent>().addTexture(
-      "SMALL-LEFT-DROPPING", "./assets/Luigi/Small-Left-Dropping.png");
-
-  getComponent<TextureComponent>().addTexture(
-      "LARGE-RIGHT-IDLE", "./assets/Luigi/Large-Right-Idle.png");
-  getComponent<TextureComponent>().addTexture(
-      "LARGE-RIGHT-MOVING", "./assets/Luigi/Large-Right-Moving.png");
-  getComponent<TextureComponent>().addTexture(
-      "LARGE-RIGHT-SKIDDING", "./assets/Luigi/Large-Right-Skidding.png");
-  getComponent<TextureComponent>().addTexture(
-      "LARGE-RIGHT-JUMPING", "./assets/Luigi/Large-Right-Jumping.png");
-  getComponent<TextureComponent>().addTexture(
-      "LARGE-RIGHT-DROPPING", "./assets/Luigi/Large-Right-Dropping.png");
-  getComponent<TextureComponent>().addTexture(
-      "LARGE-RIGHT-DUCKLING", "./assets/Luigi/Large-Right-Duckling.png");
-
-  getComponent<TextureComponent>().addTexture(
-      "LARGE-LEFT-IDLE", "./assets/Luigi/Large-Left-Idle.png");
-  getComponent<TextureComponent>().addTexture(
-      "LARGE-LEFT-MOVING", "./assets/Luigi/Large-Left-Moving.png");
-  getComponent<TextureComponent>().addTexture(
-      "LARGE-LEFT-SKIDDING", "./assets/Luigi/Large-Left-Skidding.png");
-  getComponent<TextureComponent>().addTexture(
-      "LARGE-LEFT-JUMPING", "./assets/Luigi/Large-Left-Jumping.png");
-  getComponent<TextureComponent>().addTexture(
-      "LARGE-LEFT-DROPPING", "./assets/Luigi/Large-Left-Dropping.png");
-  getComponent<TextureComponent>().addTexture(
-      "LARGE-LEFT-DUCKLING", "./assets/Luigi/Large-Left-Duckling.png");
-
-  getComponent<MarioSoundComponent>().LoadSounds();
-}
-void Luigi::update(float deltaTime) {
   handleInput(state, deltaTime);
+  getComponent<CollisionComponent>().reset();
   for (auto &component : components) {
     component->update(deltaTime);
   }
 
   // resolve collision
-  if(getComponent<CollisionComponent>().getAbove()) {
-    Shared<AbstractEntity> aboveBlock = getComponent<CollisionComponent>().getAbove();
-    if(aboveBlock->name == "BrokenBlock") {
+  Shared<AbstractEntity> above = getComponent<CollisionComponent>().getAbove();
+  Shared<AbstractEntity> below = getComponent<CollisionComponent>().getBelow();
+  Shared<AbstractEntity> left = getComponent<CollisionComponent>().getLeft();
+  Shared<AbstractEntity> right = getComponent<CollisionComponent>().getRight();
+  if(above) {
+    if(above->name == "BrokenBlock") {
       if(state->getSize() == "SMALL")
-        aboveBlock->getComponent<BlockTriggerComponent>().setTrigger(new TriggerBrokenBlockWhenHitBySmall(aboveBlock->getComponent<PositionComponent>().getPosition()));
+        above->getComponent<BlockTriggerComponent>().setTrigger(new TriggerBrokenBlockWhenHitBySmall(above->getComponent<PositionComponent>().getPosition()));
+    } 
+  }
+  if(below != nullptr) {
+    if(below->hasComponent<EnemyTag>()) {
+      if(below->hasComponent<CollisionComponent>())
+        below->getComponent<CollisionComponent>().setAbove(make_shared<PlayableEntity>("Player"));
     }
   }
   // if(getComponent<CollisionComponent>().getBelow())
@@ -112,112 +51,13 @@ void Luigi::update(float deltaTime) {
   // if(getComponent<CollisionComponent>().getRight())
   //   cerr << getComponent<CollisionComponent>().getRight()->name << '\n';
 }
-void Luigi::input() {}
-
-void Luigi::draw() {
+void PlayableEntity::draw() {
   ASSERT(hasComponent<TextureComponent>());
   std::string currentState = state->getCurrentState();
   getComponent<TextureComponent>().drawTexture(currentState);
 }
-Mario::Mario()
-    : PlayableEntity("Mario"),
-      state(make_shared<DroppingState>("SMALL", "RIGHT")) {
-  Vector2 size({16, 20});
-  Vector2 position = {0.0f, 0.0f};
-  Vector2 velocity = {0, 0};
-
-  addComponent<CollisionComponent>();
-  addComponent<PositionComponent>(position);
-  addComponent<TransformComponent>(velocity);
-  addComponent<BoundingBoxComponent>(size);
-  addComponent<TextureComponent>();
-  addComponent<MarioSoundComponent>();
-
-  getComponent<TextureComponent>().addTexture(
-      "SMALL-RIGHT-IDLE", "./assets/Mario/Small-Right-Idle.png");
-  getComponent<TextureComponent>().addTexture(
-      "SMALL-RIGHT-MOVING", "./assets/Mario/Small-Right-Moving.png");
-  getComponent<TextureComponent>().addTexture(
-      "SMALL-RIGHT-SKIDDING", "./assets/Mario/Small-Right-Skidding.png");
-  getComponent<TextureComponent>().addTexture(
-      "SMALL-RIGHT-JUMPING", "./assets/Mario/Small-Right-Jumping.png");
-  getComponent<TextureComponent>().addTexture(
-      "SMALL-RIGHT-DROPPING", "./assets/Mario/Small-Right-Dropping.png");
-
-  getComponent<TextureComponent>().addTexture(
-      "SMALL-LEFT-IDLE", "./assets/Mario/Small-Left-Idle.png");
-  getComponent<TextureComponent>().addTexture(
-      "SMALL-LEFT-MOVING", "./assets/Mario/Small-Left-Moving.png");
-  getComponent<TextureComponent>().addTexture(
-      "SMALL-LEFT-SKIDDING", "./assets/Mario/Small-Left-Skidding.png");
-  getComponent<TextureComponent>().addTexture(
-      "SMALL-LEFT-JUMPING", "./assets/Mario/Small-Left-Jumping.png");
-  getComponent<TextureComponent>().addTexture(
-      "SMALL-LEFT-DROPPING", "./assets/Mario/Small-Left-Dropping.png");
-
-  getComponent<TextureComponent>().addTexture(
-      "LARGE-RIGHT-IDLE", "./assets/Mario/Large-Right-Idle.png");
-  getComponent<TextureComponent>().addTexture(
-      "LARGE-RIGHT-MOVING", "./assets/Mario/Large-Right-Moving.png");
-  getComponent<TextureComponent>().addTexture(
-      "LARGE-RIGHT-SKIDDING", "./assets/Mario/Large-Right-Skidding.png");
-  getComponent<TextureComponent>().addTexture(
-      "LARGE-RIGHT-JUMPING", "./assets/Mario/Large-Right-Jumping.png");
-  getComponent<TextureComponent>().addTexture(
-      "LARGE-RIGHT-DROPPING", "./assets/Mario/Large-Right-Dropping.png");
-  getComponent<TextureComponent>().addTexture(
-      "LARGE-RIGHT-DUCKLING", "./assets/Mario/Large-Right-Duckling.png");
-
-  getComponent<TextureComponent>().addTexture(
-      "LARGE-LEFT-IDLE", "./assets/Mario/Large-Left-Idle.png");
-  getComponent<TextureComponent>().addTexture(
-      "LARGE-LEFT-MOVING", "./assets/Mario/Large-Left-Moving.png");
-  getComponent<TextureComponent>().addTexture(
-      "LARGE-LEFT-SKIDDING", "./assets/Mario/Large-Left-Skidding.png");
-  getComponent<TextureComponent>().addTexture(
-      "LARGE-LEFT-JUMPING", "./assets/Mario/Large-Left-Jumping.png");
-  getComponent<TextureComponent>().addTexture(
-      "LARGE-LEFT-DROPPING", "./assets/Mario/Large-Left-Dropping.png");
-  getComponent<TextureComponent>().addTexture(
-      "LARGE-LEFT-DUCKLING", "./assets/Mario/Large-Left-Duckling.png");
-
-  getComponent<MarioSoundComponent>().LoadSounds();
-}
-
-void Mario::update(float deltaTime) {
-  handleInput(state, deltaTime);
-  for (auto &component : components) {
-    component->update(deltaTime);
-  }
-
-  // resolve collision
-  if(getComponent<CollisionComponent>().getAbove()) {
-    Shared<AbstractEntity> aboveBlock = getComponent<CollisionComponent>().getAbove();
-    if(aboveBlock->name == "BrokenBlock") {
-      if(state->getSize() == "SMALL") {
-        aboveBlock->getComponent<BlockTriggerComponent>().setTrigger(new TriggerBrokenBlockWhenHitBySmall(aboveBlock->getComponent<PositionComponent>().getPosition()));
-      }
-    }
-  }
-  // if(getComponent<CollisionComponent>().getBelow())
-  //   cerr << getComponent<CollisionComponent>().getBelow()->name << '\n';
-  // if(getComponent<CollisionComponent>().getLeft())
-  //   cerr << getComponent<CollisionComponent>().getLeft()->name << '\n';
-  // if(getComponent<CollisionComponent>().getRight())
-  //   cerr << getComponent<CollisionComponent>().getRight()->name << '\n';
-}
-
-void Mario::input() {}
-
-void Mario::draw() {
-  ASSERT(hasComponent<TextureComponent>());
-  std::string currentState = state->getCurrentState();
-  // cerr << state->getCurrentState() << '\n';
-  getComponent<TextureComponent>().drawTexture(currentState);
-}
-PlayableEntity::PlayableEntity() {
-  timeFrameCounter = 0.0f;
-  fallAcc = GRAVITY_DEC;
+PlayableEntity::PlayableEntity() : fallAcc(GRAVITY_DEC), timeFrameCounter(0.0f), state(make_shared<DroppingState>("SMALL", "RIGHT")) {
+  addComponent<PlayerTag>();
 }
 void PlayableEntity::handleInput(Shared<CharacterState> &state,
                                  float deltaTime) {

@@ -11,6 +11,8 @@
 #include "Components/Texture.h"
 #include "Components/Transform.h"
 #include "Entity/PlayableEntity.h"
+#include "Entity/Mario.h"
+#include "Entity/Luigi.h"
 #include "pch.h"
 
 Shared<Mario> EntityFactory::createMario() {

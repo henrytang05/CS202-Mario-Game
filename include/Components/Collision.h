@@ -15,6 +15,11 @@ public:
     Shared<AbstractEntity> getAbove();
     Shared<AbstractEntity> getRight();
     Shared<AbstractEntity> getLeft();
+    void setBelow(Shared<AbstractEntity> other);
+    void setAbove(Shared<AbstractEntity> other);
+    void setRight(Shared<AbstractEntity> other);
+    void setLeft(Shared<AbstractEntity> other);
+    void reset();
     CollisionComponent();
     ~CollisionComponent();
     CollisionComponent(Shared<std::vector<Shared<AbstractEntity>>> _entities);

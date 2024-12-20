@@ -15,12 +15,13 @@ public:
 
 private:
   bool changeGameScreen, changeLoadScreen, changeRankingScreen,
-      changeSettingsScreen;
+      changeSettingsScreen, changeGuideScreen;
   Texture background;
   GUI::ImageButton *NewGameButton;
   GUI::ImageButton *LoadGameButton;
   GUI::ImageButton *RankingButton;
   GUI::ImageButton *SettingsButton;
+  GUI::ImageButton *GuideButton;
 };
 } // namespace SceneSpace
 #endif // INTROSCENE_H

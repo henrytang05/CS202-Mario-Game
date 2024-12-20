@@ -82,15 +82,14 @@ Shared<Scene> GameScene::updateScene(float deltaTime) {
   return nullptr;
 }
 void GameScene::update(float deltaTime) {
-  time -= GUI::get_delta_time();
-
+  time -= deltaTime;
   for (auto &entity : entities) {
     if (!entity->isActive())
       continue;
     entity->update(deltaTime);
-    if (entity->hasAllComponents<PositionComponent, TransformComponent,
-                                 EnemyTag>())
-      systems[0]->update(entity, deltaTime);
+    // if (entity->hasAllComponents<PositionComponent, TransformComponent,
+    //                              EnemyTag>())
+    //   systems[0]->update(entity, deltaTime);
   }
 
   camera.target.x = player->getComponent<PositionComponent>().getPosition().x;

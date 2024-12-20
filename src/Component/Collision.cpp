@@ -118,9 +118,10 @@ bool CollisionComponent::ResolveDynamicRectVsRect(const float deltaTime, Shared<
 
     return false;
 }
+void CollisionComponent::reset() {
+    for(int i = 0; i < 4; i++) contact[i] = nullptr;
+}
 void CollisionComponent::update(float deltaTime) {
-    for(int i = 0; i < 4; i++)
-        contact[i] = nullptr;
     std::vector<pair<int, float>> col;
     auto &otherEntity = *(entities);
     
@@ -152,6 +153,19 @@ Shared<AbstractEntity> CollisionComponent::getRight() {
 }
 Shared<AbstractEntity> CollisionComponent::getLeft() {
     return contact[1];
+}
+
+void CollisionComponent::setBelow(Shared<AbstractEntity> other) {
+    contact[2] = other;
+}
+void CollisionComponent::setAbove(Shared<AbstractEntity> other) {
+    contact[0] = other;
+}
+void CollisionComponent::setRight(Shared<AbstractEntity> other) {
+    contact[3] = other;
+}
+void CollisionComponent::setLeft(Shared<AbstractEntity> other) {
+    contact[1] = other;
 }
 void CollisionComponent::setEntities(Shared<std::vector<Shared<AbstractEntity>>> _entities) {
     entities = _entities;

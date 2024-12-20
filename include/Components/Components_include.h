@@ -9,4 +9,5 @@
 #include "Components/Transform.h"
 #include "Components/Collision.h"
 #include "Components/BlockTrigger.h"
+#include "Components/SoundComponent.h"
 #endif // COMPONENTS_H

@@ -4,7 +4,7 @@
 #include "Entity/PlayableEntity.h"
 #include "pch.h"
 #include <memory>
-
+#include "TextureManager.h"
 Shared<Mario> EntityFactory::createMario() {
   Shared<Mario> mario = std::make_shared<Mario>();
 
@@ -20,23 +20,24 @@ Shared<AbstractEntity> EntityFactory::createGoomba() {
   // return goomba;
   return nullptr;
 }
-Shared<AbstractEntity> EntityFactory::createBlock(string type,Texture2D texture, Vector2 position) {
+Shared<AbstractEntity> EntityFactory::createBlock(string type, Vector2 position) {
+  Texture2D texture = TextureManager::getInstance().getTexture(type);
   std::cerr<<"Still good get into createBlock"<<std::endl; 
   Shared<AbstractEntity> block = nullptr;
   if(type == "NormalBlock"){
-    block = std::make_shared<NormalBlock>(texture, position);
+    block = std::make_shared<NormalBlock>(position);
   }
   else if(type == "BrokenBlock"){
-    block = std::make_shared<BrokenBlock>(texture, position);
+    block = std::make_shared<BrokenBlock>(position);
   }
   else if(type == "HardBlock"){
-    block = std::make_shared<HardBlock>(texture, position);
+    block = std::make_shared<HardBlock>(position);
   }
   else if(type == "GroundBlock"){
-    block = std::make_shared<GroundBlock>(texture, position);
+    block = std::make_shared<GroundBlock>(position);
   }
   else if(type == "QuestionBlock"){
-    block = std::make_shared<QuestionBlock>(texture, position);
+    block = std::make_shared<QuestionBlock>(position);
   }
   return block;
 }

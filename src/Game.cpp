@@ -29,12 +29,13 @@ void Game::init() {
 
 void Game::run() {
   while (!WindowShouldClose()) {
-    update();
+    float deltaTime = GetFrameTime();
+    update(deltaTime);
     draw();
   }
 }
-void Game::update() {
-  Shared<SceneSpace::Scene> nextScene = currentScene->updateScene();
+void Game::update(float deltaTime) {
+  Shared<SceneSpace::Scene> nextScene = currentScene->updateScene(deltaTime);
   if (nextScene) {
     currentScene = nextScene;
     currentScene->loadResources();

@@ -10,7 +10,7 @@ public:
 class IUpdatable {
 public:
   virtual ~IUpdatable() = default;
-  virtual void update() = 0;
+  virtual void update(float deltaTime) = 0;
 };
 
 class IDrawable {

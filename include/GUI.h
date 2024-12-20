@@ -1,5 +1,5 @@
 #pragma once
-
+#include <chrono>
 
 namespace GUI{
     // IMAGEBUTTON
@@ -17,4 +17,6 @@ namespace GUI{
 		void draw();
 		bool isPressed();
     };
+
+    double get_delta_time();
 }

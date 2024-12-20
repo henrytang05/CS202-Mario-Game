@@ -1,56 +1,6 @@
 #include "Map.h"
 #include "Logger.h"
 
-void MapRenderer::addTileset(const std::string& tilesetPath, const std::string& imagePath, int firstGid) {
-    std::ifstream file(tilesetPath);
-    if (!file.is_open()) {
-        std::cerr << "Error: Could not open file " << tilesetPath << std::endl;
-        return;
-    }
-    json tilesetData;
-    try {
-        file >> tilesetData;
-    } catch (const json::parse_error& e) {
-        std::cerr << "Parse error: " << e.what() << std::endl;
-        return;
-    }
-
-    Texture2D tilesetImage = LoadTexture(imagePath.c_str());
-    Image tilesetImageAsImage = LoadImageFromTexture(tilesetImage);
-
-    int tileWidth = tilesetData["tilewidth"];
-    int tileHeight = tilesetData["tileheight"];
-    int columns = tilesetData["columns"];
-    int tileCount = tilesetData["tilecount"];
-
-    // Create textures for each tile.
-    for (int i = 0; i < tileCount; ++i) {
-        float x = (i % columns) * tileWidth;
-        float y = (i / columns) * tileHeight;
-        Image tileImage = ImageFromImage(tilesetImageAsImage, { x, y, (float)tileWidth, (float)tileHeight });
-        Texture2D tileTexture = LoadTextureFromImage(tileImage);
-        textureMap[i + firstGid] = {"Null",tileTexture};
-        UnloadImage(tileImage);
-    }
-    std::cerr<<"Still good her before add type"<<std::endl;
-    // Add type for tiles
-    //Base on the type in the json file
-    if(tilesetData.find("tiles") == tilesetData.end()){
-        return;
-    }
-    for(const auto& tile : tilesetData["tiles"]){
-      int id = tile["id"];
-    if (tile.contains("type")) {
-        string type = tile["type"];
-        textureMap[id + firstGid].first = type;
-    }
-    }
-
-    UnloadImage(tilesetImageAsImage);
-    UnloadTexture(tilesetImage);
-}
-
-
 std::vector<Shared<AbstractEntity>> MapRenderer::createMap(const std::string& mapPath) { 
     std::ifstream file(mapPath);
     if (!file.is_open()) {
@@ -74,56 +24,35 @@ std::vector<Shared<AbstractEntity>> MapRenderer::createMap(const std::string& ma
     mapHeight = mapData["height"];
     tileWidth = mapData["tilewidth"];
     tileHeight = mapData["tileheight"];
-    std::cerr << "Map width: " << mapWidth << " Map height: " << mapHeight << std::endl;
 
-    // Load Tilesets
-    const std::string dir = "Map/";
+    string Level;
+    for (const auto &properties : mapData["properties"]) {
+            if (properties["name"] == "Level") {
+                Level = properties["value"];
+                break;
+            }
+        }
+
+
+    //Load Tilesets
+    std::string dir = "assets/" + Level; // This one will be changed as Level1, Level2
     for (const auto& tileset : mapData["tilesets"]) {
+        std::string tilesetPath = dir + "/" + tileset["source"].get<std::string>();
+        std::string imagePath = tilesetPath.substr(0, tilesetPath.find_last_of(".")) + ".png";
+        std::cerr<<"tilesetPath: "<<tilesetPath<<std::endl;
+        std::cerr<<"imagePath: "<<imagePath<<std::endl;
         int firstGid = tileset["firstgid"];
-        std::string tilesetPath = tileset["source"];
-        std::string imagePath = tilesetPath.substr(0, tilesetPath.size() - 5) + ".png";
-        this->addTileset(dir + tilesetPath, dir + imagePath, firstGid);
+        TextureManager::getInstance().addTileset(tilesetPath, imagePath, firstGid);
     }
-    
+
     // Load Layers
     for (const auto& layer : mapData["layers"]) {
-        if (layer["type"] == "tilelayer") {
-            loadLayer(layer);
-        } else if (layer["type"] == "objectgroup") {
+        if (layer["type"] == "objectgroup") {
             loadObjectGroup(layer);
         }
     }
-
     return objects;
    
-}
-vector<Shared<AbstractEntity>> loadEntity() {
-    return vector<Shared<AbstractEntity>>();
-}
-void MapRenderer::loadLayer(const json& layer) {
-  std::cerr<<"load layer"<<std::endl;
-    int index = 0;
-    for (const auto& tileIdValue : layer["data"]) {
-      if (!tileIdValue.is_null() && tileIdValue.is_number()) {
-          int tileId = tileIdValue.get<int>();
-          int x = (index % mapWidth) * tileWidth;
-          int y = (index / mapWidth) * tileHeight;
-          if(textureMap.find(tileId) == textureMap.end()){
-              index++;
-              continue;
-          }
-          if(textureMap[tileId].first == "Null"){
-              index++;
-              continue;
-          }
-          entityFactory = std::make_unique<EntityFactory>();
-          auto obj = entityFactory->createBlock(textureMap[tileId].first,textureMap[tileId].second, { (float)x, (float)y });
-          if (obj) {
-              objects.push_back(obj);
-              index++;
-          }
-        }
-    }
 }
 
 void MapRenderer::loadObjectGroup(const json& layer) {
@@ -139,10 +68,8 @@ void MapRenderer::loadObjectGroup(const json& layer) {
         float y = object_layer["y"];
         float width = object_layer["width"];
         float height = object_layer["height"];
-        y = y - height;// Silly adjustment
         //Create game objects based on type
         if (name == "Pipe") {
-            y = y + height;
             entityFactory = std::make_unique<EntityFactory>();
             auto obj = entityFactory->createPipe({x, y}, {width, height});
             if (obj) {
@@ -150,7 +77,6 @@ void MapRenderer::loadObjectGroup(const json& layer) {
             }
             std::cerr<<"x: "<<x<<" y: "<<y<<std::endl;
             std::cerr<<"width: "<<width<<" height: "<<height<<std::endl;
-            
         } else if (name == "Flag") {
             // Create an enemy object
             entityFactory = std::make_unique<EntityFactory>();
@@ -158,11 +84,46 @@ void MapRenderer::loadObjectGroup(const json& layer) {
             if (obj) {
                 objects.push_back(obj);
             }
-        } 
-        else 
-        {
-            return;
+        } else if (name == "FlagPole") {
+            // Create an enemy object
+            entityFactory = std::make_unique<EntityFactory>();
+            auto obj = entityFactory->createFlagPole({x, y});
+            if (obj) {
+                objects.push_back(obj);
+            }
+        } else if (name == "NormalBlock"){
+            entityFactory = std::make_unique<EntityFactory>();
+            auto obj = entityFactory->createBlock("NormalBlock", {x, y});
+            if (obj) {
+                objects.push_back(obj);
+            }
+        } else if (name == "BrokenBlock"){
+            entityFactory = std::make_unique<EntityFactory>();
+            auto obj = entityFactory->createBlock("BrokenBlock", {x, y});
+            if (obj) {
+                objects.push_back(obj);
+            }
+        } else if (name == "HardBlock"){
+            entityFactory = std::make_unique<EntityFactory>();
+            auto obj = entityFactory->createBlock("HardBlock", {x, y});
+            if (obj) {
+                objects.push_back(obj);
+            }
+        } else if (name == "GroundBlock"){
+            entityFactory = std::make_unique<EntityFactory>();
+            auto obj = entityFactory->createBlock("GroundBlock", {x, y});
+            if (obj) {
+                objects.push_back(obj);
+            }
+        } else if (name == "QuestionBlock"){
+            entityFactory = std::make_unique<EntityFactory>();
+            auto obj = entityFactory->createBlock("QuestionBlock", {x, y});
+            if (obj) {
+                objects.push_back(obj);
+            }
         }
+        
+
     }
 }
 

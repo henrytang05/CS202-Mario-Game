@@ -37,11 +37,11 @@ const float MAX_FALL = 270.0f;
 const float FALL_ACC_A = 421.875f;
 const float FALL_ACC = 1800.0f;
 class PlayableEntity : public AbstractEntity,
-                       public IInputable,
                        public IMovable {
 private:
   float fallAcc;
   float timeFrameCounter;
+  Shared<CharacterState> state;
 public:
   PlayableEntity();
   PlayableEntity(std::string name);
@@ -50,30 +50,8 @@ public:
   Vector2 getVelocity() override;
   void setVelocity(Vector2 newVelocity) override;
   virtual void handleInput(Shared<CharacterState> &state, float deltaTime);
-};
-class Luigi : public PlayableEntity {
-public:
-  Luigi();
-  ~Luigi() = default;
 
   void update(float deltaTime) override;
   void draw() override;
-
-private:
-  void input() override;
-  Shared<CharacterState> state;
 };
-class Mario : public PlayableEntity {
-public:
-  Mario();
-  ~Mario() = default;
-
-  void update(float deltaTime) override;
-  void draw() override;
-
-private:
-  void input() override;
-  Shared<CharacterState> state;
-};
-
 #endif // PLAYABLE_ENTITY_H

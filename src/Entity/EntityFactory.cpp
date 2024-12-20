@@ -2,6 +2,8 @@
 
 #include "Components/Components_include.h"
 #include "Entity/PlayableEntity.h"
+#include "Entity/Mario.h"
+#include "Entity/Luigi.h"
 #include "pch.h"
 #include <memory>
 

@@ -36,4 +36,22 @@ namespace GUI{
         float getValue();
         void setValue(float newValue);
     };
+
+    class TickBox {
+    private:
+        Rectangle box;
+        bool isChecked;
+        Color boxColor;
+        Color hoverColor;
+        Color tickColor;
+        Color borderColor;
+        float borderThickness;
+    public:
+        TickBox(float x, float y, float size, bool initialChecked , 
+            Color boxColor, Color hoverColor, Color tickColo, Color borderColor, float borderThickness);
+        void update(Vector2& mousePos, bool& isLeftClick);
+        void draw();
+        bool getChecked();
+        void setChecked(bool checked);
+    };
 }

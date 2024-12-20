@@ -30,7 +30,7 @@ void MarioSoundComponent::LoadSounds()
 	soundsEffects[23] = LoadSound("./assets/sounds/smb_ting_sound.wav");
 
 	for(auto& it : soundsEffects){
-		SetSoundVolume(it, SOUND_VOLUME)
+		SetSoundVolume(it, SOUND_VOLUME);
 	}
 }
 

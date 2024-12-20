@@ -19,6 +19,7 @@ public:
   void init() override;
 
 private:
+  bool IsMario = isMario;
   double time;
   Texture2D background;
   MapRenderer mapRenderer;

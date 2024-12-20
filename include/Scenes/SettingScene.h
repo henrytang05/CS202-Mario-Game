@@ -18,6 +18,8 @@ private:
   GUI::ImageButton* QuitButton;
   GUI::Slider* musicSetting;
   GUI::Slider* soundSetting;
+  GUI::TickBox* mario;
+  GUI::TickBox* luigi;
 };
 } // namespace SceneSpace
 #endif // SETTINGSCENE_H

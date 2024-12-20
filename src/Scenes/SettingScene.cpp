@@ -14,6 +14,8 @@ SceneSpace::SettingScene::~SettingScene()
     delete QuitButton;
     delete musicSetting;
     delete soundSetting;
+    delete mario;
+    delete luigi;
 }
 
 Shared<SceneSpace::Scene> SceneSpace::SettingScene::updateScene(float deltaTime)
@@ -24,6 +26,16 @@ Shared<SceneSpace::Scene> SceneSpace::SettingScene::updateScene(float deltaTime)
     QuitButton->update(mousePos, isLeftClick);
     musicSetting->update(mousePos);
     soundSetting->update(mousePos);
+    mario->update(mousePos, isLeftClick);
+    if(mario->getChecked()){
+        isMario = true;
+        luigi->setChecked(false);
+    }
+    luigi->update(mousePos, isLeftClick);
+    if(luigi->getChecked()){
+        isMario = false;
+        mario->setChecked(false);
+    }
     if (QuitButton->isPressed())
     {
         SoundCtrl.PlayTingSound();
@@ -40,6 +52,8 @@ void SceneSpace::SettingScene::draw()
     QuitButton->draw();
     musicSetting->draw();
     soundSetting->draw();
+    mario->draw();
+    luigi->draw();
 }
 
 void SceneSpace::SettingScene::loadResources()
@@ -49,6 +63,8 @@ void SceneSpace::SettingScene::loadResources()
                                        "./assets/Hover_QuitButton.png");
     musicSetting = new GUI::Slider(650, 220, 210, 30, 15, MUSIC_VOLUME, WHITE, GRAY);
     soundSetting = new GUI::Slider(650, 340, 210, 30, 15, SOUND_VOLUME, WHITE, GRAY);
+    mario = new GUI::TickBox(680, 610, 25, isMario, WHITE, LIGHTGRAY, BLACK, BLACK, 3);
+    luigi = new GUI::TickBox(840, 610, 25, !isMario, WHITE, LIGHTGRAY, BLACK, BLACK, 3);
 }
 
 void SceneSpace::SettingScene::init()

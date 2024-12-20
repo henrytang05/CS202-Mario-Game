@@ -74,3 +74,35 @@ void GUI::Slider::setValue(float newValue)
     if (newValue > 1.0f) newValue = 1.0f;
     value = newValue;
 }
+
+GUI::TickBox::TickBox(float x, float y, float size, bool initialChecked, Color boxColor, Color hoverColor, Color tickColor, Color borderColor, float borderThickness)
+     : box{ x, y, size, size }, isChecked(initialChecked), 
+          boxColor(boxColor), hoverColor(hoverColor), 
+          tickColor(tickColor), borderColor(borderColor), 
+          borderThickness(borderThickness) {}
+
+void GUI::TickBox::update(Vector2 &mousePos, bool& isLeftClick)
+{
+    if (CheckCollisionPointRec(mousePos, box) && isLeftClick) {
+            isChecked = true;
+    }
+}
+
+void GUI::TickBox::draw()
+{
+    Color currentColor = CheckCollisionPointRec(GetMousePosition(), box) ? hoverColor : boxColor;
+    DrawRectangleRec(box, currentColor);
+    DrawRectangleLinesEx(box, borderThickness, borderColor);
+    if(isChecked)
+        DrawText("X", box.x + box.width / 4, box.y + round((box.height - 2 * borderThickness) / 4), (int)(box.height * 0.8f), tickColor);
+}
+
+bool GUI::TickBox::getChecked()
+{
+    return isChecked;
+}
+
+void GUI::TickBox::setChecked(bool checked)
+{
+    isChecked = checked;
+}

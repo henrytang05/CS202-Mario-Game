@@ -183,7 +183,7 @@ void SoundController::PlayTingSound()
 
 void SoundController::Update(int time)
 {
-	if(time == 345) {
+	if(time == 60) {
 		SetMusicPitch(bg, 1.5);
 	}
 	MusicVolume = MUSIC_VOLUME;

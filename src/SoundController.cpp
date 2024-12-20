@@ -50,14 +50,14 @@ void SoundController::LoadSounds()
 void SoundController::PlayGroundTheme()
 {
 	bg = backgroundTracks[0];
-	SetMusicVolume(bg, volume);
+	SetMusicVolume(bg, MusicVolume);
 	PlayMusicStream(bg);
 }
 
 void SoundController::PlayUndergroundTheme()
 {
 	bg = backgroundTracks[1];
-	SetMusicVolume(bg, volume);
+	SetMusicVolume(bg, MusicVolume);
 	PlayMusicStream(bg);
 }
 
@@ -185,6 +185,12 @@ void SoundController::Update(int time)
 {
 	if(time == 345) {
 		SetMusicPitch(bg, 1.5);
+	}
+	MusicVolume = MUSIC_VOLUME;
+	SoundVolume = SOUND_VOLUME;
+	SetMusicVolume(bg, MusicVolume);
+	for(auto& it : soundsEffects){
+		SetSoundVolume(it, SoundVolume);
 	}
 	UpdateMusicStream(bg);
 }

@@ -19,4 +19,21 @@ namespace GUI{
     };
 
     double get_delta_time();
+    
+    class Slider{
+    private:
+        int x, y;
+        int width, height;   
+        int knobRadius;    
+        float value;           
+        Color sliderColor;   
+        Color knobColor;  
+    public:
+        Slider(int x, int y, int width, int height, int knobRadius, 
+           float &initialValue, Color sliderColor, Color knobColor);
+        void update(Vector2& mousePos);
+        void draw();
+        float getValue();
+        void setValue(float newValue);
+    };
 }

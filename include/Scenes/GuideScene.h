@@ -1,5 +1,5 @@
-#ifndef GUIDESCENE_HH
-#define GUIDESCENE_HH
+#ifndef GUIDESCENE_H
+#define GUIDESCENE_H
 #include "GUI.h"
 #include "Scenes/Scene.h"
 #include "AbstractEntity.h"

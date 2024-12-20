@@ -41,3 +41,36 @@ double GUI::get_delta_time()
 
     return delta;
 }
+
+GUI::Slider::Slider(int x, int y, int width, int height, int knobRadius, float &initialValue, Color sliderColor, Color knobColor) 
+    : x(x), y(y), width(width), height(height), knobRadius(knobRadius), 
+          value(initialValue), sliderColor(sliderColor), knobColor(knobColor) {}
+
+void GUI::Slider::update(Vector2& mousePos)
+{
+    if (IsMouseButtonDown(MOUSE_LEFT_BUTTON) &&
+        CheckCollisionPointRec(mousePos, (Rectangle){(float)x, (float)y, (float)width, (float)height})) {
+        value = (mousePos.x - x) / (float)width;
+        if (value < 0.0f) value = 0.0f;
+        if (value > 1.0f) value = 1.0f;
+    }
+}
+
+void GUI::Slider::draw()
+{
+    DrawRectangle(x, y, width, height, sliderColor);
+    int knobX = x + (int)(value * width);
+    DrawCircle(knobX, y + height / 2, knobRadius, knobColor);
+}
+
+float GUI::Slider::getValue()
+{
+    return value;
+}
+
+void GUI::Slider::setValue(float newValue)
+{
+    if (newValue < 0.0f) newValue = 0.0f;
+    if (newValue > 1.0f) newValue = 1.0f;
+    value = newValue;
+}

@@ -4,6 +4,8 @@
 #include "Scenes/LoadGameScene.h"
 #include "Scenes/GuideScene.h"
 #include "Scenes/Scene.h"
+#include "Scenes/SettingScene.h"
+
 namespace SceneSpace {
 IntroScene::IntroScene() : Scene() {
   changeGameScreen = false;
@@ -64,6 +66,8 @@ Shared<Scene> IntroScene::updateScene(float deltaTime) {
     return std::make_shared<SceneSpace::LoadGameScene>();
   if (changeGuideScreen)
     return std::make_shared<SceneSpace::GuideScene>();
+  if (changeSettingsScreen)
+    return std::make_shared<SceneSpace::SettingScene>();
   return nullptr;
 }
 void IntroScene::draw() {

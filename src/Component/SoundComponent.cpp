@@ -1,4 +1,6 @@
 #include "Components/SoundComponent.h"
+#include "globals.h"
+
 MarioSoundComponent::MarioSoundComponent() : Component("SoundComponent") {}
 void MarioSoundComponent::LoadSounds()
 {
@@ -26,6 +28,10 @@ void MarioSoundComponent::LoadSounds()
 	soundsEffects[21] = LoadSound("./assets/sounds/smb_warning.wav");
 	soundsEffects[22] = LoadSound("./assets/sounds/smb_world_clear.wav");
 	soundsEffects[23] = LoadSound("./assets/sounds/smb_ting_sound.wav");
+
+	for(auto& it : soundsEffects){
+		SetSoundVolume(it, SOUND_VOLUME)
+	}
 }
 
 void MarioSoundComponent::Play1upEffect()

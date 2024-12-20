@@ -52,3 +52,9 @@ Shared<AbstractEntity> EntityFactory::createFlag(Vector2 position)
   Shared<AbstractEntity> flag = std::make_shared<Flag>(position);
   return flag;
 }
+
+Shared<AbstractEntity> EntityFactory::createFlagPole(Vector2 position)
+{
+  Shared<AbstractEntity> flagPole = std::make_shared<FlagPole>(position);
+  return flagPole;
+}

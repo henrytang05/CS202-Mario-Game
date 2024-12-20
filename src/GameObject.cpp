@@ -5,12 +5,12 @@
 #include "Components/Transform.h"
 #include "Components/BlockTrigger.h"
 
-NormalBlock::NormalBlock(Texture2D texture, Vector2 position): AbstractEntity("NormalBlock") {
+NormalBlock::NormalBlock(Vector2 position): AbstractEntity("NormalBlock") {
     Vector2 size({16, 16});
     addComponent<PositionComponent>(position);    
     addComponent<BoundingBoxComponent>(size);
     addComponent<TextureComponent>();
-    getComponent<TextureComponent>().addTexture("Normal", texture);
+    getComponent<TextureComponent>().addTexture("Normal", TextureManager::getInstance().getTexture("NormalBlock"));
 }
 
 void NormalBlock::draw() {
@@ -23,15 +23,14 @@ void NormalBlock::update(float deltaTime) {
         comp->update(deltaTime);
 }
 
-BrokenBlock::BrokenBlock(Texture2D texture, Vector2 position): AbstractEntity("BrokenBlock") {
+BrokenBlock::BrokenBlock(Vector2 position): AbstractEntity("BrokenBlock") {
     Vector2 size({16, 16});
     addComponent<PositionComponent>(position);    
     addComponent<BoundingBoxComponent>(size);
     addComponent<BlockTriggerComponent>();
     addComponent<TransformComponent>((Vector2){0.0f, 0.0f});
     addComponent<TextureComponent>();
-    getComponent<TextureComponent>().addTexture("Normal", texture);
-    std::cerr<<"create broken block"<<std::endl;
+    getComponent<TextureComponent>().addTexture("Normal", TextureManager::getInstance().getTexture("BrokenBlock"));
 }
 
 void BrokenBlock::draw() {
@@ -44,13 +43,12 @@ void BrokenBlock::update(float deltaTime) {
         comp->update(deltaTime);
 }
 
-HardBlock::HardBlock(Texture2D texture, Vector2 position): AbstractEntity("HardBlock") {
+HardBlock::HardBlock(Vector2 position): AbstractEntity("HardBlock") {
     Vector2 size({16, 16});
     addComponent<PositionComponent>(position);    
     addComponent<BoundingBoxComponent>(size);
     addComponent<TextureComponent>();
-    getComponent<TextureComponent>().addTexture("Normal", texture);
-    std::cerr<<"create hard block"<<std::endl;
+    getComponent<TextureComponent>().addTexture("Normal", TextureManager::getInstance().getTexture("HardBlock"));
 }
 
 void HardBlock::draw() {
@@ -63,13 +61,12 @@ void HardBlock::update(float deltaTime) {
         comp->update(deltaTime);
 }
 
-GroundBlock::GroundBlock(Texture2D texture, Vector2 position): AbstractEntity("GroundBlock") {
+GroundBlock::GroundBlock(Vector2 position): AbstractEntity("GroundBlock") {
     Vector2 size({16, 16});
     addComponent<PositionComponent>(position);    
     addComponent<BoundingBoxComponent>(size);
     addComponent<TextureComponent>();
-    getComponent<TextureComponent>().addTexture("Normal", texture);
-    std::cerr<<"create ground block"<<std::endl;
+    getComponent<TextureComponent>().addTexture("Normal", TextureManager::getInstance().getTexture("GroundBlock"));
 }
 
 void GroundBlock::draw() {
@@ -82,14 +79,13 @@ void GroundBlock::update(float deltaTime) {
         comp->update(deltaTime);
 }
 
-QuestionBlock::QuestionBlock(Texture2D texture, Vector2 position): AbstractEntity("QuestionBlock") {
+QuestionBlock::QuestionBlock(Vector2 position): AbstractEntity("QuestionBlock") {
     Vector2 size({16, 16});
     addComponent<PositionComponent>(position);    
     addComponent<BoundingBoxComponent>(size);
     addComponent<TransformComponent>((Vector2){0.0f, 0.0f});
     addComponent<TextureComponent>();
-    getComponent<TextureComponent>().addTexture("Normal", texture);
-    std::cerr<<"create question block"<<std::endl;
+    getComponent<TextureComponent>().addTexture("Normal", TextureManager::getInstance().getTexture("QuestionBlock"));
 }
 
 void QuestionBlock::draw() {
@@ -120,12 +116,11 @@ void Pipe::update(float deltaTime) {
 
 //
 Flag::Flag(Vector2 position): AbstractEntity("Flag") {
-    Vector2 position_fix = {position.x, position.y};
-    Vector2 size = {2, 128};
-    addComponent<PositionComponent>(position_fix);    
+    Vector2 size = {16, 16};
+    addComponent<PositionComponent>(position);    
     addComponent<BoundingBoxComponent>(size);
     addComponent<TextureComponent>();
-    getComponent<TextureComponent>().addTexture("Normal", LoadTexture("Map/Flag.png"));
+    getComponent<TextureComponent>().addTexture("Normal", TextureManager::getInstance().getTexture("Flag") );
 
     std::cerr<<"create flag"<<std::endl;
 }
@@ -136,6 +131,26 @@ void Flag::draw() {
 }
 
 void Flag::update(float deltaTime) {
+    for(auto &comp : components)
+        comp->update(deltaTime);
+}
+
+FlagPole::FlagPole(Vector2 position): AbstractEntity("FlagPole") {
+    Vector2 size = {16, 16};
+    addComponent<PositionComponent>(position);    
+    addComponent<BoundingBoxComponent>(size);
+    addComponent<TextureComponent>();
+    getComponent<TextureComponent>().addTexture("Normal", TextureManager::getInstance().getTexture("FlagPole") );
+
+    std::cerr<<"create flagpole"<<std::endl;
+}
+
+void FlagPole::draw() {
+    ASSERT(hasComponent<TextureComponent>());
+    getComponent<TextureComponent>().drawTexture("Normal");
+}
+
+void FlagPole::update(float deltaTime) {
     for(auto &comp : components)
         comp->update(deltaTime);
 }

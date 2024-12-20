@@ -41,12 +41,12 @@ GameScene::~GameScene() {
 #endif
 }
 void GameScene::loadResources() {
-  // Loading BackGround
-  Image bImage = LoadImage("Map/BackGroundnew.png");
+  //Loading BackGround
+  Image bImage = LoadImage("assets/Level1/BackGround.png");
   background = LoadTextureFromImage(bImage);
   UnloadImage(bImage);
-  // Create Map
-  entities = mapRenderer.createMap("Map/Level1new.json");
+  //Create Map
+  entities = mapRenderer.createMap("assets/Level1/Level1new.json");
 }
 void GameScene::draw() {
   BeginMode2D(camera);
@@ -70,8 +70,8 @@ void GameScene::update(float deltaTime) {
   camera.target.x = player->getComponent<PositionComponent>().getPosition().x;
   if (camera.target.x <= screenWidth / (2.0f * camera.zoom))
     camera.target.x = screenWidth / (2.0f * camera.zoom);
-  if (camera.target.x >= screenWidth - screenWidth / (2.0f * camera.zoom))
-    camera.target.x = screenWidth - screenWidth / (2.0f * camera.zoom);
+  if (camera.target.x >= gameWidth - screenWidth / (2.0f * camera.zoom))
+    camera.target.x = gameWidth - screenWidth / (2.0f * camera.zoom);
   SoundCtrl.Update((int)time);
 }
 

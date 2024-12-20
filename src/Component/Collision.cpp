@@ -141,16 +141,16 @@ void CollisionComponent::update(float deltaTime) {
     for(auto x : col)
         ResolveDynamicRectVsRect(deltaTime, otherEntity[x.first]);
 }
-Shared<AbstractEntity> CollisionComponent::getBelow() {
+Shared<AbstractEntity>& CollisionComponent::getBelow() {
     return contact[2];
 }
-Shared<AbstractEntity> CollisionComponent::getAbove() {
+Shared<AbstractEntity>& CollisionComponent::getAbove() {
     return contact[0];
 }
-Shared<AbstractEntity> CollisionComponent::getRight() {
+Shared<AbstractEntity>& CollisionComponent::getRight() {
     return contact[3];
 }
-Shared<AbstractEntity> CollisionComponent::getLeft() {
+Shared<AbstractEntity>& CollisionComponent::getLeft() {
     return contact[1];
 }
 void CollisionComponent::setEntities(Shared<std::vector<Shared<AbstractEntity>>> _entities) {

@@ -77,11 +77,14 @@ void GameScene::draw() {
   DrawText(TextFormat("Time: %03i", (int)time), 1200, 35, GAMEPLAY_TEXT_SIZE,
            WHITE);
 }
-Shared<Scene> GameScene::updateScene(float deltaTime) {
+Unique<Scene> GameScene::updateScene(float deltaTime) {
   this->update(deltaTime);
   if(player->checkAlive() == false) {
-    return make_shared<SceneSpace::GameScene>();
+    SoundCtrl.Pause();
   }
+  if(player->checkOver()) {
+    return make_unique<IntroScene>();
+  } 
   return nullptr;
 }
 void GameScene::update(float deltaTime) {

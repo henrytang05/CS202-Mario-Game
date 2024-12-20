@@ -13,7 +13,7 @@ SceneSpace::LoadGameScene::~LoadGameScene()
     delete QuitButton;
 }
 
-Shared<SceneSpace::Scene> SceneSpace::LoadGameScene::updateScene(float deltaTime)
+Unique<SceneSpace::Scene> SceneSpace::LoadGameScene::updateScene(float deltaTime)
 {
   SoundCtrl.Update();
   Vector2 mousePos = GetMousePosition();
@@ -23,7 +23,7 @@ Shared<SceneSpace::Scene> SceneSpace::LoadGameScene::updateScene(float deltaTime
   if (QuitButton->isPressed())
   {
     SoundCtrl.PlayTingSound();
-    return std::make_shared<SceneSpace::IntroScene>();
+    return std::make_unique<SceneSpace::IntroScene>();
   }
 
   return nullptr;

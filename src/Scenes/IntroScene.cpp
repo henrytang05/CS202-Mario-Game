@@ -25,7 +25,7 @@ IntroScene::~IntroScene() {
   delete GuideButton;
 }
 
-Shared<Scene> IntroScene::updateScene(float deltaTime) {
+Unique<Scene> IntroScene::updateScene(float deltaTime) {
   SoundCtrl.Update();
   Vector2 mousePos = GetMousePosition();
   bool isLeftClick = IsMouseButtonPressed(MOUSE_BUTTON_LEFT);
@@ -61,13 +61,13 @@ Shared<Scene> IntroScene::updateScene(float deltaTime) {
     SoundCtrl.PlayTingSound();
   }
   if (changeGameScreen)
-    return std::make_shared<SceneSpace::GameScene>();
+    return std::make_unique<SceneSpace::GameScene>();
   if (changeLoadScreen)
-    return std::make_shared<SceneSpace::LoadGameScene>();
+    return std::make_unique<SceneSpace::LoadGameScene>();
   if (changeGuideScreen)
-    return std::make_shared<SceneSpace::GuideScene>();
+    return std::make_unique<SceneSpace::GuideScene>();
   if (changeSettingsScreen)
-    return std::make_shared<SceneSpace::SettingScene>();
+    return std::make_unique<SceneSpace::SettingScene>();
   return nullptr;
 }
 void IntroScene::draw() {

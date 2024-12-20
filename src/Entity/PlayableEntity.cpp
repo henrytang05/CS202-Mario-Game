@@ -28,17 +28,22 @@ Vector2 PlayableEntity::getVelocity() {
 bool PlayableEntity::checkAlive() const {
   return !isDeath;
 }
+
+bool PlayableEntity::checkOver() const {
+  return gameOver;
+}
 void PlayableEntity::update(float deltaTime) {
   if(getComponent<PositionComponent>().getY() > 1.2f * screenHeight) {
     state = make_shared<DeathState>("SMALL", state->getFacing());
     getComponent<MarioSoundComponent>().PlayMarioDieEffect();
   }
   if(state->getState() == "DEATH") {
+    isDeath = true;
     getComponent<TextureComponent2>().changeState(state->getCurrentState());
     getComponent<TransformComponent>().setVelocity({0.0f, -200.0f});
     getComponent<TransformComponent>().update(deltaTime);
     if(getComponent<PositionComponent>().getPosition().y < 0.0f) {
-      isDeath = true;
+      gameOver = true;
     }
     return;
   }

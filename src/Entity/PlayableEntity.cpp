@@ -7,12 +7,15 @@
 #include "Entity/States/CharacterStates.h"
 
 PlayableEntity::PlayableEntity(std::string name)
-    : AbstractEntity(name), fallAcc(GRAVITY_DEC), timeFrameCounter(0.0f),
+    : AbstractEntity(name), fallAcc(GRAVITY_DEC),
       state(make_shared<DroppingState>("SMALL", "RIGHT")) {
 
   addComponent<PlayerTag>();
 }
 
+PlayableEntity::PlayableEntity() : fallAcc(GRAVITY_DEC), state(make_shared<DroppingState>("SMALL", "RIGHT")) {
+  addComponent<PlayerTag>();
+}
 void PlayableEntity::setVelocity(Vector2 newVelocity) {
   ASSERT(hasComponent<TransformComponent>());
   getComponent<TransformComponent>().setVelocity(newVelocity);
@@ -54,12 +57,6 @@ void PlayableEntity::update(float deltaTime) {
   //   cerr << getComponent<CollisionComponent>().getRight()->name << '\n';
 }
 void PlayableEntity::draw() {
-  ASSERT(hasComponent<TextureComponent>());
-  std::string currentState = state->getCurrentState();
-  getComponent<TextureComponent>().drawTexture(currentState);
-}
-PlayableEntity::PlayableEntity() : fallAcc(GRAVITY_DEC), timeFrameCounter(0.0f), state(make_shared<DroppingState>("SMALL", "RIGHT")) {
-  addComponent<PlayerTag>();
 }
 void PlayableEntity::handleInput(Shared<CharacterState> &state,
                                  float deltaTime) {
@@ -185,20 +182,11 @@ void PlayableEntity::handleInput(Shared<CharacterState> &state,
              state->getState() != "DROPPING" &&
              state->getState() != "DUCKLING") {
     if (std::fabs(velocity.x) >= MIN_WALKING_VELO) {
-      timeFrameCounter += deltaTime;
-      if (timeFrameCounter >= 0.1f) {
-        if (state->getState() == "IDLE")
-          state =
-              make_shared<MovingState>(state->getSize(), state->getFacing());
-        else
-          state =
-              make_shared<StandingState>(state->getSize(), state->getFacing());
-        timeFrameCounter = 0.0f;
-      }
+          state = make_shared<MovingState>(state->getSize(), state->getFacing());
     } else {
       state = make_shared<StandingState>(state->getSize(), state->getFacing());
-      timeFrameCounter = 0.0f;
     }
   }
+  getComponent<TextureComponent2>().changeState(state->getCurrentState());
   setVelocity(velocity);
 }

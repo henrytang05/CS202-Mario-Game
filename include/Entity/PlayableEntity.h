@@ -39,7 +39,6 @@ const float FALL_ACC = 1800.0f;
 class PlayableEntity : public AbstractEntity, public IMovable {
 private:
   float fallAcc;
-  float timeFrameCounter;
   Shared<CharacterState> state;
 
 public:

@@ -30,7 +30,7 @@ GameScene::GameScene() : Scene(), camera({0, 0}) {
 void GameScene::init() {
   time = 360.f;
   entityFactory = std::make_unique<EntityFactory>();
-  player = entityFactory->createLuigi();
+  player = entityFactory->createMario();
   entities.push_back(player);
   gameOver = false;
   camera.offset = {screenWidth / 2.0f, screenHeight / 2.0f};
@@ -67,8 +67,7 @@ void GameScene::draw() {
   for (auto &entity : entities) {
     if (!entity->isActive())
       continue;
-    if (entity->hasAllComponents<TextureComponent2, PositionComponent,
-                                 EnemyTag>()) {
+    if (entity->hasAllComponents<TextureComponent2, PositionComponent>()) {
       systems[1]->update(entity, dt);
     }
     entity->draw();

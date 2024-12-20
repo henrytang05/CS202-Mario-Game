@@ -25,6 +25,7 @@ std::vector<Shared<AbstractEntity>> MapRenderer::createMap(const std::string& ma
     tileWidth = mapData["tilewidth"];
     tileHeight = mapData["tileheight"];
 
+    cerr<<"mapWidth: "<<mapWidth<<endl;
     string Level;
     for (const auto &properties : mapData["properties"]) {
             if (properties["name"] == "Level") {

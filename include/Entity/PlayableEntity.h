@@ -36,17 +36,15 @@ const float JUMPING_VELO = -240.0f;
 const float MAX_FALL = 270.0f;
 const float FALL_ACC_A = 421.875f;
 const float FALL_ACC = 1800.0f;
-class PlayableEntity : public AbstractEntity,
-                       public IMovable {
+class PlayableEntity : public AbstractEntity, public IMovable {
 private:
   float fallAcc;
   float timeFrameCounter;
   Shared<CharacterState> state;
+
 public:
   PlayableEntity();
   PlayableEntity(std::string name);
-
-  virtual void update(float deltaTime) override;
 
   virtual ~PlayableEntity() = default;
   Vector2 getVelocity() override;

@@ -19,4 +19,39 @@ namespace GUI{
     };
 
     double get_delta_time();
+    
+    class Slider{
+    private:
+        int x, y;
+        int width, height;   
+        int knobRadius;    
+        float value;           
+        Color sliderColor;   
+        Color knobColor;  
+    public:
+        Slider(int x, int y, int width, int height, int knobRadius, 
+           float &initialValue, Color sliderColor, Color knobColor);
+        void update(Vector2& mousePos);
+        void draw();
+        float getValue();
+        void setValue(float newValue);
+    };
+
+    class TickBox {
+    private:
+        Rectangle box;
+        bool isChecked;
+        Color boxColor;
+        Color hoverColor;
+        Color tickColor;
+        Color borderColor;
+        float borderThickness;
+    public:
+        TickBox(float x, float y, float size, bool initialChecked , 
+            Color boxColor, Color hoverColor, Color tickColo, Color borderColor, float borderThickness);
+        void update(Vector2& mousePos, bool& isLeftClick);
+        void draw();
+        bool getChecked();
+        void setChecked(bool checked);
+    };
 }

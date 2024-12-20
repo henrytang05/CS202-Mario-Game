@@ -1,6 +1,7 @@
 #pragma once
 #include "raylib.h"
 #include <array>
+#include "globals.h"
 
 class SoundController {
 private:
@@ -9,8 +10,8 @@ private:
   Music bg;
   void LoadBackgroundTracks();
   void LoadSoundEffects();
-  float volume = 1.0f;
-
+  float MusicVolume = 1.0f;
+  float SoundVolume = 1.0f;
 public:
   ~SoundController();
   void LoadSounds();

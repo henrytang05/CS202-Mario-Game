@@ -31,6 +31,7 @@ void PlayableEntity::update(float deltaTime) {
     if(above->name == "BrokenBlock") {
       if(state->getSize() == "SMALL")
         above->getComponent<BlockTriggerComponent>().setTrigger(new TriggerBrokenBlockWhenHitBySmall(above->getComponent<PositionComponent>().getPosition()));
+        getComponent<MarioSoundComponent>().PlayBumpEffect();
     }
   }
   // if(getComponent<CollisionComponent>().getBelow())

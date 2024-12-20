@@ -1,7 +1,6 @@
 #include "Scenes/GuideScene.h"
 #include "Logger.h"
 #include "Scenes/IntroScene.h"
-#include "Scenes/GuideScene.h"
 #include "Components/Components_include.h"
 #include "Components/Position.h"
 #include "Components/Texture.h"

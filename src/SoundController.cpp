@@ -199,3 +199,8 @@ void SoundController::Update()
 {
 	Update(0);
 }
+
+void SoundController::Pause()
+{
+	PauseMusicStream(bg);
+}

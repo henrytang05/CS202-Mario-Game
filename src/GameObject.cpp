@@ -134,3 +134,23 @@ void Flag::update(float deltaTime) {
     for(auto &comp : components)
         comp->update(deltaTime);
 }
+
+FlagPole::FlagPole(Vector2 position): AbstractEntity("FlagPole") {
+    Vector2 size = {16, 16};
+    addComponent<PositionComponent>(position);    
+    addComponent<BoundingBoxComponent>(size);
+    addComponent<TextureComponent>();
+    getComponent<TextureComponent>().addTexture("Normal", TextureManager::getInstance().getTexture("FlagPole") );
+
+    std::cerr<<"create flagpole"<<std::endl;
+}
+
+void FlagPole::draw() {
+    ASSERT(hasComponent<TextureComponent>());
+    getComponent<TextureComponent>().drawTexture("Normal");
+}
+
+void FlagPole::update(float deltaTime) {
+    for(auto &comp : components)
+        comp->update(deltaTime);
+}

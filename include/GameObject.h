@@ -91,3 +91,15 @@ public:
     void draw() override;
     void update(float deltaTime) override;
 };
+
+// Derived class for a flag pole
+class FlagPole : public AbstractEntity {
+private:
+    bool isCollision = false;
+public:
+    FlagPole() = default;
+    FlagPole(Vector2 position);
+    ~FlagPole() = default;
+    void draw() override;
+    void update(float deltaTime) override;
+};

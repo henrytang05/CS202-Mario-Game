@@ -40,7 +40,7 @@ class PlayableEntity : public AbstractEntity, public IMovable {
 private:
   float fallAcc;
   Shared<CharacterState> state;
-
+  bool isDeath;
 public:
   PlayableEntity();
   PlayableEntity(std::string name);
@@ -48,8 +48,8 @@ public:
   virtual ~PlayableEntity() = default;
   Vector2 getVelocity() override;
   void setVelocity(Vector2 newVelocity) override;
-  virtual void handleInput(Shared<CharacterState> &state, float deltaTime);
-
+  virtual void handleInput(float deltaTime);
+  bool checkAlive() const;
   void update(float deltaTime) override;
   void draw() override;
 };

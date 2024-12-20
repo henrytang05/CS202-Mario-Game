@@ -7,13 +7,13 @@
 #include "Entity/States/CharacterStates.h"
 
 PlayableEntity::PlayableEntity(std::string name)
-    : AbstractEntity(name), fallAcc(GRAVITY_DEC),
+    : AbstractEntity(name), fallAcc(GRAVITY_DEC), isDeath(false),
       state(make_shared<DroppingState>("SMALL", "RIGHT")) {
 
   addComponent<PlayerTag>();
 }
 
-PlayableEntity::PlayableEntity() : fallAcc(GRAVITY_DEC), state(make_shared<DroppingState>("SMALL", "RIGHT")) {
+PlayableEntity::PlayableEntity() : fallAcc(GRAVITY_DEC), state(make_shared<DroppingState>("SMALL", "RIGHT")), isDeath(false) {
   addComponent<PlayerTag>();
 }
 void PlayableEntity::setVelocity(Vector2 newVelocity) {
@@ -25,8 +25,17 @@ Vector2 PlayableEntity::getVelocity() {
   ASSERT(hasComponent<TransformComponent>());
   return getComponent<TransformComponent>().getVelocity();
 }
+bool PlayableEntity::checkAlive() const {
+  return !isDeath;
+}
 void PlayableEntity::update(float deltaTime) {
-  handleInput(state, deltaTime);
+  if(state->getState() == "DEATH") {
+    getComponent<TextureComponent2>().changeState(state->getCurrentState());
+    getComponent<TransformComponent>().setVelocity({0.0f, -100.0f});
+    getComponent<TransformComponent>().update(deltaTime);
+    return;
+  }
+  handleInput(deltaTime);
   getComponent<CollisionComponent>().reset();
   for (auto &component : components) {
     component->update(deltaTime);
@@ -49,17 +58,23 @@ void PlayableEntity::update(float deltaTime) {
         below->getComponent<CollisionComponent>().setAbove(make_shared<PlayableEntity>("Player"));
     }
   }
-  // if(getComponent<CollisionComponent>().getBelow())
-  //   cerr << getComponent<CollisionComponent>().getBelow()->name << '\n';
-  // if(getComponent<CollisionComponent>().getLeft())
-  //   cerr << getComponent<CollisionComponent>().getLeft()->name << '\n';
-  // if(getComponent<CollisionComponent>().getRight())
-  //   cerr << getComponent<CollisionComponent>().getRight()->name << '\n';
+  if(left != nullptr) {
+    if(left->hasComponent<EnemyTag>() && state->getSize() == "SMALL") {
+      state = make_shared<DeathState>(state->getSize(), state->getFacing());
+      getComponent<MarioSoundComponent>().PlayMarioDieEffect();
+    }
+  }   
+  if(right != nullptr) {
+    if(right->hasComponent<EnemyTag>() && state->getSize() == "SMALL") {
+      state = make_shared<DeathState>(state->getSize(), state->getFacing());
+      getComponent<MarioSoundComponent>().PlayMarioDieEffect();
+    }
+  } 
 }
 void PlayableEntity::draw() {
 }
-void PlayableEntity::handleInput(Shared<CharacterState> &state,
-                                 float deltaTime) {
+void PlayableEntity::handleInput(float deltaTime) {
+  
   Vector2 velocity = getVelocity();
   bool keyLeft = IsKeyDown(KEY_LEFT);
   bool keyRight = IsKeyDown(KEY_RIGHT);

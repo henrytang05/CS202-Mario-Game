@@ -37,6 +37,10 @@ Luigi::Luigi() : PlayableEntity("Luigi"){
   texture.addTextures("SMALL-RIGHT-DROPPING", textures);
   textures.clear();
 
+  textures.push_back(LoadTexture("./assets/Luigi/Small-Right-Death.png"));
+  texture.addTextures("SMALL-RIGHT-DEATH", textures);
+  textures.clear();
+
   // SMALL LEFT
   textures.push_back(LoadTexture("./assets/Luigi/Small-Left-Idle.png"));
   texture.addTextures("SMALL-LEFT-IDLE", textures);
@@ -60,6 +64,9 @@ Luigi::Luigi() : PlayableEntity("Luigi"){
   texture.addTextures("SMALL-LEFT-DROPPING", textures);
   textures.clear();
   
+  textures.push_back(LoadTexture("./assets/Luigi/Small-Left-Death.png"));
+  texture.addTextures("SMALL-LEFT-DEATH", textures);
+  textures.clear();
 
   // LARGE RIGHT
   textures.push_back(LoadTexture("./assets/Luigi/Large-Right-Idle.png"));

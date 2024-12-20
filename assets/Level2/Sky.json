@@ -1,0 +1,14 @@
+{ "columns":8,
+ "image":"Sky.png",
+ "imageheight":115,
+ "imagewidth":137,
+ "margin":0,
+ "name":"Sky",
+ "spacing":0,
+ "tilecount":56,
+ "tiledversion":"1.11.0",
+ "tileheight":16,
+ "tilewidth":16,
+ "type":"tileset",
+ "version":"1.10"
+}

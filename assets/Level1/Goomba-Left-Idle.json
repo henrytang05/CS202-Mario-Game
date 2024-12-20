@@ -4,6 +4,7 @@
  "imagewidth":16,
  "margin":0,
  "name":"Goomba-Left-Idle",
+ "objectalignment":"topleft",
  "spacing":0,
  "tilecount":1,
  "tiledversion":"1.11.0",
@@ -14,7 +15,6 @@
          "objectgroup":
             {
              "draworder":"index",
-             "id":2,
              "name":"",
              "objects":[
                     {

@@ -1,25 +1,37 @@
 { "columns":1,
- "image":"Koopa-Left-Idle.png",
+ "image":"underwater-Koopa-Left-Idle.png",
  "imageheight":27,
  "imagewidth":16,
  "margin":0,
- "name":"Koopa-Left-Idle",
+ "name":"underwater-Koopa-Left-Idle",
  "objectalignment":"topleft",
  "spacing":0,
  "tilecount":1,
  "tiledversion":"1.11.0",
- "tileheight":27,
+ "tileheight":23,
  "tiles":[
         {
          "id":0,
          "objectgroup":
             {
              "draworder":"index",
+             "id":2,
              "name":"",
              "objects":[
                     {
-                     "height":27,
+                     "height":23,
                      "id":1,
+                     "name":"",
+                     "rotation":0,
+                     "type":"",
+                     "visible":true,
+                     "width":16,
+                     "x":0,
+                     "y":0
+                    }, 
+                    {
+                     "height":23,
+                     "id":2,
                      "name":"",
                      "rotation":0,
                      "type":"",

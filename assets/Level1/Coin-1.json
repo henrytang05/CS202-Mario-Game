@@ -1,31 +1,32 @@
 { "columns":1,
- "image":"Koopa-Left-Idle.png",
- "imageheight":27,
+ "image":"Coin-1.png",
+ "imageheight":16,
  "imagewidth":16,
  "margin":0,
- "name":"Koopa-Left-Idle",
+ "name":"Coin-1",
  "objectalignment":"topleft",
  "spacing":0,
  "tilecount":1,
  "tiledversion":"1.11.0",
- "tileheight":27,
+ "tileheight":16,
  "tiles":[
         {
          "id":0,
          "objectgroup":
             {
              "draworder":"index",
+             "id":2,
              "name":"",
              "objects":[
                     {
-                     "height":27,
+                     "height":16,
                      "id":1,
                      "name":"",
                      "rotation":0,
                      "type":"",
                      "visible":true,
-                     "width":16,
-                     "x":0,
+                     "width":10,
+                     "x":3,
                      "y":0
                     }],
              "opacity":1,
@@ -34,7 +35,7 @@
              "x":0,
              "y":0
             },
-         "type":"Koopa"
+         "type":"Coin"
         }],
  "tilewidth":16,
  "type":"tileset",

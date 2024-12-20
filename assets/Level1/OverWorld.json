@@ -4,6 +4,7 @@
  "imagewidth":166,
  "margin":0,
  "name":"OverWorld",
+ "objectalignment":"topleft",
  "spacing":0,
  "tilecount":70,
  "tiledversion":"1.11.0",
@@ -140,6 +141,84 @@
          "type":"QuestionBlock"
         }, 
         {
+         "id":6,
+         "objectgroup":
+            {
+             "draworder":"index",
+             "name":"",
+             "objects":[
+                    {
+                     "height":16,
+                     "id":1,
+                     "name":"",
+                     "rotation":0,
+                     "type":"",
+                     "visible":true,
+                     "width":16,
+                     "x":0,
+                     "y":0
+                    }],
+             "opacity":1,
+             "type":"objectgroup",
+             "visible":true,
+             "x":0,
+             "y":0
+            },
+         "type":"Pipe1"
+        }, 
+        {
+         "id":7,
+         "objectgroup":
+            {
+             "draworder":"index",
+             "name":"",
+             "objects":[
+                    {
+                     "height":16,
+                     "id":1,
+                     "name":"",
+                     "rotation":0,
+                     "type":"",
+                     "visible":true,
+                     "width":16,
+                     "x":0,
+                     "y":0
+                    }],
+             "opacity":1,
+             "type":"objectgroup",
+             "visible":true,
+             "x":0,
+             "y":0
+            },
+         "type":"Pipe2"
+        }, 
+        {
+         "id":16,
+         "objectgroup":
+            {
+             "draworder":"index",
+             "name":"",
+             "objects":[
+                    {
+                     "height":16,
+                     "id":1,
+                     "name":"",
+                     "rotation":0,
+                     "type":"",
+                     "visible":true,
+                     "width":14,
+                     "x":2,
+                     "y":0
+                    }],
+             "opacity":1,
+             "type":"objectgroup",
+             "visible":true,
+             "x":0,
+             "y":0
+            },
+         "type":"Pipe3"
+        }, 
+        {
          "id":17,
          "objectgroup":
             {
@@ -156,13 +235,25 @@
                      "width":14,
                      "x":0,
                      "y":0
+                    }, 
+                    {
+                     "height":16,
+                     "id":2,
+                     "name":"",
+                     "rotation":0,
+                     "type":"",
+                     "visible":true,
+                     "width":14,
+                     "x":0,
+                     "y":0
                     }],
              "opacity":1,
              "type":"objectgroup",
              "visible":true,
              "x":0,
              "y":0
-            }
+            },
+         "type":"Pipe4"
         }],
  "tilewidth":16,
  "type":"tileset",

@@ -116,9 +116,8 @@ void Pipe::update(float deltaTime) {
 
 //
 Flag::Flag(Vector2 position): AbstractEntity("Flag") {
-    Vector2 position_fix = {position.x, position.y};
-    Vector2 size = {2, 128};
-    addComponent<PositionComponent>(position_fix);    
+    Vector2 size = {16, 16};
+    addComponent<PositionComponent>(position);    
     addComponent<BoundingBoxComponent>(size);
     addComponent<TextureComponent>();
     getComponent<TextureComponent>().addTexture("Normal", TextureManager::getInstance().getTexture("Flag") );

@@ -1,9 +1,9 @@
 { "columns":3,
- "image":"Checkpoint.png",
+ "image":"underwater-Checkpoint.png",
  "imageheight":16,
  "imagewidth":48,
  "margin":0,
- "name":"Checkpoint",
+ "name":"underwater-Checkpoint",
  "objectalignment":"topleft",
  "spacing":0,
  "tilecount":3,
@@ -15,6 +15,7 @@
          "objectgroup":
             {
              "draworder":"index",
+             "id":2,
              "name":"",
              "objects":[
                     {
@@ -31,17 +32,6 @@
                     {
                      "height":16,
                      "id":2,
-                     "name":"",
-                     "rotation":0,
-                     "type":"",
-                     "visible":true,
-                     "width":16,
-                     "x":0,
-                     "y":0
-                    }, 
-                    {
-                     "height":16,
-                     "id":3,
                      "name":"",
                      "rotation":0,
                      "type":"",
@@ -63,6 +53,7 @@
          "objectgroup":
             {
              "draworder":"index",
+             "id":2,
              "name":"",
              "objects":[
                     {
@@ -81,73 +72,20 @@
              "visible":true,
              "x":0,
              "y":0
-            }
+            },
+         "type":"TopPole"
         }, 
         {
          "id":2,
          "objectgroup":
             {
              "draworder":"index",
+             "id":2,
              "name":"",
              "objects":[
                     {
                      "height":16,
                      "id":1,
-                     "name":"",
-                     "rotation":0,
-                     "type":"",
-                     "visible":true,
-                     "width":4,
-                     "x":6,
-                     "y":0
-                    }, 
-                    {
-                     "height":16,
-                     "id":2,
-                     "name":"",
-                     "rotation":0,
-                     "type":"",
-                     "visible":true,
-                     "width":4,
-                     "x":6,
-                     "y":0
-                    }, 
-                    {
-                     "height":16,
-                     "id":3,
-                     "name":"",
-                     "rotation":0,
-                     "type":"",
-                     "visible":true,
-                     "width":4,
-                     "x":6,
-                     "y":0
-                    }, 
-                    {
-                     "height":16,
-                     "id":4,
-                     "name":"",
-                     "rotation":0,
-                     "type":"",
-                     "visible":true,
-                     "width":4,
-                     "x":6,
-                     "y":0
-                    }, 
-                    {
-                     "height":16,
-                     "id":5,
-                     "name":"",
-                     "rotation":0,
-                     "type":"",
-                     "visible":true,
-                     "width":4,
-                     "x":6,
-                     "y":0
-                    }, 
-                    {
-                     "height":16,
-                     "id":7,
                      "name":"",
                      "rotation":0,
                      "type":"",
@@ -161,7 +99,8 @@
              "visible":true,
              "x":0,
              "y":0
-            }
+            },
+         "type":"Pole"
         }],
  "tilewidth":16,
  "type":"tileset",

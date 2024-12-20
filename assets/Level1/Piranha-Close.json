@@ -1,14 +1,14 @@
 { "columns":1,
- "image":"Koopa-Left-Idle.png",
- "imageheight":27,
+ "image":"Piranha-Close.png",
+ "imageheight":32,
  "imagewidth":16,
  "margin":0,
- "name":"Koopa-Left-Idle",
- "objectalignment":"topleft",
+ "name":"Piranha-Close",
+ "objectalignment":"topright",
  "spacing":0,
  "tilecount":1,
  "tiledversion":"1.11.0",
- "tileheight":27,
+ "tileheight":32,
  "tiles":[
         {
          "id":0,
@@ -18,7 +18,7 @@
              "name":"",
              "objects":[
                     {
-                     "height":27,
+                     "height":32,
                      "id":1,
                      "name":"",
                      "rotation":0,
@@ -34,7 +34,7 @@
              "x":0,
              "y":0
             },
-         "type":"Koopa"
+         "type":"Piranha"
         }],
  "tilewidth":16,
  "type":"tileset",

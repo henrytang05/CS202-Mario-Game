@@ -7,7 +7,9 @@
 #include "Entity/States/CharacterStates.h"
 
 PlayableEntity::PlayableEntity(std::string name)
-    : AbstractEntity(name), fallAcc(GRAVITY_DEC), timeFrameCounter(0.0f), state(make_shared<DroppingState>("SMALL", "RIGHT")) {
+    : AbstractEntity(name), fallAcc(GRAVITY_DEC), timeFrameCounter(0.0f),
+      state(make_shared<DroppingState>("SMALL", "RIGHT")) {
+
   addComponent<PlayerTag>();
 }
 
@@ -109,7 +111,7 @@ void PlayableEntity::handleInput(Shared<CharacterState> &state,
     }
     velocity.y += fallAcc * deltaTime;
 
-    if(IsKeyPressed(KEY_UP)) {
+    if (IsKeyPressed(KEY_UP)) {
       velocity.y = JUMPING_VELO;
       fallAcc = FALL_ACC;
       state = make_shared<JumpingState>(state->getSize(), state->getFacing());
@@ -119,19 +121,23 @@ void PlayableEntity::handleInput(Shared<CharacterState> &state,
         getComponent<MarioSoundComponent>().PlayJumpSuperEffect();
     }
 
-    if(keyDown && std::fabs(velocity.x) < MIN_WALKING_VELO && state->getSize() == "LARGE" && state->getState() != "DUCKLING") {
+    if (keyDown && std::fabs(velocity.x) < MIN_WALKING_VELO &&
+        state->getSize() == "LARGE" && state->getState() != "DUCKLING") {
       state = make_shared<DucklingState>(state->getSize(), state->getFacing());
       getComponent<BoundingBoxComponent>().setSize({16.0f, 15.0f});
-      getComponent<PositionComponent>().setPosition({getComponent<PositionComponent>().getX(), getComponent<PositionComponent>().getY() + 13.0f});
+      getComponent<PositionComponent>().setPosition(
+          {getComponent<PositionComponent>().getX(),
+           getComponent<PositionComponent>().getY() + 13.0f});
     }
-    if(IsKeyReleased(KEY_DOWN) && state->getState() == "DUCKLING") {
+    if (IsKeyReleased(KEY_DOWN) && state->getState() == "DUCKLING") {
       state = make_shared<StandingState>(state->getSize(), state->getFacing());
       getComponent<BoundingBoxComponent>().setSize({16.0f, 28.0f});
-      getComponent<PositionComponent>().setPosition({getComponent<PositionComponent>().getX(), getComponent<PositionComponent>().getY() - 13.0f});
+      getComponent<PositionComponent>().setPosition(
+          {getComponent<PositionComponent>().getX(),
+           getComponent<PositionComponent>().getY() - 13.0f});
     }
-  }
-  else {
-    if(velocity.y < 0.0f && IsKeyDown(KEY_UP)) {
+  } else {
+    if (velocity.y < 0.0f && IsKeyDown(KEY_UP)) {
       velocity.y -= (FALL_ACC - FALL_ACC_A) * deltaTime;
     }
     if (keyRight && !keyLeft) {
@@ -175,9 +181,10 @@ void PlayableEntity::handleInput(Shared<CharacterState> &state,
   if (state->getState() == "SKIDDING") {
     if (std::fabs(velocity.x) < MIN_SKIDDING)
       state = make_shared<StandingState>(state->getSize(), state->getFacing());
-  } 
-  else if(state->getState() != "JUMPING" && state->getState() != "DROPPING" && state->getState() != "DUCKLING") {
-    if(std::fabs(velocity.x) >= MIN_WALKING_VELO) {
+  } else if (state->getState() != "JUMPING" &&
+             state->getState() != "DROPPING" &&
+             state->getState() != "DUCKLING") {
+    if (std::fabs(velocity.x) >= MIN_WALKING_VELO) {
       timeFrameCounter += deltaTime;
       if (timeFrameCounter >= 0.1f) {
         if (state->getState() == "IDLE")

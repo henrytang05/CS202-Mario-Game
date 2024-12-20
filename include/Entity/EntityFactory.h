@@ -4,6 +4,8 @@
 #include "AbstractEntity.h"
 #include "Entity/Enemy.h"
 #include "Entity/PlayableEntity.h"
+#include "Entity/Mario.h"
+#include "Entity/Luigi.h"
 #include "GameObject.h"
 class IFactory {
 public:

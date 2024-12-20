@@ -29,14 +29,14 @@ void PlayableEntity::update(float deltaTime) {
   }
 
   // resolve collision
-  if (getComponent<CollisionComponent>().getAbove()) {
-    Shared<AbstractEntity> aboveBlock =
-        getComponent<CollisionComponent>().getAbove();
-    if (aboveBlock->name == "BrokenBlock") {
-      if (state->getSize() == "SMALL")
-        aboveBlock->getComponent<BlockTriggerComponent>().setTrigger(
-            new TriggerBrokenBlockWhenHitBySmall(
-                aboveBlock->getComponent<PositionComponent>().getPosition()));
+  Shared<AbstractEntity> above = getComponent<CollisionComponent>().getAbove();
+  Shared<AbstractEntity> below = getComponent<CollisionComponent>().getBelow();
+  Shared<AbstractEntity> left = getComponent<CollisionComponent>().getLeft();
+  Shared<AbstractEntity> right = getComponent<CollisionComponent>().getRight();
+  if(above) {
+    if(above->name == "BrokenBlock") {
+      if(state->getSize() == "SMALL")
+        above->getComponent<BlockTriggerComponent>().setTrigger(new TriggerBrokenBlockWhenHitBySmall(above->getComponent<PositionComponent>().getPosition()));
     }
   }
   // if(getComponent<CollisionComponent>().getBelow())

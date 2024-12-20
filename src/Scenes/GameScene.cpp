@@ -82,8 +82,7 @@ Shared<Scene> GameScene::updateScene(float deltaTime) {
   return nullptr;
 }
 void GameScene::update(float deltaTime) {
-  time -= GUI::get_delta_time();
-
+  time -= deltaTime;
   for (auto &entity : entities) {
     if (!entity->isActive())
       continue;

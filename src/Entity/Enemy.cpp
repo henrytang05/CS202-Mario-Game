@@ -28,12 +28,12 @@ void Enemy::handleCollision() {
     auto left = collision.getLeft();
     auto right = collision.getRight();
 
-    Vector2 v = {-ENEMY_SPEED, 0};
-
     auto &trans = getComponent<TransformComponent>();
+
+    Vector2 v = trans.getVelocity();
     float g = getComponent<Gravity>();
     if (left && !left->hasComponent<EnemyTag>())
-        v = {ENEMY_SPEED, trans.getVelocity().y};
+        v = {-ENEMY_SPEED, trans.getVelocity().y};
     else if (right && !right->hasComponent<EnemyTag>())
         v = {ENEMY_SPEED, trans.getVelocity().y};
 
@@ -44,11 +44,13 @@ void Enemy::handleCollision() {
         }
     }
     trans.setVelocity(v);
-    if (above)
+    if (above != nullptr) {
         if (above->hasComponent<PlayerTag>()) {
-            destroy();
+            //destroy();
             getComponent<TextureComponent2>().changeState("Goomba-Die");
         }
+    }
+    getComponent<CollisionComponent>().reset();
 }
 
 void Enemy::draw() {

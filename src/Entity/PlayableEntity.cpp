@@ -24,6 +24,7 @@ Vector2 PlayableEntity::getVelocity() {
 }
 void PlayableEntity::update(float deltaTime) {
   handleInput(state, deltaTime);
+  getComponent<CollisionComponent>().reset();
   for (auto &component : components) {
     component->update(deltaTime);
   }
@@ -37,6 +38,12 @@ void PlayableEntity::update(float deltaTime) {
     if(above->name == "BrokenBlock") {
       if(state->getSize() == "SMALL")
         above->getComponent<BlockTriggerComponent>().setTrigger(new TriggerBrokenBlockWhenHitBySmall(above->getComponent<PositionComponent>().getPosition()));
+    } 
+  }
+  if(below != nullptr) {
+    if(below->hasComponent<EnemyTag>()) {
+      if(below->hasComponent<CollisionComponent>())
+        below->getComponent<CollisionComponent>().setAbove(make_shared<PlayableEntity>("Player"));
     }
   }
   // if(getComponent<CollisionComponent>().getBelow())
@@ -51,9 +58,8 @@ void PlayableEntity::draw() {
   std::string currentState = state->getCurrentState();
   getComponent<TextureComponent>().drawTexture(currentState);
 }
-PlayableEntity::PlayableEntity() {
-  timeFrameCounter = 0.0f;
-  fallAcc = GRAVITY_DEC;
+PlayableEntity::PlayableEntity() : fallAcc(GRAVITY_DEC), timeFrameCounter(0.0f), state(make_shared<DroppingState>("SMALL", "RIGHT")) {
+  addComponent<PlayerTag>();
 }
 void PlayableEntity::handleInput(Shared<CharacterState> &state,
                                  float deltaTime) {

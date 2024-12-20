@@ -87,9 +87,9 @@ void GameScene::update(float deltaTime) {
     if (!entity->isActive())
       continue;
     entity->update(deltaTime);
-    if (entity->hasAllComponents<PositionComponent, TransformComponent,
-                                 EnemyTag>())
-      systems[0]->update(entity, deltaTime);
+    // if (entity->hasAllComponents<PositionComponent, TransformComponent,
+    //                              EnemyTag>())
+    //   systems[0]->update(entity, deltaTime);
   }
 
   camera.target.x = player->getComponent<PositionComponent>().getPosition().x;

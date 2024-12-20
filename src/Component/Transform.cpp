@@ -16,8 +16,8 @@ void TransformComponent::init() {
 }
 
 void TransformComponent::update(float deltaTime) {
-  if (entity->hasComponent<EnemyTag>())
-    return;
+  // if (entity->hasComponent<EnemyTag>())
+  //   return;
   PositionComponent &position = entity->getComponent<PositionComponent>();
   position.setPosition(
       (Vector2){position.getPosition().x + velocity.x * deltaTime,

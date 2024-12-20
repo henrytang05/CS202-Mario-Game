@@ -10,6 +10,7 @@ public:
   void update(float deltaTime) override;
   void setVelocity(Vector2 newVelocity);
   Vector2 getVelocity() const;
+  Vector2 operator-() const;
 
 private:
   Vector2 velocity;

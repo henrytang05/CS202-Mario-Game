@@ -22,7 +22,8 @@ protected:
     SKIDDING,
     JUMPING,
     DROPPING,
-    DUCKLING
+    DUCKLING, 
+    DEATH
   };
   enum SIZE {
     SMALL = 0,
@@ -76,6 +77,14 @@ public:
   DucklingState() = default;
   ~DucklingState() = default;
   DucklingState(std::string size, std::string facing);
+  std::string getState() override;
+};
+
+class DeathState : public CharacterState {
+public:
+  DeathState() = default;
+  ~DeathState() = default;
+  DeathState(std::string size, std::string facing);
   std::string getState() override;
 };
 #endif // CHARACTER_STATE_H

@@ -1,13 +1,12 @@
-
-#include "Interface.h"
-#include "pch.h"
 #include "Game.h"
+#include "Interface.h"
 #include "Logger.h"
 #include "Map.h"
 #include "Scenes/GameScene.h"
 #include "Scenes/IntroScene.h"
 #include "Scenes/Scene.h"
 #include "globals.h"
+#include "pch.h"
 #include "raylib.h"
 
 Game::Game() { init(); }

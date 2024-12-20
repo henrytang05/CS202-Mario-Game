@@ -5,6 +5,9 @@
 #include "Entity/PlayableEntity.h"
 #include "Map.h"
 #include "Scenes/Scene.h"
+#include "System/System.h"
+
+#include "Entity/EnemySystem.h"
 
 namespace SceneSpace {
 class GameScene : public Scene {
@@ -28,6 +31,10 @@ private:
   std::vector<Shared<AbstractEntity>> entities;
   Unique<IFactory> entityFactory;
   bool gameOver;
+
+  // TODO: remove this later
+private:
+  std::vector<Unique<System>> systems;
 };
 } // namespace SceneSpace
 

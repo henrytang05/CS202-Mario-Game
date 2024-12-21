@@ -55,7 +55,7 @@ GameScene::~GameScene() {
 }
 void GameScene::loadResources() {
   //Loading BackGround
-  Image bImage = LoadImage("assets/Level2 /BackGround.png");
+  Image bImage = LoadImage("assets/Level2/BackGround.png");
   background = LoadTextureFromImage(bImage);
   UnloadImage(bImage);
   //Create Map
@@ -93,9 +93,8 @@ void GameScene::update(float deltaTime) {
     if (!entity->isActive())
       continue;
     entity->update(deltaTime);
-    // if (entity->hasAllComponents<PositionComponent, TransformComponent,
-    //                              EnemyTag>())
-    //   systems[0]->update(entity, deltaTime);
+    if(entity->hasAllComponents<TransformComponent, PositionComponent>())
+      systems[0]->update(entity, deltaTime);
   }
 
   camera.target.x = player->getComponent<PositionComponent>().getPosition().x;

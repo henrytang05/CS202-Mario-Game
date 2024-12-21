@@ -20,6 +20,9 @@ public:
   template <typename T, typename... TArgs>
   inline T &addComponent(TArgs &&...mArgs);
   template <typename T> inline T &getComponent() const;
+  template <typename T> inline void removeComponent();
+  template <typename T, typename... TArgs>
+  inline T &modifyComponent(TArgs &&...mArgs);
 
   uint32_t getId() const { return id; }
   bool operator==(const AbstractEntity &other) const { return id == other.id; }
@@ -88,4 +91,32 @@ template <typename T> inline T &AbstractEntity::getComponent() const {
   return *static_cast<T *>(ptr);
 }
 
-#endif // ABSTRACTENTITY_H
+template <typename T> inline void AbstractEntity::removeComponent() {
+  T &c = getComponent<T>();
+  for (auto it = components.begin(); it != components.end(); ++it) {
+    if (it->get() == &c) {
+      components.erase(it);
+      break;
+    }
+  }
+  componentArray[getComponentTypeID<T>()] = nullptr;
+  componentBitset[getComponentTypeID<T>()] = false;
+}
+
+template <typename T, typename... TArgs>
+inline T &AbstractEntity::modifyComponent(TArgs &&...mArgs) {
+
+  T &c = getComponent<T>();
+  for (auto it = components.begin(); it != components.end(); ++it) {
+    if (it->get() == &c) {
+      std::unique_ptr<T> new_component =
+          std::make_unique<T>(std::forward<TArgs>(mArgs)...);
+      *it = std::move(new_component);
+      componentArray[getComponentTypeID<T>()] = it->get();
+      break;
+    }
+  }
+  return c;
+}
+
+#endif // ABSTRACTENTITY_

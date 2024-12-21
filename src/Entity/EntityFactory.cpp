@@ -44,7 +44,9 @@ Shared<Enemy> EntityFactory::createEnemy(Vector2 position, Vector2 size) {
   Shared<Enemy> enemy = std::make_shared<Enemy>(name);
 
   enemy->addComponent<CollisionComponent>();
+
   enemy->addComponent<PositionComponent>(position);
+
   enemy->addComponent<TransformComponent>(Vector2{-10.0f * cnt, 10});
   enemy->addComponent<BoundingBoxComponent>(size);
   enemy->addComponent<EnemyTag>();

@@ -26,30 +26,28 @@ void TransformSystem::update(Shared<AbstractEntity> entity, float dt) {
 void AnimationSystem::update(Shared<AbstractEntity> entity, float dt) {
   if (!entity->isActive())
     return;
-  if (!entity->hasAllComponents<TextureComponent2, PositionComponent,
+  if (!entity->hasAllComponents<Animation, PositionComponent,
                                 BoundingBoxComponent>()) {
     throw std::runtime_error(
         "Entity does not have required components for RenderSystem");
   }
 
-  auto &texture = entity->getComponent<TextureComponent2>();
   auto &position = entity->getComponent<PositionComponent>();
-
+  auto &texture = entity->getComponent<Animation>();
   auto &frames = texture.animations[texture.animationState];
+  if (frames.empty()) {
+    throw std::runtime_error("No frames in animation");
+  }
+
   texture.elapsedTime += dt;
-  if (texture.elapsedTime >= texture.frameDelay) {
+  while (texture.elapsedTime >= texture.frameDelay) {
     texture.elapsedTime -= texture.frameDelay;
-    if (!frames.empty()) {
-      texture.currentFrame++;
-      if (texture.currentFrame >= frames.size()) {
-        if (texture.isLooping) {
-          texture.currentFrame = 0;
-        } else {
-          texture.currentFrame = frames.size() - 1;
-        }
-      }
+    texture.currentFrame++;
+    if (texture.currentFrame >= frames.size()) {
+      texture.currentFrame = texture.isLooping ? 0 : frames.size() - 1;
     }
   }
+
   Texture2D choosen_texture = frames[texture.currentFrame];
   DrawTexture(choosen_texture, position.getX(), position.getY(), WHITE);
 }

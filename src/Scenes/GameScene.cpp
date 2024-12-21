@@ -67,10 +67,11 @@ void GameScene::draw() {
   for (auto &entity : entities) {
     if (!entity->isActive())
       continue;
-    if (entity->hasAllComponents<TextureComponent2, PositionComponent,
-                                 EnemyTag>()) {
+
+    if (entity->hasAllComponents<Animation, PositionComponent>()) {
       systems[1]->update(entity, dt);
     }
+
     entity->draw();
   }
   EndMode2D();
@@ -87,9 +88,8 @@ void GameScene::update(float deltaTime) {
     if (!entity->isActive())
       continue;
     entity->update(deltaTime);
-    // if (entity->hasAllComponents<PositionComponent, TransformComponent,
-    //                              EnemyTag>())
-    //   systems[0]->update(entity, deltaTime);
+    if (entity->hasAllComponents<PositionComponent, TransformComponent>())
+      systems[0]->update(entity, deltaTime);
   }
 
   camera.target.x = player->getComponent<PositionComponent>().getPosition().x;

@@ -1,7 +1,6 @@
 #include "Scenes/GuideScene.h"
 #include "Logger.h"
 #include "Scenes/IntroScene.h"
-#include "Scenes/GuideScene.h"
 #include "Components/Components_include.h"
 #include "Components/Position.h"
 #include "Components/Texture.h"
@@ -18,7 +17,7 @@ SceneSpace::GuideScene::~GuideScene()
     delete QuitButton;
 }
 
-Shared<SceneSpace::Scene> SceneSpace::GuideScene::updateScene(float deltaTime)
+Unique<SceneSpace::Scene> SceneSpace::GuideScene::updateScene(float deltaTime)
 {
     SoundCtrl.Update();
     // for (auto &entity : entities) {
@@ -31,7 +30,7 @@ Shared<SceneSpace::Scene> SceneSpace::GuideScene::updateScene(float deltaTime)
     if (QuitButton->isPressed())
     {
         SoundCtrl.PlayTingSound();
-        return std::make_shared<SceneSpace::IntroScene>();
+        return std::make_unique<SceneSpace::IntroScene>();
     }
     return nullptr;
 }

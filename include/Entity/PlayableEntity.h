@@ -39,9 +39,8 @@ const float FALL_ACC = 1800.0f;
 class PlayableEntity : public AbstractEntity, public IMovable {
 private:
   float fallAcc;
-  float timeFrameCounter;
   Shared<CharacterState> state;
-
+  bool isDeath, gameOver;
 public:
   PlayableEntity();
   PlayableEntity(std::string name);
@@ -49,8 +48,9 @@ public:
   virtual ~PlayableEntity() = default;
   Vector2 getVelocity() override;
   void setVelocity(Vector2 newVelocity) override;
-  virtual void handleInput(Shared<CharacterState> &state, float deltaTime);
-
+  virtual void handleInput(float deltaTime);
+  bool checkAlive() const;
+  bool checkOver() const;
   void update(float deltaTime) override;
   void draw() override;
 };

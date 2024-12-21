@@ -7,12 +7,15 @@
 #include "Entity/States/CharacterStates.h"
 
 PlayableEntity::PlayableEntity(std::string name)
-    : AbstractEntity(name), fallAcc(GRAVITY_DEC), timeFrameCounter(0.0f),
+    : AbstractEntity(name), fallAcc(GRAVITY_DEC), isDeath(false),
       state(make_shared<DroppingState>("SMALL", "RIGHT")) {
 
   addComponent<PlayerTag>();
 }
 
+PlayableEntity::PlayableEntity() : fallAcc(GRAVITY_DEC), state(make_shared<DroppingState>("SMALL", "RIGHT")), isDeath(false) {
+  addComponent<PlayerTag>();
+}
 void PlayableEntity::setVelocity(Vector2 newVelocity) {
   ASSERT(hasComponent<TransformComponent>());
   getComponent<TransformComponent>().setVelocity(newVelocity);
@@ -22,8 +25,29 @@ Vector2 PlayableEntity::getVelocity() {
   ASSERT(hasComponent<TransformComponent>());
   return getComponent<TransformComponent>().getVelocity();
 }
+bool PlayableEntity::checkAlive() const {
+  return !isDeath;
+}
+
+bool PlayableEntity::checkOver() const {
+  return gameOver;
+}
 void PlayableEntity::update(float deltaTime) {
-  handleInput(state, deltaTime);
+  if(getComponent<PositionComponent>().getY() > 1.2f * screenHeight) {
+    state = make_shared<DeathState>("SMALL", state->getFacing());
+    getComponent<MarioSoundComponent>().PlayMarioDieEffect();
+  }
+  if(state->getState() == "DEATH") {
+    isDeath = true;
+    getComponent<TextureComponent2>().changeState(state->getCurrentState());
+    getComponent<TransformComponent>().setVelocity({0.0f, -200.0f});
+    getComponent<TransformComponent>().update(deltaTime);
+    if(getComponent<PositionComponent>().getPosition().y < 0.0f) {
+      gameOver = true;
+    }
+    return;
+  }
+  handleInput(deltaTime);
   getComponent<CollisionComponent>().reset();
   for (auto &component : components) {
     component->update(deltaTime);
@@ -38,7 +62,8 @@ void PlayableEntity::update(float deltaTime) {
     if(above->name == "BrokenBlock") {
       if(state->getSize() == "SMALL")
         above->getComponent<BlockTriggerComponent>().setTrigger(new TriggerBrokenBlockWhenHitBySmall(above->getComponent<PositionComponent>().getPosition()));
-    } 
+        getComponent<MarioSoundComponent>().PlayBumpEffect();
+    }
   }
   if(below != nullptr) {
     if(below->hasComponent<EnemyTag>()) {
@@ -46,23 +71,23 @@ void PlayableEntity::update(float deltaTime) {
         below->getComponent<CollisionComponent>().setAbove(make_shared<PlayableEntity>("Player"));
     }
   }
-  // if(getComponent<CollisionComponent>().getBelow())
-  //   cerr << getComponent<CollisionComponent>().getBelow()->name << '\n';
-  // if(getComponent<CollisionComponent>().getLeft())
-  //   cerr << getComponent<CollisionComponent>().getLeft()->name << '\n';
-  // if(getComponent<CollisionComponent>().getRight())
-  //   cerr << getComponent<CollisionComponent>().getRight()->name << '\n';
+  if(left != nullptr) {
+    if(left->hasComponent<EnemyTag>() && state->getSize() == "SMALL") {
+      state = make_shared<DeathState>(state->getSize(), state->getFacing());
+      getComponent<MarioSoundComponent>().PlayMarioDieEffect();
+    }
+  }   
+  if(right != nullptr) {
+    if(right->hasComponent<EnemyTag>() && state->getSize() == "SMALL") {
+      state = make_shared<DeathState>(state->getSize(), state->getFacing());
+      getComponent<MarioSoundComponent>().PlayMarioDieEffect();
+    }
+  } 
 }
 void PlayableEntity::draw() {
-  ASSERT(hasComponent<TextureComponent>());
-  std::string currentState = state->getCurrentState();
-  getComponent<TextureComponent>().drawTexture(currentState);
 }
-PlayableEntity::PlayableEntity() : fallAcc(GRAVITY_DEC), timeFrameCounter(0.0f), state(make_shared<DroppingState>("SMALL", "RIGHT")) {
-  addComponent<PlayerTag>();
-}
-void PlayableEntity::handleInput(Shared<CharacterState> &state,
-                                 float deltaTime) {
+void PlayableEntity::handleInput(float deltaTime) {
+  
   Vector2 velocity = getVelocity();
   bool keyLeft = IsKeyDown(KEY_LEFT);
   bool keyRight = IsKeyDown(KEY_RIGHT);
@@ -185,20 +210,11 @@ void PlayableEntity::handleInput(Shared<CharacterState> &state,
              state->getState() != "DROPPING" &&
              state->getState() != "DUCKLING") {
     if (std::fabs(velocity.x) >= MIN_WALKING_VELO) {
-      timeFrameCounter += deltaTime;
-      if (timeFrameCounter >= 0.1f) {
-        if (state->getState() == "IDLE")
-          state =
-              make_shared<MovingState>(state->getSize(), state->getFacing());
-        else
-          state =
-              make_shared<StandingState>(state->getSize(), state->getFacing());
-        timeFrameCounter = 0.0f;
-      }
+          state = make_shared<MovingState>(state->getSize(), state->getFacing());
     } else {
       state = make_shared<StandingState>(state->getSize(), state->getFacing());
-      timeFrameCounter = 0.0f;
     }
   }
+  getComponent<TextureComponent2>().changeState(state->getCurrentState());
   setVelocity(velocity);
 }

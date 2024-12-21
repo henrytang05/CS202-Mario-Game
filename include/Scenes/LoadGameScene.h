@@ -8,7 +8,7 @@ class LoadGameScene : public Scene {
 public:
   LoadGameScene();
   ~LoadGameScene();
-  Shared<SceneSpace::Scene> updateScene(float deltaTime) override;
+  Unique<SceneSpace::Scene> updateScene(float deltaTime) override;
   void draw() override;
   void loadResources() override;
   void init() override;

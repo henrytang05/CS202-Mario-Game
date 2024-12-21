@@ -14,7 +14,7 @@ class GameScene : public Scene {
 public:
   GameScene();
   ~GameScene();
-  Shared<Scene> updateScene(float deltaTime) override;
+  Unique<Scene> updateScene(float deltaTime) override;
   void update(float deltaTime);
   void draw() override;
   void loadResources() override;
@@ -22,6 +22,7 @@ public:
   void init() override;
 
 private:
+  bool IsMario = isMario;
   double time;
   Texture2D background;
   MapRenderer mapRenderer;

@@ -85,22 +85,25 @@ Shared<Enemy> EntityFactory::createEnemy(Vector2 position, Vector2 size) {
   return enemy;
 }
 
-Shared<AbstractEntity>
-EntityFactory::createBlock(string type, Texture2D texture, Vector2 position) {
-  std::cerr << "Still good get into createBlock" << std::endl;
+Shared<AbstractEntity> EntityFactory::createBlock(string type, Vector2 position) {
+  Texture2D texture = TextureManager::getInstance().getTexture(type);
+  std::cerr<<"Still good get into createBlock"<<std::endl; 
   Shared<AbstractEntity> block = nullptr;
-  if (type == "NormalBlock") {
-    block = std::make_shared<NormalBlock>(texture, position);
-  } else if (type == "BrokenBlock") {
-    block = std::make_shared<BrokenBlock>(texture, position);
-  } else if (type == "HardBlock") {
-    block = std::make_shared<HardBlock>(texture, position);
-  } else if (type == "GroundBlock") {
-    block = std::make_shared<GroundBlock>(texture, position);
-  } else if (type == "QuestionBlock") {
-    block = std::make_shared<QuestionBlock>(texture, position);
+  if(type == "NormalBlock"){
+    block = std::make_shared<NormalBlock>(position);
   }
-  block->addComponent<StillObjectTag>();
+  else if(type == "BrokenBlock"){
+    block = std::make_shared<BrokenBlock>(position);
+  }
+  else if(type == "HardBlock"){
+    block = std::make_shared<HardBlock>(position);
+  }
+  else if(type == "GroundBlock"){
+    block = std::make_shared<GroundBlock>(position);
+  }
+  else if(type == "QuestionBlock"){
+    block = std::make_shared<QuestionBlock>(position);
+  }
   return block;
 }
 
@@ -116,4 +119,10 @@ Shared<AbstractEntity> EntityFactory::createFlag(Vector2 position) {
 
   flag->addComponent<StillObjectTag>();
   return flag;
+}
+
+Shared<AbstractEntity> EntityFactory::createFlagPole(Vector2 position)
+{
+  Shared<AbstractEntity> flagPole = std::make_shared<FlagPole>(position);
+  return flagPole;
 }

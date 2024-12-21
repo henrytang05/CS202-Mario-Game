@@ -105,7 +105,6 @@ template <typename T> inline void AbstractEntity::removeComponent() {
 
 template <typename T, typename... TArgs>
 inline T &AbstractEntity::modifyComponent(TArgs &&...mArgs) {
-
   T &c = getComponent<T>();
   for (auto it = components.begin(); it != components.end(); ++it) {
     if (it->get() == &c) {

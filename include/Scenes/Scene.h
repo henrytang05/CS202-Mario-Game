@@ -14,9 +14,12 @@ public:
   virtual void draw() = 0;
   virtual void loadResources() = 0;
   virtual void init() = 0;
+  virtual void setEnd(bool end);
+  virtual bool checkEnd();
   // virtual bool isFinished() = 0;
 
 protected:
+  bool isEnd = false;
   SoundController SoundCtrl;
 };
 } // namespace SceneSpace

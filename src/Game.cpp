@@ -22,9 +22,9 @@ void Game::init() {
   InitWindow(screenWidth, screenHeight, "Super Mario");
   InitAudioDevice();
   SetTargetFPS(60);
-  currentScene = std::make_shared<SceneSpace::IntroScene>();
-  currentScene->loadResources();
-  currentScene->init();
+  pushScene(std::make_unique<SceneSpace::IntroScene>());
+  QuitButton = new GUI::ImageButton(30, 200, "./assets/QuitButton.png",
+                                       "./assets/Hover_QuitButton.png");
 }
 
 void Game::run() {
@@ -35,20 +35,50 @@ void Game::run() {
   }
 }
 void Game::update(float deltaTime) {
-  Shared<SceneSpace::Scene> nextScene = currentScene->updateScene(deltaTime);
-  if (nextScene) {
-    currentScene = nextScene;
-    currentScene->loadResources();
-    currentScene->init();
+  pushScene(scenes.top()->updateScene(deltaTime));
+  Vector2 mousePos = GetMousePosition();
+  bool isLeftClick = IsMouseButtonPressed(MOUSE_BUTTON_LEFT);
+  QuitButton->update(mousePos, isLeftClick);
+  if (QuitButton->isPressed())
+  {
+    popScene();
+    scenes.top()->setEnd(false);
   }
 }
 void Game::clean() {
+  delete QuitButton;
+  clearScene();
   CloseAudioDevice();
   CloseWindow();
 }
 void Game::draw() {
   BeginDrawing();
   ClearBackground(RAYWHITE);
-  currentScene->draw();
+  scenes.top()->draw();
+  QuitButton->draw();
   EndDrawing();
+}
+
+void Game::pushScene(Shared<SceneSpace::Scene> scene)
+{
+  if(scene){
+    scene->loadResources();
+    scene->init();
+    scenes.push(scene);
+  }
+}
+
+void Game::popScene()
+{
+  if(!scenes.empty()){
+    scenes.pop();
+  }
+  
+}
+
+void Game::clearScene()
+{
+  while(!scenes.empty()){
+    scenes.pop();
+  }
 }

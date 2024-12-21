@@ -39,14 +39,14 @@ void Enemy::handleCollision() {
   if (!below) {
     if (getComponent<PositionComponent>().getY() > screenHeight) {
       destroy();
-      getComponent<Animation>().changeState("Goomba-Die");
+      getComponent<TextureComponent>().changeState("Die");
     }
   }
   trans.setVelocity(v);
   if (above != nullptr) {
     if (above->hasComponent<PlayerTag>()) {
       destroy();
-      getComponent<Animation>().changeState("Goomba-Die");
+      getComponent<TextureComponent>().changeState("Die");
     }
   }
   getComponent<CollisionComponent>().reset();

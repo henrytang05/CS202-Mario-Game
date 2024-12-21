@@ -65,10 +65,11 @@ void GameScene::draw() {
   BeginMode2D(camera);
   DrawTexture(background, 0, 0, WHITE);
   for (auto &entity : entities) {
-    if (!entity->isActive())
-      continue;
+    // if (!entity->isActive())
+    //   continue;
 
-    if (entity->hasAllComponents<Animation, PositionComponent>()) {
+    if (entity->hasAllComponents<TextureComponent, PositionComponent,
+                                 EnemyTag>()) {
       systems[1]->update(entity, dt);
     }
 

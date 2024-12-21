@@ -51,18 +51,24 @@ Shared<Enemy> EntityFactory::createEnemy(Vector2 position, Vector2 size) {
   enemy->addComponent<BoundingBoxComponent>(size);
   enemy->addComponent<EnemyTag>();
   enemy->addComponent<Gravity>();
-  enemy->addComponent<Animation>(0.1f, true, "Left-Moving");
+  enemy->addComponent<TextureComponent>();
 
-  enemy->getComponent<Animation>().addAnimation(
-      "Left-Moving", {LoadTexture("assets/Goomba/Goomba-Left-Idle.png"),
-                      LoadTexture("assets/Goomba/Goomba-Left-Moving.png")});
+  enemy->getComponent<TextureComponent>().addTexture(
+      "Left-Moving",
+      {LoadTexture("assets/Goomba/Goomba-Left-Idle.png"),
+       LoadTexture("assets/Goomba/Goomba-Left-Moving.png")},
+      0.1f, true);
 
-  enemy->getComponent<Animation>().addAnimation(
-      "Right-Moving", {LoadTexture("assets/Goomba/Goomba-Right-Idle.png"),
-                       LoadTexture("assets/Goomba/Goomba-Right-Moving.png")});
+  enemy->getComponent<TextureComponent>().addTexture(
+      "Right-Moving",
+      {LoadTexture("assets/Goomba/Goomba-Right-Idle.png"),
+       LoadTexture("assets/Goomba/Goomba-Right-Moving.png")},
+      0.1f, true);
 
-  enemy->getComponent<Animation>().addAnimation(
-      "Die", {LoadTexture("assets/Goomba/Goomba-Die.png")});
+  enemy->getComponent<TextureComponent>().addTexture(
+      "Die", {LoadTexture("assets/Goomba/Goomba-Die.png")}, .3f, false);
+
+  enemy->getComponent<TextureComponent>().changeState("Left-Moving");
 
   // enemy->getComponent<TextureComponent2>().addTexture(
   //     "Goomba-Die", "./assets/Goomba/Goomba-Die.png");

@@ -5,6 +5,8 @@
 #include "Components/Transform.h"
 #include "Components/BlockTrigger.h"
 
+Unique <IFactory> _entityFactory;
+
 NormalBlock::NormalBlock(Vector2 position): AbstractEntity("NormalBlock") {
     Vector2 size({16, 16});
     addComponent<PositionComponent>(position);    
@@ -86,11 +88,16 @@ QuestionBlock::QuestionBlock(Vector2 position): AbstractEntity("QuestionBlock") 
     addComponent<TransformComponent>((Vector2){0.0f, 0.0f});
     addComponent<TextureComponent>();
     getComponent<TextureComponent>().addTexture("Normal", TextureManager::getInstance().getTexture("QuestionBlock"));
+    
+    //items.push_back(_entityFactory->createCoin({position.x, position.y - 16.0f}));
+    
 }
 
 void QuestionBlock::draw() {
     ASSERT(hasComponent<TextureComponent>());
     getComponent<TextureComponent>().drawTexture("Normal");
+    // for(auto &entity : items)
+    //     entity->draw();
 }
 
 void QuestionBlock::update(float deltaTime) {

@@ -6,6 +6,7 @@ using json = nlohmann::json;
 #include "Components/BoundingBox.h"
 #include "Components/Texture.h"
 #include "TextureManager.h"
+#include "Entity/EntityFactory.h"
 // Factory class for creating entities
 
 // Derived class for a normal block

@@ -4,7 +4,7 @@
 #include "Entity/PlayableEntity.h"
 #include "Entity/States/CharacterStates.h"
 #include "Components/SoundComponent.h"
-
+#include "TextureManager.h"
 PlayableEntity::PlayableEntity(std::string name) : AbstractEntity(name), fallAcc(GRAVITY_DEC), timeFrameCounter(0.0f), state(make_shared<DroppingState>("SMALL", "RIGHT")) {}
 
 void PlayableEntity::setVelocity(Vector2 newVelocity) {
@@ -31,6 +31,14 @@ void PlayableEntity::update(float deltaTime) {
     if(above->name == "BrokenBlock") {
       if(state->getSize() == "SMALL")
         above->getComponent<BlockTriggerComponent>().setTrigger(new TriggerBrokenBlockWhenHitBySmall(above->getComponent<PositionComponent>().getPosition()));
+    }
+    if(above->name == "QuestionBlock") {
+      //Vector2 pos = {above->getComponent<PositionComponent>().getPosition().x, above->getComponent<PositionComponent>().getPosition().y - 16.0f};
+      // above -> modifyComponent<PositionComponent>(pos);
+      above -> modifyComponent<TextureComponent>();
+      above -> getComponent<TextureComponent>().addTexture("Normal", ::TextureManager::getInstance().getTexture("HardBlock"));
+      cerr<<"QuestionBlock\n";
+
     }
   }
   // if(getComponent<CollisionComponent>().getBelow())

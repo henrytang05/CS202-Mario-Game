@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="164" height="50" tilewidth="16" tileheight="16" infinite="0" nextlayerid="28" nextobjectid="683">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="164" height="50" tilewidth="16" tileheight="16" infinite="0" nextlayerid="29" nextobjectid="686">
  <editorsettings>
   <export target="Level1new.json" format="json"/>
  </editorsettings>
@@ -439,13 +439,13 @@
   <object id="66" gid="74" x="2487.15" y="687.818" width="16" height="16"/>
  </objectgroup>
  <objectgroup id="23" name="Piranha">
-  <object id="635" gid="77" x="1624.38" y="720.125" width="16" height="32"/>
-  <object id="636" gid="77" x="423.818" y="704" width="16" height="32"/>
+  <object id="684" gid="77" x="408.08" y="736.023" width="16" height="24"/>
+  <object id="685" gid="77" x="1608.63" y="751.75" width="16" height="24"/>
  </objectgroup>
  <objectgroup id="14" name="Castle" visible="0">
   <object id="64" x="2544" y="688" width="80" height="80"/>
  </objectgroup>
- <objectgroup draworder="index" id="25" name="Pipe">
+ <objectgroup draworder="index" id="25" name="Pipe" visible="0">
   <object id="624" gid="78" x="400" y="704" width="32" height="32">
    <properties>
     <property name="hasPiranha" type="bool" value="true"/>

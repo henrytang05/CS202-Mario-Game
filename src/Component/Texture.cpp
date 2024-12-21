@@ -22,8 +22,12 @@ void TextureComponent::drawTexture(std::string state) {
 }
 
 void TextureComponent::changeState(std::string state) {
-  this->state = state;
-  textures[state].currentFrame = 0;
+  if (this->state != state) {
+    lastState = this->state;
+    this->state = state;
+    textures[state].currentFrame = 0;
+    textures[state].elapsedTime = 0;
+  }
 }
 
 void TextureComponent::addTexture(std::string state, std::string filename) {

@@ -29,12 +29,21 @@ void TextureComponent::changeState(std::string state) {
 void TextureComponent::addTexture(std::string state, std::string filename) {
   Texture2D texture = LoadTexture(filename.c_str());
   assert(textures.find(state) == textures.end());
+  if (textures.size() == 0) {
+    this->state = state;
+    lastState = state;
+  }
   Animation a;
   a.frames.push_back(texture);
   textures[state] = a;
 }
 void TextureComponent::addTexture(std::string state, Texture2D texture) {
   assert(textures.find(state) == textures.end());
+
+  if (textures.size() == 0) {
+    this->state = state;
+    lastState = state;
+  }
   Animation a;
   a.frames.push_back(texture);
   textures[state] = a;
@@ -44,6 +53,11 @@ void TextureComponent::addTexture(std::string state,
                                   std::vector<Texture2D> frame,
                                   float frameDelay, bool isLooping) {
   assert(this->textures.find(state) == this->textures.end());
+
+  if (textures.size() == 0) {
+    this->state = state;
+    lastState = state;
+  }
   Animation a(frameDelay, isLooping);
   a.frames = frame;
   this->textures[state] = a;
@@ -51,5 +65,10 @@ void TextureComponent::addTexture(std::string state,
 
 void TextureComponent::addAnimation(std::string state, Animation animation) {
   assert(this->textures.find(state) == this->textures.end());
+
+  if (textures.size() == 0) {
+    this->state = state;
+    lastState = state;
+  }
   this->textures[state] = animation;
 }

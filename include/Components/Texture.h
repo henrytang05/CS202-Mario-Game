@@ -4,6 +4,8 @@
 #include "raylib.h"
 #include <unordered_map>
 
+#define DEFAULT_TEXTURE "Default"
+
 struct Animation {
   Animation(float frameDelay = 0.1f, bool isLooping = true);
   float frameDelay;

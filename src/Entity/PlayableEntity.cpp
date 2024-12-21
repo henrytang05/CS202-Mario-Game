@@ -39,7 +39,7 @@ void PlayableEntity::update(float deltaTime) {
   }
   if(state->getState() == "DEATH") {
     isDeath = true;
-    getComponent<TextureComponent2>().changeState(state->getCurrentState());
+    getComponent<TextureComponent>().changeState(state->getCurrentState());
     getComponent<TransformComponent>().setVelocity({0.0f, -200.0f});
     getComponent<TransformComponent>().update(deltaTime);
     if(getComponent<PositionComponent>().getPosition().y < 0.0f) {
@@ -215,6 +215,6 @@ void PlayableEntity::handleInput(float deltaTime) {
       state = make_shared<StandingState>(state->getSize(), state->getFacing());
     }
   }
-  getComponent<TextureComponent2>().changeState(state->getCurrentState());
+  getComponent<TextureComponent>().changeState(state->getCurrentState());
   setVelocity(velocity);
 }

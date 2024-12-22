@@ -8,7 +8,7 @@ class IntroScene : public Scene {
 public:
   IntroScene();
   ~IntroScene();
-  Shared<Scene> updateScene(float deltaTime) override;
+  Unique<Scene> updateScene(float deltaTime) override;
   void draw() override;
   void loadResources() override;
   void init() override;

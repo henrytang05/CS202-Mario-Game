@@ -10,10 +10,19 @@ class AbstractEntity : public IUpdatable, public IDrawable {
 public:
   AbstractEntity() : active(true), name("Unnamed") { id = nextID(); }
   AbstractEntity(std::string name) : active(true), name(name) { id = nextID(); }
-  virtual ~AbstractEntity() = default;
-  template <typename T> bool hasComponent() const;
-  template <typename T, typename... TArgs> T &addComponent(TArgs &&...mArgs);
-  template <typename T> T &getComponent() const;
+  virtual ~AbstractEntity() {
+#ifdef _DEBUG
+    Log(name + " created: " + std::to_string(id));
+#endif
+  }
+  template <typename T> inline bool hasComponent() const;
+  template <typename... TArgs> inline bool hasAllComponents() const;
+  template <typename T, typename... TArgs>
+  inline T &addComponent(TArgs &&...mArgs);
+  template <typename T> inline T &getComponent() const;
+  template <typename T> inline void removeComponent();
+  template <typename T, typename... TArgs>
+  inline T &modifyComponent(TArgs &&...mArgs);
 
   uint32_t getId() const { return id; }
   bool operator==(const AbstractEntity &other) const { return id == other.id; }
@@ -49,6 +58,11 @@ template <typename T> inline bool AbstractEntity::hasComponent() const {
   return this->componentBitset.test(typeID);
 }
 
+template <typename... TArgs>
+inline bool AbstractEntity::hasAllComponents() const {
+  return (hasComponent<TArgs>() && ...);
+}
+
 template <typename T, typename... TArgs>
 inline T &AbstractEntity::addComponent(TArgs &&...mArgs) {
   ComponentTypeID typeID = getComponentTypeID<T>();
@@ -77,4 +91,31 @@ template <typename T> inline T &AbstractEntity::getComponent() const {
   return *static_cast<T *>(ptr);
 }
 
-#endif // ABSTRACTENTITY_H
+template <typename T> inline void AbstractEntity::removeComponent() {
+  T &c = getComponent<T>();
+  for (auto it = components.begin(); it != components.end(); ++it) {
+    if (it->get() == &c) {
+      components.erase(it);
+      break;
+    }
+  }
+  componentArray[getComponentTypeID<T>()] = nullptr;
+  componentBitset[getComponentTypeID<T>()] = false;
+}
+
+template <typename T, typename... TArgs>
+inline T &AbstractEntity::modifyComponent(TArgs &&...mArgs) {
+  T &c = getComponent<T>();
+  for (auto it = components.begin(); it != components.end(); ++it) {
+    if (it->get() == &c) {
+      std::unique_ptr<T> new_component =
+          std::make_unique<T>(std::forward<TArgs>(mArgs)...);
+      *it = std::move(new_component);
+      componentArray[getComponentTypeID<T>()] = it->get();
+      break;
+    }
+  }
+  return c;
+}
+
+#endif // ABSTRACTENTITY_

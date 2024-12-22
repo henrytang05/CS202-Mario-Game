@@ -18,7 +18,7 @@ SceneSpace::SettingScene::~SettingScene()
     delete luigi;
 }
 
-Shared<SceneSpace::Scene> SceneSpace::SettingScene::updateScene(float deltaTime)
+Unique<SceneSpace::Scene> SceneSpace::SettingScene::updateScene(float deltaTime)
 {
     SoundCtrl.Update();
     Vector2 mousePos = GetMousePosition();
@@ -39,7 +39,7 @@ Shared<SceneSpace::Scene> SceneSpace::SettingScene::updateScene(float deltaTime)
     if (QuitButton->isPressed())
     {
         SoundCtrl.PlayTingSound();
-        return std::make_shared<SceneSpace::IntroScene>();
+        return std::make_unique<SceneSpace::IntroScene>();
     }
     MUSIC_VOLUME = musicSetting->getValue();
     SOUND_VOLUME = soundSetting->getValue();

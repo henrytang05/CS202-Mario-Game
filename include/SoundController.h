@@ -43,4 +43,5 @@ public:
   void PlayTingSound();
   void Update(int time);
   void Update();
+  void Pause();
 };

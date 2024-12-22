@@ -21,7 +21,7 @@ IntroScene::~IntroScene() {
   delete GuideButton;
 }
 
-Shared<Scene> IntroScene::updateScene(float deltaTime) {
+Unique<Scene> IntroScene::updateScene(float deltaTime) {
   SoundCtrl.Update();
   Vector2 mousePos = GetMousePosition();
   bool isLeftClick = IsMouseButtonPressed(MOUSE_BUTTON_LEFT);

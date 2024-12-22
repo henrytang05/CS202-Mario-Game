@@ -8,7 +8,7 @@ class SettingScene : public Scene {
 public:
   SettingScene();
   ~SettingScene();
-  Shared<SceneSpace::Scene> updateScene(float deltaTime) override;
+  Unique<SceneSpace::Scene> updateScene(float deltaTime) override;
   void draw() override;
   void loadResources() override;
   void init() override;

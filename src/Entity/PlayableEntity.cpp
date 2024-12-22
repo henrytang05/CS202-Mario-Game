@@ -7,13 +7,13 @@
 #include "Entity/States/CharacterStates.h"
 
 PlayableEntity::PlayableEntity(std::string name)
-    : AbstractEntity(name), fallAcc(GRAVITY_DEC), isDeath(false),
+    : AbstractEntity(name), fallAcc(GRAVITY_DEC), isDeath(false), gameOver(false),
       state(make_shared<DroppingState>("SMALL", "RIGHT")) {
 
   addComponent<PlayerTag>();
 }
 
-PlayableEntity::PlayableEntity() : fallAcc(GRAVITY_DEC), state(make_shared<DroppingState>("SMALL", "RIGHT")), isDeath(false) {
+PlayableEntity::PlayableEntity() : fallAcc(GRAVITY_DEC), state(make_shared<DroppingState>("SMALL", "RIGHT")), isDeath(false), gameOver(false) {
   addComponent<PlayerTag>();
 }
 void PlayableEntity::setVelocity(Vector2 newVelocity) {

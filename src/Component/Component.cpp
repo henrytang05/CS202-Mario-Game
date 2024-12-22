@@ -12,7 +12,6 @@ Component::~Component() {
   entity = nullptr;
 }
 
-void Component::init() {}
-void Component::update(float deltaTime) {}
-void Component::draw() {}
+std::string Component::getName() const { return name; }
+
 void Component::setEntity(AbstractEntity *_entity) { this->entity = _entity; }

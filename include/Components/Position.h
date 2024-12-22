@@ -6,21 +6,49 @@
 
 Vector2 operator+(const Vector2 &v1, const Vector2 &v2);
 
-class PositionComponent : public Component {
+class PositionComponent : public Component, public Vector2 {
 public:
-  PositionComponent();
+  PositionComponent(Vector2 pos)
+      : Component("PositionComponent"), Vector2(pos) {}
+  PositionComponent(float x, float y)
+      : Component("PositionComponent"), Vector2(x, y) {}
+  PositionComponent() : Component("PositionComponent"), Vector2({0, 0}) {}
   ~PositionComponent() = default;
-  PositionComponent(Vector2 pos);
-  void setPosition(Vector2 pos);
-  Vector2 getPosition();
-  float getX();
-  float getY();
-  void setX(float x);
-  void setY(float y);
-  void init() override;
 
-private:
-  Vector2 position;
+  void setPosition(Vector2 pos) {
+    x = pos.x;
+    y = pos.y;
+  }
+  Vector2 getPosition() { return {x, y}; }
+};
+
+class TransformComponent : public Component, public Vector2 {
+public:
+  TransformComponent(Vector2 pos)
+      : Component("TransformComponent"), Vector2(pos) {}
+  TransformComponent(float x, float y)
+      : Component("TransformComponent"), Vector2(x, y) {}
+  TransformComponent() : Component("TransformComponent"), Vector2({0, 0}) {}
+  ~TransformComponent() = default;
+
+  void setVelocity(Vector2 pos) {
+    x = pos.x;
+    y = pos.y;
+  }
+  Vector2 getVelocity() { return {x, y}; }
+};
+
+class BoundingBoxComponent : public Component, public Vector2 {
+public:
+  BoundingBoxComponent(Vector2 size)
+      : Component("BoundingBoxComponent"), Vector2(size) {}
+  BoundingBoxComponent(float x, float y)
+      : Component("BoundingBoxComponent"), Vector2(x, y) {}
+  BoundingBoxComponent() : Component("BoundingBoxComponent"), Vector2({0, 0}) {}
+  ~BoundingBoxComponent() = default;
+
+  void setSize(Vector2 size);
+  Vector2 getSize();
 };
 
 #endif // POSITION_COMPONENT_H

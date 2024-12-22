@@ -3,6 +3,7 @@
 #include "AbstractEntity.h"
 #include "Entity/EntityFactory.h"
 #include "Entity/PlayableEntity.h"
+#include "EntityManager.h"
 #include "Map.h"
 #include "Scenes/Scene.h"
 #include "System/System.h"
@@ -27,12 +28,14 @@ private:
   Texture2D background;
   MapRenderer mapRenderer;
   Camera2D camera;
-  Shared<PlayableEntity> player;
-  std::vector<Shared<AbstractEntity>> entities;
-  Unique<IFactory> entityFactory;
+  // Shared<PlayableEntity> player;
+  // std::vector<Shared<AbstractEntity>> entities;
   bool gameOver;
 
-  // TODO: remove this later
+  // NOTE: change
+  AbstractEntity &player;
+  EntityManager &EM;
+
 private:
   std::vector<Unique<System>> systems;
 };

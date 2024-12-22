@@ -21,7 +21,7 @@
 class TextureComponent;
 namespace SceneSpace {
 
-GameScene::GameScene() : Scene(), camera({0, 0}) {
+GameScene::GameScene() : Scene(), camera({0, 0}), EM(EntityManager::get()) {
   // TODO: remove this later
   systems.push_back(std::make_unique<TransformSystem>());
   systems.push_back(std::make_unique<AnimationSystem>());
@@ -29,14 +29,18 @@ GameScene::GameScene() : Scene(), camera({0, 0}) {
 
 void GameScene::init() {
   time = 360.f;
-  entityFactory = std::make_unique<EntityFactory>();
-  if(isMario) player = entityFactory->createMario();
-  else player = entityFactory->createLuigi();
-  entities.push_back(player);
+
+  EntityFactory entityFactory;
+
+  if (isMario)
+    player = entityFactory.createMario();
+  else
+    player = entityFactory.createLuigi();
+
   gameOver = false;
   camera.offset = {screenWidth / 2.0f, screenHeight / 2.0f};
   camera.rotation = 0.0f;
-  camera.target.x = player->getComponent<PositionComponent>().getPosition().x;
+  camera.target.x = EM.getComponent<PositionComponent>(&player).x;
   camera.target.y = 784.0f - 186.0f;
   camera.zoom = 2.0f;
   SoundCtrl.PlayGroundTheme();
@@ -54,11 +58,11 @@ GameScene::~GameScene() {
 #endif
 }
 void GameScene::loadResources() {
-  //Loading BackGround
+  // Loading BackGround
   Image bImage = LoadImage("assets/Level2/BackGround.png");
   background = LoadTextureFromImage(bImage);
   UnloadImage(bImage);
-  //Create Map
+  // Create Map
   entities = mapRenderer.createMap("assets/Level2/Level2.json");
 }
 void GameScene::draw() {
@@ -79,12 +83,12 @@ void GameScene::draw() {
 }
 Unique<Scene> GameScene::updateScene(float deltaTime) {
   this->update(deltaTime);
-  if(player->checkAlive() == false) {
+  if (player->checkAlive() == false) {
     SoundCtrl.Pause();
   }
-  if(player->checkOver()) {
+  if (player->checkOver()) {
     return make_unique<IntroScene>();
-  } 
+  }
   return nullptr;
 }
 void GameScene::update(float deltaTime) {
@@ -93,7 +97,7 @@ void GameScene::update(float deltaTime) {
     if (!entity->isActive())
       continue;
     entity->update(deltaTime);
-    if(entity->hasAllComponents<TransformComponent, PositionComponent>())
+    if (entity->hasAllComponents<TransformComponent, PositionComponent>())
       systems[0]->update(entity, deltaTime);
   }
 

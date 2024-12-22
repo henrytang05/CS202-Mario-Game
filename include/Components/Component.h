@@ -1,43 +1,19 @@
 #ifndef COMPONENT_H
 #define COMPONENT_H
-
-class AbstractEntity;
-class Component;
-using ComponentTypeID = std::size_t;
-
-constexpr std::size_t maxComponents = 64;
-
-using ComponentBitSet = std::bitset<maxComponents>;
-using ComponentArray = std::array<Component *, maxComponents>;
+#include "EntityManager.h"
 
 class Component {
-
 public:
   Component();
   Component(std::string name);
   virtual ~Component();
-  virtual void update(float deltaTime);
-  virtual void draw();
-  void setEntity(AbstractEntity *e);
 
-  virtual void init();
+  void setEntity(AbstractEntity *e);
+  std::string getName() const;
 
 private:
-protected:
-  AbstractEntity *entity;
-
-public:
+  EntityManager &manager = EntityManager::get();
   const std::string name;
 };
-
-inline ComponentTypeID getComponentTypeID() {
-  static ComponentTypeID lastID = 0;
-  return lastID++;
-}
-
-template <typename T> inline ComponentTypeID getComponentTypeID() noexcept {
-  static ComponentTypeID typeID = getComponentTypeID();
-  return typeID;
-}
 
 #endif // COMPONENT_H

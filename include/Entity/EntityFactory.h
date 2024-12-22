@@ -2,6 +2,7 @@
 #define ENTITY_FACTORY_H
 
 #include "AbstractEntity.h"
+#include "Entity/Enemy.h"
 #include "Entity/PlayableEntity.h"
 #include "Entity/Mario.h"
 #include "Entity/Luigi.h"
@@ -13,6 +14,7 @@ public:
   virtual ~IFactory() = default;
   virtual Shared<Mario> createMario() = 0;
   virtual Shared<Luigi> createLuigi() = 0;
+  virtual Shared<Enemy> createEnemy(Vector2 position, Vector2 size) = 0;
   virtual Shared<AbstractEntity> createGoomba() = 0;
   virtual Shared<AbstractEntity> createBlock(string type, Vector2 position) = 0;
   virtual Shared<AbstractEntity> createPipe(Vector2 position, Vector2 size) = 0;
@@ -25,6 +27,8 @@ class EntityFactory : public IFactory {
 public:
   Shared<Mario> createMario() override;
   Shared<Luigi> createLuigi() override;
+  Shared<Enemy> createEnemy(Vector2 position, Vector2 size) override;
+
   Shared<AbstractEntity> createGoomba() override;
   Shared<AbstractEntity> createBlock(string type, Vector2 position) override;
   Shared<AbstractEntity> createPipe(Vector2 position, Vector2 size) override;

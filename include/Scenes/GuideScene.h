@@ -1,5 +1,5 @@
-#ifndef GUIDESCENE_HH
-#define GUIDESCENE_HH
+#ifndef GUIDESCENE_H
+#define GUIDESCENE_H
 #include "GUI.h"
 #include "Scenes/Scene.h"
 #include "AbstractEntity.h"
@@ -11,7 +11,7 @@ class GuideScene : public Scene {
 public:
   GuideScene();
   ~GuideScene();
-  Shared<SceneSpace::Scene> updateScene(float deltaTime) override;
+  Unique<SceneSpace::Scene> updateScene(float deltaTime) override;
   void draw() override;
   void loadResources() override;
   void init() override;

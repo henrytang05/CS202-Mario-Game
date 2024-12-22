@@ -1,6 +1,4 @@
 #pragma once
-#include "pch.h"
-#include "GameObject.h"
 #include "Components/BoundingBox.h"
 #include "Components/Position.h"
 #include "Components/Texture.h"

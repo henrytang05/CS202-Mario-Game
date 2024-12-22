@@ -1,31 +1,59 @@
-// #include "Entity/Enemy.h"
-// #include "Components/BoundingBox.h"
-// #include "Components/Components_include.h"
-// #include "Components/Position.h"
-// #include "Components/Texture.h"
-// #include "Components/Transform.h"
-// #include "TextureManager.h"
+#include "Entity/Enemy.h"
 
-// Enemy::Enemy(std::string name) : AbstractEntity(name) {}
+#include "AbstractEntity.h"
+#include "Components/Collision.h"
+#include "Components/EnemyComponents.h"
+#include "Components/Gravity.h"
+#include "Components/Position.h"
+#include "Components/Texture.h"
+#include "Components/Transform.h"
+#include "globals.h"
+#include "raylib.h"
 
+Enemy::Enemy(std::string name) : AbstractEntity(name) {
+  // Initialize enemy
+}
+void Enemy::update(float deltatime) {
+  for (auto &component : components) {
+    component->update(deltatime);
+  }
 
-// Goomba::Goomba(std::string name) : Enemy(name) {
-//   Vector2 position = {0, 0}; // Set initial position
-//   Vector2 size = {16, 16};
-//   addComponent<PositionComponent>(position);
-//   addComponent<BoundingBoxComponent>(size);
-//   addComponent<TextureComponent>();
-//   getComponent<TextureComponent>().addTexture("Normal", TextureManager::getInstance().getTexture("Goomba"));
-// }
+  handleCollision();
+}
 
-// void Goomba::update(float deltaTime) {
-//   Enemy::update(deltaTime);
-// }
+void Enemy::handleCollision() {
+  CollisionComponent &collision = getComponent<CollisionComponent>();
+  auto above = collision.getAbove();
+  auto below = collision.getBelow();
+  auto left = collision.getLeft();
+  auto right = collision.getRight();
 
-// void Goomba::draw() {
-//   Enemy::draw();
-// }
+  auto &trans = getComponent<TransformComponent>();
 
-// void Goomba::handleCollision() {
-//   // Implement specific collision handling for Goomba
-// }
+  Vector2 v = trans.getVelocity();
+  if (left && !left->hasComponent<EnemyTag>())
+    v.x = ENEMY_SPEED;
+  else if (right && !right->hasComponent<EnemyTag>())
+    v.x = -ENEMY_SPEED;
+
+  if (!below) {
+    if (getComponent<PositionComponent>().getY() > screenHeight) {
+      destroy();
+      getComponent<TextureComponent>().changeState("Die");
+    }
+  }
+  trans.setVelocity(v);
+  if (above != nullptr) {
+    if (above->hasComponent<PlayerTag>()) {
+      destroy();
+      getComponent<TextureComponent>().changeState("Die");
+    }
+  }
+  getComponent<CollisionComponent>().reset();
+}
+
+void Enemy::draw() {
+  // for (auto &component : components) {
+  //   component->draw();
+  // }
+}

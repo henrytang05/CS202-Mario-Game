@@ -1,21 +1,25 @@
-#ifndef LOADGAMESCENE_H
-#define LOADGAMESCENE_H
+#ifndef SETTINGSCENE_H
+#define SETTINGSCENE_H
 #include "GUI.h"
 #include "Scenes/Scene.h"
 
 namespace SceneSpace {
-class LoadGameScene : public Scene {
+class SettingScene : public Scene {
 public:
-  LoadGameScene();
-  ~LoadGameScene();
+  SettingScene();
+  ~SettingScene();
   Unique<SceneSpace::Scene> updateScene(float deltaTime) override;
   void draw() override;
   void loadResources() override;
   void init() override;
-
+  void update(float deltaTime);
 private:
   Texture background;
   GUI::ImageButton* QuitButton;
+  GUI::Slider* musicSetting;
+  GUI::Slider* soundSetting;
+  GUI::TickBox* mario;
+  GUI::TickBox* luigi;
 };
 } // namespace SceneSpace
-#endif // LOADGAMESCENE_H
+#endif // SETTINGSCENE_H

@@ -15,10 +15,10 @@ std::vector<Shared<AbstractEntity>> MapRenderer::createMap(const std::string& ma
         return objects;
     }
 
-    if (mapData.is_null()) {
-        std::cerr << "Error: JSON data is null" << std::endl;
-        return objects;
-    }
+  if (mapData.is_null()) {
+    std::cerr << "Error: JSON data is null" << std::endl;
+    return objects;
+  }
 
     mapWidth = mapData["width"];
     mapHeight = mapData["height"];
@@ -142,7 +142,7 @@ void MapRenderer::loadObjectGroup(const json& layer) {
 }
 
 void MapRenderer::render() {
-    for (const auto& obj : objects) {
-        obj->draw();
-    }
+  for (const auto &obj : objects) {
+    obj->draw();
+  }
 }

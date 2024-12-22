@@ -1,9 +1,10 @@
 #ifndef GAME_H
 #define GAME_H
+#include "Interface.h"
 #include "Scenes/Scene.h"
 class IUpdatable;
 class IDrawable;
-using namespace SceneSpace;
+
 class Game : public IUpdatable, public IDrawable {
 public:
   Game();

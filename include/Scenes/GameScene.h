@@ -5,13 +5,16 @@
 #include "Entity/PlayableEntity.h"
 #include "Map.h"
 #include "Scenes/Scene.h"
+#include "System/System.h"
+
+#include "Entity/EnemySystem.h"
 
 namespace SceneSpace {
 class GameScene : public Scene {
 public:
   GameScene();
   ~GameScene();
-  Shared<Scene> updateScene(float deltaTime) override;
+  Unique<Scene> updateScene(float deltaTime) override;
   void update(float deltaTime);
   void draw() override;
   void loadResources() override;
@@ -19,6 +22,7 @@ public:
   void init() override;
 
 private:
+  bool IsMario = isMario;
   double time;
   Texture2D background;
   MapRenderer mapRenderer;
@@ -27,6 +31,10 @@ private:
   std::vector<Shared<AbstractEntity>> entities;
   Unique<IFactory> entityFactory;
   bool gameOver;
+
+  // TODO: remove this later
+private:
+  std::vector<Unique<System>> systems;
 };
 } // namespace SceneSpace
 

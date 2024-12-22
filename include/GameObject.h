@@ -6,6 +6,7 @@ using json = nlohmann::json;
 #include "Components/BoundingBox.h"
 #include "Components/Texture.h"
 #include "TextureManager.h"
+#include "Entity/EntityFactory.h"
 // Factory class for creating entities
 
 // Derived class for a normal block
@@ -102,4 +103,16 @@ public:
     ~FlagPole() = default;
     void draw() override;
     void update(float deltaTime) override;
+};
+
+class Piranha : public AbstractEntity {
+public:
+  Piranha(Vector2 position);
+  ~Piranha() = default;
+  void update(float deltaTime) override;
+  void draw() override;
+
+private:
+  Vector2 position_fixed;
+  float elapsedTime=0;
 };

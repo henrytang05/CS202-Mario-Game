@@ -105,11 +105,13 @@ template <typename T> inline void AbstractEntity::removeComponent() {
 
 template <typename T, typename... TArgs>
 inline T &AbstractEntity::modifyComponent(TArgs &&...mArgs) {
+
   T &c = getComponent<T>();
   for (auto it = components.begin(); it != components.end(); ++it) {
     if (it->get() == &c) {
       std::unique_ptr<T> new_component =
           std::make_unique<T>(std::forward<TArgs>(mArgs)...);
+      new_component->setEntity(this);
       *it = std::move(new_component);
       componentArray[getComponentTypeID<T>()] = it->get();
       break;
@@ -119,3 +121,4 @@ inline T &AbstractEntity::modifyComponent(TArgs &&...mArgs) {
 }
 
 #endif // ABSTRACTENTITY_
+

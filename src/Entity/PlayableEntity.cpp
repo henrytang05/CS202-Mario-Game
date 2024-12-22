@@ -5,15 +5,15 @@
 #include "Components/SoundComponent.h"
 #include "Components/Tags.h"
 #include "Entity/States/CharacterStates.h"
+#include "TextureManager.h"
 
 PlayableEntity::PlayableEntity(std::string name)
-    : AbstractEntity(name), fallAcc(GRAVITY_DEC), isDeath(false),
+    : AbstractEntity(name), fallAcc(GRAVITY_DEC), isDeath(false), gameOver(false),
       state(make_shared<DroppingState>("SMALL", "RIGHT")) {
-
   addComponent<PlayerTag>();
 }
 
-PlayableEntity::PlayableEntity() : fallAcc(GRAVITY_DEC), state(make_shared<DroppingState>("SMALL", "RIGHT")), isDeath(false) {
+PlayableEntity::PlayableEntity() : fallAcc(GRAVITY_DEC), state(make_shared<DroppingState>("SMALL", "RIGHT")), isDeath(false), gameOver(false) {
   addComponent<PlayerTag>();
 }
 void PlayableEntity::setVelocity(Vector2 newVelocity) {
@@ -60,29 +60,26 @@ void PlayableEntity::update(float deltaTime) {
   Shared<AbstractEntity> right = getComponent<CollisionComponent>().getRight();
   if(above) {
     if(above->name == "BrokenBlock") {
-      if(state->getSize() == "SMALL")
+      if(state->getSize() == "SMALL") {
         above->getComponent<BlockTriggerComponent>().setTrigger(new TriggerBrokenBlockWhenHitBySmall(above->getComponent<PositionComponent>().getPosition()));
         getComponent<MarioSoundComponent>().PlayBumpEffect();
+      }
+    }
+    if(above->name == "QuestionBlock") {
+      //Vector2 pos = {above->getComponent<PositionComponent>().getPosition().x, above->getComponent<PositionComponent>().getPosition().y - 16.0f};
+      // above -> modifyComponent<PositionComponent>(pos);
+      above -> modifyComponent<TextureComponent>();
+      above -> getComponent<TextureComponent>().addTexture("Normal", ::TextureManager::getInstance().getTexture("HardBlock"));
+      cerr<<"QuestionBlock\n";
+
     }
   }
-  if(below != nullptr) {
-    if(below->hasComponent<EnemyTag>()) {
-      if(below->hasComponent<CollisionComponent>())
-        below->getComponent<CollisionComponent>().setAbove(make_shared<PlayableEntity>("Player"));
-    }
-  }
-  if(left != nullptr) {
-    if(left->hasComponent<EnemyTag>() && state->getSize() == "SMALL") {
-      state = make_shared<DeathState>(state->getSize(), state->getFacing());
-      getComponent<MarioSoundComponent>().PlayMarioDieEffect();
-    }
-  }   
-  if(right != nullptr) {
-    if(right->hasComponent<EnemyTag>() && state->getSize() == "SMALL") {
-      state = make_shared<DeathState>(state->getSize(), state->getFacing());
-      getComponent<MarioSoundComponent>().PlayMarioDieEffect();
-    }
-  } 
+  // if(getComponent<CollisionComponent>().getBelow())
+  //   cerr << getComponent<CollisionComponent>().getBelow()->name << '\n';
+  // if(getComponent<CollisionComponent>().getLeft())
+  //   cerr << getComponent<CollisionComponent>().getLeft()->name << '\n';
+  // if(getComponent<CollisionComponent>().getRight())
+  //   cerr << getComponent<CollisionComponent>().getRight()->name << '\n';
 }
 void PlayableEntity::draw() {
 }

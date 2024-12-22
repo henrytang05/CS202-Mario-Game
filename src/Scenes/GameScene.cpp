@@ -46,7 +46,7 @@ void GameScene::loadResources() {
   background = LoadTextureFromImage(bImage);
   UnloadImage(bImage);
   //Create Map
-  entities = mapRenderer.createMap("assets/Level1/Level1new.json");
+  entities = mapRenderer.createMap("assets/Level1/Level1.json");
 }
 void GameScene::draw() {
   BeginMode2D(camera);
@@ -63,7 +63,7 @@ Shared<Scene> GameScene::updateScene(float deltaTime) {
   return nullptr;
 }
 void GameScene::update(float deltaTime) {
-  time -= GUI::get_delta_time();
+  time -= deltaTime;
   for (auto &entity : entities) {
     entity->update(deltaTime);
   }

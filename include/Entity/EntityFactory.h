@@ -3,7 +3,10 @@
 
 #include "AbstractEntity.h"
 #include "Entity/PlayableEntity.h"
+#include "Entity/Mario.h"
+#include "Entity/Luigi.h"
 #include "GameObject.h"
+#include "Entity/Enemy.h"
 class IFactory {
 public:
   map<string, Texture2D> mapTexture;
@@ -15,6 +18,7 @@ public:
   virtual Shared<AbstractEntity> createPipe(Vector2 position, Vector2 size) = 0;
   virtual Shared<AbstractEntity> createFlag(Vector2 position) = 0;
   virtual Shared<AbstractEntity> createFlagPole(Vector2 position) = 0;
+  virtual Shared<AbstractEntity> createPiranha(Vector2 position) = 0;
 };
 
 class EntityFactory : public IFactory {
@@ -26,6 +30,7 @@ public:
   Shared<AbstractEntity> createPipe(Vector2 position, Vector2 size) override;
   Shared<AbstractEntity> createFlag(Vector2 position) override;
   Shared<AbstractEntity> createFlagPole(Vector2 position) override;
+  Shared<AbstractEntity> createPiranha(Vector2 position) override;
 };
 
 #endif // ENTITY_FACTORY_H

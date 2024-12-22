@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="164" height="50" tilewidth="16" tileheight="16" infinite="0" nextlayerid="28" nextobjectid="683">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="164" height="50" tilewidth="16" tileheight="16" infinite="0" nextlayerid="29" nextobjectid="686">
  <editorsettings>
-  <export target="Level1new.json" format="json"/>
+  <export target="Level1.json" format="json"/>
  </editorsettings>
  <properties>
   <property name="Level" value="Level1"/>
@@ -439,25 +439,25 @@
   <object id="66" gid="74" x="2487.15" y="687.818" width="16" height="16"/>
  </objectgroup>
  <objectgroup id="23" name="Piranha">
-  <object id="635" gid="77" x="1624.38" y="720.125" width="16" height="32"/>
-  <object id="636" gid="77" x="423.818" y="704" width="16" height="32"/>
+  <object id="684" gid="77" x="408.413" y="711.356" width="16" height="24"/>
+  <object id="685" gid="77" x="1607.96" y="727.75" width="16" height="24"/>
  </objectgroup>
  <objectgroup id="14" name="Castle" visible="0">
   <object id="64" x="2544" y="688" width="80" height="80"/>
  </objectgroup>
- <objectgroup draworder="index" id="25" name="Pipe">
+ <objectgroup draworder="index" id="25" name="Pipe" visible="0">
   <object id="624" gid="78" x="400" y="704" width="32" height="32">
    <properties>
-    <property name="hasPiranha" type="bool" value="true"/>
+    <property name="height" type="float" value="80"/>
+    <property name="width" type="float" value="32"/>
    </properties>
   </object>
   <object id="625" gid="78" x="1600" y="720" width="32" height="32">
    <properties>
-    <property name="hasPiranha" type="bool" value="true"/>
+    <property name="height" type="float" value="64"/>
+    <property name="width" type="float" value="32"/>
    </properties>
   </object>
-  <object id="638" x="1600" y="720" width="32" height="64"/>
-  <object id="642" x="400" y="704" width="32.7273" height="80.5455"/>
  </objectgroup>
  <objectgroup id="26" name="Coin">
   <object id="643" gid="79" x="640" y="752" width="16" height="16"/>

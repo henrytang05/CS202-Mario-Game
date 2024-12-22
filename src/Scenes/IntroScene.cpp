@@ -2,6 +2,7 @@
 #include "Logger.h"
 #include "Scenes/GameScene.h"
 #include "Scenes/LoadGameScene.h"
+#include "Scenes/GuideScene.h"
 #include "Scenes/Scene.h"
 namespace SceneSpace {
 IntroScene::IntroScene() : Scene() {
@@ -19,6 +20,7 @@ IntroScene::~IntroScene() {
   delete LoadGameButton;
   delete RankingButton;
   delete SettingsButton;
+  delete GuideButton;
 }
 
 Shared<Scene> IntroScene::updateScene(float deltaTime) {
@@ -29,6 +31,7 @@ Shared<Scene> IntroScene::updateScene(float deltaTime) {
   LoadGameButton->update(mousePos, isLeftClick);
   RankingButton->update(mousePos, isLeftClick);
   SettingsButton->update(mousePos, isLeftClick);
+  GuideButton->update(mousePos, isLeftClick);
 
   if (NewGameButton->isPressed())
   {
@@ -50,10 +53,17 @@ Shared<Scene> IntroScene::updateScene(float deltaTime) {
     changeSettingsScreen = true;
     SoundCtrl.PlayTingSound();
   }
+  if(GuideButton->isPressed())
+  {
+    changeGuideScreen = true;
+    SoundCtrl.PlayTingSound();
+  }
   if (changeGameScreen)
     return std::make_shared<SceneSpace::GameScene>();
   if (changeLoadScreen)
     return std::make_shared<SceneSpace::LoadGameScene>();
+  if (changeGuideScreen)
+    return std::make_shared<SceneSpace::GuideScene>();
   return nullptr;
 }
 void IntroScene::draw() {
@@ -62,6 +72,7 @@ void IntroScene::draw() {
   LoadGameButton->draw();
   RankingButton->draw();
   SettingsButton->draw();
+  GuideButton->draw();
 }
 void IntroScene::loadResources() {
   background = LoadTexture("./assets/MenuBackground.png");
@@ -73,11 +84,14 @@ void IntroScene::loadResources() {
                                        "./assets/Hover_RankingButton.png");
   SettingsButton = new GUI::ImageButton(545, 595, "./assets/SettingsButton.png",
                                         "./assets/Hover_SettingsButton.png");
+  GuideButton = new GUI::ImageButton(30, 20, "./assets/GuideButton.png",
+                                        "./assets/Hover_GuideButton.png");
 };
 void IntroScene::init() {
   changeGameScreen = false;
   changeLoadScreen = false;
   changeRankingScreen = false;
   changeSettingsScreen = false;
+  changeGuideScreen = false;
 };
 } // namespace SceneSpace

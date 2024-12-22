@@ -2,6 +2,8 @@
 
 #include "Components/Components_include.h"
 #include "Entity/PlayableEntity.h"
+#include "Entity/Mario.h"
+#include "Entity/Luigi.h"
 #include "pch.h"
 #include <memory>
 #include "TextureManager.h"
@@ -51,4 +53,15 @@ Shared<AbstractEntity> EntityFactory::createFlag(Vector2 position)
 {
   Shared<AbstractEntity> flag = std::make_shared<Flag>(position);
   return flag;
+}
+
+Shared<AbstractEntity> EntityFactory::createFlagPole(Vector2 position)
+{
+  Shared<AbstractEntity> flagPole = std::make_shared<FlagPole>(position);
+  return flagPole;
+}
+Shared<AbstractEntity> EntityFactory::createPiranha(Vector2 position)
+{
+  Shared<AbstractEntity> piranha = std::make_shared<Piranha>(position);
+  return piranha;
 }

@@ -104,3 +104,15 @@ public:
     void draw() override;
     void update(float deltaTime) override;
 };
+
+class Piranha : public AbstractEntity {
+public:
+  Piranha(Vector2 position);
+  ~Piranha() = default;
+  void update(float deltaTime) override;
+  void draw() override;
+
+private:
+  Vector2 position_fixed;
+  float elapsedTime=0;
+};

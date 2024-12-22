@@ -72,12 +72,18 @@ void MapRenderer::loadObjectGroup(const json& layer) {
         //Create game objects based on type
         if (name == "Pipe") {
             entityFactory = std::make_unique<EntityFactory>();
+            for (auto const &property : object_layer["properties"]) {
+                if(property["name"]=="height"){
+                    height = property["value"];
+                }
+                if(property["name"]=="width"){
+                    width = property["value"];
+                }
+            }
             auto obj = entityFactory->createPipe({x, y}, {width, height});
             if (obj) {
                 objects.push_back(obj);
             }
-            std::cerr<<"x: "<<x<<" y: "<<y<<std::endl;
-            std::cerr<<"width: "<<width<<" height: "<<height<<std::endl;
         } else if (name == "Flag") {
             // Create an enemy object
             entityFactory = std::make_unique<EntityFactory>();
@@ -119,6 +125,13 @@ void MapRenderer::loadObjectGroup(const json& layer) {
         } else if (name == "QuestionBlock"){
             entityFactory = std::make_unique<EntityFactory>();
             auto obj = entityFactory->createBlock("QuestionBlock", {x, y});
+            if (obj) {
+                objects.push_back(obj);
+            }
+        } 
+        else if (name == "Piranha"){
+            entityFactory = std::make_unique<EntityFactory>();
+            auto obj = entityFactory->createPiranha({x, y});
             if (obj) {
                 objects.push_back(obj);
             }

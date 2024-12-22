@@ -108,12 +108,14 @@ void QuestionBlock::update(float deltaTime) {
 Pipe::Pipe(Vector2 position, Vector2 size): AbstractEntity("Pipe") {
     addComponent<PositionComponent>(position);    
     addComponent<BoundingBoxComponent>(size);
+    addComponent<TextureComponent>();
+    getComponent<TextureComponent>().addTexture("Normal", TextureManager::getInstance().getTexture("Pipe"));
     std::cerr<<"create pipe"<<std::endl;
 }
 
 void Pipe::draw() {
-    // ASSERT(hasComponent<TextureComponent>());
-    // getComponent<TextureComponent>().drawTexture("Normal");
+    ASSERT(hasComponent<TextureComponent>());
+    getComponent<TextureComponent>().drawTexture("Normal");
 }
 
 void Pipe::update(float deltaTime) {
@@ -160,4 +162,33 @@ void FlagPole::draw() {
 void FlagPole::update(float deltaTime) {
     for(auto &comp : components)
         comp->update(deltaTime);
+}
+
+Piranha::Piranha(Vector2 position) {
+Vector2 size = {16, 32};
+  addComponent<PositionComponent>(position);
+  addComponent<BoundingBoxComponent>(size);
+  addComponent<TextureComponent>();
+  getComponent<TextureComponent>().addTexture("Normal", TextureManager::getInstance().getTexture("Piranha"));
+  position_fixed = position;
+}
+
+void Piranha::update(float deltaTime) {
+ elapsedTime += deltaTime;
+float amplitude = 30.0f; // Distance to move up and down
+float frequency = 1.0f; // Speed of oscillation
+
+auto position_change = getComponent<PositionComponent>().getPosition();
+position_change.y = position_fixed.y - amplitude * (1.0f + sin(frequency * elapsedTime)) / 2.0f;
+
+// Ensure it doesn't go below the fixed position
+if (position_change.y > position_fixed.y) {
+  position_change.y = position_fixed.y;
+}
+  getComponent<PositionComponent>().setPosition(position_change);
+}
+
+void Piranha::draw() {
+  ASSERT(hasComponent<TextureComponent>());
+  getComponent<TextureComponent>().drawTexture("Normal");
 }

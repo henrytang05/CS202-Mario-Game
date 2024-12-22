@@ -3722,20 +3722,80 @@
         }, 
         {
          "draworder":"topdown",
-         "id":28,
+         "id":19,
          "name":"QuestionBlock",
          "objects":[
                 {
                  "gid":5,
                  "height":16,
-                 "id":683,
+                 "id":449,
                  "name":"",
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":16,
-                 "x":96,
+                 "x":160,
                  "y":720
+                }, 
+                {
+                 "gid":5,
+                 "height":16,
+                 "id":496,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":976,
+                 "y":720
+                }, 
+                {
+                 "gid":5,
+                 "height":16,
+                 "id":539,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":1696,
+                 "y":720
+                }, 
+                {
+                 "gid":5,
+                 "height":16,
+                 "id":540,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":1744,
+                 "y":720
+                }, 
+                {
+                 "gid":5,
+                 "height":16,
+                 "id":541,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":1792,
+                 "y":720
+                }, 
+                {
+                 "gid":5,
+                 "height":16,
+                 "id":542,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":1744,
+                 "y":656
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -3784,27 +3844,27 @@
          "objects":[
                 {
                  "gid":77,
-                 "height":32,
-                 "id":635,
+                 "height":24,
+                 "id":684,
                  "name":"",
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":16,
-                 "x":1624.38,
-                 "y":720.125
+                 "x":408.413333333333,
+                 "y":711.356333333333
                 }, 
                 {
                  "gid":77,
-                 "height":32,
-                 "id":636,
+                 "height":24,
+                 "id":685,
                  "name":"",
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":16,
-                 "x":423.818,
-                 "y":704
+                 "x":1607.96333333333,
+                 "y":727.75
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -3846,9 +3906,14 @@
                  "name":"",
                  "properties":[
                         {
-                         "name":"hasPiranha",
-                         "type":"bool",
-                         "value":true
+                         "name":"height",
+                         "type":"float",
+                         "value":80
+                        }, 
+                        {
+                         "name":"width",
+                         "type":"float",
+                         "value":32
                         }],
                  "rotation":0,
                  "type":"",
@@ -3864,9 +3929,14 @@
                  "name":"",
                  "properties":[
                         {
-                         "name":"hasPiranha",
-                         "type":"bool",
-                         "value":true
+                         "name":"height",
+                         "type":"float",
+                         "value":64
+                        }, 
+                        {
+                         "name":"width",
+                         "type":"float",
+                         "value":32
                         }],
                  "rotation":0,
                  "type":"",
@@ -3874,32 +3944,10 @@
                  "width":32,
                  "x":1600,
                  "y":720
-                }, 
-                {
-                 "height":64,
-                 "id":638,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":32,
-                 "x":1600,
-                 "y":720
-                }, 
-                {
-                 "height":80.5455,
-                 "id":642,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":32.7273,
-                 "x":400,
-                 "y":704
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":true,
+         "visible":false,
          "x":0,
          "y":0
         }, 
@@ -4381,7 +4429,7 @@
          "y":0
         }],
  "nextlayerid":29,
- "nextobjectid":684,
+ "nextobjectid":686,
  "orientation":"orthogonal",
  "properties":[
         {

@@ -85,6 +85,7 @@ QuestionBlock::QuestionBlock(Vector2 position): AbstractEntity("QuestionBlock") 
     Vector2 size({16, 16});
     addComponent<PositionComponent>(position);    
     addComponent<BoundingBoxComponent>(size);
+    addComponent<BlockTriggerComponent>();
     addComponent<TransformComponent>((Vector2){0.0f, 0.0f});
     addComponent<TextureComponent>();
     getComponent<TextureComponent>().addTexture("Normal", TextureManager::getInstance().getTexture("QuestionBlock"));

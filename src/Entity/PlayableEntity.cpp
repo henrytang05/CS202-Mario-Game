@@ -33,12 +33,9 @@ void PlayableEntity::update(float deltaTime) {
         above->getComponent<BlockTriggerComponent>().setTrigger(new TriggerBrokenBlockWhenHitBySmall(above->getComponent<PositionComponent>().getPosition()));
     }
     if(above->name == "QuestionBlock") {
-      //Vector2 pos = {above->getComponent<PositionComponent>().getPosition().x, above->getComponent<PositionComponent>().getPosition().y - 16.0f};
-      // above -> modifyComponent<PositionComponent>(pos);
-      above -> modifyComponent<TextureComponent>();
-      above -> getComponent<TextureComponent>().addTexture("Normal", ::TextureManager::getInstance().getTexture("HardBlock"));
-      cerr<<"QuestionBlock\n";
-
+      if(state->getSize() == "SMALL") {
+        above->getComponent<BlockTriggerComponent>().setTrigger(new TriggerQuestionBlock(above->getComponent<PositionComponent>().getPosition()));
+      }
     }
   }
   // if(getComponent<CollisionComponent>().getBelow())

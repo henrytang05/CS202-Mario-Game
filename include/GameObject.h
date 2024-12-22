@@ -7,6 +7,7 @@ using json = nlohmann::json;
 #include "Components/Texture.h"
 #include "TextureManager.h"
 #include "Entity/EntityFactory.h"
+#include "Observer.h"
 // Factory class for creating entities
 
 // Derived class for a normal block
@@ -58,7 +59,7 @@ public:
 };
 
 // Derived class for a question block
-class QuestionBlock : public AbstractEntity {
+class QuestionBlock : public AbstractEntity, public Subject {
 private:
     bool isCollision = false;
 public:

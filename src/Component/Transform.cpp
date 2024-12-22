@@ -15,15 +15,7 @@ void TransformComponent::init() {
     entity->addComponent<PositionComponent>();
 }
 
-void TransformComponent::update(float deltaTime) {
-  // if (entity->hasComponent<EnemyTag>())
-  //   return;
-  // PositionComponent &position = entity->getComponent<PositionComponent>();
-  // position.setPosition(
-  //     (Vector2){position.getPosition().x + velocity.x * deltaTime,
-  //               position.getPosition().y + velocity.y * deltaTime});
-}
-
+void TransformComponent::update(float deltaTime) {}
 void TransformComponent::setVelocity(Vector2 newVelocity) {
   velocity = newVelocity;
 }

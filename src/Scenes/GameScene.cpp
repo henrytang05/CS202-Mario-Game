@@ -45,8 +45,7 @@ void GameScene::init() {
   SoundCtrl.PlayGroundTheme();
   for (auto &entity : entities) {
     if (entity->hasComponent<CollisionComponent>()) {
-      entity->getComponent<CollisionComponent>().setEntities(
-          Shared<std::vector<Shared<AbstractEntity>>>(&entities));
+      entity->getComponent<CollisionComponent>().setEntities(&entities);
     }
   }
 }

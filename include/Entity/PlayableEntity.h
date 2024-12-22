@@ -45,7 +45,7 @@ public:
   PlayableEntity();
   PlayableEntity(std::string name);
 
-  virtual ~PlayableEntity() = default;
+  virtual ~PlayableEntity();
   Vector2 getVelocity() override;
   void setVelocity(Vector2 newVelocity) override;
   virtual void handleInput(float deltaTime);

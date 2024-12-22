@@ -14,10 +14,6 @@ public:
   void setSize(Vector2 size);
   void update(float deltaTime) override;
   Vector2 getSize();
-  Rectangle getTopLeft();
-  Rectangle getTopRight();
-  Rectangle getBotLeft();
-  Rectangle getBotRight();
 
 private:
   PositionComponent *position;

@@ -5,14 +5,12 @@
 #include "Components/Position.h"
 #include "globals.h"
 
-class BoundingBoxComponent : public Component {
+class BoundingBoxComponent : public Component, public Vector2 {
 public:
   BoundingBoxComponent();
   BoundingBoxComponent(Vector2 _size);
 
-  void init() override;
   void setSize(Vector2 size);
-  void update(float deltaTime) override;
   Vector2 getSize();
   Rectangle getTopLeft();
   Rectangle getTopRight();
@@ -21,6 +19,5 @@ public:
 
 private:
   PositionComponent *position;
-  Vector2 size;
 };
 #endif // BOUNDINGBOX_H

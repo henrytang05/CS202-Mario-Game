@@ -1,25 +1,26 @@
 #ifndef BLOCKTRIGGER_H
 #define BLOCKTRIGGER_H
 
-#include "Components/Component.h"
-#include "Components/Components_include.h"
 #include "AbstractEntity.h"
+#include "Components/Component.h"
 #include "globals.h"
-
 
 class TriggerBehaviour {
 public:
-    virtual TriggerBehaviour* trigger(AbstractEntity *entity, float deltaTime) = 0;
+  virtual TriggerBehaviour *trigger(AbstractEntity *entity,
+                                    float deltaTime) = 0;
+  virtual ~TriggerBehaviour() = default;
 };
 
 class TriggerBrokenBlockWhenHitBySmall : public TriggerBehaviour {
 private:
-    float sumFrame;
-    Vector2 fixedPosition;
+  float sumFrame;
+  Vector2 fixedPosition;
+
 public:
-    TriggerBrokenBlockWhenHitBySmall();
-    TriggerBrokenBlockWhenHitBySmall(Vector2 _fixedPosition);
-    TriggerBehaviour* trigger(AbstractEntity *entity, float deltaTime) override;
+  TriggerBrokenBlockWhenHitBySmall();
+  TriggerBrokenBlockWhenHitBySmall(Vector2 _fixedPosition);
+  TriggerBehaviour *trigger(AbstractEntity *entity, float deltaTime) override;
 };
 
 // class TriggerBrokenBlockWhenHitByLarge : public TriggerBehaviour {
@@ -27,7 +28,8 @@ public:
 //     float sumFrame;
 // public:
 //     TriggerBrokenBlockWhenHitByLarge();
-//     TriggerBehaviour* trigger(AbstractEntity *entityy, float deltaTime) override;
+//     TriggerBehaviour* trigger(AbstractEntity *entityy, float deltaTime)
+//     override;
 // };
 
 // class TriggerQuestionBlock : public TriggerBehaviour {
@@ -37,17 +39,18 @@ public:
 // public:
 //     TriggerQuestionBlock();
 //     TriggerQuestionBlock(Vector2 _fixedPosition);
-//     TriggerBehaviour* trigger(AbstractEntity *entity, float deltaTime) override;
+//     TriggerBehaviour* trigger(AbstractEntity *entity, float deltaTime)
+//     override;
 // };
 
 class BlockTriggerComponent : public Component {
 public:
   ~BlockTriggerComponent();
   BlockTriggerComponent();
-  void init() override;
   void setTrigger(TriggerBehaviour *_trigger);
-  void update(float deltaTime) override;
+  void update(float deltaTime);
+
 private:
-    TriggerBehaviour *trigger;
+  TriggerBehaviour *trigger;
 };
 #endif // BLOCKTRIGGER_H

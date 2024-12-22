@@ -13,7 +13,6 @@ Texture2D &Animation::operator[](int index) { return frames[index]; }
 TextureComponent::TextureComponent() : state(""), lastState("") {}
 
 void TextureComponent::init() {}
-void TextureComponent::update(float deltaTime) {}
 
 void TextureComponent::drawTexture(std::string state) {
   Vector2 position = entity->getComponent<PositionComponent>().getPosition();

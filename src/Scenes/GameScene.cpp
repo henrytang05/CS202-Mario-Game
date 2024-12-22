@@ -24,7 +24,8 @@ namespace SceneSpace {
 GameScene::GameScene() : Scene(), camera({0, 0}), EM(EntityManager::get()) {
   // TODO: remove this later
   systems.push_back(std::make_unique<TransformSystem>());
-  systems.push_back(std::make_unique<AnimationSystem>());
+  // systems.push_back(std::make_unique<AnimationSystem>());
+  systems.push_back(std::make_unique<CollisionSystem>());
 }
 
 void GameScene::init() {
@@ -44,12 +45,6 @@ void GameScene::init() {
   camera.target.y = 784.0f - 186.0f;
   camera.zoom = 2.0f;
   SoundCtrl.PlayGroundTheme();
-  for (auto &entity : entities) {
-    if (entity->hasComponent<CollisionComponent>()) {
-      entity->getComponent<CollisionComponent>().setEntities(
-          Shared<std::vector<Shared<AbstractEntity>>>(&entities));
-    }
-  }
 }
 
 GameScene::~GameScene() {
@@ -83,7 +78,7 @@ void GameScene::draw() {
 }
 Unique<Scene> GameScene::updateScene(float deltaTime) {
   this->update(deltaTime);
-  if (player->checkAlive() == false) {
+  if (player.isActive() == false) {
     SoundCtrl.Pause();
   }
   if (player->checkOver()) {
@@ -93,15 +88,11 @@ Unique<Scene> GameScene::updateScene(float deltaTime) {
 }
 void GameScene::update(float deltaTime) {
   time -= deltaTime;
-  for (auto &entity : entities) {
-    if (!entity->isActive())
-      continue;
-    entity->update(deltaTime);
-    if (entity->hasAllComponents<TransformComponent, PositionComponent>())
-      systems[0]->update(entity, deltaTime);
+  for (auto &system : systems) {
+    system->update(EM, deltaTime);
   }
 
-  camera.target.x = player->getComponent<PositionComponent>().getPosition().x;
+  camera.target.x = EM.getComponent<PositionComponent>(&player).x;
   if (camera.target.x <= screenWidth / (2.0f * camera.zoom))
     camera.target.x = screenWidth / (2.0f * camera.zoom);
   if (camera.target.x >= gameWidth - screenWidth / (2.0f * camera.zoom))

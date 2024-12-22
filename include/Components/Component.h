@@ -1,5 +1,6 @@
 #ifndef COMPONENT_H
 #define COMPONENT_H
+#include "AbstractEntity.h"
 #include "EntityManager.h"
 
 class Component {
@@ -11,9 +12,10 @@ public:
   void setEntity(AbstractEntity *e);
   std::string getName() const;
 
-private:
-  EntityManager &manager = EntityManager::get();
+protected:
+  AbstractEntity *entity;
   const std::string name;
+  EntityManager &EM = EntityManager::get();
 };
 
 #endif // COMPONENT_H

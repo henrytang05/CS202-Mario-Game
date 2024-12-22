@@ -5,49 +5,45 @@
 #include "raylib.h"
 
 BoundingBoxComponent::BoundingBoxComponent()
-    : Component("BoundingBoxComponent"), position(nullptr), size({0, 0}) {}
+    : Component("BoundingBoxComponent"), Vector2(), position(nullptr) {}
 
 BoundingBoxComponent::BoundingBoxComponent(Vector2 size)
-    : Component("BoundingBoxComponent"), position(nullptr), size(size) {}
+    : Component("BoundingBoxComponent"), Vector2(size), position(nullptr) {}
 
-void BoundingBoxComponent::init() {
-  if (!entity->hasComponent<PositionComponent>())
-    entity->addComponent<PositionComponent>();
-
-  position = &entity->getComponent<PositionComponent>();
+Vector2 BoundingBoxComponent::getSize() { return {x, y}; }
+void BoundingBoxComponent::setSize(Vector2 size) {
+  x = size.x;
+  y = size.y;
 }
-Vector2 BoundingBoxComponent::getSize() { return this->size;}
-void BoundingBoxComponent::setSize(Vector2 size) { this->size = size; }
 Rectangle BoundingBoxComponent::getTopLeft() {
   Rectangle result;
-  result.x = position->getX();
-  result.y = position->getY();
-  result.width = size.x / 2.0f;
-  result.height = size.y / 2.0f;
+  result.x = position->x;
+  result.y = position->y;
+  result.width = x / 2.0f;
+  result.height = y / 2.0f;
   return result;
 }
 Rectangle BoundingBoxComponent::getTopRight() {
   Rectangle result;
-  result.x = position->getX() + getTopLeft().width;
-  result.y = position->getY();
-  result.width = size.x - getTopLeft().width;
-  result.height = size.y / 2.0f;
+  result.x = position->x + getTopLeft().width;
+  result.y = position->y;
+  result.width = x - getTopLeft().width;
+  result.height = y / 2.0f;
   return result;
 }
 Rectangle BoundingBoxComponent::getBotLeft() {
   Rectangle result;
-  result.x = position->getX();
-  result.y = position->getY() + getTopLeft().height;
-  result.width = size.x / 2.0f;
-  result.height = size.y - getTopLeft().height;
+  result.x = position->x;
+  result.y = position->y + getTopLeft().height;
+  result.width = x / 2.0f;
+  result.height = y - getTopLeft().height;
   return result;
 }
 Rectangle BoundingBoxComponent::getBotRight() {
   Rectangle result;
-  result.x = position->getX() + getTopLeft().width;
-  result.y = position->getY() + getTopLeft().height;
-  result.width = size.x - getTopLeft().width;
-  result.height = size.y - getTopLeft().height;
+  result.x = position->x + getTopLeft().width;
+  result.y = position->y + getTopLeft().height;
+  result.width = x - getTopLeft().width;
+  result.height = y - getTopLeft().height;
   return result;
 }
-void BoundingBoxComponent::update(float deltaTime) {}

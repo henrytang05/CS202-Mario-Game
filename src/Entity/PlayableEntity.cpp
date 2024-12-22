@@ -12,7 +12,9 @@ PlayableEntity::PlayableEntity(std::string name)
 
   addComponent<PlayerTag>();
 }
-
+PlayableEntity::~PlayableEntity() {
+  state = nullptr;
+}
 PlayableEntity::PlayableEntity() : fallAcc(GRAVITY_DEC), state(make_shared<DroppingState>("SMALL", "RIGHT")), isDeath(false), gameOver(false) {
   addComponent<PlayerTag>();
 }
@@ -54,31 +56,36 @@ void PlayableEntity::update(float deltaTime) {
   }
 
   // resolve collision
-  Shared<AbstractEntity> above = getComponent<CollisionComponent>().getAbove();
-  Shared<AbstractEntity> below = getComponent<CollisionComponent>().getBelow();
-  Shared<AbstractEntity> left = getComponent<CollisionComponent>().getLeft();
-  Shared<AbstractEntity> right = getComponent<CollisionComponent>().getRight();
-  if(above) {
-    if(above->name == "BrokenBlock") {
-      if(state->getSize() == "SMALL")
-        above->getComponent<BlockTriggerComponent>().setTrigger(new TriggerBrokenBlockWhenHitBySmall(above->getComponent<PositionComponent>().getPosition()));
+  auto above = getComponent<CollisionComponent>().getAbove();
+  auto below = getComponent<CollisionComponent>().getBelow();
+  auto left = getComponent<CollisionComponent>().getLeft();
+  auto right = getComponent<CollisionComponent>().getRight();
+  if(above.lock()) {
+    if(above.lock()->name == "BrokenBlock") {
+      if(state->getSize() == "SMALL") {
+        above.lock()->getComponent<BlockTriggerComponent>().setTrigger(new TriggerBrokenBlockWhenHitBySmall(above.lock()->getComponent<PositionComponent>().getPosition()));
         getComponent<MarioSoundComponent>().PlayBumpEffect();
+      }
+    }
+    else if(above.lock()->hasComponent<EnemyTag>() && state->getSize() == "SMALL") {
+      state = make_shared<DeathState>(state->getSize(), state->getFacing());
+      getComponent<MarioSoundComponent>().PlayMarioDieEffect();
     }
   }
-  if(below != nullptr) {
-    if(below->hasComponent<EnemyTag>()) {
-      if(below->hasComponent<CollisionComponent>())
-        below->getComponent<CollisionComponent>().setAbove(make_shared<PlayableEntity>("Player"));
+  if(below.lock() != nullptr) {
+    if(below.lock()->hasComponent<EnemyTag>()) {
+      if(below.lock()->hasComponent<CollisionComponent>())
+        below.lock()->getComponent<CollisionComponent>().setAbove(Shared<PlayableEntity>(this));
     }
   }
-  if(left != nullptr) {
-    if(left->hasComponent<EnemyTag>() && state->getSize() == "SMALL") {
+  if(left.lock() != nullptr) {
+    if(left.lock()->hasComponent<EnemyTag>() && state->getSize() == "SMALL") {
       state = make_shared<DeathState>(state->getSize(), state->getFacing());
       getComponent<MarioSoundComponent>().PlayMarioDieEffect();
     }
   }   
-  if(right != nullptr) {
-    if(right->hasComponent<EnemyTag>() && state->getSize() == "SMALL") {
+  if(right.lock() != nullptr) {
+    if(right.lock()->hasComponent<EnemyTag>() && state->getSize() == "SMALL") {
       state = make_shared<DeathState>(state->getSize(), state->getFacing());
       getComponent<MarioSoundComponent>().PlayMarioDieEffect();
     }
@@ -94,7 +101,7 @@ void PlayableEntity::handleInput(float deltaTime) {
   bool keyUp = IsKeyDown(KEY_UP);
   bool keyDown = IsKeyDown(KEY_DOWN);
   if (state->getState() != "JUMPING" && state->getState() != "DROPPING") {
-    if (getComponent<CollisionComponent>().getBelow() == nullptr)
+    if (getComponent<CollisionComponent>().getBelow().lock() == nullptr)
       state = make_shared<DroppingState>(state->getSize(), state->getFacing());
     if (std::fabs(velocity.x) < MIN_WALKING_VELO) {
       velocity.x = 0.0f;
@@ -178,7 +185,7 @@ void PlayableEntity::handleInput(float deltaTime) {
     }
     if (velocity.y > 0.0f && state->getState() != "DROPPING")
       state = make_shared<DroppingState>(state->getSize(), state->getFacing());
-    if (getComponent<CollisionComponent>().getBelow() &&
+    if (getComponent<CollisionComponent>().getBelow().lock() &&
         state->getState() == "DROPPING") {
       state = make_shared<StandingState>(state->getSize(), state->getFacing());
       // fallAcc = GRAVITY_DEC;

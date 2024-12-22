@@ -29,7 +29,7 @@ GameScene::GameScene() : Scene(), camera({0, 0}) {
 }
 
 void GameScene::init() {
-  GuideButton = new GUI::ImageButton(30, 20, "./assets/GuideButton.png",
+  GuideButton = new GUI::ImageButton(100, 20, "./assets/GuideButton.png",
                                       "./assets/Hover_GuideButton.png");
   time = 360.f;
   entityFactory = std::make_unique<EntityFactory>();

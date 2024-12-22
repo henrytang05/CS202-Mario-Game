@@ -22,8 +22,11 @@ void Game::init() {
   InitAudioDevice();
   SetTargetFPS(60);
   pushScene(std::make_unique<SceneSpace::IntroScene>());
-  QuitButton = new GUI::ImageButton(30, 200, "./assets/QuitButton.png",
+  QuitButton = new GUI::ImageButton(30, 20, "./assets/QuitButton.png",
                                        "./assets/Hover_QuitButton.png");
+  YES = new GUI::ImageButton(540, 485, "./assets/YES.png", "./assets/Hover_YES.png");
+  NO = new GUI::ImageButton(750, 485, "./assets/NO.png", "./assets/Hover_NO.png");
+  QuitGame = LoadTexture("./assets/QuitGame.png");
 }
 
 void Game::run() {
@@ -34,15 +37,30 @@ void Game::run() {
   }
 }
 void Game::update(float deltaTime) {
-  pushScene(scenes.top()->updateScene(deltaTime));
+  pushScene(scenes.top()->updateScene(deltaTime));  
+
   Vector2 mousePos = GetMousePosition();
   bool isLeftClick = IsMouseButtonPressed(MOUSE_BUTTON_LEFT);
-  QuitButton->update(mousePos, isLeftClick);
-  if (QuitButton->isPressed())
-  {
-    popScene();
-    scenes.top()->setEnd(false);
+  isLeftClick = isLeftClick;
+  if(typeid(*scenes.top()) != typeid(SceneSpace::IntroScene)) {
+    QuitButton->update(mousePos, isLeftClick);
+    if (QuitButton->isPressed())
+    {
+      if(typeid(*scenes.top()) == typeid(SceneSpace::GameScene)){
+        quittingGame = true;
+      }
+      else popScene();
+    }
   }
+  if(quittingGame){
+    YES->update(mousePos, isLeftClick);
+    NO->update(mousePos, isLeftClick);
+    if(YES->isPressed()){
+      quittingGame = false;
+      popScene();
+    }
+    if(NO->isPressed()) quittingGame = false;
+  } 
 }
 void Game::clean() {
   delete QuitButton;
@@ -54,7 +72,14 @@ void Game::draw() {
   BeginDrawing();
   ClearBackground(RAYWHITE);
   scenes.top()->draw();
-  QuitButton->draw();
+  if(typeid(*scenes.top()) != typeid(SceneSpace::IntroScene)) {
+    QuitButton->draw();
+  }
+  if(quittingGame){
+    DrawTexture(QuitGame, 420, 198, WHITE);
+    YES->draw();
+    NO->draw();
+  }
   EndDrawing();
 }
 

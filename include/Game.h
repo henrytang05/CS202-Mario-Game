@@ -23,6 +23,10 @@ public:
 private:
   std::stack<Shared<SceneSpace::Scene>> scenes;
   GUI::ImageButton* QuitButton;
+  GUI::ImageButton* YES;
+  GUI::ImageButton* NO;
+  Texture2D QuitGame;
+  bool quittingGame = false;
 };
 
 #endif // GAME_H

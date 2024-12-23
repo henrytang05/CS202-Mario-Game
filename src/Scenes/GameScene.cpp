@@ -42,8 +42,7 @@ void GameScene::init() {
   SoundCtrl.PlayGroundTheme();
   for (auto &entity : entities) {
     if (entity->hasComponent<CollisionComponent>()) {
-      entity->getComponent<CollisionComponent>().setEntities(
-          Shared<std::vector<Shared<AbstractEntity>>>(&entities));
+      entity->getComponent<CollisionComponent>().setEntities(&entities);
     }
   }
 }
@@ -55,11 +54,11 @@ GameScene::~GameScene() {
 }
 void GameScene::loadResources() {
   //Loading BackGround
-  Image bImage = LoadImage("assets/Level2/BackGround.png");
+  Image bImage = LoadImage("assets/Level1/BackGround.png");
   background = LoadTextureFromImage(bImage);
   UnloadImage(bImage);
   //Create Map
-  entities = mapRenderer.createMap("assets/Level2/Level2.json");
+  entities = mapRenderer.createMap("assets/Level1/Level1.json");
 }
 void GameScene::draw() {
   float dt = GetFrameTime();
@@ -71,7 +70,6 @@ void GameScene::draw() {
     if (entity->hasAllComponents<TextureComponent, PositionComponent>()) {
       systems[1]->update(entity, dt);
     }
-    entity->draw();
   }
   EndMode2D();
   DrawText(TextFormat("Time: %03i", (int)time), 1200, 35, GAMEPLAY_TEXT_SIZE,
@@ -84,7 +82,7 @@ Unique<Scene> GameScene::updateScene(float deltaTime) {
   }
   if(player->checkOver()) {
     return make_unique<IntroScene>();
-  } 
+  }
   return nullptr;
 }
 void GameScene::update(float deltaTime) {

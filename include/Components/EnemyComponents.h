@@ -17,7 +17,7 @@ struct EnemyVelocity : public Vector2, public Component {
 };
 
 struct EnemySize : public Vector2, public Component {
-  EnemySize() = default;
+  EnemySize() : Vector2(), Component("EnemySize") {};
   EnemySize(Vector2 size) : Vector2(size), Component("EnemySize") {}
 };
 

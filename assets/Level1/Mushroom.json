@@ -1,0 +1,20 @@
+{ "columns":1,
+ "image":"Mushroom.png",
+ "imageheight":16,
+ "imagewidth":16,
+ "margin":0,
+ "name":"Mushroom",
+ "objectalignment":"topleft",
+ "spacing":0,
+ "tilecount":1,
+ "tiledversion":"1.11.0",
+ "tileheight":16,
+ "tiles":[
+        {
+         "id":0,
+         "type":"Mushroom"
+        }],
+ "tilewidth":16,
+ "type":"tileset",
+ "version":"1.10"
+}

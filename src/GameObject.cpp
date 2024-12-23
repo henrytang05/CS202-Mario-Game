@@ -1,12 +1,9 @@
-#include "GameObject.h"
-#include "Components/BoundingBox.h"
-#include "Components/Position.h"
-#include "Components/Texture.h"
-#include "Components/Transform.h"
-#include "Components/BlockTrigger.h"
+#include "Entity/EntityFactory.h"
+
 
 Unique <IFactory> _entityFactory;
-
+ 
+  
 NormalBlock::NormalBlock(Vector2 position): AbstractEntity("NormalBlock") {
     Vector2 size({16, 16});
     addComponent<PositionComponent>(position);    
@@ -29,10 +26,10 @@ BrokenBlock::BrokenBlock(Vector2 position): AbstractEntity("BrokenBlock") {
     Vector2 size({16, 16});
     addComponent<PositionComponent>(position);    
     addComponent<BoundingBoxComponent>(size);
-    addComponent<BlockTriggerComponent>();
     addComponent<TransformComponent>((Vector2){0.0f, 0.0f});
     addComponent<TextureComponent>();
     getComponent<TextureComponent>().addTexture("Normal", TextureManager::getInstance().getTexture("BrokenBlock"));
+    addComponent<BlockTriggerComponent>();
 }
 
 void BrokenBlock::draw() {
@@ -41,8 +38,20 @@ void BrokenBlock::draw() {
 }
 
 void BrokenBlock::update(float deltaTime) {
-    for(auto &comp : components)
+    if(this->isCollision)
+    {
+        this->name = "HardBlock";
+        Vector2 position_fixed = this->getComponent<PositionComponent>().getPosition();
+        this->removeComponent<BlockTriggerComponent>();
+        this->modifyComponent<PositionComponent>(position_fixed);
+        this->modifyComponent<TextureComponent>();
+        this->getComponent<TextureComponent>().addTexture("Normal", TextureManager::getInstance().getTexture("HardBlock"));
+    }
+    for(auto &comp : components){
+        if(comp==nullptr) continue;
         comp->update(deltaTime);
+    }
+        
 }
 
 HardBlock::HardBlock(Vector2 position): AbstractEntity("HardBlock") {
@@ -85,6 +94,7 @@ QuestionBlock::QuestionBlock(Vector2 position): AbstractEntity("QuestionBlock") 
     Vector2 size({16, 16});
     addComponent<PositionComponent>(position);    
     addComponent<BoundingBoxComponent>(size);
+    addComponent<BlockTriggerComponent>();
     addComponent<TransformComponent>((Vector2){0.0f, 0.0f});
     addComponent<TextureComponent>();
     getComponent<TextureComponent>().addTexture("Normal", TextureManager::getInstance().getTexture("QuestionBlock"));
@@ -164,17 +174,22 @@ void FlagPole::update(float deltaTime) {
         comp->update(deltaTime);
 }
 
-Piranha::Piranha(Vector2 position) {
+Piranha::Piranha(Vector2 position) : AbstractEntity("Piranha") {
 Vector2 size = {16, 32};
   addComponent<PositionComponent>(position);
   addComponent<BoundingBoxComponent>(size);
   addComponent<TextureComponent>();
-  getComponent<TextureComponent>().addTexture("Normal", TextureManager::getInstance().getTexture("Piranha"));
+  vector<Texture2D> textures;
+  textures.push_back(TextureManager::getInstance().getTexture("Piranha1"));
+  textures.push_back(TextureManager::getInstance().getTexture("Piranha2"));
+  getComponent<TextureComponent>().addTexture("Normal", textures, 0.1f, true);
+  getComponent<TextureComponent>().changeState("Normal");
+  addComponent<EnemyTag>();
   position_fixed = position;
 }
 
 void Piranha::update(float deltaTime) {
- elapsedTime += deltaTime;
+elapsedTime += deltaTime;
 float amplitude = 30.0f; // Distance to move up and down
 float frequency = 1.0f; // Speed of oscillation
 
@@ -191,4 +206,66 @@ if (position_change.y > position_fixed.y) {
 void Piranha::draw() {
   ASSERT(hasComponent<TextureComponent>());
   getComponent<TextureComponent>().drawTexture("Normal");
+}
+
+Mushroom::Mushroom(Vector2 position) {
+    Vector2 size = {0,0};
+    addComponent<CollisionComponent>();
+    addComponent<TransformComponent>((Vector2){0.0f, 0.0f});
+    addComponent<BoundingBoxComponent>(size);
+    addComponent<PositionComponent>(position);   
+    position_fixed = getComponent<PositionComponent>().getPosition(); 
+    addComponent<TextureComponent>();
+    getComponent<TextureComponent>().addTexture("Normal", TextureManager::getInstance().getTexture("Mushroom") );
+}
+
+
+void Mushroom::handleCollision()
+{
+    CollisionComponent &collision = getComponent<CollisionComponent>();
+    auto above = collision.getAbove();
+    auto below = collision.getBelow();
+    auto left = collision.getLeft();
+    auto right = collision.getRight();
+
+    auto &trans = getComponent<TransformComponent>();
+    
+    Vector2 v = trans.getVelocity();
+    if (left.lock() && !left.lock()->hasComponent<EnemyTag>())
+        v.x = -ENEMY_SPEED;
+    if (right.lock() && !right.lock()->hasComponent<EnemyTag>())
+        v.x = ENEMY_SPEED;
+    if(below.lock() == nullptr)
+        v.y = 100.0f;
+    trans.setVelocity(v);
+
+    getComponent<CollisionComponent>().reset();
+}
+
+void Mushroom::update(float deltaTime) {
+    if(isTriggered)
+    {   
+        elapsedTime += deltaTime;
+
+        auto position_change = getComponent<PositionComponent>().getPosition();
+        position_change.y = position_change.y - 16.0f * deltaTime;
+
+        // Ensure it doesn't go below the fixed position
+        if (position_change.y < position_fixed.y - 16.0f) {
+            position_change.y = position_fixed.y - 17.0f;
+            isTriggered = false;
+            getComponent<BoundingBoxComponent>().setSize((Vector2){16.0f, 16.0f});
+            getComponent<TransformComponent>().setVelocity((Vector2){50.0f, 10.0f});
+        }
+        getComponent<PositionComponent>().setPosition(position_change);
+    }
+    if(this->getComponent<BoundingBoxComponent>().getSize().y == 16.0f)
+        handleCollision();
+    for(auto &comp : components)
+        comp->update(deltaTime);
+}
+
+void Mushroom:: onNotify()
+{
+    isTriggered = true;
 }

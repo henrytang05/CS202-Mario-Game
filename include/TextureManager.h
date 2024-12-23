@@ -15,6 +15,9 @@ public:
     }
 
     Texture2D getTexture(const std::string& key) {
+        if(mapTexture.find(key) == mapTexture.end()) {
+            throw std::runtime_error("Texture not found");
+        }
         return mapTexture[key];
     }
 

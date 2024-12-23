@@ -154,3 +154,24 @@ void FlagPole::update(float deltaTime) {
     for(auto &comp : components)
         comp->update(deltaTime);
 }
+
+
+Coin::Coin(Vector2 position): AbstractEntity("Coin") {
+    Vector2 size({16, 16});
+    addComponent<PositionComponent>(position);    
+    addComponent<BoundingBoxComponent>(size);
+    addComponent<BlockTriggerComponent>();
+    addComponent<TransformComponent>((Vector2){0.0f, 0.0f});
+    addComponent<TextureComponent>();
+    getComponent<TextureComponent>().addTexture("Normal", TextureManager::getInstance().getTexture("Coin"));
+}
+
+void Coin::draw() {
+    ASSERT(hasComponent<TextureComponent>());
+    getComponent<TextureComponent>().drawTexture("Normal");
+}
+
+void Coin::update(float deltaTime) {
+    for(auto &comp : components)
+        comp->update(deltaTime);
+}

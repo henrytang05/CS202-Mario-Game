@@ -71,6 +71,10 @@ void PlayableEntity::update(float deltaTime) {
       state = make_shared<DeathState>(state->getSize(), state->getFacing());
       getComponent<MarioSoundComponent>().PlayMarioDieEffect();
     }
+    else if(above.lock()->name == "Coin") {
+      above.lock()->getComponent<BlockTriggerComponent>().setTrigger(new TriggerCoin(above.lock()->getComponent<PositionComponent>().getPosition()));
+      getComponent<MarioSoundComponent>().PlayCoinEffect();
+    }
   }
   if(below.lock() != nullptr) {
     if(below.lock()->hasComponent<EnemyTag>()) {

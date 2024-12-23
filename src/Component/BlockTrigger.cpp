@@ -59,6 +59,34 @@ TriggerBehaviour* TriggerBrokenBlockWhenHitBySmall::trigger(AbstractEntity *enti
 //     entity->getComponent<TransformComponent>().setVelocity(velocity);
 //     return retVal;
 // }
+
+TriggerCoin::TriggerCoin() {
+    sumFrame = 0.0f;
+}
+
+TriggerCoin::TriggerCoin(Vector2 _fixedPosition) {
+    fixedPosition = _fixedPosition;
+    sumFrame = 0.0f;
+}
+TriggerBehaviour* TriggerCoin::trigger(AbstractEntity *entity, float deltaTime) {
+    TriggerBehaviour* retVal = this;
+    sumFrame += deltaTime;
+    Vector2 velocity = entity->getComponent<TransformComponent>().getVelocity();
+    if(sumFrame < 0.2f) {
+        velocity = velocity + (Vector2){0.0f, -600.0f * deltaTime};
+    }
+    velocity = velocity + (Vector2){0.0f, 120.0f * deltaTime};
+    if(velocity.y >= 1200.0f) velocity.y = 1200.0f;
+    if(velocity.y <= -1200.0f) velocity.y = -1200.0f;
+    if(sumFrame >= 0.6f) {
+        entity->getComponent<PositionComponent>().setPosition(fixedPosition);
+        velocity.y = 0.0f;
+        retVal = nullptr;
+    }
+    entity->getComponent<TransformComponent>().setVelocity(velocity);
+    return retVal;
+}
+
 BlockTriggerComponent::BlockTriggerComponent() : Component("BlockTriggerComponent"), trigger(nullptr) {}
 BlockTriggerComponent::~BlockTriggerComponent() {
     if(trigger) {

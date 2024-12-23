@@ -122,6 +122,12 @@ void MapRenderer::loadObjectGroup(const json& layer) {
             if (obj) {
                 objects.push_back(obj);
             }
+        } else if (name == "Coin"){
+            entityFactory = std::make_unique<EntityFactory>();
+            auto obj = entityFactory->createBlock("Coin", {x, y});
+            if (obj) {
+                objects.push_back(obj);
+            }
         }
         
 

@@ -103,3 +103,14 @@ public:
     void draw() override;
     void update(float deltaTime) override;
 };
+
+class Coin : public AbstractEntity {
+private:
+    bool isCollision = false;
+public:
+    Coin() = default;
+    Coin(Vector2 position);
+    ~Coin() = default;
+    void draw() override;
+    void update(float deltaTime) override;
+};

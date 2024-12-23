@@ -82,6 +82,15 @@ void PlayableEntity::collisionAbove() {
         above.lock()->getComponent<BlockTriggerComponent>().setTrigger(new TriggerBrokenBlockWhenHitBySmall(above.lock()->getComponent<PositionComponent>().getPosition()));
         getComponent<MarioSoundComponent>().PlayBumpEffect();
       }
+      else{
+        above.lock()->getComponent<BlockTriggerComponent>().setTrigger(new TriggerBrokenBlockWhenHitByLarge(above.lock()->getComponent<PositionComponent>().getPosition()));
+        getComponent<MarioSoundComponent>().PlayBreakBlockEffect();
+      }
+    }
+    if(above.lock()->name == "QuestionBlock")
+    {
+      above.lock()->getComponent<BlockTriggerComponent>().setTrigger(new TriggerQuestionBlock(above.lock()->getComponent<PositionComponent>().getPosition()));
+      getComponent<MarioSoundComponent>().PlayBumpEffect();
     }
     if(above.lock()->hasComponent<EnemyTag>()) {
       if(state->getSize() == "SMALL")
@@ -100,6 +109,13 @@ void PlayableEntity::collisionBelow() {
   auto below = getComponent<CollisionComponent>().getBelow();
   if(below.lock() != nullptr) {
     if(below.lock()->hasComponent<EnemyTag>()) {
+      if(below.lock()->name == "Piranha") {
+        if(state->getSize() == "SMALL")
+          setToDie();
+        else {
+          setToSmall();
+        }
+      }
       if(below.lock()->hasComponent<CollisionComponent>())
         below.lock()->getComponent<CollisionComponent>().setAbove(Shared<PlayableEntity>(this));
     }

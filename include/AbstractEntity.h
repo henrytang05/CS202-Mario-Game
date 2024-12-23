@@ -5,8 +5,8 @@
 #include "Interface.h"
 #include "Logger.h"
 #include <cstdint>
-
-class AbstractEntity : public IUpdatable, public IDrawable {
+#include "Observer.h"
+class AbstractEntity : public IUpdatable, public IDrawable, public Subject {
 public:
   AbstractEntity() : active(true), name("Unnamed") { id = nextID(); }
   AbstractEntity(std::string name) : active(true), name(name) { id = nextID(); }
@@ -30,7 +30,6 @@ public:
 
   bool isActive() const { return active; }
   void destroy() { active = false; }
-
 private:
   uint32_t nextID() const {
     static uint32_t nextID = 0;
@@ -39,8 +38,9 @@ private:
 
 public:
   bool active;
+  bool isCollision = false;
   std::string name;
-  std::vector<Unique<Component>> components;
+  std::vector<Shared<Component>> components;
 
 private:
   uint32_t id;
@@ -95,21 +95,23 @@ template <typename T> inline void AbstractEntity::removeComponent() {
   T &c = getComponent<T>();
   for (auto it = components.begin(); it != components.end(); ++it) {
     if (it->get() == &c) {
+      componentArray[getComponentTypeID<T>()] = nullptr;
+      componentBitset[getComponentTypeID<T>()] = false;
       components.erase(it);
       break;
     }
   }
-  componentArray[getComponentTypeID<T>()] = nullptr;
-  componentBitset[getComponentTypeID<T>()] = false;
 }
 
 template <typename T, typename... TArgs>
 inline T &AbstractEntity::modifyComponent(TArgs &&...mArgs) {
+
   T &c = getComponent<T>();
   for (auto it = components.begin(); it != components.end(); ++it) {
     if (it->get() == &c) {
       std::unique_ptr<T> new_component =
           std::make_unique<T>(std::forward<TArgs>(mArgs)...);
+      new_component->setEntity(this);
       *it = std::move(new_component);
       componentArray[getComponentTypeID<T>()] = it->get();
       break;
@@ -119,3 +121,4 @@ inline T &AbstractEntity::modifyComponent(TArgs &&...mArgs) {
 }
 
 #endif // ABSTRACTENTITY_
+

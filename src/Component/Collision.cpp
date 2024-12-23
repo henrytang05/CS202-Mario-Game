@@ -129,6 +129,7 @@ void CollisionComponent::update(float deltaTime) {
     Vector2 cp, cn;
     for(int i = 0; i < (int)entities->size(); i++) {
         if(*otherEntity[i] == *entity) continue;
+        if(!otherEntity[i]->hasComponent<BoundingBoxComponent>()) continue;
         Vector2 position = otherEntity[i]->getComponent<PositionComponent>().getPosition();
         Vector2 size = otherEntity[i]->getComponent<BoundingBoxComponent>().getSize();
         Rectangle bbOtherEntity = (Rectangle){position.x, position.y, size.x, size.y};

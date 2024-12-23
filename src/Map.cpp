@@ -72,12 +72,18 @@ void MapRenderer::loadObjectGroup(const json& layer) {
         //Create game objects based on type
         if (name == "Pipe") {
             entityFactory = std::make_unique<EntityFactory>();
+            for (auto const &property : object_layer["properties"]) {
+                if(property["name"]=="height"){
+                    height = property["value"];
+                }
+                if(property["name"]=="width"){
+                    width = property["value"];
+                }
+            }
             auto obj = entityFactory->createPipe({x, y}, {width, height});
             if (obj) {
                 objects.push_back(obj);
             }
-            std::cerr<<"x: "<<x<<" y: "<<y<<std::endl;
-            std::cerr<<"width: "<<width<<" height: "<<height<<std::endl;
         } else if (name == "Flag") {
             // Create an enemy object
             entityFactory = std::make_unique<EntityFactory>();
@@ -119,6 +125,41 @@ void MapRenderer::loadObjectGroup(const json& layer) {
         } else if (name == "QuestionBlock"){
             entityFactory = std::make_unique<EntityFactory>();
             auto obj = entityFactory->createBlock("QuestionBlock", {x, y});
+            if(object_layer.find("properties") != object_layer.end()){
+                for (auto const &property : object_layer["properties"]) {
+                    if(property["name"]=="isCoin"){
+                        if(property["value"]==true){
+                            //items.push_back(_entityFactory->createCoin({position.x, position.y - 16.0f}));
+                        }
+                    }
+                    if(property["name"]=="isMushroom"){
+                        if(property["value"]==true){
+                            entityFactory = std::make_unique<EntityFactory>();
+                            auto mushroom = entityFactory->createMushroom({x, y});
+                            if(mushroom){
+                                objects.push_back(mushroom);
+                                obj->addObserver(mushroom);
+                            }
+                        }
+                    }
+                }
+            }
+            if (obj) {
+                objects.push_back(obj);
+            }
+              
+            
+        } 
+        else if (name == "Piranha"){
+            entityFactory = std::make_unique<EntityFactory>();
+            auto obj = entityFactory->createPiranha({x, y});
+            if (obj) {
+                objects.push_back(obj);
+            }
+        } 
+        else if (name == "Mushroom"){
+            entityFactory = std::make_unique<EntityFactory>();
+            auto obj = entityFactory->createMushroom({x, y});
             if (obj) {
                 objects.push_back(obj);
             }
@@ -129,8 +170,6 @@ void MapRenderer::loadObjectGroup(const json& layer) {
                 objects.push_back(obj);
             }
         }
-        
-
     }
 }
 

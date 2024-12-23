@@ -1,0 +1,124 @@
+#ifndef ABSTRACTENTITY_H
+#define ABSTRACTENTITY_H
+
+#include "Components/Component.h"
+#include "Interface.h"
+#include "Logger.h"
+#include <cstdint>
+#include "Observer.h"
+class AbstractEntity : public IUpdatable, public IDrawable, public Subject {
+public:
+  AbstractEntity() : active(true), name("Unnamed") { id = nextID(); }
+  AbstractEntity(std::string name) : active(true), name(name) { id = nextID(); }
+  virtual ~AbstractEntity() {
+#ifdef _DEBUG
+    Log(name + " created: " + std::to_string(id));
+#endif
+  }
+  template <typename T> inline bool hasComponent() const;
+  template <typename... TArgs> inline bool hasAllComponents() const;
+  template <typename T, typename... TArgs>
+  inline T &addComponent(TArgs &&...mArgs);
+  template <typename T> inline T &getComponent() const;
+  template <typename T> inline void removeComponent();
+  template <typename T, typename... TArgs>
+  inline T &modifyComponent(TArgs &&...mArgs);
+
+  uint32_t getId() const { return id; }
+  bool operator==(const AbstractEntity &other) const { return id == other.id; }
+  bool operator!=(const AbstractEntity &other) const { return id != other.id; }
+
+  bool isActive() const { return active; }
+  void destroy() { active = false; }
+private:
+  uint32_t nextID() const {
+    static uint32_t nextID = 0;
+    return nextID++;
+  }
+
+public:
+  bool active;
+  bool isCollision = false;
+  std::string name;
+  std::vector<Shared<Component>> components;
+
+private:
+  uint32_t id;
+  ComponentArray componentArray;
+  ComponentBitSet componentBitset;
+};
+
+template <typename T> inline bool AbstractEntity::hasComponent() const {
+  ComponentTypeID typeID = getComponentTypeID<T>();
+
+  if (typeID >= maxComponents) {
+    Log("Exceeded maximum number of components", LogLevel::ERROR, "log.txt");
+    return false;
+  }
+  return this->componentBitset.test(typeID);
+}
+
+template <typename... TArgs>
+inline bool AbstractEntity::hasAllComponents() const {
+  return (hasComponent<TArgs>() && ...);
+}
+
+template <typename T, typename... TArgs>
+inline T &AbstractEntity::addComponent(TArgs &&...mArgs) {
+  ComponentTypeID typeID = getComponentTypeID<T>();
+  if (typeID >= maxComponents) {
+    throw std::runtime_error("Exceeded maximum number of components");
+  }
+  T *c(new T(std::forward<TArgs>(mArgs)...));
+  c->setEntity(this);
+
+  // Unique<Component> uPtr{c};
+  // components.emplace_back(std::move(uPtr));
+  components.push_back(Unique<Component>(c));
+
+  componentArray[getComponentTypeID<T>()] = c;
+  componentBitset[getComponentTypeID<T>()] = true;
+  c->init();
+
+#ifdef _DEBUG
+  Log("Component added: " + c->name);
+#endif
+  return *c;
+}
+
+template <typename T> inline T &AbstractEntity::getComponent() const {
+  auto ptr(componentArray[getComponentTypeID<T>()]);
+  return *static_cast<T *>(ptr);
+}
+
+template <typename T> inline void AbstractEntity::removeComponent() {
+  T &c = getComponent<T>();
+  for (auto it = components.begin(); it != components.end(); ++it) {
+    if (it->get() == &c) {
+      componentArray[getComponentTypeID<T>()] = nullptr;
+      componentBitset[getComponentTypeID<T>()] = false;
+      components.erase(it);
+      break;
+    }
+  }
+}
+
+template <typename T, typename... TArgs>
+inline T &AbstractEntity::modifyComponent(TArgs &&...mArgs) {
+
+  T &c = getComponent<T>();
+  for (auto it = components.begin(); it != components.end(); ++it) {
+    if (it->get() == &c) {
+      std::unique_ptr<T> new_component =
+          std::make_unique<T>(std::forward<TArgs>(mArgs)...);
+      new_component->setEntity(this);
+      *it = std::move(new_component);
+      componentArray[getComponentTypeID<T>()] = it->get();
+      break;
+    }
+  }
+  return c;
+}
+
+#endif // ABSTRACTENTITY_
+

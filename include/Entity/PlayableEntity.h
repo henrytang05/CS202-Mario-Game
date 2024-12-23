@@ -47,13 +47,21 @@ public:
   PlayableEntity();
   PlayableEntity(std::string name);
 
-  virtual ~PlayableEntity() = default;
+  virtual ~PlayableEntity();
   Vector2 getVelocity() override;
   void setVelocity(Vector2 newVelocity) override;
   virtual void handleInput(float deltaTime);
   bool checkAlive() const;
   bool checkOver() const;
   void update(float deltaTime) override;
+  void setToDie();
+  void setToSmall();
+  void setToLarge();
+  void resolveCollision();
+  void collisionRight();
+  void collisionLeft();
+  void collisionAbove();
+  void collisionBelow();
   void draw() override;
 };
 #endif // PLAYABLE_ENTITY_H

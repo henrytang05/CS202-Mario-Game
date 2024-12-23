@@ -10,7 +10,7 @@ Animation::Animation(float frameDelay, bool isLooping)
 
 Texture2D &Animation::operator[](int index) { return frames[index]; }
 
-TextureComponent::TextureComponent() : state(""), lastState("") {}
+TextureComponent::TextureComponent() : Component("TextureComponent"), state(""), lastState("") {}
 
 void TextureComponent::drawTexture(std::string state) {
   Vector2 position = entity->getComponent<PositionComponent>().getPosition();

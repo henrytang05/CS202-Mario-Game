@@ -11,10 +11,6 @@ public:
 
   void setSize(Vector2 size);
   Vector2 getSize();
-  Rectangle getTopLeft();
-  Rectangle getTopRight();
-  Rectangle getBotLeft();
-  Rectangle getBotRight();
 
 private:
   PositionComponent *position;

@@ -74,3 +74,14 @@ Weak<AbstractEntity> EntityFactory::createFlagPole(Vector2 position) {
     Shared<FlagPole> flagPole = std::make_shared<FlagPole>(position, &EM);
     return flagPole;
 }
+Shared<AbstractEntity> EntityFactory::createPiranha(Vector2 position)
+{
+  Shared<AbstractEntity> piranha = std::make_shared<Piranha>(position);
+  return piranha;
+}
+
+Shared<Mushroom> EntityFactory::createMushroom(Vector2 position)
+{
+  Shared<Mushroom> powerUp = std::make_shared<Mushroom>(position);
+  return powerUp;
+}

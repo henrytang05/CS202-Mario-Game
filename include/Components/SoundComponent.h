@@ -4,9 +4,9 @@
 #include "raylib.h"
 
 class MarioSoundComponent : public Component {
-    private:
+private:
     std::array<Sound, 24> soundsEffects;
-    public:
+public:
     MarioSoundComponent();
     void init() override {};
     void LoadSounds();
@@ -34,4 +34,13 @@ class MarioSoundComponent : public Component {
     void PlayWarningEffect();
     void PlayWorldClearEffect();
     void PlayTingSound();
+};
+
+class CoinSoundComponent : public Component {
+private:
+    Sound soundEffect;
+public:
+    CoinSoundComponent();
+    void init() override {};
+    void PlayCoinEffect();
 };

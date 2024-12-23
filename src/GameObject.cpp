@@ -277,7 +277,12 @@ Coin::Coin(Vector2 position): AbstractEntity("Coin") {
     addComponent<BlockTriggerComponent>();
     addComponent<TransformComponent>((Vector2){0.0f, 0.0f});
     addComponent<TextureComponent>();
-    getComponent<TextureComponent>().addTexture("Normal", TextureManager::getInstance().getTexture("Coin"));
+    vector<Texture2D> textures;
+    textures.push_back(TextureManager::getInstance().getTexture("Coin1"));
+    textures.push_back(TextureManager::getInstance().getTexture("Coin2"));
+    textures.push_back(TextureManager::getInstance().getTexture("Coin3"));
+    getComponent<TextureComponent>().addTexture("Normal", textures, 0.1f, true);
+    getComponent<TextureComponent>().changeState("Normal");
 }
 
 void Coin::draw() {

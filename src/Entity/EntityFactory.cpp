@@ -118,3 +118,9 @@ Shared<Mushroom> EntityFactory::createMushroom(Vector2 position)
   Shared<Mushroom> powerUp = std::make_shared<Mushroom>(position);
   return powerUp;
 }
+
+Shared<Coin> EntityFactory::createCoin(Vector2 position)
+{
+  Shared<Coin> coin = std::make_shared<Coin>(position);
+  return coin;
+}

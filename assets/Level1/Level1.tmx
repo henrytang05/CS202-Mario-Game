@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="164" height="50" tilewidth="16" tileheight="16" infinite="0" nextlayerid="30" nextobjectid="692">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="164" height="50" tilewidth="16" tileheight="16" infinite="0" nextlayerid="30" nextobjectid="697">
  <editorsettings>
   <export target="Level1new.json" format="json"/>
  </editorsettings>
@@ -12,9 +12,9 @@
  <tileset firstgid="73" source="Castle.json"/>
  <tileset firstgid="74" source="Checkpoint.json"/>
  <tileset firstgid="77" source="Pipe.json"/>
- <tileset firstgid="78" source="Coin-1.json"/>
- <tileset firstgid="79" source="Piranha.json"/>
- <tileset firstgid="81" source="Mushroom.json"/>
+ <tileset firstgid="78" source="Coin.json"/>
+ <tileset firstgid="81" source="Piranha.json"/>
+ <tileset firstgid="83" source="Mushroom.json"/>
  <layer id="13" name="Sky" width="164" height="50">
   <data encoding="csv">
 32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,
@@ -445,8 +445,8 @@
   <object id="66" gid="74" x="2487.15" y="687.818" width="16" height="16"/>
  </objectgroup>
  <objectgroup id="23" name="Piranha">
-  <object id="690" gid="79" x="407.667" y="712" width="16" height="32"/>
-  <object id="691" gid="79" x="1608.18" y="727.909" width="16" height="32"/>
+  <object id="692" gid="81" x="407.5" y="711.583" width="16" height="32"/>
+  <object id="693" gid="81" x="1607.2" y="727.5" width="16" height="32"/>
  </objectgroup>
  <objectgroup id="14" name="Castle" visible="0">
   <object id="64" x="2544" y="688" width="80" height="80"/>
@@ -494,6 +494,8 @@
   <object id="673" gid="78" x="2160" y="768" width="16" height="16"/>
   <object id="674" gid="78" x="2176" y="768" width="16" height="16"/>
   <object id="675" gid="78" x="2192" y="768" width="16" height="16"/>
+  <object id="694" gid="78" x="80" y="720" width="16" height="16"/>
+  <object id="696" gid="83" x="960" y="0" width="16" height="16"/>
  </objectgroup>
  <objectgroup id="7" name="Goomba">
   <object id="5" gid="71" x="304" y="768" width="16" height="16"/>

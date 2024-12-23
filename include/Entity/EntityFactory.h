@@ -137,6 +137,17 @@ private:
   Vector2 position_fixed;
 };
 
+class Coin : public AbstractEntity {
+private:
+    bool isCollision = false;
+public:
+    Coin() = default;
+    Coin(Vector2 position);
+    ~Coin() = default;
+    void draw() override;
+    void update(float deltaTime) override;
+};
+
 class IFactory {
 public:
   map<string, Texture2D> mapTexture;
@@ -151,6 +162,7 @@ public:
   virtual Shared<AbstractEntity> createFlagPole(Vector2 position) = 0;
   virtual Shared<AbstractEntity> createPiranha(Vector2 position) = 0;
   virtual Shared<Mushroom> createMushroom(Vector2 position) = 0;
+  virtual Shared<Coin> createCoin(Vector2 position) = 0;
 };
 
 class EntityFactory : public IFactory {
@@ -166,6 +178,7 @@ public:
   Shared<AbstractEntity> createFlagPole(Vector2 position) override;
   Shared<AbstractEntity> createPiranha(Vector2 position) override;
   Shared<Mushroom> createMushroom(Vector2 position) override;
+  Shared<Coin> createCoin(Vector2 position) override;
 };
 
 #endif // ENTITY_FACTORY_H

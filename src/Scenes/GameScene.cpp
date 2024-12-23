@@ -61,7 +61,7 @@ void GameScene::loadResources() {
   background = LoadTextureFromImage(bImage);
   UnloadImage(bImage);
   //Create Map
-  entities = mapRenderer.createMap("assets/Level1/Level1.json");
+  entities = mapRenderer.createMap("assets/Level1/Level1new.json");
 }
 void GameScene::draw() {
   float dt = GetFrameTime();

@@ -222,43 +222,45 @@ Mushroom::Mushroom(Vector2 position) {
 
 void Mushroom::handleCollision()
 {
-CollisionComponent &collision = getComponent<CollisionComponent>();
-  auto above = collision.getAbove();
-  auto below = collision.getBelow();
-  auto left = collision.getLeft();
-  auto right = collision.getRight();
+    CollisionComponent &collision = getComponent<CollisionComponent>();
+    auto above = collision.getAbove();
+    auto below = collision.getBelow();
+    auto left = collision.getLeft();
+    auto right = collision.getRight();
 
-  auto &trans = getComponent<TransformComponent>();
-  
-  Vector2 v = trans.getVelocity();
-  if (left.lock() && !left.lock()->hasComponent<EnemyTag>())
-    v.x = ENEMY_SPEED;
-  else if (right.lock() && !right.lock()->hasComponent<EnemyTag>())
-    v.x = -ENEMY_SPEED;
-  if(below.lock() == nullptr) v.y = 10.0f;
-  trans.setVelocity(v);
+    auto &trans = getComponent<TransformComponent>();
+    
+    Vector2 v = trans.getVelocity();
+    if (left.lock() && !left.lock()->hasComponent<EnemyTag>())
+        v.x = -ENEMY_SPEED;
+    if (right.lock() && !right.lock()->hasComponent<EnemyTag>())
+        v.x = ENEMY_SPEED;
+    if(below.lock() == nullptr)
+        v.y = 100.0f;
+    trans.setVelocity(v);
 
-  getComponent<CollisionComponent>().reset();
+    getComponent<CollisionComponent>().reset();
 }
 
 void Mushroom::update(float deltaTime) {
     if(isTriggered)
     {   
         elapsedTime += deltaTime;
-        float frequency = 1.0f; // Speed of oscillation
 
         auto position_change = getComponent<PositionComponent>().getPosition();
         position_change.y = position_change.y - 16.0f * deltaTime;
 
         // Ensure it doesn't go below the fixed position
-        if (position_change.y <= position_fixed.y - 16.0f) {
-            position_change.y = position_fixed.y - 16.0f;
+        if (position_change.y < position_fixed.y - 16.0f) {
+            position_change.y = position_fixed.y - 17.0f;
             isTriggered = false;
+            getComponent<BoundingBoxComponent>().setSize((Vector2){16.0f, 16.0f});
             getComponent<TransformComponent>().setVelocity((Vector2){50.0f, 10.0f});
         }
         getComponent<PositionComponent>().setPosition(position_change);
     }
-
+    if(this->getComponent<BoundingBoxComponent>().getSize().y == 16.0f)
+        handleCollision();
     for(auto &comp : components)
         comp->update(deltaTime);
 }
@@ -266,5 +268,4 @@ void Mushroom::update(float deltaTime) {
 void Mushroom:: onNotify()
 {
     isTriggered = true;
-    getComponent<BoundingBoxComponent>().setSize({16.0f, 16.0f});  
 }

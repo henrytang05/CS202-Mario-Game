@@ -54,7 +54,7 @@ GameScene::~GameScene() {
 }
 void GameScene::loadResources() {
   //Loading BackGround
-  Image bImage = LoadImage("assets/Level2/BackGround.png");
+  Image bImage = LoadImage("assets/Level1/BackGround.png");
   background = LoadTextureFromImage(bImage);
   UnloadImage(bImage);
   //Create Map
@@ -70,7 +70,6 @@ void GameScene::draw() {
     if (entity->hasAllComponents<TextureComponent, PositionComponent>()) {
       systems[1]->update(entity, dt);
     }
-    entity->draw();
   }
   EndMode2D();
   DrawText(TextFormat("Time: %03i", (int)time), 1200, 35, GAMEPLAY_TEXT_SIZE,

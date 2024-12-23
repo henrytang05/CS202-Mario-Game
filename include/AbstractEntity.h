@@ -30,7 +30,7 @@ public:
 
   bool isActive() const { return active; }
   void destroy() { active = false; }
-
+  
 private:
   uint32_t nextID() const {
     static uint32_t nextID = 0;
@@ -39,8 +39,9 @@ private:
 
 public:
   bool active;
+  bool isCollision = false;
   std::string name;
-  std::vector<Unique<Component>> components;
+  std::vector<Shared<Component>> components;
 
 private:
   uint32_t id;
@@ -95,12 +96,12 @@ template <typename T> inline void AbstractEntity::removeComponent() {
   T &c = getComponent<T>();
   for (auto it = components.begin(); it != components.end(); ++it) {
     if (it->get() == &c) {
+      componentArray[getComponentTypeID<T>()] = nullptr;
+      componentBitset[getComponentTypeID<T>()] = false;
       components.erase(it);
       break;
     }
   }
-  componentArray[getComponentTypeID<T>()] = nullptr;
-  componentBitset[getComponentTypeID<T>()] = false;
 }
 
 template <typename T, typename... TArgs>

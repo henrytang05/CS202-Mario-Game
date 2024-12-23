@@ -135,9 +135,14 @@ void MapRenderer::loadObjectGroup(const json& layer) {
             if (obj) {
                 objects.push_back(obj);
             }
+        } 
+        else if (name == "Mushroom"){
+            entityFactory = std::make_unique<EntityFactory>();
+            auto obj = entityFactory->createMushroom({x, y});
+            if (obj) {
+                objects.push_back(obj);
+            }
         }
-        
-
     }
 }
 

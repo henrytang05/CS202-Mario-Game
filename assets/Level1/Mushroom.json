@@ -1,25 +1,24 @@
 { "columns":1,
- "image":"Piranha-Close.png",
- "imageheight":24,
+ "image":"Mushroom.png",
+ "imageheight":16,
  "imagewidth":16,
  "margin":0,
- "name":"Piranha-Close",
+ "name":"Mushroom",
  "objectalignment":"topleft",
  "spacing":0,
  "tilecount":1,
  "tiledversion":"1.11.0",
- "tileheight":24,
+ "tileheight":16,
  "tiles":[
         {
          "id":0,
          "objectgroup":
             {
              "draworder":"index",
-             "id":2,
              "name":"",
              "objects":[
                     {
-                     "height":24,
+                     "height":16,
                      "id":1,
                      "name":"",
                      "rotation":0,
@@ -35,7 +34,7 @@
              "x":0,
              "y":0
             },
-         "type":"Piranha"
+         "type":"Mushroom"
         }],
  "tilewidth":16,
  "type":"tileset",

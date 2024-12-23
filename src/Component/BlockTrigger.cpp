@@ -61,12 +61,31 @@ TriggerBrokenBlockWhenHitByLarge::TriggerBrokenBlockWhenHitByLarge() {
     sumFrame = 0.0f;
 }
 
+TriggerBrokenBlockWhenHitByLarge::TriggerBrokenBlockWhenHitByLarge(Vector2 _fixedPosition) {
+    fixedPosition = _fixedPosition;
+    sumFrame = 0.0f;
+}
+
 TriggerBehaviour* TriggerBrokenBlockWhenHitByLarge::trigger(AbstractEntity *entity, float deltaTime) {
-    
-    entity->removeComponent<BoundingBoxComponent>();
-
-
     TriggerBehaviour* retVal = this;
+    entity->removeComponent<BoundingBoxComponent>();
+    sumFrame += deltaTime;
+    if(sumFrame <= 0.1f){
+    entity->modifyComponent<TextureComponent>();
+    vector<Texture2D> textures;
+    textures.push_back(LoadTextureFromImage(LoadImage("assets/Block/Pieces1.png")));
+    textures.push_back(LoadTextureFromImage(LoadImage("assets/Block/Pieces2.png")));
+    textures.push_back(LoadTextureFromImage(LoadImage("assets/Block/Pieces3.png")));
+    textures.push_back(LoadTextureFromImage(LoadImage("assets/Block/Pieces4.png")));
+    entity->getComponent<TextureComponent>().addTexture("Normal", textures, 0.1f, true);
+    entity->getComponent<PositionComponent>().setPosition(fixedPosition);
+    entity->getComponent<TextureComponent>().changeState("Normal");
+    }
+    else if( sumFrame >= 0.2f)
+    {
+        entity->removeComponent<TextureComponent>();
+        retVal = nullptr;
+    }
     return retVal;
 }
 
@@ -82,10 +101,6 @@ TriggerQuestionBlock::TriggerQuestionBlock(Vector2 _fixedPosition)
 }
 TriggerBehaviour* TriggerQuestionBlock::trigger(AbstractEntity *entity, float deltaTime)
 {   
-    entity->name = "HardBlock";
-    entity->modifyComponent<TextureComponent>();
-    entity->getComponent<TextureComponent>().addTexture("Normal", TextureManager::getInstance().getTexture("HardBlock"));
-    
     TriggerBehaviour *retVal = this;
     sumFrame += deltaTime;
     Vector2 velocity = entity->getComponent<TransformComponent>().getVelocity();
@@ -96,6 +111,10 @@ TriggerBehaviour* TriggerQuestionBlock::trigger(AbstractEntity *entity, float de
     if(velocity.y >= 600.0f) velocity.y = 600.0f;
     if(velocity.y <= -600.0f) velocity.y = -600.0f;
     if(sumFrame >= 0.3f) {
+        entity->name = "HardBlock";
+        entity->modifyComponent<TextureComponent>();
+        vector<Texture2D> textures;
+        entity->getComponent<TextureComponent>().addTexture("Normal", TextureManager::getInstance().getTexture("HardBlock"));
         entity->getComponent<PositionComponent>().setPosition(fixedPosition);
         velocity.y = 0.0f;
         retVal = nullptr;

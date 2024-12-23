@@ -25,8 +25,10 @@ public:
 class TriggerBrokenBlockWhenHitByLarge : public TriggerBehaviour {
 private:
     float sumFrame;
+    Vector2 fixedPosition;
 public:
     TriggerBrokenBlockWhenHitByLarge();
+    TriggerBrokenBlockWhenHitByLarge(Vector2 _fixedPosition);
     TriggerBehaviour* trigger(AbstractEntity *entityy, float deltaTime) override;
 };
 

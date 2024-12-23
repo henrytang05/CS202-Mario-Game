@@ -117,3 +117,14 @@ private:
   Vector2 position_fixed;
   float elapsedTime=0;
 };
+
+class Mushroom : public AbstractEntity {
+public:
+  Mushroom() = default;
+  Mushroom(Vector2 position);
+  void update(float deltatime) override;
+  void draw() override {};
+
+private:
+  void handleCollision();
+};

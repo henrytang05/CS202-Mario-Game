@@ -24,8 +24,8 @@ void TransformSystem::update(Shared<AbstractEntity> entity, float dt) {
 }
 
 void AnimationSystem::update(Shared<AbstractEntity> entity, float dt) {
-  if (!entity->hasAllComponents<TextureComponent, PositionComponent,
-                                BoundingBoxComponent>()) {
+  if (!entity->hasAllComponents<TextureComponent, PositionComponent
+                            >()) {
     throw std::runtime_error(
         "Entity does not have required components for RenderSystem");
   }

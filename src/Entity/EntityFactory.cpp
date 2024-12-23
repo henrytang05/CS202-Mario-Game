@@ -123,3 +123,9 @@ Shared<AbstractEntity> EntityFactory::createPiranha(Vector2 position)
   Shared<AbstractEntity> piranha = std::make_shared<Piranha>(position);
   return piranha;
 }
+
+Shared<AbstractEntity> EntityFactory::createMushroom(Vector2 position)
+{
+  Shared<AbstractEntity> powerUp = std::make_shared<Mushroom>(position);
+  return powerUp;
+}

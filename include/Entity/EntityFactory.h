@@ -21,6 +21,7 @@ public:
   virtual Shared<AbstractEntity> createFlag(Vector2 position) = 0;
   virtual Shared<AbstractEntity> createFlagPole(Vector2 position) = 0;
   virtual Shared<AbstractEntity> createPiranha(Vector2 position) = 0;
+  virtual Shared<AbstractEntity> createMushroom(Vector2 position) = 0;
 };
 
 class EntityFactory : public IFactory {
@@ -35,6 +36,7 @@ public:
   Shared<AbstractEntity> createFlag(Vector2 position) override;
   Shared<AbstractEntity> createFlagPole(Vector2 position) override;
   Shared<AbstractEntity> createPiranha(Vector2 position) override;
+  Shared<AbstractEntity> createMushroom(Vector2 position) override;
 };
 
 #endif // ENTITY_FACTORY_H

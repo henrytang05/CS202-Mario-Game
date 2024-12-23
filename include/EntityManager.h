@@ -64,7 +64,7 @@ public:
 
   virtual ~AbstractEntity();
 
-  void initEntity(EntityManager *EM);
+  void initEntity();
   uint32_t getID() const;
   bool operator==(const AbstractEntity &other) const;
   bool operator!=(const AbstractEntity &other) const;

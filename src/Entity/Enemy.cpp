@@ -31,20 +31,20 @@ void Enemy::handleCollision() {
   auto &trans = getComponent<TransformComponent>();
 
   Vector2 v = trans.getVelocity();
-  if (left && !left->hasComponent<EnemyTag>())
+  if (left.lock() && !left.lock()->hasComponent<EnemyTag>())
     v.x = ENEMY_SPEED;
-  else if (right && !right->hasComponent<EnemyTag>())
+  else if (right.lock() && !right.lock()->hasComponent<EnemyTag>())
     v.x = -ENEMY_SPEED;
 
-  if (!below) {
+  if (!below.lock()) {
     if (getComponent<PositionComponent>().getY() > screenHeight) {
       destroy();
       getComponent<TextureComponent>().changeState("Die");
     }
   }
   trans.setVelocity(v);
-  if (above != nullptr) {
-    if (above->hasComponent<PlayerTag>()) {
+  if (above.lock() != nullptr) {
+    if (above.lock()->hasComponent<PlayerTag>()) {
       destroy();
       getComponent<TextureComponent>().changeState("Die");
     }

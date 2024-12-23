@@ -6,12 +6,12 @@
 CollisionComponent::CollisionComponent()
     : Component("CollisionComponent"), entities(nullptr) {
         contact.resize(4);
-        for(int i = 0; i < 4; i++) contact[i] = nullptr;
+        for(int i = 0; i < 4; i++) contact[i].reset();
     }
-CollisionComponent::CollisionComponent(Shared<std::vector<Shared<AbstractEntity>>> _entities)
+CollisionComponent::CollisionComponent(std::vector<Shared<AbstractEntity>> *_entities)
     : Component("CollisionComponent"), entities(_entities) {
         contact.resize(4);
-        for(int i = 0; i < 4; i++) contact[i] = nullptr;
+        for(int i = 0; i < 4; i++) contact[i].reset();
     }
 
 CollisionComponent::~CollisionComponent() {
@@ -93,12 +93,12 @@ bool CollisionComponent::DynamicRectVsRect(const float deltaTime, const Rectangl
     else
         return false;
 }
-bool CollisionComponent::ResolveDynamicRectVsRect(const float deltaTime, Shared<AbstractEntity> r_static)
+bool CollisionComponent::ResolveDynamicRectVsRect(const float deltaTime, Weak<AbstractEntity> r_static)
 {
     Vector2 contact_point, contact_normal;
     float contact_time = 0.0f;
-    Vector2 position = r_static->getComponent<PositionComponent>().getPosition();
-    Vector2 size = r_static->getComponent<BoundingBoxComponent>().getSize();
+    Vector2 position = r_static.lock()->getComponent<PositionComponent>().getPosition();
+    Vector2 size = r_static.lock()->getComponent<BoundingBoxComponent>().getSize();
     Rectangle bbOtherEntity = (Rectangle){position.x, position.y, size.x, size.y};
     if (DynamicRectVsRect(deltaTime, bbOtherEntity, contact_point, contact_normal, contact_time))
     {
@@ -119,7 +119,7 @@ bool CollisionComponent::ResolveDynamicRectVsRect(const float deltaTime, Shared<
     return false;
 }
 void CollisionComponent::reset() {
-    for(int i = 0; i < 4; i++) contact[i] = nullptr;
+    for(int i = 0; i < 4; i++) contact[i].reset();
 }
 void CollisionComponent::update(float deltaTime) {
     std::vector<pair<int, float>> col;
@@ -143,31 +143,31 @@ void CollisionComponent::update(float deltaTime) {
     for(auto x : col)
         ResolveDynamicRectVsRect(deltaTime, otherEntity[x.first]);
 }
-Shared<AbstractEntity> CollisionComponent::getBelow() {
+Weak<AbstractEntity> CollisionComponent::getBelow() {
     return contact[2];
 }
-Shared<AbstractEntity> CollisionComponent::getAbove() {
+Weak<AbstractEntity> CollisionComponent::getAbove() {
     return contact[0];
 }
-Shared<AbstractEntity> CollisionComponent::getRight() {
+Weak<AbstractEntity> CollisionComponent::getRight() {
     return contact[3];
 }
-Shared<AbstractEntity> CollisionComponent::getLeft() {
+Weak<AbstractEntity> CollisionComponent::getLeft() {
     return contact[1];
 }
 
-void CollisionComponent::setBelow(Shared<AbstractEntity> other) {
+void CollisionComponent::setBelow(Weak<AbstractEntity> other) {
     contact[2] = other;
 }
-void CollisionComponent::setAbove(Shared<AbstractEntity> other) {
+void CollisionComponent::setAbove(Weak<AbstractEntity> other) {
     contact[0] = other;
 }
-void CollisionComponent::setRight(Shared<AbstractEntity> other) {
+void CollisionComponent::setRight(Weak<AbstractEntity> other) {
     contact[3] = other;
 }
-void CollisionComponent::setLeft(Shared<AbstractEntity> other) {
+void CollisionComponent::setLeft(Weak<AbstractEntity> other) {
     contact[1] = other;
 }
-void CollisionComponent::setEntities(Shared<std::vector<Shared<AbstractEntity>>> _entities) {
+void CollisionComponent::setEntities(std::vector<Shared<AbstractEntity>> *_entities) {
     entities = _entities;
 }

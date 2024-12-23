@@ -42,8 +42,7 @@ void GameScene::init() {
   SoundCtrl.PlayGroundTheme();
   for (auto &entity : entities) {
     if (entity->hasComponent<CollisionComponent>()) {
-      entity->getComponent<CollisionComponent>().setEntities(
-          Shared<std::vector<Shared<AbstractEntity>>>(&entities));
+      entity->getComponent<CollisionComponent>().setEntities(&entities);
     }
   }
 }
@@ -84,7 +83,7 @@ Unique<Scene> GameScene::updateScene(float deltaTime) {
   }
   if(player->checkOver()) {
     return make_unique<IntroScene>();
-  } 
+  }
   return nullptr;
 }
 void GameScene::update(float deltaTime) {

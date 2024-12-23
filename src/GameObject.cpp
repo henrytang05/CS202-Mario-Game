@@ -299,6 +299,7 @@ Coin::Coin(Vector2 position): AbstractEntity("Coin") {
     addComponent<BoundingBoxComponent>(size);
     addComponent<PositionComponent>(position);
     addComponent<TextureComponent>();
+    addComponent<CoinSoundComponent>();
     vector<Texture2D> textures;
     textures.push_back(TextureManager::getInstance().getTexture("Coin1"));
     textures.push_back(TextureManager::getInstance().getTexture("Coin2"));
@@ -332,5 +333,6 @@ void Coin::update(float deltaTime) {
 void Coin::onNotify()
 {
     isTriggered = true;
-    getComponent<BoundingBoxComponent>().setSize({16.0f, 16.0f});  
+    getComponent<BoundingBoxComponent>().setSize({16.0f, 16.0f});
+    getComponent<CoinSoundComponent>().PlayCoinEffect();
 }

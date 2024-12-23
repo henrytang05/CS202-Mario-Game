@@ -156,6 +156,7 @@ void MarioSoundComponent::PlayTingSound()
 
 CoinSoundComponent::CoinSoundComponent(){
 	soundEffect = LoadSound("./assets/sounds/smb_coin.wav");
+	SetSoundVolume(soundEffect, SOUND_VOLUME);
 }
 
 void CoinSoundComponent::PlayCoinEffect() {

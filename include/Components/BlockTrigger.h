@@ -1,8 +1,8 @@
 #ifndef BLOCKTRIGGER_H
 #define BLOCKTRIGGER_H
 
-#include "AbstractEntity.h"
 #include "Components/Component.h"
+#include "EntityManager.h"
 #include "globals.h"
 
 class TriggerBehaviour {

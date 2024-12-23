@@ -10,6 +10,7 @@
 #define UNNAMED "Unnamed"
 #define INVALID_ENTITY_ID -1
 
+class Component;
 class EntityManager;
 // NOTE: Component
 typedef uint32_t EntityID;
@@ -36,7 +37,7 @@ public:
 template <typename T> class ComponentArray : public IComponentArray {
 public:
   ComponentArray<T>() { entityComponentIndexMap.fill(-1); }
-  ~ComponentArray();
+  virtual ~ComponentArray() = default;
   void onEntityDestroyed(EntityID id) override {
     throw std::runtime_error("Not implemented");
   }
@@ -51,14 +52,19 @@ private:
   bool active;       // check if entity is active
   uint32_t id;       // entity id
   std::string name;  // name for debuggin
-  EntityManager &EM; // Haven't find a way to make this safer
+  EntityManager *EM; // Haven't find a way to make this safer
 
 public:
   // AbstractEntity(); // Avoid using this constructor
   AbstractEntity(EntityManager &EM, uint32_t id = INVALID_ENTITY_ID,
                  std::string name = UNNAMED, bool active = true);
+
+  AbstractEntity(std::string name = UNNAMED, uint32_t id = INVALID_ENTITY_ID,
+                 bool active = true);
+
   virtual ~AbstractEntity();
 
+  void initEntity(EntityManager *EM);
   uint32_t getID() const;
   bool operator==(const AbstractEntity &other) const;
   bool operator!=(const AbstractEntity &other) const;
@@ -88,6 +94,8 @@ public:
 
 class EntityManager {
 
+  inline static EntityID lastID = 0;
+
 private:
   std::array<Shared<AbstractEntity>, maxEntity>
       entities; // id : entity
@@ -99,19 +107,19 @@ private:
       bitsetEntityMap; // component bitset : entities with those components
   std::unordered_map<EntityID, std::bitset<maxComponents>> entityBitsetMap;
 
-  std::unordered_map<std::string, EntityID> entityNameMap;
+  std::unordered_map<std::string, std::unordered_set<EntityID>> entityNameMap;
 
 public:
   Weak<AbstractEntity> createEntity(std::string name = UNNAMED);
-  std::array<Shared<AbstractEntity>, maxEntity> &getEntities();
+  std::array<Shared<AbstractEntity>, maxEntity> &getAllEntities();
+  std::vector<Weak<AbstractEntity>> getEntities();
 
   AbstractEntity &getEntityRef(uint32_t id);
-  AbstractEntity &getEntityRef(std::string name);
-
-  Weak<AbstractEntity> getEntityPtr(std::string name);
   Weak<AbstractEntity> getEntityPtr(uint32_t id);
 
-  uint32_t getEntityID(std::string name);
+  std::vector<Weak<AbstractEntity>> getEntityByName(std::string name);
+
+  std::vector<EntityID> getEntityID(std::string name);
   uint32_t getEntityID(AbstractEntity &entity);
   uint32_t getEntityID(Weak<AbstractEntity> entity);
   uint32_t getEntityID(Shared<AbstractEntity> &entity);
@@ -121,7 +129,7 @@ public:
   void destroyEntity(std::string name);
   void destroyEntity(AbstractEntity &entity);
   void destroyEntity(Weak<AbstractEntity> entity);
-  uint32_t nextID() const;
+  uint32_t nextID(bool reset = false) const;
 
   template <typename T>
   inline bool hasComponent(const AbstractEntity *entity) const;
@@ -158,11 +166,12 @@ public:
   template <typename T, typename... TArgs>
   inline T &modifyComponent(Shared<AbstractEntity> entity, TArgs &&...mArgs);
 
-public:
-  EntityManager();
+  void reset();
+  static EntityManager &getInstance();
   ~EntityManager();
 
 private:
+  EntityManager();
   EntityManager(const EntityManager &) = delete;
   EntityManager &operator=(const EntityManager &) = delete;
 };
@@ -343,30 +352,30 @@ inline std::vector<Weak<AbstractEntity>> EntityManager::getHasAll() {
 }
 
 template <typename T> inline bool AbstractEntity::hasComponent() const {
-  return EM.hasComponent<T>(this);
+  return EM->hasComponent<T>(this);
 }
 
 template <typename... TArgs>
 inline bool AbstractEntity::hasAllComponents() const {
-  return EM.hasAllComponents<TArgs...>(this);
+  return EM->hasAllComponents<TArgs...>(this);
 }
 
 template <typename T, typename... TArgs>
 inline T &AbstractEntity::addComponent(TArgs &&...mArgs) {
-  return EM.addComponent<T>(this, std::forward<TArgs>(mArgs)...);
+  return EM->addComponent<T>(this, std::forward<TArgs>(mArgs)...);
 }
 
 template <typename T> inline T &AbstractEntity::getComponent() {
-  return EM.getComponent<T>(this);
+  return EM->getComponent<T>(this);
 }
 
 template <typename T> inline void AbstractEntity::removeComponent() {
-  EM.removeComponent<T>(this);
+  EM->removeComponent<T>(this);
 }
 
 template <typename T, typename... TArgs>
 inline T &AbstractEntity::modifyComponent(TArgs &&...mArgs) {
-  return EM.modifyComponent<T>(this, std::forward<TArgs>(mArgs)...);
+  return EM->modifyComponent<T>(this, std::forward<TArgs>(mArgs)...);
 }
 
 #endif // ENTITY_MANAGER_H

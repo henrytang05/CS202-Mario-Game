@@ -1,7 +1,7 @@
 // #ifndef ENEMY_SYSTEM_H
 // #define ENEMY_SYSTEM_H
 //
-// #include "AbstractEntity.h"
+// #include "EntityManager.h"
 // #include "Components/Collision.h"
 // #include "Components/EnemyComponents.h"
 // #include "Components/Texture.h"

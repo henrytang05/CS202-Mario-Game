@@ -1,26 +1,27 @@
 #include "Entity/Mario.h"
 #include "Components/Components_include.h"
+#include "EntityManager.h"
 
-Mario::Mario()
-    : PlayableEntity("Mario") {
+Weak<AbstractEntity> initMario(EntityManager &EM) {
   Vector2 size({16, 20});
   Vector2 position = {0.0f, screenHeight - 100.0f};
   Vector2 velocity = {0, 0};
 
-  addComponent<CollisionComponent>();
-  addComponent<PositionComponent>(position);
-  addComponent<TransformComponent>(velocity);
-  addComponent<BoundingBoxComponent>(size);
-  addComponent<MarioSoundComponent>();
-  auto &texture = addComponent<TextureComponent>();
+  Shared<AbstractEntity> Mario = EM.createEntity("Mario").lock();
 
-  //SMALL RIGHT
+  Mario->addComponent<CollisionComponent>();
+  Mario->addComponent<PositionComponent>(position);
+  Mario->addComponent<TransformComponent>(velocity);
+  Mario->addComponent<BoundingBoxComponent>(size);
+  Mario->addComponent<MarioSoundComponent>();
+  auto &texture = Mario->addComponent<TextureComponent>();
+
+  // SMALL RIGHT
   std::vector<Texture2D> textures;
   textures.push_back(LoadTexture("./assets/Mario/Small-Right-Idle.png"));
   texture.addTexture("SMALL-RIGHT-IDLE", textures);
   textures.clear();
 
-  
   textures.push_back(LoadTexture("./assets/Mario/Small-Right-Idle.png"));
   textures.push_back(LoadTexture("./assets/Mario/Small-Right-Moving.png"));
   texture.addTexture("SMALL-RIGHT-MOVING", textures);
@@ -47,7 +48,6 @@ Mario::Mario()
   texture.addTexture("SMALL-LEFT-IDLE", textures);
   textures.clear();
 
-  
   textures.push_back(LoadTexture("./assets/Mario/Small-Left-Idle.png"));
   textures.push_back(LoadTexture("./assets/Mario/Small-Left-Moving.png"));
   texture.addTexture("SMALL-LEFT-MOVING", textures);
@@ -64,7 +64,7 @@ Mario::Mario()
   textures.push_back(LoadTexture("./assets/Mario/Small-Left-Dropping.png"));
   texture.addTexture("SMALL-LEFT-DROPPING", textures);
   textures.clear();
-  
+
   textures.push_back(LoadTexture("./assets/Mario/Small-Left-Death.png"));
   texture.addTexture("SMALL-LEFT-DEATH", textures);
   textures.clear();
@@ -74,7 +74,6 @@ Mario::Mario()
   texture.addTexture("LARGE-RIGHT-IDLE", textures);
   textures.clear();
 
-  
   textures.push_back(LoadTexture("./assets/Mario/Large-Right-Idle.png"));
   textures.push_back(LoadTexture("./assets/Mario/Large-Right-Moving.png"));
   texture.addTexture("LARGE-RIGHT-MOVING", textures);
@@ -101,7 +100,6 @@ Mario::Mario()
   texture.addTexture("LARGE-LEFT-IDLE", textures);
   textures.clear();
 
-  
   textures.push_back(LoadTexture("./assets/Mario/Large-Left-Idle.png"));
   textures.push_back(LoadTexture("./assets/Mario/Large-Left-Moving.png"));
   texture.addTexture("LARGE-LEFT-MOVING", textures);
@@ -124,5 +122,6 @@ Mario::Mario()
   textures.clear();
   texture.changeState("SMALL-RIGHT-IDLE");
 
-  getComponent<MarioSoundComponent>().LoadSounds();
+  Mario->getComponent<MarioSoundComponent>().LoadSounds();
+  return Mario;
 }

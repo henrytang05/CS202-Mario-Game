@@ -1,11 +1,9 @@
 #include "Components/Position.h"
 
-#include "globals.h"
-
 PositionComponent::PositionComponent(Vector2 pos)
-    : Component("PositionComponent"), Vector2(pos) {}
+    : Component("PositionComponent"), Vector2({pos.x, pos.y}) {}
 PositionComponent::PositionComponent(float x, float y)
-    : Component("PositionComponent"), Vector2(x, y) {}
+    : Component("PositionComponent"), Vector2({x, y}) {}
 PositionComponent::PositionComponent()
     : Component("PositionComponent"), Vector2({0, 0}) {}
 PositionComponent::~PositionComponent() = default;
@@ -22,9 +20,9 @@ Vector2 operator+(const Vector2 &v1, const Vector2 &v2) {
 }
 
 TransformComponent::TransformComponent(Vector2 pos)
-    : Component("TransformComponent"), Vector2(pos) {}
+    : Component("TransformComponent"), Vector2({pos.x, pos.y}) {}
 TransformComponent::TransformComponent(float x, float y)
-    : Component("TransformComponent"), Vector2(x, y) {}
+    : Component("TransformComponent"), Vector2({x, y}) {}
 TransformComponent::TransformComponent()
     : Component("TransformComponent"), Vector2({0, 0}) {}
 TransformComponent::~TransformComponent() = default;

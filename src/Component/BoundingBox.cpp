@@ -1,7 +1,6 @@
 #include "Components/BoundingBox.h"
-#include "AbstractEntity.h"
 #include "Components/Position.h"
-#include "globals.h"
+#include "EntityManager.h"
 #include "raylib.h"
 
 BoundingBoxComponent::BoundingBoxComponent()

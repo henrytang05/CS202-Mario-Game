@@ -1,6 +1,6 @@
 #include "Components/Texture.h"
-#include "AbstractEntity.h"
 #include "Components/Position.h"
+#include "EntityManager.h"
 
 #include "raylib.h"
 
@@ -11,8 +11,6 @@ Animation::Animation(float frameDelay, bool isLooping)
 Texture2D &Animation::operator[](int index) { return frames[index]; }
 
 TextureComponent::TextureComponent() : state(""), lastState("") {}
-
-void TextureComponent::init() {}
 
 void TextureComponent::drawTexture(std::string state) {
   Vector2 position = entity->getComponent<PositionComponent>().getPosition();

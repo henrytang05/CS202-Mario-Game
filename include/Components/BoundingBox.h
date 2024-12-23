@@ -1,7 +1,6 @@
 #ifndef BOUNDINGBOX_H
 #define BOUNDINGBOX_H
 
-#include "Components/Component.h"
 #include "Components/Position.h"
 #include "globals.h"
 

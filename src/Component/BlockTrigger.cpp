@@ -1,4 +1,5 @@
 #include "Components/BlockTrigger.h"
+#include "Components/Position.h"
 TriggerBrokenBlockWhenHitBySmall::TriggerBrokenBlockWhenHitBySmall() {
   sumFrame = 0.0f;
 }

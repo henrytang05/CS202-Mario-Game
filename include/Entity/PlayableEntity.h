@@ -1,8 +1,8 @@
 #ifndef PLAYABLE_ENTITY_H
 #define PLAYABLE_ENTITY_H
 
-#include "AbstractEntity.h"
 #include "Entity/States/CharacterStates.h"
+#include "EntityManager.h"
 #include "Interface.h"
 /*
         const MIN_WALK = 4.453125;
@@ -36,11 +36,13 @@ const float JUMPING_VELO = -240.0f;
 const float MAX_FALL = 270.0f;
 const float FALL_ACC_A = 421.875f;
 const float FALL_ACC = 1800.0f;
+
 class PlayableEntity : public AbstractEntity, public IMovable {
 private:
   float fallAcc;
   Shared<CharacterState> state;
   bool isDeath, gameOver;
+
 public:
   PlayableEntity();
   PlayableEntity(std::string name);

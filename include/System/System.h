@@ -1,27 +1,38 @@
 #ifndef SYSTEM_H
 #define SYSTEM_H
 
-#include "AbstractEntity.h"
 #include "Components/Collision.h"
 #include "EntityManager.h"
-class System {
+#include "Interface.h"
 
+class System {
 public:
   virtual ~System() = default;
+};
+
+class IDrawableSystem : public System {
+public:
+  virtual ~IDrawableSystem() = default;
+  virtual void draw(EntityManager &EM, float dt) = 0;
+};
+
+class IUpdatableSystem : public System {
+public:
+  virtual ~IUpdatableSystem() = default;
   virtual void update(EntityManager &EM, float dt) = 0;
 };
 
-class TransformSystem : public System {
+class TransformSystem : public IUpdatableSystem {
 public:
   void update(EntityManager &EM, float dt) override;
 };
 
-class AnimationSystem : public System {
+class AnimationSystem : public IDrawableSystem {
 public:
-  void update(EntityManager &EM, float dt) override;
+  void draw(EntityManager &EM, float dt) override;
 };
 
-class CollisionSystem : public System {
+class CollisionSystem : public IUpdatableSystem {
 public:
   void update(EntityManager &EM, float dt) override;
 

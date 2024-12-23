@@ -1,6 +1,5 @@
 #include "System/System.h"
 
-#include "AbstractEntity.h"
 #include "Components/BoundingBox.h"
 #include "Components/Collision.h"
 #include "Components/Position.h"
@@ -12,9 +11,12 @@
 void TransformSystem::update(EntityManager &EM, float dt) {
   auto Entities = EM.getHasAll<PositionComponent, TransformComponent>();
 
-  for (auto entity : Entities) {
-    auto &position = EM.getComponent<PositionComponent>(entity);
-    auto &transform = EM.getComponent<TransformComponent>(entity);
+  for (auto tEntity : Entities) {
+    if (tEntity.expired())
+      throw std::runtime_error("Entity is expired");
+    auto entity = tEntity.lock();
+    auto &position = entity->getComponent<PositionComponent>();
+    auto &transform = entity->getComponent<TransformComponent>();
 
     float x = position.x + transform.x * dt;
     float y = position.y + transform.y * dt;
@@ -22,9 +24,12 @@ void TransformSystem::update(EntityManager &EM, float dt) {
   }
 }
 
-void AnimationSystem::update(EntityManager &EM, float dt) {
+void AnimationSystem::draw(EntityManager &EM, float dt) {
   auto Entities = EM.getHasAll<TextureComponent, PositionComponent>();
-  for (auto entity : Entities) {
+  for (auto tEntity : Entities) {
+    if (tEntity.expired())
+      throw std::runtime_error("Entity is expired");
+    auto entity = tEntity.lock();
     auto &position = EM.getComponent<PositionComponent>(entity);
     auto &texture = EM.getComponent<TextureComponent>(entity);
     auto &animation = texture.textures[texture.state];
@@ -53,38 +58,46 @@ void AnimationSystem::update(EntityManager &EM, float dt) {
 void CollisionSystem::reset(CollisionComponent &cc) {
   cc.contact.resize(4);
   for (int i = 0; i < 4; i++)
-    cc.contact[i] = nullptr;
+    cc.contact[i].reset();
 }
 
 void CollisionSystem::update(EntityManager &EM, float dt) {
   auto Entities = EM.getHasAll<CollisionComponent, PositionComponent,
                                BoundingBoxComponent>();
-  for (auto entity : Entities) {
+  for (auto tentity : Entities) {
+    if (tentity.expired())
+      throw std::runtime_error("Entity is expired");
+
+    auto entity = tentity.lock();
+
     auto &cc = EM.getComponent<CollisionComponent>(entity);
     reset(cc);
-    std::vector<pair<int, float>> col;
+    std::vector<std::pair<int, float>> col;
     auto &otherEntity = Entities;
     float t = 0, min_t = INFINITY;
     Vector2 cp, cn;
     for (int i = 0; i < (int)Entities.size(); i++) {
-      if (*otherEntity[i] == *entity)
+      if (*otherEntity[i].lock() == *entity)
         continue;
       Vector2 position =
-          EM.getComponent<PositionComponent>(otherEntity[i]).getPosition();
+          EM.getComponent<PositionComponent>(otherEntity[i].lock())
+              .getPosition();
       Vector2 size =
-          EM.getComponent<BoundingBoxComponent>(otherEntity[i]).getSize();
+          EM.getComponent<BoundingBoxComponent>(otherEntity[i].lock())
+              .getSize();
       Rectangle bbOtherEntity =
           (Rectangle){position.x, position.y, size.x, size.y};
       if (DynamicRectVsRect(dt, bbOtherEntity, cp, cn, t, EM, *entity)) {
         col.push_back(std::make_pair(i, t));
       }
     }
-    std::sort(col.begin(), col.end(),
-              [&](const pair<int, float> &x, const pair<int, float> &y) {
-                return x.second < y.second;
-              });
+    std::sort(
+        col.begin(), col.end(),
+        [&](const std::pair<int, float> &x, const std::pair<int, float> &y) {
+          return x.second < y.second;
+        });
     for (auto x : col)
-      ResolveDynamicRectVsRect(dt, *otherEntity[x.first], EM, *entity);
+      ResolveDynamicRectVsRect(dt, *otherEntity[x.first].lock(), EM, *entity);
   }
 }
 
@@ -92,38 +105,41 @@ bool CollisionSystem::ResolveDynamicRectVsRect(const float deltaTime,
                                                AbstractEntity &r_static,
                                                EntityManager &EM,
                                                AbstractEntity &entity) {
-  Vector2 contact_point, contact_normal;
-  float contact_time = 0.0f;
-
-  Vector2 position =
-      EM.getComponent<PositionComponent>(&r_static).getPosition();
-  Vector2 size = EM.getComponent<BoundingBoxComponent>(&r_static).getSize();
-
-  Rectangle bbOtherEntity = (Rectangle){position.x, position.y, size.x, size.y};
-  if (DynamicRectVsRect(deltaTime, bbOtherEntity, contact_point, contact_normal,
-                        contact_time, EM, entity)) {
-    if (contact_normal.y > 0.0f)
-      contact[0] = &r_static;
-
-    if (contact_normal.x < 0.0f)
-      contact[1] = &r_static;
-
-    if (contact_normal.y < 0.0f)
-      contact[2] = &r_static;
-
-    if (contact_normal.x > 0.0f)
-      contact[3] = &r_static;
-
-    Vector2 velocity =
-        EM.getComponent<TransformComponent>(&entity).getVelocity();
-    velocity = velocity + (Vector2){contact_normal.x * std::fabs(velocity.x) *
-                                        (1 - contact_time),
-                                    contact_normal.y * std::fabs(velocity.y) *
-                                        (1 - contact_time)};
-    EM.getComponent<TransformComponent>(&entity).setVelocity(velocity);
-    return true;
-  }
-
+  // Vector2 contact_point, contact_normal;
+  // float contact_time = 0.0f;
+  //
+  // Vector2 position =
+  //     EM.getComponent<PositionComponent>(&r_static).getPosition();
+  // Vector2 size = EM.getComponent<BoundingBoxComponent>(&r_static).getSize();
+  //
+  // Rectangle bbOtherEntity = (Rectangle){position.x, position.y, size.x,
+  // size.y}; if (DynamicRectVsRect(deltaTime, bbOtherEntity, contact_point,
+  // contact_normal,
+  //                       contact_time, EM, entity)) {
+  //   if (contact_normal.y > 0.0f)
+  //     contact[0] = &r_static;
+  //
+  //   if (contact_normal.x < 0.0f)
+  //     contact[1] = &r_static;
+  //
+  //   if (contact_normal.y < 0.0f)
+  //     contact[2] = &r_static;
+  //
+  //   if (contact_normal.x > 0.0f)
+  //     contact[3] = &r_static;
+  //
+  //   Vector2 velocity =
+  //       EM.getComponent<TransformComponent>(&entity).getVelocity();
+  //   velocity = velocity + (Vector2){contact_normal.x * std::fabs(velocity.x)
+  //   *
+  //                                       (1 - contact_time),
+  //                                   contact_normal.y * std::fabs(velocity.y)
+  //                                   *
+  //                                       (1 - contact_time)};
+  //   EM.getComponent<TransformComponent>(&entity).setVelocity(velocity);
+  //   return true;
+  // }
+  //
   return false;
 }
 bool CollisionSystem::DynamicRectVsRect(const float deltaTime,
@@ -132,34 +148,37 @@ bool CollisionSystem::DynamicRectVsRect(const float deltaTime,
                                         Vector2 &contact_normal,
                                         float &contact_time, EntityManager &EM,
                                         AbstractEntity &entity) {
-  // Check if dynamic rectangle is actually moving - we assume rectangles are
-  // NOT in collision to start
+  // // Check if dynamic rectangle is actually moving - we assume rectangles are
+  // // NOT in collision to start
+  // // Vector2 velocity =
+  // // entity->getComponent<TransformComponent>().getVelocity(); Vector2 size =
+  // // entity->getComponent<BoundingBoxComponent>().getSize(); Vector2 position
+  // =
+  // // entity->getComponent<PositionComponent>().getPosition();
+  //
   // Vector2 velocity =
-  // entity->getComponent<TransformComponent>().getVelocity(); Vector2 size =
-  // entity->getComponent<BoundingBoxComponent>().getSize(); Vector2 position =
-  // entity->getComponent<PositionComponent>().getPosition();
-
-  Vector2 velocity = EM.getComponent<TransformComponent>(&entity).getVelocity();
-  Vector2 size = EM.getComponent<BoundingBoxComponent>(&entity).getSize();
-  Vector2 position = EM.getComponent<PositionComponent>(&entity).getPosition();
-
-  if (velocity.x == 0 && velocity.y == 0)
-    return false;
-
-  // Expand target rectangle by source dimensions
-  Rectangle expanded_target;
-  expanded_target.x = r_static.x - size.x / 2.0f;
-  expanded_target.y = r_static.y - size.y / 2.0f;
-  expanded_target.width = r_static.width + size.x;
-  expanded_target.height = r_static.height + size.y;
-  Vector2 ray_origin =
-      (Vector2){position.x + size.x / 2.0f, position.y + size.y / 2.0f};
-  Vector2 ray_dir = (Vector2){velocity.x * deltaTime, velocity.y * deltaTime};
-  if (RayVsRect(ray_origin, ray_dir, expanded_target, contact_point,
-                contact_normal, contact_time))
-    return (contact_time >= 0.0f && contact_time < 1.0f);
-  else
-    return false;
+  // EM.getComponent<TransformComponent>(&entity).getVelocity(); Vector2 size =
+  // EM.getComponent<BoundingBoxComponent>(&entity).getSize(); Vector2 position
+  // = EM.getComponent<PositionComponent>(&entity).getPosition();
+  //
+  // if (velocity.x == 0 && velocity.y == 0)
+  //   return false;
+  //
+  // // Expand target rectangle by source dimensions
+  // Rectangle expanded_target;
+  // expanded_target.x = r_static.x - size.x / 2.0f;
+  // expanded_target.y = r_static.y - size.y / 2.0f;
+  // expanded_target.width = r_static.width + size.x;
+  // expanded_target.height = r_static.height + size.y;
+  // Vector2 ray_origin =
+  //     (Vector2){position.x + size.x / 2.0f, position.y + size.y / 2.0f};
+  // Vector2 ray_dir = (Vector2){velocity.x * deltaTime, velocity.y *
+  // deltaTime}; if (RayVsRect(ray_origin, ray_dir, expanded_target,
+  // contact_point,
+  //               contact_normal, contact_time))
+  //   return (contact_time >= 0.0f && contact_time < 1.0f);
+  // else
+  return false;
 }
 bool RayVsRect(const Vector2 &ray_origin, const Vector2 &ray_dir,
                const Rectangle &target, Vector2 &contact_point,

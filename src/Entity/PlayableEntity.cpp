@@ -99,10 +99,10 @@ void PlayableEntity::collisionAbove() {
         setToSmall();
       }
     }
-    if(above.lock()->name == "Coin") {
-      above.lock()->getComponent<BlockTriggerComponent>().setTrigger(new TriggerCoin(above.lock()->getComponent<PositionComponent>().getPosition()));
-      getComponent<MarioSoundComponent>().PlayCoinEffect();
-    }
+    // if(above.lock()->name == "Coin") {
+    //   above.lock()->getComponent<BlockTriggerComponent>().setTrigger(new TriggerCoin(above.lock()->getComponent<PositionComponent>().getPosition()));
+    //   getComponent<MarioSoundComponent>().PlayCoinEffect();
+    // }
   }
 }
 void PlayableEntity::collisionBelow() {

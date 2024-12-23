@@ -1,12 +1,9 @@
-#include "GameObject.h"
-#include "Components/BoundingBox.h"
-#include "Components/Position.h"
-#include "Components/Texture.h"
-#include "Components/Transform.h"
-#include "Components/BlockTrigger.h"
+#include "Entity/EntityFactory.h"
+
 
 Unique <IFactory> _entityFactory;
-
+ 
+  
 NormalBlock::NormalBlock(Vector2 position): AbstractEntity("NormalBlock") {
     Vector2 size({16, 16});
     addComponent<PositionComponent>(position);    
@@ -212,9 +209,12 @@ void Piranha::draw() {
 }
 
 Mushroom::Mushroom(Vector2 position) {
-    Vector2 size = {16, 14};
-    addComponent<PositionComponent>(position);    
+    Vector2 size = {0,0};
+    addComponent<CollisionComponent>();
+    addComponent<TransformComponent>((Vector2){0.0f, 0.0f});
     addComponent<BoundingBoxComponent>(size);
+    addComponent<PositionComponent>(position);   
+    position_fixed = getComponent<PositionComponent>().getPosition(); 
     addComponent<TextureComponent>();
     getComponent<TextureComponent>().addTexture("Normal", TextureManager::getInstance().getTexture("Mushroom") );
 }
@@ -222,38 +222,49 @@ Mushroom::Mushroom(Vector2 position) {
 
 void Mushroom::handleCollision()
 {
-//     CollisionComponent &collision = getComponent<CollisionComponent>();
-//   auto above = collision.getAbove();
-//   auto below = collision.getBelow();
-//   auto left = collision.getLeft();
-//   auto right = collision.getRight();
+CollisionComponent &collision = getComponent<CollisionComponent>();
+  auto above = collision.getAbove();
+  auto below = collision.getBelow();
+  auto left = collision.getLeft();
+  auto right = collision.getRight();
 
-//   auto &trans = getComponent<TransformComponent>();
+  auto &trans = getComponent<TransformComponent>();
+  
+  Vector2 v = trans.getVelocity();
+  if (left.lock() && !left.lock()->hasComponent<EnemyTag>())
+    v.x = ENEMY_SPEED;
+  else if (right.lock() && !right.lock()->hasComponent<EnemyTag>())
+    v.x = -ENEMY_SPEED;
+  if(below.lock() == nullptr) v.y = 10.0f;
+  trans.setVelocity(v);
 
-//   Vector2 v = trans.getVelocity();
-//   if (left.lock() && !left.lock()->hasComponent<EnemyTag>())
-//     v.x = ENEMY_SPEED;
-//   else if (right.lock() && !right.lock()->hasComponent<EnemyTag>())
-//     v.x = -ENEMY_SPEED;
-
-//   if (!below.lock()) {
-//     if (getComponent<PositionComponent>().getY() > screenHeight) {
-//       destroy();
-//       getComponent<TextureComponent>().changeState("Die");
-//     }
-//   }
-//   trans.setVelocity(v);
-//   if (above.lock() != nullptr) {
-//     if (above.lock()->hasComponent<PlayerTag>()) {
-//       destroy();
-//       getComponent<TextureComponent>().changeState("Die");
-//     }
-//   }
-//   getComponent<CollisionComponent>().reset();
+  getComponent<CollisionComponent>().reset();
 }
 
 void Mushroom::update(float deltaTime) {
+    if(isTriggered)
+    {   
+        elapsedTime += deltaTime;
+        float frequency = 1.0f; // Speed of oscillation
+
+        auto position_change = getComponent<PositionComponent>().getPosition();
+        position_change.y = position_change.y - 16.0f * deltaTime;
+
+        // Ensure it doesn't go below the fixed position
+        if (position_change.y <= position_fixed.y - 16.0f) {
+            position_change.y = position_fixed.y - 16.0f;
+            isTriggered = false;
+            getComponent<TransformComponent>().setVelocity((Vector2){50.0f, 10.0f});
+        }
+        getComponent<PositionComponent>().setPosition(position_change);
+    }
+
     for(auto &comp : components)
         comp->update(deltaTime);
 }
 
+void Mushroom:: onNotify()
+{
+    isTriggered = true;
+    getComponent<BoundingBoxComponent>().setSize({16.0f, 16.0f});  
+}

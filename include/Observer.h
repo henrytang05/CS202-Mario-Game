@@ -8,18 +8,15 @@ public:
 class Subject {
 public:
     virtual ~Subject() = default;
-    void addObserver(Observer* observer) {
+    void addObserver(Weak<Observer> observer) {
         observers.push_back(observer);
-    }
-    void removeObserver(Observer* observer) {
-        observers.erase(std::remove(observers.begin(), observers.end(), observer), observers.end());
     }
     void notify() {
         for (auto observer : observers) {
-            observer->onNotify();
+            observer.lock()->onNotify();
         }
     }
 
 private:
-    std::vector<Observer*> observers;
+    std::vector<Weak<Observer>> observers;
 };

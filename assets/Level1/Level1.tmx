@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="164" height="50" tilewidth="16" tileheight="16" infinite="0" nextlayerid="30" nextobjectid="692">
  <editorsettings>
-  <export target="Level1.json" format="json"/>
+  <export target="Level1new.json" format="json"/>
  </editorsettings>
  <properties>
   <property name="Level" value="Level1"/>
@@ -13,8 +13,8 @@
  <tileset firstgid="74" source="Checkpoint.json"/>
  <tileset firstgid="77" source="Pipe.json"/>
  <tileset firstgid="78" source="Coin-1.json"/>
- <tileset firstgid="79" source="Mushroom.json"/>
- <tileset firstgid="80" source="Piranha.json"/>
+ <tileset firstgid="79" source="Piranha.json"/>
+ <tileset firstgid="81" source="Mushroom.json"/>
  <layer id="13" name="Sky" width="164" height="50">
   <data encoding="csv">
 32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,
@@ -130,9 +130,6 @@
   <object id="680" gid="76" x="2496" y="736" width="16" height="16"/>
   <object id="681" gid="76" x="2496" y="752" width="16" height="16"/>
   <object id="682" gid="76" x="2496" y="768" width="16" height="16"/>
- </objectgroup>
- <objectgroup id="29" name="Mushroom">
-  <object id="688" gid="79" x="160" y="720" width="16" height="16"/>
  </objectgroup>
  <objectgroup id="16" name="GroundBlock">
   <object id="158" gid="4" x="0" y="784" width="16" height="16"/>
@@ -431,7 +428,12 @@
   <object id="495" gid="1" x="1008" y="720" width="16" height="16"/>
  </objectgroup>
  <objectgroup id="19" name="QuestionBlock">
-  <object id="449" gid="5" x="160" y="720" width="16" height="16"/>
+  <object id="449" gid="5" x="160" y="720" width="16" height="16">
+   <properties>
+    <property name="isCoin" type="bool" value="false"/>
+    <property name="isMushroom" type="bool" value="true"/>
+   </properties>
+  </object>
   <object id="496" gid="5" x="976" y="720" width="16" height="16"/>
   <object id="539" gid="5" x="1696" y="720" width="16" height="16"/>
   <object id="540" gid="5" x="1744" y="720" width="16" height="16"/>
@@ -443,8 +445,8 @@
   <object id="66" gid="74" x="2487.15" y="687.818" width="16" height="16"/>
  </objectgroup>
  <objectgroup id="23" name="Piranha">
-  <object id="690" gid="80" x="407.667" y="712" width="16" height="32"/>
-  <object id="691" gid="80" x="1608.18" y="727.909" width="16" height="32"/>
+  <object id="690" gid="79" x="407.667" y="712" width="16" height="32"/>
+  <object id="691" gid="79" x="1608.18" y="727.909" width="16" height="32"/>
  </objectgroup>
  <objectgroup id="14" name="Castle" visible="0">
   <object id="64" x="2544" y="688" width="80" height="80"/>

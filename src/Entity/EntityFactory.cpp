@@ -1,16 +1,5 @@
 #include "Entity/EntityFactory.h"
-#include "Components/BoundingBox.h"
-#include "Components/Collision.h"
-#include "Components/Components_include.h"
-#include "Components/EnemyComponents.h"
-#include "Components/Gravity.h"
-#include "Components/Position.h"
-#include "Components/Texture.h"
-#include "Components/Transform.h"
-#include "Entity/Luigi.h"
-#include "Entity/Mario.h"
-#include "Entity/PlayableEntity.h"
-#include "pch.h"
+ 
 
 Shared<Mario> EntityFactory::createMario() {
   Shared<Mario> mario = std::make_shared<Mario>();
@@ -124,8 +113,8 @@ Shared<AbstractEntity> EntityFactory::createPiranha(Vector2 position)
   return piranha;
 }
 
-Shared<AbstractEntity> EntityFactory::createMushroom(Vector2 position)
+Shared<Mushroom> EntityFactory::createMushroom(Vector2 position)
 {
-  Shared<AbstractEntity> powerUp = std::make_shared<Mushroom>(position);
+  Shared<Mushroom> powerUp = std::make_shared<Mushroom>(position);
   return powerUp;
 }

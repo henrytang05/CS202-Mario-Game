@@ -11,8 +11,5 @@ public:
 
   void setSize(Vector2 size);
   Vector2 getSize();
-
-private:
-  PositionComponent *position;
 };
 #endif // BOUNDINGBOX_H

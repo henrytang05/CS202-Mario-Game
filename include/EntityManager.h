@@ -47,7 +47,7 @@ public:
       entityComponentIndexMap; // entityID : componentIndex
 };
 
-class AbstractEntity : public IUpdatable, public IDrawable {
+class AbstractEntity : public IUpdatable {
 private:
   bool active;       // check if entity is active
   uint32_t id;       // entity id
@@ -72,10 +72,12 @@ public:
   bool isActive() const;
   void destroy();
 
+  virtual void update(float deltaTime) override;
+  virtual void changeState();
+
   // WARNING: This is a temporary solution
-  void update(float dt) override {}
-  void draw() override {}
   std::string getName() const;
+  void setName(std::string name);
 
   template <typename T> inline bool hasComponent() const;
 

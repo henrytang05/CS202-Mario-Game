@@ -2,7 +2,8 @@
 #include "Components/Components_include.h"
 #include "EntityManager.h"
 
-Weak<AbstractEntity> initMario(EntityManager &EM) {
+Weak<AbstractEntity> initMario() {
+  EntityManager &EM = EntityManager::getInstance();
   Vector2 size({16, 20});
   Vector2 position = {0.0f, screenHeight - 100.0f};
   Vector2 velocity = {0, 0};

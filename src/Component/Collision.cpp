@@ -5,9 +5,14 @@
 
 CollisionComponent::CollisionComponent() : Component("CollisionComponent") {
   contact.resize(4);
+  reset();
+}
+
+void CollisionComponent::reset() {
   for (int i = 0; i < 4; i++)
     contact[i].reset();
 }
+
 // CollisionComponent::CollisionComponent(
 //     Shared<std::vector<Shared<AbstractEntity>>> _entities)
 //     : Component("CollisionComponent"){

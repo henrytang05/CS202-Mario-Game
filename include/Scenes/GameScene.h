@@ -1,7 +1,7 @@
 #ifndef GAMESCENE_H
 #define GAMESCENE_H
+
 #include "Entity/EntityFactory.h"
-#include "Entity/PlayableEntity.h"
 #include "EntityManager.h"
 #include "Map.h"
 #include "Scenes/Scene.h"
@@ -27,8 +27,6 @@ private:
   Texture2D background;
   MapRenderer mapRenderer;
   Camera2D camera;
-  // Shared<PlayableEntity> player;
-  // std::vector<Shared<AbstractEntity>> entities;
   EntityManager &EM;
   Weak<AbstractEntity> player;
   bool gameOver;

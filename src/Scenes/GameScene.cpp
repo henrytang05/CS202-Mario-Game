@@ -66,9 +66,7 @@ void GameScene::loadResources() {
   background = LoadTextureFromImage(bImage);
   UnloadImage(bImage);
   // Create Map
-  mapRenderer.createMap("assets/Level2/Level2.json");
-
-  entities = EM.getEntities();
+  entities = mapRenderer.createMap("assets/Level2/Level2.json");
 }
 void GameScene::draw() {
   float dt = GetFrameTime();
@@ -76,7 +74,7 @@ void GameScene::draw() {
   DrawTexture(background, 0, 0, WHITE);
   for (auto &entity : entities) {
     for (auto &system : draw_systems) {
-      system.lock()->draw(EM, dt);
+      system.lock()->draw(dt);
     }
   }
   EndMode2D();
@@ -96,7 +94,7 @@ Unique<Scene> GameScene::updateScene(float deltaTime) {
 void GameScene::update(float deltaTime) {
   time -= deltaTime;
   for (auto &system : update_systems) {
-    system.lock()->update(EM, deltaTime);
+    system.lock()->update(deltaTime);
   }
 
   camera.target.x = player.lock()->getComponent<PositionComponent>().x;

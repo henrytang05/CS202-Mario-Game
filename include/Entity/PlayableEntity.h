@@ -40,8 +40,8 @@ const float FALL_ACC = 1800.0f;
 class PlayableEntity : public AbstractEntity, public IMovable {
 private:
   float fallAcc;
-  Shared<CharacterState> state;
   bool isDeath, gameOver;
+  Shared<CharacterState> state;
 
 public:
   PlayableEntity();
@@ -62,6 +62,5 @@ public:
   void collisionLeft();
   void collisionAbove();
   void collisionBelow();
-  void draw() override;
 };
 #endif // PLAYABLE_ENTITY_H

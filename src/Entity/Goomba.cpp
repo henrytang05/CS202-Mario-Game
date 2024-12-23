@@ -1,11 +1,13 @@
 #include "Components/Components_include.h"
 #include "Entity/Mario.h"
 
-Weak<AbstractEntity> initGoomba(EntityManager &EM, Vector2 position,
-                                Vector2 size) {
+// TODO: change to goomba
+Weak<AbstractEntity> initGoomba(Vector2 position, Vector2 size) {
+  EntityManager &EM = EntityManager::getInstance();
   static int cnt = 1;
   std::string name = "Goomba" + std::to_string(cnt++);
 
+  // TODO: change to make shared
   Weak<AbstractEntity> rEnemy = EM.createEntity(name);
   Shared<AbstractEntity> enemy = rEnemy.lock();
 

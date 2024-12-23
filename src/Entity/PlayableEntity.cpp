@@ -1,21 +1,21 @@
 #include "Entity/PlayableEntity.h"
-#include "AbstractEntity.h"
-#include "Components/BoundingBox.h"
 #include "Components/Components_include.h"
 #include "Components/SoundComponent.h"
-#include "Components/Tags.h"
 #include "Entity/States/CharacterStates.h"
+using namespace std;
 
 PlayableEntity::PlayableEntity(std::string name)
-    : AbstractEntity(name), fallAcc(GRAVITY_DEC), isDeath(false), gameOver(false),
-      state(make_shared<DroppingState>("SMALL", "RIGHT")) {
-
+    : AbstractEntity(name), fallAcc(GRAVITY_DEC), isDeath(false),
+      gameOver(false),
+      state(std::make_shared<DroppingState>("SMALL", "RIGHT")) {
+  initEntity();
   addComponent<PlayerTag>();
 }
-PlayableEntity::~PlayableEntity() {
-  state = nullptr;
-}
-PlayableEntity::PlayableEntity() : fallAcc(GRAVITY_DEC), state(make_shared<DroppingState>("SMALL", "RIGHT")), isDeath(false), gameOver(false) {
+
+PlayableEntity::~PlayableEntity() { state = nullptr; }
+PlayableEntity::PlayableEntity()
+    : fallAcc(GRAVITY_DEC), isDeath(false), gameOver(false),
+      state(std::make_shared<DroppingState>("SMALL", "RIGHT")) {
   addComponent<PlayerTag>();
 }
 void PlayableEntity::setVelocity(Vector2 newVelocity) {
@@ -27,13 +27,9 @@ Vector2 PlayableEntity::getVelocity() {
   ASSERT(hasComponent<TransformComponent>());
   return getComponent<TransformComponent>().getVelocity();
 }
-bool PlayableEntity::checkAlive() const {
-  return !isDeath;
-}
+bool PlayableEntity::checkAlive() const { return !isDeath; }
 
-bool PlayableEntity::checkOver() const {
-  return gameOver;
-}
+bool PlayableEntity::checkOver() const { return gameOver; }
 void PlayableEntity::setToDie() {
   state = make_shared<DeathState>("SMALL", state->getFacing());
   getComponent<MarioSoundComponent>().PlayMarioDieEffect();
@@ -42,19 +38,21 @@ void PlayableEntity::setToSmall() {
   state->setSizeState("SMALL");
   getComponent<BoundingBoxComponent>().setSize((Vector2){16.0f, 20.0f});
   Vector2 position = getComponent<PositionComponent>().getPosition();
-  getComponent<PositionComponent>().setPosition((Vector2){position.x, position.y + 8.0f});
+  getComponent<PositionComponent>().setPosition(
+      (Vector2){position.x, position.y + 8.0f});
 }
 void PlayableEntity::setToLarge() {
   state->setSizeState("LARGE");
   getComponent<BoundingBoxComponent>().setSize((Vector2){16.0f, 28.0f});
   Vector2 position = getComponent<PositionComponent>().getPosition();
-  getComponent<PositionComponent>().setPosition((Vector2){position.x, position.y - 8.0f});
+  getComponent<PositionComponent>().setPosition(
+      (Vector2){position.x, position.y - 8.0f});
 }
 void PlayableEntity::collisionRight() {
   auto right = getComponent<CollisionComponent>().getRight();
-  if(right.lock() != nullptr) {
-    if(right.lock()->hasComponent<EnemyTag>()) {
-      if(state->getSize() == "SMALL")
+  if (right.lock() != nullptr) {
+    if (right.lock()->hasComponent<EnemyTag>()) {
+      if (state->getSize() == "SMALL")
         setToDie();
       else {
         setToSmall();
@@ -64,36 +62,41 @@ void PlayableEntity::collisionRight() {
 }
 void PlayableEntity::collisionLeft() {
   auto left = getComponent<CollisionComponent>().getLeft();
-  if(left.lock() != nullptr) {
-    if(left.lock()->hasComponent<EnemyTag>()) {
-      if(state->getSize() == "SMALL")
+  if (left.lock() != nullptr) {
+    if (left.lock()->hasComponent<EnemyTag>()) {
+      if (state->getSize() == "SMALL")
         setToDie();
       else {
         setToSmall();
       }
     }
-  } 
+  }
 }
+// TODO:  fix this later, dont depend on block name
 void PlayableEntity::collisionAbove() {
   auto above = getComponent<CollisionComponent>().getAbove();
-  if(above.lock()) {
-    if(above.lock()->name == "BrokenBlock") {
-      if(state->getSize() == "SMALL") {
-        above.lock()->getComponent<BlockTriggerComponent>().setTrigger(new TriggerBrokenBlockWhenHitBySmall(above.lock()->getComponent<PositionComponent>().getPosition()));
+  if (above.lock()) {
+    if (above.lock()->getName() == "BrokenBlock") {
+      if (state->getSize() == "SMALL") {
+        above.lock()->getComponent<BlockTriggerComponent>().setTrigger(
+            new TriggerBrokenBlockWhenHitBySmall(
+                above.lock()->getComponent<PositionComponent>().getPosition()));
         getComponent<MarioSoundComponent>().PlayBumpEffect();
-      }
-      else{
-        above.lock()->getComponent<BlockTriggerComponent>().setTrigger(new TriggerBrokenBlockWhenHitByLarge(above.lock()->getComponent<PositionComponent>().getPosition()));
+      } else {
+        above.lock()->getComponent<BlockTriggerComponent>().setTrigger(
+            new TriggerBrokenBlockWhenHitByLarge(
+                above.lock()->getComponent<PositionComponent>().getPosition()));
         getComponent<MarioSoundComponent>().PlayBreakBlockEffect();
       }
     }
-    if(above.lock()->name == "QuestionBlock")
-    {
-      above.lock()->getComponent<BlockTriggerComponent>().setTrigger(new TriggerQuestionBlock(above.lock()->getComponent<PositionComponent>().getPosition()));
+    if (above.lock()->getName() == "QuestionBlock") {
+      above.lock()->getComponent<BlockTriggerComponent>().setTrigger(
+          new TriggerQuestionBlock(
+              above.lock()->getComponent<PositionComponent>().getPosition()));
       getComponent<MarioSoundComponent>().PlayBumpEffect();
     }
-    if(above.lock()->hasComponent<EnemyTag>()) {
-      if(state->getSize() == "SMALL")
+    if (above.lock()->hasComponent<EnemyTag>()) {
+      if (state->getSize() == "SMALL")
         setToDie();
       else {
         setToSmall();
@@ -103,17 +106,18 @@ void PlayableEntity::collisionAbove() {
 }
 void PlayableEntity::collisionBelow() {
   auto below = getComponent<CollisionComponent>().getBelow();
-  if(below.lock() != nullptr) {
-    if(below.lock()->hasComponent<EnemyTag>()) {
-      if(below.lock()->name == "Piranha") {
-        if(state->getSize() == "SMALL")
+  if (below.lock() != nullptr) {
+    if (below.lock()->hasComponent<EnemyTag>()) {
+      if (below.lock()->getName() == "Piranha") {
+        if (state->getSize() == "SMALL")
           setToDie();
         else {
           setToSmall();
         }
       }
-      if(below.lock()->hasComponent<CollisionComponent>())
-        below.lock()->getComponent<CollisionComponent>().setAbove(Shared<PlayableEntity>(this));
+      if (below.lock()->hasComponent<CollisionComponent>())
+        below.lock()->getComponent<CollisionComponent>().setAbove(
+            Shared<PlayableEntity>(this));
     }
   }
 }
@@ -124,32 +128,29 @@ void PlayableEntity::resolveCollision() {
   collisionRight();
 }
 void PlayableEntity::update(float deltaTime) {
-  if(getComponent<PositionComponent>().getY() > 1.2f * screenHeight) {
+  if (getComponent<PositionComponent>().y > 1.2f * screenHeight) {
     setToDie();
   }
-  if(state->getState() == "DEATH") {
+  if (state->getState() == "DEATH") {
     isDeath = true;
     getComponent<TextureComponent>().changeState(state->getCurrentState());
     getComponent<TransformComponent>().setVelocity({0.0f, -200.0f});
-    getComponent<TransformComponent>().update(deltaTime);
-    if(getComponent<PositionComponent>().getPosition().y < 0.0f) {
+
+    if (hasComponent<CollisionComponent>())
+      removeComponent<CollisionComponent>();
+
+    if (getComponent<PositionComponent>().getPosition().y < 0.0f) {
       gameOver = true;
     }
     return;
   }
   handleInput(deltaTime);
   getComponent<CollisionComponent>().reset();
-  for (auto &component : components) {
-    component->update(deltaTime);
-  }
 
   // resolve collision
   resolveCollision();
 }
-void PlayableEntity::draw() {
-}
 void PlayableEntity::handleInput(float deltaTime) {
-  
   Vector2 velocity = getVelocity();
   bool keyLeft = IsKeyDown(KEY_LEFT);
   bool keyRight = IsKeyDown(KEY_RIGHT);
@@ -213,15 +214,15 @@ void PlayableEntity::handleInput(float deltaTime) {
       state = make_shared<DucklingState>(state->getSize(), state->getFacing());
       getComponent<BoundingBoxComponent>().setSize({16.0f, 15.0f});
       getComponent<PositionComponent>().setPosition(
-          {getComponent<PositionComponent>().getX(),
-           getComponent<PositionComponent>().getY() + 13.0f});
+          {getComponent<PositionComponent>().x,
+           getComponent<PositionComponent>().y + 13.0f});
     }
     if (IsKeyReleased(KEY_DOWN) && state->getState() == "DUCKLING") {
       state = make_shared<StandingState>(state->getSize(), state->getFacing());
       getComponent<BoundingBoxComponent>().setSize({16.0f, 28.0f});
       getComponent<PositionComponent>().setPosition(
-          {getComponent<PositionComponent>().getX(),
-           getComponent<PositionComponent>().getY() - 13.0f});
+          {getComponent<PositionComponent>().x,
+           getComponent<PositionComponent>().y - 13.0f});
     }
   } else {
     if (velocity.y < 0.0f && IsKeyDown(KEY_UP)) {
@@ -272,7 +273,7 @@ void PlayableEntity::handleInput(float deltaTime) {
              state->getState() != "DROPPING" &&
              state->getState() != "DUCKLING") {
     if (std::fabs(velocity.x) >= MIN_WALKING_VELO) {
-          state = make_shared<MovingState>(state->getSize(), state->getFacing());
+      state = make_shared<MovingState>(state->getSize(), state->getFacing());
     } else {
       state = make_shared<StandingState>(state->getSize(), state->getFacing());
     }

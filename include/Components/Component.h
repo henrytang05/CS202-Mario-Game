@@ -20,4 +20,14 @@ protected:
   std::string name;
 };
 
+struct SwingComponent : public Component {
+  SwingComponent(Vector2 position_fixed = {0, 0}, float elapsedTime = 0)
+      : Component("SwingComponent") {
+    this->position_fixed = position_fixed;
+    this->elapsedTime = elapsedTime;
+  }
+  ~SwingComponent() = default;
+  Vector2 position_fixed;
+  float elapsedTime = 0;
+};
 #endif // COMPONENT_H

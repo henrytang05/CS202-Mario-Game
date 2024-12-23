@@ -138,6 +138,9 @@ AbstractEntity::AbstractEntity(EntityManager &EM, uint32_t id, std::string name,
 AbstractEntity::AbstractEntity(std::string name, uint32_t id, bool active)
     : active(active), id(id), name(name), EM(nullptr) {}
 
+void AbstractEntity::update(float deltaTime) {}
+void AbstractEntity::changeState() {}
+
 void AbstractEntity::initEntity() {
   auto &EM = EntityManager::getInstance();
   *this = *EM.createEntity(name).lock().get();
@@ -167,3 +170,4 @@ void AbstractEntity::destroy() {
 }
 
 std::string AbstractEntity::getName() const { return name; }
+void AbstractEntity::setName(std::string name) { this->name = name; }

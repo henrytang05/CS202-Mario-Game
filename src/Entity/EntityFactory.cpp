@@ -5,83 +5,86 @@
 #include "Components/Components_include.h"
 #include "Entity/Mario.h"
 #include "EntityManager.h"
+#include "GameObject.h"
 #include "pch.h"
 #include "raylib.h"
 
 EntityFactory::EntityFactory(EntityManager &EM) : IFactory(EM) {}
 //
-Weak<AbstractEntity> EntityFactory::createMario() { return initMario(EM); }
-Weak<AbstractEntity> EntityFactory::createLuigi() { return initLuigi(EM); }
-Weak<AbstractEntity> EntityFactory::createGoomba(Vector2 position, Vector2 size) {
-    return initGoomba(EM, position, size);
+Weak<AbstractEntity> EntityFactory::createMario() { return initMario(); }
+Weak<AbstractEntity> EntityFactory::createLuigi() { return initLuigi(); }
+Weak<AbstractEntity> EntityFactory::createGoomba(Vector2 position,
+                                                 Vector2 size) {
+  return initGoomba(position, size);
 }
 
-Weak<AbstractEntity> EntityFactory::createEnemy(Vector2 position, Vector2 size) {
-    return initGoomba(EM, position, size);
+Weak<AbstractEntity> EntityFactory::createEnemy(Vector2 position,
+                                                Vector2 size) {
+  return initGoomba(position, size);
 }
 
-Weak<AbstractEntity> EntityFactory::createBlock(std::string type, Vector2 position) {
-    Texture2D texture = TextureManager::getInstance().getTexture(type);
+Weak<AbstractEntity> EntityFactory::createBlock(std::string type,
+                                                Vector2 position) {
+  Texture2D texture = TextureManager::getInstance().getTexture(type);
 
-    Weak<AbstractEntity> luigi =
-        EntityManager::getInstance().createEntity("Luigi") luigi.lock()->addComponent
-
-            std::cerr
-        << "Still good get into createBlock" << std::endl;
-    Weak<AbstractEntity> block;
-    if (type == "NormalBlock") {
-        block = std::make_shared<NormalBlock>(position, &EM);
-    } else if (type == "BrokenBlock") {
-        block = std::make_shared<BrokenBlock>(position, &EM);
-    } else if (type == "HardBlock") {
-        block = std::make_shared<HardBlock>(position, &EM);
-    } else if (type == "GroundBlock") {
-        block = std::make_shared<GroundBlock>(position, &EM);
-    } else if (type == "QuestionBlock") {
-        block = std::make_shared<QuestionBlock>(position, &EM);
-    } else {
-        throw std::runtime_error("Block type not found");
-    }
-    return block;
+  std::cerr << "Still good get into createBlock" << std::endl;
+  Weak<AbstractEntity> block;
+  if (type == "NormalBlock") {
+    block = std::make_shared<NormalBlock>(position);
+  } else if (type == "BrokenBlock") {
+    block = std::make_shared<BrokenBlock>(position);
+  } else if (type == "HardBlock") {
+    block = std::make_shared<HardBlock>(position);
+  } else if (type == "GroundBlock") {
+    block = std::make_shared<GroundBlock>(position);
+  } else if (type == "QuestionBlock") {
+    block = std::make_shared<QuestionBlock>(position);
+  } else {
+    throw std::runtime_error("Block type not found");
+  }
+  return block;
 }
 
-Weak<AbstractEntity> EntityFactory::createPipe(Vector2 position, Vector2 size) {
-    //   Weak<Pipe>(position, size);
-    //   pipe->addComponent<StillObjectTag>();
-    //   return pipe;
-    // }
-    //
-    // Weak<AbstractEntity> EntityFactory::createFlag(Vector2 position) {
-    //   Weak<AbstractEntity>(position);
-    //
-    //   flag->addComponent<StillObjectTag>();
-    //   return flag;
-    // }
-    //
-    // Weak<AbstractEntity> EntityFactory::createFlagPole(Vector2 position) {
-    //   Weak<AbstractEntity>(position);
-    //   return flagPole;
-    Shared<Pipe> pipe = std::make_shared<Pipe>(position, size, &EM);
-    return pipe;
+Weak<Koomba> EntityFactory::createKoomba(Vector2 position, Vector2 size) {
+  Weak<Koomba> koomba = initKoopa(position, size);
+  return koomba;
 }
 
-Weak<AbstractEntity> EntityFactory::createFlag(Vector2 position) {
-    Shared<Flag> flag = std::make_shared<Flag>(position, &EM);
-    return flag;
+Weak<Pipe> EntityFactory::createPipe(Vector2 position, Vector2 size) {
+  //   Weak<Pipe>(position, size);
+  //   pipe->addComponent<StillObjectTag>();
+  //   return pipe;
+  // }
+  //
+  // Weak<AbstractEntity> EntityFactory::createFlag(Vector2 position) {
+  //   Weak<AbstractEntity>(position);
+  //
+  //   flag->addComponent<StillObjectTag>();
+  //   return flag;
+  // }
+  //
+  // Weak<AbstractEntity> EntityFactory::createFlagPole(Vector2 position) {
+  //   Weak<AbstractEntity>(position);
+  //   return flagPole;
+  Shared<Pipe> pipe = std::make_shared<Pipe>(position, size);
+  return pipe;
 }
 
-Weak<AbstractEntity> EntityFactory::createFlagPole(Vector2 position) {
-    Shared<FlagPole> flagPole = std::make_shared<FlagPole>(position, &EM);
-    return flagPole;
+Weak<Flag> EntityFactory::createFlag(Vector2 position) {
+  Shared<Flag> flag = std::make_shared<Flag>(position);
+  return flag;
 }
-Shared<AbstractEntity> EntityFactory::createPiranha(Vector2 position)
-{
-  Shared<AbstractEntity> piranha = std::make_shared<Piranha>(position);
+
+Weak<FlagPole> EntityFactory::createFlagPole(Vector2 position) {
+  Shared<FlagPole> flagPole = std::make_shared<FlagPole>(position);
+  return flagPole;
+}
+Weak<Piranha> EntityFactory::createPiranha(Vector2 position) {
+  Shared<Piranha> piranha = std::make_shared<Piranha>(position);
   return piranha;
 }
 
-Shared<Mushroom> EntityFactory::createMushroom(Vector2 position)
-{
+Weak<Mushroom> EntityFactory::createMushroom(Vector2 position) {
   Shared<Mushroom> powerUp = std::make_shared<Mushroom>(position);
   return powerUp;
 }

@@ -4,16 +4,13 @@
 #include "raylib.h"
 
 BoundingBoxComponent::BoundingBoxComponent()
-    : Component("BoundingBoxComponent"), Vector2(), position(nullptr) {}
+    : Component("BoundingBoxComponent"), Vector2() {}
 
 BoundingBoxComponent::BoundingBoxComponent(Vector2 size)
-    : Component("BoundingBoxComponent"), Vector2(size), position(nullptr) {}
+    : Component("BoundingBoxComponent"), Vector2(size) {}
 
 Vector2 BoundingBoxComponent::getSize() { return {x, y}; }
 void BoundingBoxComponent::setSize(Vector2 size) {
   x = size.x;
   y = size.y;
 }
-Vector2 BoundingBoxComponent::getSize() { return this->size;}
-void BoundingBoxComponent::setSize(Vector2 size) { this->size = size; }
-void BoundingBoxComponent::update(float deltaTime) {}

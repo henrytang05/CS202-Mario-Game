@@ -52,6 +52,14 @@ public:
   bool checkAlive() const;
   bool checkOver() const;
   void update(float deltaTime) override;
+  void setToDie();
+  void setToSmall();
+  void setToLarge();
+  void resolveCollision();
+  void collisionRight();
+  void collisionLeft();
+  void collisionAbove();
+  void collisionBelow();
   void draw() override;
 };
 #endif // PLAYABLE_ENTITY_H

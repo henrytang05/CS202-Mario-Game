@@ -216,6 +216,12 @@ Mushroom::Mushroom(Vector2 position) {
     addComponent<PositionComponent>(position);   
     position_fixed = getComponent<PositionComponent>().getPosition(); 
     addComponent<TextureComponent>();
+    // vector<Texture2D> textures;
+    // textures.push_back(TextureManager::getInstance().getTexture("Coin1"));
+    // textures.push_back(TextureManager::getInstance().getTexture("Coin2"));
+    // textures.push_back(TextureManager::getInstance().getTexture("Coin3"));
+    // getComponent<TextureComponent>().addTexture("Normal", textures, 0.1f, true);
+    // getComponent<TextureComponent>().changeState("Normal");
     getComponent<TextureComponent>().addTexture("Normal", TextureManager::getInstance().getTexture("Mushroom") );
 }
 
@@ -258,6 +264,21 @@ void Mushroom::update(float deltaTime) {
         }
         getComponent<PositionComponent>().setPosition(position_change);
     }
+    //     elapsedTime += deltaTime;
+    //     Vector2 velocity = this->getComponent<TransformComponent>().getVelocity();
+    //     if(elapsedTime < 0.2f) {
+    //         velocity = velocity + (Vector2){0.0f, -600.0f * deltaTime};
+    //     }
+    //     velocity = velocity + (Vector2){0.0f, 120.0f * deltaTime};
+    //     if(velocity.y >= 1200.0f) velocity.y = 1200.0f;
+    //     if(velocity.y <= -1200.0f) velocity.y = -1200.0f;
+    //     if(elapsedTime >= 1) {
+    //         this->getComponent<PositionComponent>().setPosition(Vector2{-16,-16});
+    //         velocity.y = 0.0f;
+    //         isTriggered = false;
+    //     }
+    //     this->getComponent<TransformComponent>().setVelocity(velocity);
+    // }
 
     for(auto &comp : components)
         comp->update(deltaTime);
@@ -270,9 +291,10 @@ void Mushroom:: onNotify()
 }
 
 
-Coin::Coin(Vector2 position){
-    Vector2 size({0, 0});
-    addComponent<CollisionComponent>();
+Coin::Coin(Vector2 position): AbstractEntity("Coin") {
+    Vector2 size({1, 1});
+    addComponent<PositionComponent>(position);    
+    addComponent<BoundingBoxComponent>(size);
     addComponent<TransformComponent>((Vector2){0.0f, 0.0f});
     addComponent<BoundingBoxComponent>(size);
     addComponent<PositionComponent>(position);
@@ -285,29 +307,30 @@ Coin::Coin(Vector2 position){
     getComponent<TextureComponent>().changeState("Normal");
 }
 
-void Coin::onNotify()
-{
-    isTriggered = true;
-    getComponent<BoundingBoxComponent>().setSize({16.0f, 16.0f});  
-} 
 
 void Coin::update(float deltaTime) {
     if(isTriggered){
-        sumFrame += deltaTime;
+        elapsedTime += deltaTime;
         Vector2 velocity = this->getComponent<TransformComponent>().getVelocity();
-        if(sumFrame < 0.2f) {
+        if(elapsedTime < 0.2f) {
             velocity = velocity + (Vector2){0.0f, -600.0f * deltaTime};
         }
         velocity = velocity + (Vector2){0.0f, 120.0f * deltaTime};
         if(velocity.y >= 1200.0f) velocity.y = 1200.0f;
         if(velocity.y <= -1200.0f) velocity.y = -1200.0f;
-        if(sumFrame >= 1) {
+        if(elapsedTime >= 1) {
             this->getComponent<PositionComponent>().setPosition(Vector2{-16,-16});
             velocity.y = 0.0f;
+            isTriggered = false;
         }
         this->getComponent<TransformComponent>().setVelocity(velocity);
     }
-
     for(auto &comp : components)
         comp->update(deltaTime);
+}
+
+void Coin::onNotify()
+{
+    isTriggered = true;
+    getComponent<BoundingBoxComponent>().setSize({16.0f, 16.0f});  
 }

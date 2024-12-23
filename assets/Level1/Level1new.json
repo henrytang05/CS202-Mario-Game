@@ -3734,12 +3734,12 @@
                         {
                          "name":"isCoin",
                          "type":"bool",
-                         "value":false
+                         "value":true
                         }, 
                         {
                          "name":"isMushroom",
                          "type":"bool",
-                         "value":true
+                         "value":false
                         }],
                  "rotation":0,
                  "type":"",
@@ -3863,7 +3863,7 @@
                  "visible":true,
                  "width":16,
                  "x":407.5,
-                 "y":711.583333333333
+                 "y":711.583
                 }, 
                 {
                  "gid":81,
@@ -3874,7 +3874,7 @@
                  "type":"",
                  "visible":true,
                  "width":16,
-                 "x":1607.20454545455,
+                 "x":1607.2,
                  "y":727.5
                 }],
          "opacity":1,

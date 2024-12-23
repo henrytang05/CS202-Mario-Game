@@ -129,12 +129,7 @@ void MapRenderer::loadObjectGroup(const json& layer) {
                 for (auto const &property : object_layer["properties"]) {
                     if(property["name"]=="isCoin"){
                         if(property["value"]==true){
-                            entityFactory = std::make_unique<EntityFactory>();
-                            auto coin = entityFactory->createCoin({x, y});
-                            if(coin){
-                                objects.push_back(coin);
-                                obj->addObserver(coin);                        
-                            }
+                            //items.push_back(_entityFactory->createCoin({position.x, position.y - 16.0f}));
                         }
                     }
                     if(property["name"]=="isMushroom"){

@@ -270,12 +270,12 @@ void Mushroom:: onNotify()
 }
 
 
-Coin::Coin(Vector2 position): AbstractEntity("Coin") {
-    Vector2 size({16, 16});
-    addComponent<PositionComponent>(position);    
-    addComponent<BoundingBoxComponent>(size);
-    addComponent<BlockTriggerComponent>();
+Coin::Coin(Vector2 position){
+    Vector2 size({0, 0});
+    addComponent<CollisionComponent>();
     addComponent<TransformComponent>((Vector2){0.0f, 0.0f});
+    addComponent<BoundingBoxComponent>(size);
+    addComponent<PositionComponent>(position);
     addComponent<TextureComponent>();
     vector<Texture2D> textures;
     textures.push_back(TextureManager::getInstance().getTexture("Coin1"));
@@ -285,12 +285,29 @@ Coin::Coin(Vector2 position): AbstractEntity("Coin") {
     getComponent<TextureComponent>().changeState("Normal");
 }
 
-void Coin::draw() {
-    ASSERT(hasComponent<TextureComponent>());
-    getComponent<TextureComponent>().drawTexture("Normal");
-}
+void Coin::onNotify()
+{
+    isTriggered = true;
+    getComponent<BoundingBoxComponent>().setSize({16.0f, 16.0f});  
+} 
 
 void Coin::update(float deltaTime) {
+    if(isTriggered){
+        sumFrame += deltaTime;
+        Vector2 velocity = this->getComponent<TransformComponent>().getVelocity();
+        if(sumFrame < 0.2f) {
+            velocity = velocity + (Vector2){0.0f, -600.0f * deltaTime};
+        }
+        velocity = velocity + (Vector2){0.0f, 120.0f * deltaTime};
+        if(velocity.y >= 1200.0f) velocity.y = 1200.0f;
+        if(velocity.y <= -1200.0f) velocity.y = -1200.0f;
+        if(sumFrame >= 1) {
+            this->getComponent<PositionComponent>().setPosition(Vector2{-16,-16});
+            velocity.y = 0.0f;
+        }
+        this->getComponent<TransformComponent>().setVelocity(velocity);
+    }
+
     for(auto &comp : components)
         comp->update(deltaTime);
 }

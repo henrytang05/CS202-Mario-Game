@@ -137,15 +137,16 @@ private:
   Vector2 position_fixed;
 };
 
-class Coin : public AbstractEntity {
+class Coin : public AbstractEntity, public Observer {
 private:
-    bool isCollision = false;
+    bool isTriggered = false;
+    float sumFrame = 0;
 public:
     Coin() = default;
     Coin(Vector2 position);
-    ~Coin() = default;
-    void draw() override;
     void update(float deltaTime) override;
+    void draw() override {};
+    void onNotify() override;
 };
 
 class IFactory {

@@ -196,6 +196,9 @@ void CollisionHandlingSystem::update(float dt) {
     if (entity->hasComponent<AITag>()) {
       handleAICollision(entity);
     }
+    if(entity->hasComponent<EnemyTag>()) {
+      handleEnemyCollision(entity);
+    }
     if(entity->hasComponent<PlayerTag>()) {
       handlePlayerCollision(entity);
     }
@@ -217,6 +220,7 @@ void CollisionHandlingSystem::handlePlayerCollision(Weak<AbstractEntity> _entity
       // TODO: notify to the enemy
       entity->getComponent<CharacterStateComponent>().setEnumState("JUMPING");
       tf.setVelocity(Vector2{tf.getVelocity().x, -150.0f});
+      cc.getBelow().lock()->getComponent<CollisionComponent>().setAbove(entity);
     } 
     else if(entity->getComponent<CharacterStateComponent>().getState() == "DROPPING") {
       entity->getComponent<CharacterStateComponent>().setEnumState("IDLE");
@@ -239,7 +243,62 @@ void CollisionHandlingSystem::handlePlayerCollision(Weak<AbstractEntity> _entity
          entity->getComponent<MarioSoundComponent>().PlayBreakBlockEffect();
       }
     }
+    else if(aboveBlock->hasComponent<EnemyTag>()) {
+      // Die
+      entity->getComponent<MarioSoundComponent>().PlayMarioDieEffect();
+    }
   }
+
+  // Right Collision
+  if(cc.getRight().lock() != nullptr) {
+    auto rightBlock = cc.getRight().lock();
+    if(rightBlock->hasComponent<EnemyTag>()) {
+      // Die
+      entity->getComponent<MarioSoundComponent>().PlayMarioDieEffect();
+    }
+  }
+
+
+  // Left Collision
+  if(cc.getLeft().lock() != nullptr) {
+    auto leftBlock = cc.getLeft().lock();
+    if(leftBlock->hasComponent<EnemyTag>()) {
+      // Die
+      entity->getComponent<MarioSoundComponent>().PlayMarioDieEffect();
+    }
+  }
+}
+
+void CollisionHandlingSystem::handleEnemyCollision(Weak<AbstractEntity> _entity) {
+  if (_entity.expired())
+    throw std::runtime_error("Entity is expired");
+
+  auto entity = _entity.lock();
+
+  CollisionComponent &collision = entity->getComponent<CollisionComponent>();
+  auto above = collision.getAbove();
+  auto below = collision.getBelow();
+  auto left = collision.getLeft();
+  auto right = collision.getRight();
+
+  auto &trans = entity->getComponent<TransformComponent>();
+  Vector2 v = trans.getVelocity();
+  if (left.lock() && left.lock()->hasComponent<PlayerTag>()) {
+    left.lock()->getComponent<CollisionComponent>().setRight(entity);
+  }
+  if (right.lock() && right.lock()->hasComponent<PlayerTag>()) {
+    right.lock()->getComponent<CollisionComponent>().setRight(entity);
+  }
+  if (below.lock() && below.lock()->hasComponent<PlayerTag>()) {
+    below.lock()->getComponent<CollisionComponent>().setRight(entity);
+  }
+  if(above.lock()) {
+    if(above.lock()->hasComponent<PlayerTag>()) {
+      entity->getComponent<TextureComponent>().changeState("Die");
+      v.x = 0.0f;
+    }
+  }
+  trans.setVelocity(v);
 }
 void CollisionHandlingSystem::handleAICollision(Weak<AbstractEntity> _entity) {
   if (_entity.expired())

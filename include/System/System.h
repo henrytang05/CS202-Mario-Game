@@ -57,6 +57,7 @@ public:
   void update(float dt) override;
   void handleAICollision(Weak<AbstractEntity> entity);
   void handlePlayerCollision(Weak<AbstractEntity> entity);
+  void handleEnemyCollision(Weak<AbstractEntity> entity);
 };
 
 class SwingSystem : public IUpdatableSystem {

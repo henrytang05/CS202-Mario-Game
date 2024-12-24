@@ -2,6 +2,7 @@
 #define ENTITY_MANAGER_H
 
 #include "Interface.h"
+#include "Observer.h"
 #include "pch.h"
 #include <bitset>
 #include <unordered_map>
@@ -47,7 +48,7 @@ public:
       entityComponentIndexMap; // entityID : componentIndex
 };
 
-class AbstractEntity : public IUpdatable {
+class AbstractEntity : public IUpdatable, public Subject {
 private:
   bool active;       // check if entity is active
   uint32_t id;       // entity id

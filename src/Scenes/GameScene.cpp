@@ -85,13 +85,13 @@ void GameScene::draw() {
   for (auto &system : draw_systems) {
     system.lock()->draw(dt);
   }
+  EndMode2D();
+  DrawText(TextFormat("Time: %03i", (int)time), 1200, 35, GAMEPLAY_TEXT_SIZE,
+           WHITE);
+  GuideButton->draw();
 }
-EndMode2D();
-DrawText(TextFormat("Time: %03i", (int)time), 1200, 35, GAMEPLAY_TEXT_SIZE,
-         WHITE);
-GuideButton->draw();
-}
-Unique<Scene> GameScene::updateScene(float deltaTime) {
+} // namespace SceneSpace
+Unique<SceneSpace::Scene> SceneSpace::GameScene::updateScene(float deltaTime) {
   this->update(deltaTime);
 
   Vector2 mousePos = GetMousePosition();
@@ -102,15 +102,15 @@ Unique<Scene> GameScene::updateScene(float deltaTime) {
     return std::make_unique<SceneSpace::GuideScene>();
   }
 
-  if (player->checkAlive() == false) {
+  if (player.lock()->isActive()) {
     SoundCtrl.Pause();
   }
-  if (player->checkOver()) {
+  if (gameOver) {
     return std::make_unique<IntroScene>();
   }
   return nullptr;
 }
-void GameScene::update(float deltaTime) {
+void SceneSpace::GameScene::update(float deltaTime) {
   time -= deltaTime;
   for (auto &system : update_systems) {
     system.lock()->update(deltaTime);
@@ -124,5 +124,5 @@ void GameScene::update(float deltaTime) {
   SoundCtrl.Update((int)time);
 }
 
-bool GameScene::isFinished() { return gameOver; }
-} // namespace SceneSpace
+bool SceneSpace::GameScene::isFinished() { return gameOver; }
+// namespace SceneSpace

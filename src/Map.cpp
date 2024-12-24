@@ -113,12 +113,30 @@ void MapRenderer::loadObjectGroup(const json &layer) {
         objects.push_back(obj);
       }
     } else if (name == "QuestionBlock") {
-      auto obj = entityFactory->createBlock("QuestionBlock", {x, y});
-      if (obj.lock()) {
-        objects.push_back(obj);
+      auto obj = entityFactory->createBlock("QuestionBlock", {x, y}).lock();
+      if (object_layer.find("properties") != object_layer.end()) {
+        for (auto const &property : object_layer["properties"]) {
+          if (property["name"] == "isCoin") {
+            if (property["value"] == true) {
+              auto coin = entityFactory->createCoin({x, y});
+              if (coin) {
+                objects.push_back(coin);
+                obj->addObserver(coin);
+              }
+            }
+          }
+          if (property["name"] == "isMushroom") {
+            if (property["value"] == true) {
+              auto mushroom = entityFactory->createMushroom({x, y}).lock();
+              if (mushroom) {
+                objects.push_back(mushroom);
+                obj->addObserver(mushroom);
+              }
+            }
+          }
+        }
       }
-    }
-    else if (name == "Goomba") {
+    } else if (name == "Goomba") {
       auto obj = entityFactory->createGoomba({x, y}, {16.0f, 16.0f});
       if (obj.lock()) {
         objects.push_back(obj);

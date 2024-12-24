@@ -12,9 +12,10 @@
  <tileset firstgid="10" source="underwater-Koopa-Left-Idle.json"/>
  <tileset firstgid="11" source="Sky.json"/>
  <tileset firstgid="67" source="Coin.json"/>
+ <tileset firstgid="70" source="underwater-Mushroom.json"/>
  <layer id="26" name="Sky" width="164" height="50">
   <data encoding="base64" compression="zlib">
-   eJztwwENAAAMw6CqmH+pd3AFkLBqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqur7AGKYwM8=
+   eJztwwENAAAIwKCnMJL9I9nABLCx1aiqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq7wNqAMD/
   </data>
  </layer>
  <objectgroup id="16" name="GroundBlock">

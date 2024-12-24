@@ -1,43 +1,33 @@
 #ifndef COMPONENT_H
 #define COMPONENT_H
 
+class EntityManager;
 class AbstractEntity;
-class Component;
-using ComponentTypeID = std::size_t;
-
-constexpr std::size_t maxComponents = 64;
-
-using ComponentBitSet = std::bitset<maxComponents>;
-using ComponentArray = std::array<Component *, maxComponents>;
 
 class Component {
-
 public:
-  Component();
-  Component(std::string name);
+  Component(std::string name = "Unnamed", AbstractEntity *e = nullptr,
+            EntityManager *em = nullptr);
   virtual ~Component();
-  virtual void update(float deltaTime);
-  virtual void draw();
+
   void setEntity(AbstractEntity *e);
+  void setEntityManager(EntityManager *em);
+  std::string getName() const;
 
-  virtual void init();
-
-private:
 protected:
-  AbstractEntity *entity;
-
-public:
-  const std::string name;
+  AbstractEntity *entity; // this is only a reference, dont delete
+  EntityManager *EM;      // this is only a reference, dont delete
+  std::string name;
 };
 
-inline ComponentTypeID getComponentTypeID() {
-  static ComponentTypeID lastID = 0;
-  return lastID++;
-}
-
-template <typename T> inline ComponentTypeID getComponentTypeID() noexcept {
-  static ComponentTypeID typeID = getComponentTypeID();
-  return typeID;
-}
-
+struct SwingComponent : public Component {
+  SwingComponent(Vector2 position_fixed = {0, 0}, float elapsedTime = 0)
+      : Component("SwingComponent") {
+    this->position_fixed = position_fixed;
+    this->elapsedTime = elapsedTime;
+  }
+  ~SwingComponent() = default;
+  Vector2 position_fixed;
+  float elapsedTime = 0;
+};
 #endif // COMPONENT_H

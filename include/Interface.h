@@ -26,4 +26,7 @@ public:
   virtual Vector2 getVelocity() = 0;
 };
 
+class AbstractEntity;
+class EntityManager;
+
 #endif // INTERFACES_H

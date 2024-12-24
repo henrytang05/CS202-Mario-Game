@@ -26,10 +26,8 @@ public:
   virtual void addTexture(std::string state, std::vector<Texture2D> textures,
                           float frameDelay = 0.1f, bool isLooping = true);
   virtual void addAnimation(std::string state, Animation animation);
-  void changeState(std::string state);
   void drawTexture(std::string state);
-  void init() override;
-  void update(float deltaTime) override;
+  void changeState(std::string state);
 
 public:
   std::string state;

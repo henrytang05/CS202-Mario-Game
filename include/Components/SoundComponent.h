@@ -1,7 +1,7 @@
 #pragma once
 #include "Component.h"
-#include <array>
 #include "raylib.h"
+#include <array>
 
 class MarioSoundComponent : public Component {
 private:

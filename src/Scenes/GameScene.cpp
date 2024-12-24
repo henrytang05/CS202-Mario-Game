@@ -2,52 +2,66 @@
 
 #include <memory>
 
-#include "AbstractEntity.h"
 #include "Components/Collision.h"
 #include "Components/Components_include.h"
-#include "Components/EnemyComponents.h"
 #include "Components/Position.h"
 #include "Components/Texture.h"
-#include "Components/Transform.h"
 #include "Entity/EnemySystem.h"
 #include "Entity/EntityFactory.h"
 #include "Entity/PlayableEntity.h"
+#include "EntityManager.h"
 #include "Logger.h"
+#include "Scenes/GuideScene.h"
 #include "Scenes/IntroScene.h"
 #include "System/System.h"
 #include "globals.h"
 #include "pch.h"
 #include "raylib.h"
-#include "Scenes/GuideScene.h"
 class TextureComponent;
 namespace SceneSpace {
 
-GameScene::GameScene() : Scene(), camera({0, 0}) {
+GameScene::GameScene() : Scene(), EM(EntityManager::getInstance()) {
   // TODO: remove this later
-  systems.push_back(std::make_unique<TransformSystem>());
-  systems.push_back(std::make_unique<AnimationSystem>());
+  entityFactory = std::make_unique<EntityFactory>(EM);
+
+  Shared<CollisionSystem> collisionSystem = std::make_shared<CollisionSystem>();
+  Shared<TransformSystem> transformSystem = std::make_shared<TransformSystem>();
+  Shared<AnimationSystem> animationSystem = std::make_shared<AnimationSystem>();
+  Shared<PlayerSystem> playerSystem = std::make_shared<PlayerSystem>();
+  Shared<CollisionHandlingSystem> collisionHandlingSystem =
+      std::make_shared<CollisionHandlingSystem>();
+  systems.push_back(playerSystem);
+  systems.push_back(collisionSystem);
+  systems.push_back(transformSystem);
+  systems.push_back(collisionHandlingSystem);
+  systems.push_back(animationSystem);
+
+  update_systems.push_back(playerSystem);
+  update_systems.push_back(collisionSystem);
+  update_systems.push_back(transformSystem);
+  update_systems.push_back(collisionHandlingSystem);
+  draw_systems.push_back(animationSystem);
 }
 
 void GameScene::init() {
   GuideButton = new GUI::ImageButton(100, 20, "./assets/GuideButton.png",
-                                      "./assets/Hover_GuideButton.png");
+                                     "./assets/Hover_GuideButton.png");
   time = 360.f;
-  entityFactory = std::make_unique<EntityFactory>();
-  if(isMario) player = entityFactory->createMario();
-  else player = entityFactory->createLuigi();
-  entities.push_back(player);
+
+  // create player type?
+  if (isMario)
+    player = entityFactory->createMario();
+  else
+    player = entityFactory->createLuigi();
+
   gameOver = false;
   camera.offset = {screenWidth / 2.0f, screenHeight / 2.0f};
   camera.rotation = 0.0f;
-  camera.target.x = player->getComponent<PositionComponent>().getPosition().x;
+  camera.target.x = player.lock()->getComponent<PositionComponent>().x;
   camera.target.y = 784.0f - 186.0f;
   camera.zoom = 2.0f;
   SoundCtrl.PlayGroundTheme();
-  for (auto &entity : entities) {
-    if (entity->hasComponent<CollisionComponent>()) {
-      entity->getComponent<CollisionComponent>().setEntities(&entities);
-    }
-  }
+  loadResources();
 }
 
 GameScene::~GameScene() {
@@ -56,24 +70,22 @@ GameScene::~GameScene() {
 #endif
 }
 void GameScene::loadResources() {
-  //Loading BackGround
-  Image bImage = LoadImage("./assets/Level2/BackGround.png");
+  // Loading BackGround
+  Image bImage = LoadImage("assets/Level1/BackGround.png");
   background = LoadTextureFromImage(bImage);
   UnloadImage(bImage);
-  //Create Map
-  entities = mapRenderer.createMap("./assets/Level2/Level2-Hard.json");
+  // Create Map
+  entities = mapRenderer.createMap("assets/Level1/Level1.json");
 }
 void GameScene::draw() {
   float dt = GetFrameTime();
   BeginMode2D(camera);
   DrawTexture(background, 0, 0, WHITE);
-  for (auto &entity : entities) {
-    if (!entity->isActive())
-      continue;
-    if (entity->hasAllComponents<TextureComponent, PositionComponent>()) {
-      systems[1]->update(entity, dt);
-    }
+
+  for (auto &system : draw_systems) {
+    system.lock()->draw(dt);
   }
+
   EndMode2D();
   DrawText(TextFormat("Time: %03i", (int)time), 1200, 35, GAMEPLAY_TEXT_SIZE,
            WHITE);
@@ -85,31 +97,26 @@ Unique<Scene> GameScene::updateScene(float deltaTime) {
   Vector2 mousePos = GetMousePosition();
   bool isLeftClick = IsMouseButtonPressed(MOUSE_BUTTON_LEFT);
   GuideButton->update(mousePos, isLeftClick);
-  if(GuideButton->isPressed())
-  {
+  if (GuideButton->isPressed()) {
     SoundCtrl.PlayTingSound();
     return std::make_unique<SceneSpace::GuideScene>();
   }
 
-  if(player->checkAlive() == false) {
+  if (player.lock()->isActive() == false) {
     SoundCtrl.Pause();
   }
-  if(player->checkOver()) {
+  if (gameOver) {
     return std::make_unique<IntroScene>();
-  } 
+  }
   return nullptr;
 }
 void GameScene::update(float deltaTime) {
   time -= deltaTime;
-  for (auto &entity : entities) {
-    if (!entity->isActive())
-      continue;
-    entity->update(deltaTime);
-    if(entity->hasAllComponents<TransformComponent, PositionComponent>())
-      systems[0]->update(entity, deltaTime);
+  for (auto &system : update_systems) {
+    system.lock()->update(deltaTime);
   }
 
-  camera.target.x = player->getComponent<PositionComponent>().getPosition().x;
+  camera.target.x = player.lock()->getComponent<PositionComponent>().x;
   if (camera.target.x <= screenWidth / (2.0f * camera.zoom))
     camera.target.x = screenWidth / (2.0f * camera.zoom);
   if (camera.target.x >= gameWidth - screenWidth / (2.0f * camera.zoom))

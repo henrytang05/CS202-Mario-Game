@@ -5,22 +5,28 @@
 #include "raylib.h"
 
 Vector2 operator+(const Vector2 &v1, const Vector2 &v2);
+Vector2 operator-(const Vector2 &v);
 
-class PositionComponent : public Component {
+class PositionComponent : public Component, public Vector2 {
 public:
   PositionComponent();
-  ~PositionComponent() = default;
   PositionComponent(Vector2 pos);
+  PositionComponent(float x, float y);
+  ~PositionComponent();
+
   void setPosition(Vector2 pos);
   Vector2 getPosition();
-  float getX();
-  float getY();
-  void setX(float x);
-  void setY(float y);
-  void init() override;
+};
 
-private:
-  Vector2 position;
+class TransformComponent : public Component, public Vector2 {
+public:
+  TransformComponent(Vector2 pos);
+  TransformComponent(float x, float y);
+  TransformComponent();
+  ~TransformComponent();
+
+  void setVelocity(Vector2 pos);
+  Vector2 getVelocity();
 };
 
 #endif // POSITION_COMPONENT_H

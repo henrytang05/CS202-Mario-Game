@@ -2,8 +2,8 @@
 
 #include "Logger.h"
 
-Component::Component() : entity(nullptr), name("Unnamed") {}
-Component::Component(std::string name) : entity(nullptr), name(name) {}
+Component::Component(std::string name, AbstractEntity *e, EntityManager *em)
+    : entity(e), EM(em), name(std::move(name)) {}
 
 Component::~Component() {
 #ifdef _DEBUG
@@ -12,7 +12,8 @@ Component::~Component() {
   entity = nullptr;
 }
 
-void Component::init() {}
-void Component::update(float deltaTime) {}
-void Component::draw() {}
+std::string Component::getName() const { return name; }
+
 void Component::setEntity(AbstractEntity *_entity) { this->entity = _entity; }
+
+void Component::setEntityManager(EntityManager *em) { EM = em; }

@@ -1,120 +1,66 @@
 #include "Entity/EntityFactory.h"
- 
 
-Shared<Mario> EntityFactory::createMario() {
-  Shared<Mario> mario = std::make_shared<Mario>();
+#include <cstddef>
 
-  return mario;
-}
-Shared<Luigi> EntityFactory::createLuigi() {
-  Shared<Luigi> luigi = std::make_shared<Luigi>();
-  return luigi;
-}
-Shared<AbstractEntity> EntityFactory::createGoomba() {
-  // Shared<Entity> goomba = std::make_shared<Entity>();
-  // // TODO: Add components
-  // return goomba;
-  return nullptr;
-}
+#include "Components/Components_include.h"
+#include "Entity/Mario.h"
+#include "EntityManager.h"
+#include "GameObject.h"
+#include "pch.h"
+#include "raylib.h"
 
-Shared<Enemy> EntityFactory::createEnemy(Vector2 position, Vector2 size) {
-  static int cnt = 1;
-  if (cnt > 1)
-    return nullptr;
-  std::string name = "Goomba" + std::to_string(cnt++);
-  Shared<Enemy> enemy = std::make_shared<Enemy>(name);
+EntityFactory::EntityFactory(EntityManager &EM) : IFactory(EM) {}
+//
+Weak<AbstractEntity> EntityFactory::createMario() { return initMario(); }
+Weak<AbstractEntity> EntityFactory::createLuigi() { return initLuigi(); }
+Weak<AbstractEntity> EntityFactory::createGoomba(Vector2 position, Vector2 size) { return initGoomba(position, size); }
 
-  enemy->addComponent<CollisionComponent>();
-
-  enemy->addComponent<PositionComponent>(position);
-
-  enemy->addComponent<TransformComponent>(Vector2{-10.0f * cnt, 10});
-  enemy->addComponent<BoundingBoxComponent>(size);
-  enemy->addComponent<EnemyTag>();
-  enemy->addComponent<Gravity>();
-  enemy->addComponent<TextureComponent>();
-
-  enemy->getComponent<TextureComponent>().addTexture(
-      "Left-Moving",
-      {LoadTexture("assets/Goomba/Goomba-Left-Idle.png"),
-       LoadTexture("assets/Goomba/Goomba-Left-Moving.png")},
-      0.1f, true);
-
-  enemy->getComponent<TextureComponent>().addTexture(
-      "Right-Moving",
-      {LoadTexture("assets/Goomba/Goomba-Right-Idle.png"),
-       LoadTexture("assets/Goomba/Goomba-Right-Moving.png")},
-      0.1f, true);
-
-  enemy->getComponent<TextureComponent>().addTexture(
-      "Die", {LoadTexture("assets/Goomba/Goomba-Die.png")}, .3f, false);
-
-  enemy->getComponent<TextureComponent>().changeState("Left-Moving");
-
-  // enemy->getComponent<TextureComponent2>().addTexture(
-  //     "Goomba-Die", "./assets/Goomba/Goomba-Die.png");
-  //
-  // enemy->getComponent<TextureComponent2>().addTexture(
-  //     "Goomba-Left-Idle", "./assets/Goomba/Goomba-Left-Idle.png");
-  // enemy->getComponent<TextureComponent2>().addTexture(
-  //     "Goomba-Right-Idle", "./assets/Goomba/Goomba-Right-Idle.png");
-  //
-  // enemy->getComponent<TextureComponent2>().addTexture(
-  //     "Goomba-Left-Moving", "./assets/Goomba/Goomba-Left-Moving.png");
-  // enemy->getComponent<TextureComponent2>().addTexture(
-  //     "Goomba-Right-Moving", "./assets/Goomba/Goomba-Right-Moving.png");
-  return enemy;
+Weak<AbstractEntity> EntityFactory::createEnemy(Vector2 position,
+                                                Vector2 size) {
+  return initGoomba(position, size);
 }
 
-Shared<AbstractEntity> EntityFactory::createBlock(string type, Vector2 position) {
+Weak<AbstractEntity> EntityFactory::createBlock(std::string type,
+                                                Vector2 position) {
   Texture2D texture = TextureManager::getInstance().getTexture(type);
-  std::cerr<<"Still good get into createBlock"<<std::endl; 
-  Shared<AbstractEntity> block = nullptr;
-  if(type == "NormalBlock"){
+
+  std::cerr << "Still good get into createBlock" << std::endl;
+  Weak<AbstractEntity> block;
+  if (type == "NormalBlock") {
     block = std::make_shared<NormalBlock>(position);
-  }
-  else if(type == "BrokenBlock"){
+  } else if (type == "BrokenBlock") {
     block = std::make_shared<BrokenBlock>(position);
-  }
-  else if(type == "HardBlock"){
+  } else if (type == "HardBlock") {
     block = std::make_shared<HardBlock>(position);
-  }
-  else if(type == "GroundBlock"){
-    block = std::make_shared<GroundBlock>(position);
-  }
-  else if(type == "QuestionBlock"){
+  } else if (type == "GroundBlock") {
+    block = createGroundBlock(position);
+  } else if (type == "QuestionBlock") {
     block = std::make_shared<QuestionBlock>(position);
+  } else {
+    throw std::runtime_error("Block type not found");
   }
   return block;
 }
-
-Shared<AbstractEntity> EntityFactory::createPipe(Vector2 position,
-                                                 Vector2 size) {
-  Shared<AbstractEntity> pipe = std::make_shared<Pipe>(position, size);
-  pipe->addComponent<StillObjectTag>();
+Weak<Pipe> EntityFactory::createPipe(Vector2 position, Vector2 size) {
+  Shared<Pipe> pipe = std::make_shared<Pipe>(position, size);
   return pipe;
 }
 
-Shared<AbstractEntity> EntityFactory::createFlag(Vector2 position) {
-  Shared<AbstractEntity> flag = std::make_shared<Flag>(position);
-
-  flag->addComponent<StillObjectTag>();
+Weak<Flag> EntityFactory::createFlag(Vector2 position) {
+  Shared<Flag> flag = std::make_shared<Flag>(position);
   return flag;
 }
 
-Shared<AbstractEntity> EntityFactory::createFlagPole(Vector2 position)
-{
-  Shared<AbstractEntity> flagPole = std::make_shared<FlagPole>(position);
+Weak<FlagPole> EntityFactory::createFlagPole(Vector2 position) {
+  Shared<FlagPole> flagPole = std::make_shared<FlagPole>(position);
   return flagPole;
 }
-Shared<AbstractEntity> EntityFactory::createPiranha(Vector2 position)
-{
-  Shared<AbstractEntity> piranha = std::make_shared<Piranha>(position);
+Weak<Piranha> EntityFactory::createPiranha(Vector2 position) {
+  Shared<Piranha> piranha = std::make_shared<Piranha>(position);
   return piranha;
 }
 
-Shared<Mushroom> EntityFactory::createMushroom(Vector2 position)
-{
+Weak<Mushroom> EntityFactory::createMushroom(Vector2 position) {
   Shared<Mushroom> powerUp = std::make_shared<Mushroom>(position);
   return powerUp;
 }

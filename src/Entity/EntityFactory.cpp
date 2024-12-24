@@ -36,7 +36,7 @@ Weak<AbstractEntity> EntityFactory::createBlock(std::string type,
   } else if (type == "HardBlock") {
     block = std::make_shared<HardBlock>(position);
   } else if (type == "GroundBlock") {
-    block = std::make_shared<GroundBlock>(position);
+    block = createGroundBlock(position);
   } else if (type == "QuestionBlock") {
     block = std::make_shared<QuestionBlock>(position);
   } else {

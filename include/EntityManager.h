@@ -344,11 +344,15 @@ inline std::vector<Weak<AbstractEntity>> EntityManager::getHasAll() {
   std::bitset<maxComponents> bitset;
   (bitset.set(getComponentTypeID<TArgs>()), ...);
 
-  const auto &ens = bitsetEntityMap[bitset];
+  std::vector<Weak<AbstractEntity>> ret;
 
-  std::vector<Weak<AbstractEntity>> ret(ens.size());
-  std::transform(ens.begin(), ens.end(), ret.begin(),
-                 [&](const EntityID &en) { return entities[en]; });
+  for (auto &[k, v] : bitsetEntityMap) {
+    if ((k & bitset) == bitset) {
+      for (auto &id : v) {
+        ret.push_back(getEntityPtr(id));
+      }
+    }
+  }
 
   return ret;
 }

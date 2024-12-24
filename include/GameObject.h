@@ -4,6 +4,10 @@
 #include "Observer.h"
 using json = nlohmann::json;
 
+// typedef AbstractEntity GroundBlock;
+
+Weak<AbstractEntity> createGroundBlock(Vector2 position);
+
 // Derived class for a normal block
 class NormalBlock : public AbstractEntity {
 private:
@@ -38,16 +42,16 @@ public:
 };
 
 // Derived class for a ground block
-class GroundBlock : public AbstractEntity {
-private:
-  bool isCollision = false;
-
-public:
-  GroundBlock(Vector2 position);
-  ~GroundBlock() = default;
-  void init(Vector2 position);
-};
-
+// class GroundBlock : public AbstractEntity {
+// private:
+//   bool isCollision = false;
+//
+// public:
+//   GroundBlock(Vector2 position);
+//   ~GroundBlock() = default;
+//   void init(Vector2 position);
+// };
+//
 // Derived class for a question block
 class QuestionBlock : public AbstractEntity {
 private:

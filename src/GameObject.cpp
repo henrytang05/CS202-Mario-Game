@@ -69,19 +69,33 @@ void HardBlock::init(Vector2 position) {
 
 // void HardBlock::update(float deltaTime) {}
 
-GroundBlock::GroundBlock(Vector2 position) : AbstractEntity("GroundBlock") {
-  initEntity();
-  init(position);
+// GroundBlock::GroundBlock(Vector2 position) : AbstractEntity("GroundBlock") {
+//   initEntity();
+//   init(position);
+// }
+
+Weak<AbstractEntity> createGroundBlock(Vector2 position) {
+  EntityManager &EM = EntityManager::getInstance();
+  Shared<AbstractEntity> entity = EM.createEntity("GroundBlock").lock();
+
+  Vector2 size({16, 16});
+  entity->addComponent<PositionComponent>(position);
+  entity->addComponent<BoundingBoxComponent>(size);
+  entity->addComponent<TextureComponent>();
+  entity->getComponent<TextureComponent>().addTexture(
+      "Normal", TextureManager::getInstance().getTexture("GroundBlock"));
+
+  return entity;
 }
 
-void GroundBlock::init(Vector2 position) {
-  Vector2 size({16, 16});
-  addComponent<PositionComponent>(position);
-  addComponent<BoundingBoxComponent>(size);
-  addComponent<TextureComponent>();
-  getComponent<TextureComponent>().addTexture(
-      "Normal", TextureManager::getInstance().getTexture("GroundBlock"));
-}
+// void GroundBlock::init(Vector2 position) {
+//   Vector2 size({16, 16});
+//   addComponent<PositionComponent>(position);
+//   addComponent<BoundingBoxComponent>(size);
+//   addComponent<TextureComponent>();
+//   getComponent<TextureComponent>().addTexture(
+//       "Normal", TextureManager::getInstance().getTexture("GroundBlock"));
+// }
 
 // void GroundBlock::draw() {
 //   ASSERT(hasComponent<TextureComponent>());

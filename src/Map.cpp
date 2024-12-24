@@ -72,12 +72,14 @@ void MapRenderer::loadObjectGroup(const json& layer) {
         //Create game objects based on type
         if (name == "Pipe") {
             entityFactory = std::make_unique<EntityFactory>();
-            for (auto const &property : object_layer["properties"]) {
-                if(property["name"]=="height"){
-                    height = property["value"];
-                }
-                if(property["name"]=="width"){
-                    width = property["value"];
+            if(object_layer.find("properties") != object_layer.end()){
+                for (auto const &property : object_layer["properties"]) {
+                    if(property["name"]=="height"){
+                        height = property["value"];
+                    }
+                    if(property["name"]=="width"){
+                        width = property["value"];
+                    }
                 }
             }
             auto obj = entityFactory->createPipe({x, y}, {width, height});

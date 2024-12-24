@@ -1,6 +1,6 @@
 // #include "Entity/EnemySystem.h"
 //
-// #include "AbstractEntity.h"
+// #include "EntityManager.h"
 // #include "Components/Collision.h"
 // #include "Components/EnemyComponents.h"
 // #include "Components/Texture.h"

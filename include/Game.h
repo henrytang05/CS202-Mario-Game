@@ -1,5 +1,6 @@
 #ifndef GAME_H
 #define GAME_H
+
 #include "Interface.h"
 #include "Scenes/Scene.h"
 class IUpdatable;

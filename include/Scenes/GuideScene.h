@@ -2,7 +2,7 @@
 #define GUIDESCENE_H
 #include "GUI.h"
 #include "Scenes/Scene.h"
-#include "AbstractEntity.h"
+#include "EntityManager.h"
 #include "Entity/PlayableEntity.h"
 #include "Entity/EntityFactory.h"
 

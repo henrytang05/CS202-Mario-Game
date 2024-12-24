@@ -115,3 +115,16 @@ private:
   float elapsedTime = 0;
   Vector2 position_fixed;
 };
+
+class Coin : public AbstractEntity, public Observer {
+private:
+  bool isTriggered = false;
+  float elapsedTime = 0;
+
+public:
+  Coin() = default;
+  Coin(Vector2 position);
+  ~Coin() = default;
+  void update(float deltaTime) override;
+  void onNotify() override;
+};

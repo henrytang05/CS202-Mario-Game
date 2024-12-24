@@ -244,7 +244,7 @@ void CollisionHandlingSystem::handlePlayerCollision(Weak<AbstractEntity> _entity
       }
     }
     else if(aboveBlock->hasComponent<EnemyTag>()) {
-      // Die
+      // EXPLAIN: DIE PLAYER
       entity->getComponent<MarioSoundComponent>().PlayMarioDieEffect();
     }
   }
@@ -253,7 +253,7 @@ void CollisionHandlingSystem::handlePlayerCollision(Weak<AbstractEntity> _entity
   if(cc.getRight().lock() != nullptr) {
     auto rightBlock = cc.getRight().lock();
     if(rightBlock->hasComponent<EnemyTag>()) {
-      // Die
+      // EXPLAIN: DIE PLAYER
       entity->getComponent<MarioSoundComponent>().PlayMarioDieEffect();
     }
   }
@@ -263,7 +263,7 @@ void CollisionHandlingSystem::handlePlayerCollision(Weak<AbstractEntity> _entity
   if(cc.getLeft().lock() != nullptr) {
     auto leftBlock = cc.getLeft().lock();
     if(leftBlock->hasComponent<EnemyTag>()) {
-      // Die
+      // EXPLAIN: DIE PLAYER
       entity->getComponent<MarioSoundComponent>().PlayMarioDieEffect();
     }
   }
@@ -293,6 +293,7 @@ void CollisionHandlingSystem::handleEnemyCollision(Weak<AbstractEntity> _entity)
     below.lock()->getComponent<CollisionComponent>().setRight(entity);
   }
   if(above.lock()) {
+    // EXPLAIN: DIE ENEMY
     if(above.lock()->hasComponent<PlayerTag>()) {
       entity->getComponent<TextureComponent>().changeState("Die");
       v.x = 0.0f;

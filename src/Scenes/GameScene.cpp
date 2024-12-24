@@ -54,11 +54,11 @@ GameScene::~GameScene() {
 }
 void GameScene::loadResources() {
   //Loading BackGround
-  Image bImage = LoadImage("assets/Level1/BackGround.png");
+  Image bImage = LoadImage("assets/Level2/BackGround.png");
   background = LoadTextureFromImage(bImage);
   UnloadImage(bImage);
   //Create Map
-  entities = mapRenderer.createMap("assets/Level1/Level1.json");
+  entities = mapRenderer.createMap("assets/Level2/Level2-Hard.json");
 }
 void GameScene::draw() {
   float dt = GetFrameTime();

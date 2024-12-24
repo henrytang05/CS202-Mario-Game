@@ -56,6 +56,7 @@ class CollisionHandlingSystem : public IUpdatableSystem {
 public:
   void update(float dt) override;
   void handleAICollision(Weak<AbstractEntity> entity);
+  void handlePlayerCollision(Weak<AbstractEntity> entity);
 };
 
 class SwingSystem : public IUpdatableSystem {
@@ -63,4 +64,8 @@ public:
   void update(float dt) override;
 };
 
+class PlayerSystem : public IUpdatableSystem {
+public:
+  void update(float dt) override;
+};
 #endif // SYSTEM_H

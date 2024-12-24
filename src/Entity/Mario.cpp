@@ -6,15 +6,33 @@ Weak<AbstractEntity> initMario() {
   EntityManager &EM = EntityManager::getInstance();
   Vector2 size({16, 20});
   Vector2 position = {0.0f, screenHeight - 100.0f};
-  Vector2 velocity = {0, 0};
+  Vector2 velocity = {0, 10.0f};
 
   Shared<AbstractEntity> Mario = EM.createEntity("Mario").lock();
-
+  Mario->addComponent<PlayerTag>();
   Mario->addComponent<CollisionComponent>();
   Mario->addComponent<PositionComponent>(position);
   Mario->addComponent<TransformComponent>(velocity);
   Mario->addComponent<BoundingBoxComponent>(size);
   Mario->addComponent<MarioSoundComponent>();
+  Mario->addComponent<CharacterStateComponent>();
+  Mario->addComponent<CharacterParametersComponent>(133.59375f, 200.390625f, 182.8125f, 365.625f, 33.75f, 562.0f, 4.453125f,
+  93.75f, 153.75f, -240.0f, 270.0f, 421.875f, 1800.0f);
+  /*    
+    float WALKING_ACC = ;
+    float RUNNING_ACC = ;
+    float NORMAL_DEC = ;
+    float SKIDDING_DEC = ;
+    float MIN_SKIDDING = ;
+    float GRAVITY_DEC = ;
+    float MIN_WALKING_VELO = ;
+    float MAX_WALKING_VELO = ;
+    float MAX_RUNNING_VELO = ;
+    float JUMPING_VELO = ;
+    float MAX_FALL = ;
+    float FALL_ACC_A = ;
+    float FALL_ACC = ;
+  */
   auto &texture = Mario->addComponent<TextureComponent>();
 
   // SMALL RIGHT

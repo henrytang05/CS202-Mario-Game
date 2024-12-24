@@ -128,7 +128,7 @@ void QuestionBlock::init(Vector2 position) {
 
 Pipe::Pipe(Vector2 position, Vector2 size) : AbstractEntity("Pipe") {
   initEntity();
-  init(position, size);
+  init(position, {32, 64});
 }
 
 void Pipe::init(Vector2 position, Vector2 size) {

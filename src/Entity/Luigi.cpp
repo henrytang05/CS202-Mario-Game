@@ -6,15 +6,33 @@ Weak<AbstractEntity> initLuigi() {
 
   Vector2 size({16, 20});
   Vector2 position = {0.0f, screenHeight - 100.0f};
-  Vector2 velocity = {0, 0};
+  Vector2 velocity = {0, 10.0f};
 
   Shared<AbstractEntity> Luigi = EM.createEntity("Luigi").lock();
-
+  Luigi->addComponent<PlayerTag>();
   Luigi->addComponent<CollisionComponent>();
   Luigi->addComponent<PositionComponent>(position);
   Luigi->addComponent<TransformComponent>(velocity);
   Luigi->addComponent<BoundingBoxComponent>(size);
   Luigi->addComponent<MarioSoundComponent>();
+  Luigi->addComponent<CharacterStateComponent>();
+  Luigi->addComponent<CharacterParametersComponent>(100.59375f, 170.390625f, 182.8125f, 365.625f, 33.75f, 562.0f, 4.453125f,
+  93.75f, 153.75f, -300.0f, 270.0f, 421.875f, 1800.0f);
+  /*    
+    float WALKING_ACC = ;
+    float RUNNING_ACC = ;
+    float NORMAL_DEC = ;
+    float SKIDDING_DEC = ;
+    float MIN_SKIDDING = ;
+    float GRAVITY_DEC = ;
+    float MIN_WALKING_VELO = ;
+    float MAX_WALKING_VELO = ;
+    float MAX_RUNNING_VELO = ;
+    float JUMPING_VELO = ;
+    float MAX_FALL = ;
+    float FALL_ACC_A = ;
+    float FALL_ACC = ;
+  */
   auto &texture = Luigi->addComponent<TextureComponent>();
   // SMALL RIGHT
   std::vector<Texture2D> textures;

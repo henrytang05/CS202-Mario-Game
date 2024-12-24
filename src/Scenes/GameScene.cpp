@@ -23,16 +23,21 @@ GameScene::GameScene() : Scene(), EM(EntityManager::getInstance()) {
     // TODO: remove this later
     entityFactory = std::make_unique<EntityFactory>(EM);
 
+    Shared<CollisionSystem> collisionSystem = std::make_shared<CollisionSystem>();
     Shared<TransformSystem> transformSystem = std::make_shared<TransformSystem>();
     Shared<AnimationSystem> animationSystem = std::make_shared<AnimationSystem>();
-    Shared<CollisionSystem> collisionSystem = std::make_shared<CollisionSystem>();
-
+    Shared<PlayerSystem> playerSystem = std::make_shared<PlayerSystem>();
+    Shared<CollisionHandlingSystem> collisionHandlingSystem = std::make_shared<CollisionHandlingSystem>();
+    systems.push_back(playerSystem);
+    systems.push_back(collisionSystem);
+    systems.push_back(collisionHandlingSystem);
     systems.push_back(transformSystem);
     systems.push_back(animationSystem);
-    systems.push_back(collisionSystem);
-
-    update_systems.push_back(transformSystem);
+    
+    update_systems.push_back(playerSystem);
     update_systems.push_back(collisionSystem);
+    update_systems.push_back(collisionHandlingSystem);
+    update_systems.push_back(transformSystem);
     draw_systems.push_back(animationSystem);
 }
 

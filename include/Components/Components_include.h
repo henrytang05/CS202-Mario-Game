@@ -8,4 +8,6 @@
 #include "Components/SoundComponent.h"
 #include "Components/Tags.h"
 #include "Components/Texture.h"
+#include "Components/CharacterState.h"
+#include "Components/CharacterParemeters.h"
 #endif // COMPONENTS_H

@@ -1,13 +1,13 @@
 #ifndef GAMESCENE_H
 #define GAMESCENE_H
-#include "AbstractEntity.h"
+
+#include "Entity/EnemySystem.h"
 #include "Entity/EntityFactory.h"
-#include "Entity/PlayableEntity.h"
+#include "EntityManager.h"
+#include "GUI.h"
 #include "Map.h"
 #include "Scenes/Scene.h"
 #include "System/System.h"
-#include "Entity/EnemySystem.h"
-#include "GUI.h"
 namespace SceneSpace {
 class GameScene : public Scene {
 public:
@@ -26,14 +26,18 @@ private:
   Texture2D background;
   MapRenderer mapRenderer;
   Camera2D camera;
-  Shared<PlayableEntity> player;
-  std::vector<Shared<AbstractEntity>> entities;
-  Unique<IFactory> entityFactory;
+  EntityManager &EM;
+  Weak<AbstractEntity> player;
   bool gameOver;
-  GUI::ImageButton* GuideButton;
+  GUI::ImageButton *GuideButton;
   // TODO: remove this later
+  Unique<IFactory> entityFactory;
+  std::vector<Weak<AbstractEntity>> entities;
+
 private:
-  std::vector<Unique<System>> systems;
+  std::vector<Shared<System>> systems;
+  std::vector<Weak<IUpdatableSystem>> update_systems;
+  std::vector<Weak<IDrawableSystem>> draw_systems;
 };
 } // namespace SceneSpace
 

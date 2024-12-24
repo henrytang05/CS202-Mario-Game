@@ -235,7 +235,7 @@ void Mushroom::handleCollision()
     auto right = collision.getRight();
 
     auto &trans = getComponent<TransformComponent>();
-    
+
     Vector2 v = trans.getVelocity();
     if (left.lock() && !left.lock()->hasComponent<EnemyTag>())
         v.x = -ENEMY_SPEED;
@@ -250,36 +250,19 @@ void Mushroom::handleCollision()
 
 void Mushroom::update(float deltaTime) {
     if(isTriggered)
-    {   
-        elapsedTime += deltaTime;
-
+    {
         auto position_change = getComponent<PositionComponent>().getPosition();
         position_change.y = position_change.y - 16.0f * deltaTime;
 
         // Ensure it doesn't go below the fixed position
         if (position_change.y < position_fixed.y - 16.0f) {
-            position_change.y = position_fixed.y - 17.0f;
+            position_change.y = position_fixed.y - 16.0f;
             isTriggered = false;
             getComponent<BoundingBoxComponent>().setSize((Vector2){16.0f, 16.0f});
             getComponent<TransformComponent>().setVelocity((Vector2){50.0f, 10.0f});
         }
         getComponent<PositionComponent>().setPosition(position_change);
     }
-    //     elapsedTime += deltaTime;
-    //     Vector2 velocity = this->getComponent<TransformComponent>().getVelocity();
-    //     if(elapsedTime < 0.2f) {
-    //         velocity = velocity + (Vector2){0.0f, -600.0f * deltaTime};
-    //     }
-    //     velocity = velocity + (Vector2){0.0f, 120.0f * deltaTime};
-    //     if(velocity.y >= 1200.0f) velocity.y = 1200.0f;
-    //     if(velocity.y <= -1200.0f) velocity.y = -1200.0f;
-    //     if(elapsedTime >= 1) {
-    //         this->getComponent<PositionComponent>().setPosition(Vector2{-16,-16});
-    //         velocity.y = 0.0f;
-    //         isTriggered = false;
-    //     }
-    //     this->getComponent<TransformComponent>().setVelocity(velocity);
-    // }
     if(this->getComponent<BoundingBoxComponent>().getSize().y == 16.0f)
         handleCollision();
     for(auto &comp : components)
@@ -289,13 +272,11 @@ void Mushroom::update(float deltaTime) {
 void Mushroom:: onNotify()
 {
     isTriggered = true;
-    getComponent<BoundingBoxComponent>().setSize({16.0f, 16.0f});  
-
 }
 
 
 Coin::Coin(Vector2 position): AbstractEntity("Coin") {
-    Vector2 size({1, 1});
+    Vector2 size({0, 0});
     addComponent<PositionComponent>(position);    
     addComponent<BoundingBoxComponent>(size);
     addComponent<TransformComponent>((Vector2){0.0f, 0.0f});

@@ -22,7 +22,7 @@ void Enemy::changeState() {
   getComponent<CollisionComponent>().reset();
 }
 
-Koomba::Koomba(Vector2 position, Vector2 size) : Enemy("Koomba") {
+Koopa::Koopa(Vector2 position, Vector2 size) : Enemy("Koomba") {
   initEntity();
   addComponent<CollisionComponent>();
   addComponent<PositionComponent>(position);
@@ -30,7 +30,7 @@ Koomba::Koomba(Vector2 position, Vector2 size) : Enemy("Koomba") {
   // addComponent<TextureComponent>("Koomba", size);
 }
 
-void Koomba::changeState() {
+void Koopa::changeState() {
   //   auto collision = getComponent<CollisionComponent>();
   //   auto _above = collision.getAbove();
   //   if (_above.expired())
@@ -51,6 +51,6 @@ void Koomba::changeState() {
   //   return koomba;
 }
 
-Weak<Koomba> initKoopa(Vector2 position, Vector2 size) {
-  return std::make_shared<Koomba>(position, size);
+Weak<Koopa> initKoopa(Vector2 position, Vector2 size) {
+  return std::make_shared<Koopa>(position, size);
 }

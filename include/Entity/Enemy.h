@@ -8,12 +8,12 @@ public:
   void changeState() override;
 };
 //
-class Koomba : public Enemy {
+class Koopa : public Enemy {
 public:
-  Koomba(Vector2 position, Vector2 size);
+  Koopa(Vector2 position, Vector2 size);
   void changeState() override;
 };
 
-Weak<Koomba> initKoopa(Vector2 position, Vector2 size);
+Weak<Koopa> initKoopa(Vector2 position, Vector2 size);
 
 #endif // ENEMY_H

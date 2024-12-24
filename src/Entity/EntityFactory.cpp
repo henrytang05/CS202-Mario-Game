@@ -45,27 +45,12 @@ Weak<AbstractEntity> EntityFactory::createBlock(std::string type,
   return block;
 }
 
-Weak<Koomba> EntityFactory::createKoomba(Vector2 position, Vector2 size) {
-  Weak<Koomba> koomba = initKoopa(position, size);
-  return koomba;
+Weak<Koopa> EntityFactory::createKoopa(Vector2 position, Vector2 size) {
+  Weak<Koopa> koopa = initKoopa(position, size);
+  return koopa;
 }
 
 Weak<Pipe> EntityFactory::createPipe(Vector2 position, Vector2 size) {
-  //   Weak<Pipe>(position, size);
-  //   pipe->addComponent<StillObjectTag>();
-  //   return pipe;
-  // }
-  //
-  // Weak<AbstractEntity> EntityFactory::createFlag(Vector2 position) {
-  //   Weak<AbstractEntity>(position);
-  //
-  //   flag->addComponent<StillObjectTag>();
-  //   return flag;
-  // }
-  //
-  // Weak<AbstractEntity> EntityFactory::createFlagPole(Vector2 position) {
-  //   Weak<AbstractEntity>(position);
-  //   return flagPole;
   Shared<Pipe> pipe = std::make_shared<Pipe>(position, size);
   return pipe;
 }

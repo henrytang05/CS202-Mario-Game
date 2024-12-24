@@ -125,9 +125,30 @@ void MapRenderer::loadObjectGroup(const json& layer) {
         } else if (name == "QuestionBlock"){
             entityFactory = std::make_unique<EntityFactory>();
             auto obj = entityFactory->createBlock("QuestionBlock", {x, y});
+            if(object_layer.find("properties") != object_layer.end()){
+                for (auto const &property : object_layer["properties"]) {
+                    if(property["name"]=="isCoin"){
+                        if(property["value"]==true){
+                            //items.push_back(_entityFactory->createCoin({position.x, position.y - 16.0f}));
+                        }
+                    }
+                    if(property["name"]=="isMushroom"){
+                        if(property["value"]==true){
+                            entityFactory = std::make_unique<EntityFactory>();
+                            auto mushroom = entityFactory->createMushroom({x, y});
+                            if(mushroom){
+                                objects.push_back(mushroom);
+                                obj->addObserver(mushroom);
+                            }
+                        }
+                    }
+                }
+            }
             if (obj) {
                 objects.push_back(obj);
             }
+              
+            
         } 
         else if (name == "Piranha"){
             entityFactory = std::make_unique<EntityFactory>();

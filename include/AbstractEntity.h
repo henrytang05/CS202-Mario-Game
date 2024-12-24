@@ -5,8 +5,8 @@
 #include "Interface.h"
 #include "Logger.h"
 #include <cstdint>
-
-class AbstractEntity : public IUpdatable, public IDrawable {
+#include "Observer.h"
+class AbstractEntity : public IUpdatable, public IDrawable, public Subject {
 public:
   AbstractEntity() : active(true), name("Unnamed") { id = nextID(); }
   AbstractEntity(std::string name) : active(true), name(name) { id = nextID(); }
@@ -30,7 +30,6 @@ public:
 
   bool isActive() const { return active; }
   void destroy() { active = false; }
-  
 private:
   uint32_t nextID() const {
     static uint32_t nextID = 0;

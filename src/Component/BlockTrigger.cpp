@@ -101,6 +101,7 @@ TriggerQuestionBlock::TriggerQuestionBlock(Vector2 _fixedPosition)
 }
 TriggerBehaviour* TriggerQuestionBlock::trigger(AbstractEntity *entity, float deltaTime)
 {   
+    entity->notify();
     TriggerBehaviour *retVal = this;
     sumFrame += deltaTime;
     Vector2 velocity = entity->getComponent<TransformComponent>().getVelocity();

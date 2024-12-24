@@ -209,6 +209,29 @@
         }, 
         {
          "draworder":"topdown",
+         "id":29,
+         "name":"Mushroom",
+         "objects":[
+                {
+                 "gid":79,
+                 "height":16,
+                 "id":688,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":160,
+                 "y":720
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
          "id":16,
          "name":"GroundBlock",
          "objects":[
@@ -3854,7 +3877,7 @@
          "name":"Piranha",
          "objects":[
                 {
-                 "gid":79,
+                 "gid":80,
                  "height":32,
                  "id":690,
                  "name":"",
@@ -3866,7 +3889,7 @@
                  "y":712
                 }, 
                 {
-                 "gid":79,
+                 "gid":80,
                  "height":32,
                  "id":691,
                  "name":"",
@@ -4482,11 +4505,11 @@
         }, 
         {
          "firstgid":79,
-         "source":"Piranha.json"
+         "source":"Mushroom.json"
         }, 
         {
-         "firstgid":81,
-         "source":"Mushroom.json"
+         "firstgid":80,
+         "source":"Piranha.json"
         }],
  "tilewidth":16,
  "type":"map",

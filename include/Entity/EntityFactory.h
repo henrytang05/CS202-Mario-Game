@@ -22,9 +22,7 @@ public:
   virtual Weak<AbstractEntity> createLuigi() = 0;
   virtual Weak<AbstractEntity> createEnemy(Vector2 position, Vector2 size) = 0;
   virtual Weak<AbstractEntity> createGoomba(Vector2 position, Vector2 size) = 0;
-  virtual Weak<AbstractEntity> createBlock(std::string type,
-                                           Vector2 position) = 0;
-  virtual Weak<Koopa> createKoopa(Vector2 position, Vector2 size) = 0;
+  virtual Weak<AbstractEntity> createBlock(std::string type, Vector2 position) = 0;
   virtual Weak<Pipe> createPipe(Vector2 position, Vector2 size) = 0;
   virtual Weak<Flag> createFlag(Vector2 position) = 0;
   virtual Weak<FlagPole> createFlagPole(Vector2 position) = 0;
@@ -41,7 +39,6 @@ public:
   Weak<AbstractEntity> createMario() override;
   Weak<AbstractEntity> createLuigi() override;
   Weak<AbstractEntity> createEnemy(Vector2 position, Vector2 size) override;
-  Weak<Koopa> createKoopa(Vector2 position, Vector2 size) override;
 
   Weak<AbstractEntity> createGoomba(Vector2 position, Vector2 size) override;
   Weak<AbstractEntity> createBlock(std::string type, Vector2 position) override;

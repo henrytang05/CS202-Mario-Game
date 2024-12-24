@@ -13,10 +13,7 @@ EntityFactory::EntityFactory(EntityManager &EM) : IFactory(EM) {}
 //
 Weak<AbstractEntity> EntityFactory::createMario() { return initMario(); }
 Weak<AbstractEntity> EntityFactory::createLuigi() { return initLuigi(); }
-Weak<AbstractEntity> EntityFactory::createGoomba(Vector2 position,
-                                                 Vector2 size) {
-  return initGoomba(position, size);
-}
+Weak<AbstractEntity> EntityFactory::createGoomba(Vector2 position, Vector2 size) { return initGoomba(position, size); }
 
 Weak<AbstractEntity> EntityFactory::createEnemy(Vector2 position,
                                                 Vector2 size) {
@@ -44,12 +41,6 @@ Weak<AbstractEntity> EntityFactory::createBlock(std::string type,
   }
   return block;
 }
-
-Weak<Koopa> EntityFactory::createKoopa(Vector2 position, Vector2 size) {
-  Weak<Koopa> koopa = initKoopa(position, size);
-  return koopa;
-}
-
 Weak<Pipe> EntityFactory::createPipe(Vector2 position, Vector2 size) {
   Shared<Pipe> pipe = std::make_shared<Pipe>(position, size);
   return pipe;

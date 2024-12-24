@@ -30,14 +30,14 @@ GameScene::GameScene() : Scene(), EM(EntityManager::getInstance()) {
     Shared<CollisionHandlingSystem> collisionHandlingSystem = std::make_shared<CollisionHandlingSystem>();
     systems.push_back(playerSystem);
     systems.push_back(collisionSystem);
-    systems.push_back(collisionHandlingSystem);
     systems.push_back(transformSystem);
+    systems.push_back(collisionHandlingSystem);
     systems.push_back(animationSystem);
     
     update_systems.push_back(playerSystem);
     update_systems.push_back(collisionSystem);
-    update_systems.push_back(collisionHandlingSystem);
     update_systems.push_back(transformSystem);
+    update_systems.push_back(collisionHandlingSystem);
     draw_systems.push_back(animationSystem);
 }
 

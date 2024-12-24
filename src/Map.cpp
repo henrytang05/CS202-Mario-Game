@@ -118,6 +118,12 @@ void MapRenderer::loadObjectGroup(const json &layer) {
         objects.push_back(obj);
       }
     }
+    else if (name == "Goomba") {
+      auto obj = entityFactory->createGoomba({x, y}, {16.0f, 16.0f});
+      if (obj.lock()) {
+        objects.push_back(obj);
+      }
+    }
   }
 }
 

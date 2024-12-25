@@ -18,13 +18,19 @@ void CollisionSystem::update(float dt) {
       throw std::runtime_error("Entity is expired");
 
     auto entity = tentity.lock();
-
+    if(entity->hasComponent<PlayerTag>() && entity->getComponent<CharacterStateComponent>().getState() == "DEATH") {
+      continue;
+    }
     std::vector<std::pair<int, float>> col;
     float t = 0, min_t = INFINITY;
     Vector2 cp, cn;
     for (int i = 0; i < (int)otherEntities.size(); i++) {
       if (*otherEntities[i].lock() == *entity)
         continue;
+        
+      if(otherEntities[i].lock()->hasComponent<PlayerTag>() && otherEntities[i].lock()->getComponent<CharacterStateComponent>().getState() == "DEATH") {
+        continue;
+      }
       Vector2 position = otherEntities[i].lock()->getComponent<PositionComponent>().getPosition();
       Vector2 size = otherEntities[i].lock()->getComponent<BoundingBoxComponent>().getSize();
       Vector2 velo = {0.0f, 0.0f};
@@ -329,8 +335,7 @@ void CollisionHandlingSystem::handlePlayerCollision(Weak<AbstractEntity> _entity
   }
 }
 
-void CollisionHandlingSystem::handleEnemyCollision(
-    Weak<AbstractEntity> _entity) {
+void CollisionHandlingSystem::handleEnemyCollision(Weak<AbstractEntity> _entity) {
   if (_entity.expired())
     throw std::runtime_error("Entity is expired");
 
@@ -383,6 +388,9 @@ void CollisionHandlingSystem::handleAICollision(Weak<AbstractEntity> _entity) {
 
   auto &trans = entity->getComponent<TransformComponent>();
   Vector2 v = trans.getVelocity();
+  if(entity->getComponent<TextureComponent>().state == "Die") {
+    // entity->destroy();
+  }
   if (left.lock())
     v.x = -ENEMY_SPEED;
   if (right.lock())

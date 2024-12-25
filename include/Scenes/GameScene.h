@@ -34,6 +34,7 @@ private:
   std::vector<Weak<AbstractEntity>> entities;
 
 private:
+  static int lives;
   std::vector<Shared<System>> systems;
   std::vector<Weak<IConfigurableSystem>> configure_systems;
   std::vector<Weak<IUpdatableSystem>> update_systems;

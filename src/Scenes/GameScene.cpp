@@ -19,7 +19,7 @@
 #include "raylib.h"
 class TextureComponent;
 namespace SceneSpace {
-
+int GameScene::lives = 3;
 GameScene::GameScene() : Scene(), EM(EntityManager::getInstance()) {
   // TODO: remove this later
   entityFactory = std::make_unique<EntityFactory>(EM);
@@ -67,6 +67,7 @@ GameScene::~GameScene() {
 #ifdef _DEBUG
   Log("GameScene destroyed");
 #endif
+  EM.reset();
 }
 void GameScene::loadResources() {
   // Loading BackGround
@@ -88,11 +89,18 @@ void GameScene::draw() {
   EndMode2D();
   DrawText(TextFormat("Time: %03i", (int)time), 1200, 35, GAMEPLAY_TEXT_SIZE,
            WHITE);
+  DrawText(TextFormat("Lives: %03i", (int)lives), 1200 - 35*6, 35, GAMEPLAY_TEXT_SIZE,
+          WHITE);
 }
 Unique<Scene> GameScene::updateScene(float deltaTime) {
   this->update(deltaTime);
   auto players = EM.getHasAll<PlayerTag>();
   if (players.empty()) {
+    lives -= 1;
+    if(lives == 0) {
+      lives = 3;
+      return make_unique<SceneSpace::IntroScene>();
+    }
     return make_unique<SceneSpace::GameScene>();
   }
   return nullptr;

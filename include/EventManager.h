@@ -16,10 +16,12 @@ struct MarioJumpOnGoombaEvent {
 struct UserClickButtonEvent {
   int buttonID;
 };
+struct MarioDieEvent {
+  uint32_t marioID;
+};
+enum class EventType { MarioJumpOnGoomba, UserClickButton, MarioDie };
 
-enum class EventType { MarioJumpOnGoomba, UserClickButton };
-
-using EventData = std::variant<MarioJumpOnGoombaEvent, UserClickButtonEvent>;
+using EventData = std::variant<MarioJumpOnGoombaEvent, UserClickButtonEvent, MarioDieEvent>;
 
 struct Event {
   Event(EventType type, EventData data) : type(type), data(data) {}

@@ -61,7 +61,6 @@ void GameScene::init() {
   camera.target.y = 784.0f - 186.0f;
   camera.zoom = 2.0f;
   SoundCtrl.PlayGroundTheme();
-  loadResources();
 }
 
 GameScene::~GameScene() {
@@ -92,11 +91,9 @@ void GameScene::draw() {
 }
 Unique<Scene> GameScene::updateScene(float deltaTime) {
   this->update(deltaTime);
-  if (player.lock()->isActive() == false) {
-    SoundCtrl.Pause();
-  }
-  if (gameOver) {
-    return make_unique<SceneSpace::IntroScene>();
+  auto players = EM.getHasAll<PlayerTag>();
+  if (players.empty()) {
+    return make_unique<SceneSpace::GameScene>();
   }
   return nullptr;
 }

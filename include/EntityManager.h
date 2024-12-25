@@ -200,7 +200,7 @@ inline T &EntityManager::addComponent(AbstractEntity *entity,
   EntityID eid = entity->getID();
 
   // remove from old bitsetEntityMap
-  bitsetEntityMap[bitset].erase(eid);
+  bitsetEntityMap[bitset].erase(bitsetEntityMap[bitset].find(eid));
 
   // add to new bitsetEntityMap
   bitset[getComponentTypeID<T>()] = true;
@@ -269,7 +269,7 @@ inline void EntityManager::removeComponent(AbstractEntity *entity) {
   EntityID eid = entity->getID();
   auto bitset = entityBitsetMap[eid];
   auto &bs = bitsetEntityMap[bitset];
-  bs.erase(eid);
+  bs.erase(bs.find(eid));
 
   bitset[getComponentTypeID<T>()] = false;
   bitsetEntityMap[bitset].insert(eid);

@@ -45,7 +45,7 @@ public:
 private:
   bool DynamicRectVsRect(const float deltaTime, const Rectangle &r_static,
                          Vector2 &contact_point, Vector2 &contact_normal,
-                         float &contact_time, Weak<AbstractEntity> entity);
+                         float &contact_time, Weak<AbstractEntity> entity, Vector2 secondVelo);
   bool ResolveDynamicRectVsRect(const float deltaTime,
                                 Weak<AbstractEntity> r_static,
                                 Weak<AbstractEntity> entity);
@@ -67,6 +67,7 @@ public:
 
 private:
   static void onMarioJumpOnGoomba(const Event &event);
+  static void onMarioDie(const Event &event);
   void handlePlayerEnemyCollision(Weak<AbstractEntity> player,
                                   Weak<AbstractEntity> enemy);
   void handlePlayerCoinCollision(Weak<AbstractEntity> player,

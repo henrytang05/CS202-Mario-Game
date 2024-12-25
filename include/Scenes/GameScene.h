@@ -35,6 +35,7 @@ private:
 
 private:
   std::vector<Shared<System>> systems;
+  std::vector<Weak<IConfigurableSystem>> configure_systems;
   std::vector<Weak<IUpdatableSystem>> update_systems;
   std::vector<Weak<IDrawableSystem>> draw_systems;
 };

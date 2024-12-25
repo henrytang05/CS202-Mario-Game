@@ -192,7 +192,29 @@ bool RayVsRect(const Vector2 &ray_origin, const Vector2 &ray_dir,
   // considered a hit, the resolver wont change anything.
   return true;
 }
+void CollisionHandlingSystem::configure() {
+  EventQueue &EQ = EventQueue::getInstance();
+  EQ.registerHandler(EventType::MarioJumpOnGoomba, this->onMarioJumpOnGoomba);
+}
 
+
+void CollisionHandlingSystem::onMarioJumpOnGoomba(const Event &event) {
+  ASSERT(event.type == EventType::MarioJumpOnGoomba);
+  const auto &MJOG = std::get<MarioJumpOnGoombaEvent>(event.data);
+  EntityManager &EM = EntityManager::getInstance();
+  auto _mario = EM.getEntityPtr(MJOG.marioID);
+  auto _goomba = EM.getEntityPtr(MJOG.goombaID);
+
+  ASSERT(!_mario.expired());
+  ASSERT(!_goomba.expired());
+
+  auto mario = _mario.lock();
+  auto goomba = _goomba.lock();
+  goomba->getComponent<TextureComponent>().changeState("Die");
+  goomba->getComponent<TransformComponent>().setVelocity({0.0f, 0.0f});
+  mario->getComponent<CharacterStateComponent>().setEnumState("JUMPING");
+  mario->getComponent<TransformComponent>().setVelocity({mario->getComponent<TransformComponent>().x, -180.0f});
+}
 void CollisionHandlingSystem::update(float dt) {
   EntityManager &EM = EntityManager::getInstance();
   auto Entities = EM.getHasAll<CollisionComponent, PositionComponent,
@@ -228,7 +250,6 @@ void CollisionHandlingSystem::handlePlayerCollision(
     entity->getComponent<CharacterStateComponent>().setEnumState("DROPPING");
   } else {
     if (cc.getBelow().lock()->hasComponent<EnemyTag>()) {
-      // TODO: notify to the enemy
       auto below = entity->getComponent<CollisionComponent>().getBelow();
       if (!below.expired()) {
         auto belowEntity = below.lock();
@@ -238,8 +259,8 @@ void CollisionHandlingSystem::handlePlayerCollision(
           EQ.pushEvent(event);
         }
       }
-    } else if (entity->getComponent<CharacterStateComponent>().getState() ==
-               "DROPPING") {
+    } 
+    else if (entity->getComponent<CharacterStateComponent>().getState() == "DROPPING") {
       entity->getComponent<CharacterStateComponent>().setEnumState("IDLE");
     }
   }
@@ -291,7 +312,6 @@ void CollisionHandlingSystem::handleEnemyCollision(
     throw std::runtime_error("Entity is expired");
 
   auto entity = _entity.lock();
-
   CollisionComponent &collision = entity->getComponent<CollisionComponent>();
   auto above = collision.getAbove();
   auto below = collision.getBelow();
@@ -308,13 +328,6 @@ void CollisionHandlingSystem::handleEnemyCollision(
   }
   if (below.lock() && below.lock()->hasComponent<PlayerTag>()) {
     below.lock()->getComponent<CollisionComponent>().setRight(entity);
-  }
-  if (above.lock()) {
-    // EXPLAIN: DIE ENEMY
-    if (above.lock()->hasComponent<PlayerTag>()) {
-      entity->getComponent<TextureComponent>().changeState("Die");
-      v.x = 0.0f;
-    }
   }
   trans.setVelocity(v);
 }

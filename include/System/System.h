@@ -12,18 +12,23 @@ public:
   virtual ~System() = default;
 };
 
-class IDrawableSystem : public System {
+class IDrawableSystem : virtual public System {
 public:
   virtual ~IDrawableSystem() = default;
   virtual void draw(float dt) = 0;
 };
 
-class IUpdatableSystem : public System {
+class IUpdatableSystem : virtual public System {
 public:
   virtual ~IUpdatableSystem() = default;
   virtual void update(float dt) = 0;
 };
 
+class IConfigurableSystem : virtual public System {
+public:
+  virtual ~IConfigurableSystem() = default;
+  virtual void configure() = 0;
+};
 class TransformSystem : public IUpdatableSystem {
 public:
   void update(float dt) override;
@@ -37,7 +42,6 @@ public:
 class CollisionSystem : public IUpdatableSystem {
 public:
   void update(float dt) override;
-
 private:
   bool DynamicRectVsRect(const float deltaTime, const Rectangle &r_static,
                          Vector2 &contact_point, Vector2 &contact_normal,
@@ -53,16 +57,16 @@ bool RayVsRect(const Vector2 &ray_origin, const Vector2 &ray_dir,
                const Rectangle &target, Vector2 &contact_point,
                Vector2 &contact_normal, float &t_hit_near);
 
-class CollisionHandlingSystem : public IUpdatableSystem {
+class CollisionHandlingSystem : public IUpdatableSystem, public IConfigurableSystem {
 public:
-  void configure();
-  void unconfigure();
+  void configure() override;
   void update(float dt) override;
   void handleAICollision(Weak<AbstractEntity> entity);
   void handlePlayerCollision(Weak<AbstractEntity> entity);
   void handleEnemyCollision(Weak<AbstractEntity> entity);
 
 private:
+  static void onMarioJumpOnGoomba(const Event &event);
   void handlePlayerEnemyCollision(Weak<AbstractEntity> player,
                                   Weak<AbstractEntity> enemy);
   void handlePlayerCoinCollision(Weak<AbstractEntity> player,
@@ -74,9 +78,9 @@ public:
   void update(float dt) override;
 };
 
-class PlayerSystem : public IUpdatableSystem {
+class PlayerSystem : public IUpdatableSystem, public IConfigurableSystem {
 public:
-  void configure();
+  void configure() override;
   void update(float dt) override;
 
 private:

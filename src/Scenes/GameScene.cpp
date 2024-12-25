@@ -28,19 +28,21 @@ GameScene::GameScene() : Scene(), EM(EntityManager::getInstance()) {
   Shared<TransformSystem> transformSystem = std::make_shared<TransformSystem>();
   Shared<AnimationSystem> animationSystem = std::make_shared<AnimationSystem>();
   Shared<PlayerSystem> playerSystem = std::make_shared<PlayerSystem>();
-  Shared<CollisionHandlingSystem> collisionHandlingSystem =
-      std::make_shared<CollisionHandlingSystem>();
+  Shared<CollisionHandlingSystem> collisionHandlingSystem = std::make_shared<CollisionHandlingSystem>();
   systems.push_back(playerSystem);
   systems.push_back(collisionSystem);
   systems.push_back(transformSystem);
   systems.push_back(collisionHandlingSystem);
   systems.push_back(animationSystem);
-
   update_systems.push_back(playerSystem);
   update_systems.push_back(collisionSystem);
   update_systems.push_back(transformSystem);
   update_systems.push_back(collisionHandlingSystem);
   draw_systems.push_back(animationSystem);
+  configure_systems.push_back(playerSystem);
+  configure_systems.push_back(collisionHandlingSystem);
+  for(auto &system : configure_systems)
+    system.lock()->configure();
 }
 
 void GameScene::init() {

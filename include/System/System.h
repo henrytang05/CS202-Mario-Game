@@ -3,6 +3,7 @@
 
 #include "Components/Collision.h"
 #include "EntityManager.h"
+#include "EventManager.h"
 #include "Interface.h"
 #include "pch.h"
 
@@ -54,10 +55,18 @@ bool RayVsRect(const Vector2 &ray_origin, const Vector2 &ray_dir,
 
 class CollisionHandlingSystem : public IUpdatableSystem {
 public:
+  void configure();
+  void unconfigure();
   void update(float dt) override;
   void handleAICollision(Weak<AbstractEntity> entity);
   void handlePlayerCollision(Weak<AbstractEntity> entity);
   void handleEnemyCollision(Weak<AbstractEntity> entity);
+
+private:
+  void handlePlayerEnemyCollision(Weak<AbstractEntity> player,
+                                  Weak<AbstractEntity> enemy);
+  void handlePlayerCoinCollision(Weak<AbstractEntity> player,
+                                 Weak<AbstractEntity> coin);
 };
 
 class SwingSystem : public IUpdatableSystem {
@@ -67,6 +76,11 @@ public:
 
 class PlayerSystem : public IUpdatableSystem {
 public:
+  void configure();
   void update(float dt) override;
+
+private:
+  static void onMarioJumpOnGoomba(const Event &event);
+  static void onUserClickButton(const Event &event);
 };
 #endif // SYSTEM_H

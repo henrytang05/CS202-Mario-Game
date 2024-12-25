@@ -80,7 +80,6 @@ public:
   void update(float dt) override;
 
 private:
-  static void onMarioJumpOnGoomba(const Event &event);
   static void onUserClickButton(const Event &event);
 };
 #endif // SYSTEM_H

@@ -229,9 +229,15 @@ void CollisionHandlingSystem::handlePlayerCollision(
   } else {
     if (cc.getBelow().lock()->hasComponent<EnemyTag>()) {
       // TODO: notify to the enemy
-      entity->getComponent<CharacterStateComponent>().setEnumState("JUMPING");
-      tf.setVelocity(Vector2{tf.getVelocity().x, -150.0f});
-      cc.getBelow().lock()->getComponent<CollisionComponent>().setAbove(entity);
+      auto below = entity->getComponent<CollisionComponent>().getBelow();
+      if (!below.expired()) {
+        auto belowEntity = below.lock();
+        if (belowEntity->hasComponent<EnemyTag>()) {
+          EventQueue &EQ = EventQueue::getInstance();
+          Event event(EventType::MarioJumpOnGoomba, MarioJumpOnGoombaEvent{entity->getID(), belowEntity->getID()});
+          EQ.pushEvent(event);
+        }
+      }
     } else if (entity->getComponent<CharacterStateComponent>().getState() ==
                "DROPPING") {
       entity->getComponent<CharacterStateComponent>().setEnumState("IDLE");

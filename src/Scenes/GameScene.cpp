@@ -9,7 +9,6 @@
 #include "Components/Texture.h"
 #include "Entity/EnemySystem.h"
 #include "Entity/EntityFactory.h"
-#include "Entity/PlayableEntity.h"
 #include "EntityManager.h"
 #include "Logger.h"
 #include "Scenes/IntroScene.h"

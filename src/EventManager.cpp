@@ -82,7 +82,7 @@ void CoinEvent::handle() {
   Unique<IFactory> entityFactory;
   entityFactory = std::make_unique<EntityFactory>(EM);
   auto coin = entityFactory->createCoin(Vector2{position.x, position.y - 10.0f});
-  EM.getEntityRef(coin).addComponent<CoinTag>(position);
+  EM.getEntityRef(coin).addComponent<CoinInBlockTag>(position);
 }
 
 void EventQueue::pushEvent(Unique<Event> &e) { eventQueue.push(std::move(e)); }

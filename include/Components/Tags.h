@@ -14,5 +14,5 @@ public:
     CoinInBlockTag() : position_fixed({0, 0}) {} ;
     Vector2 position_fixed;
 };
-class CoinTag : public Component {};
+//class CoinTag : public Component {};
 #endif // TAG_COMPONENT_H

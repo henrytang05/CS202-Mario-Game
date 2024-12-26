@@ -1,5 +1,4 @@
 #include "EntityManager.h"
-#include "Logger.h"
 #include "pch.h"
 
 EntityManager &EntityManager::getInstance() {
@@ -14,9 +13,6 @@ void EntityManager::reset() {
   nextID(true);
   for (auto &entity : entities) {
     entity.reset();
-  }
-  for(auto &componentArray : componentArrays) {
-    componentArray.reset();
   }
 }
 
@@ -123,12 +119,14 @@ void EntityManager::destroyEntity(uint32_t id) {
       componentArrays[i]->onEntityDestroyed(id);
     }
   }
-
   entities[id]->deactivate();
   entities[id].reset();
   entities[id] = nullptr;
-  bitsetEntityMap[entityBitsetMap[id]].erase(id);
   entityBitsetMap.erase(id);
+  bitsetEntityMap[entityBitsetMap[id]].erase(id);
+  // for (auto &[k, v] : bitsetEntityMap) {
+  //   v.erase(id);
+  // }
 }
 
 void EntityManager::destroyEntity(std::string name) {
@@ -183,11 +181,11 @@ AbstractEntity::~AbstractEntity() {
 uint32_t AbstractEntity::getID() const { return id; }
 
 bool AbstractEntity::isActive() const { return active; }
-void AbstractEntity::deactivate() {
-  active = false;
-}
+
+void AbstractEntity::deactivate() { active = false; }
+
 void AbstractEntity::destroy() {
-  active = false;
+  deactivate();
   EM->destroyEntity(id);
 }
 

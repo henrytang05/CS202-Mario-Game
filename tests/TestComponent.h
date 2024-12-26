@@ -1,12 +1,11 @@
 #pragma once
 
-#include "../src/Component/Component.cpp"
+#include "Components/Component.h"
 #include "EntityManager.h"
-
-#include "../src/EntityManager.cpp"
 #include "Interface.h"
 #include <gtest/gtest.h>
 #include <stdexcept>
+
 struct TestComponent : public Component {
   TestComponent(int val) : value(val) {}
   TestComponent() = default;

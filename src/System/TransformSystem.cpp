@@ -26,6 +26,7 @@ void SwingSystem::update(float dt) {
   for (auto tEntity : Entities) {
     if (tEntity.expired())
       throw std::runtime_error("Entity is expired");
+    if(tEntity.lock()->isActive() == false) continue;
     auto entity = tEntity.lock();
     auto &position = EM.getComponent<PositionComponent>(entity);
     auto &swing = EM.getComponent<SwingComponent>(entity);

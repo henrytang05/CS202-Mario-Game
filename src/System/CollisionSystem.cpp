@@ -15,11 +15,12 @@ void CollisionSystem::update(float dt) {
   auto Entities = EM.getHasAll<CollisionComponent, PositionComponent,
                                BoundingBoxComponent>();
   auto otherEntities = EM.getHasAll<BoundingBoxComponent>();
-  for (auto tentity : Entities) {
-    if (tentity.expired())
+  for (auto tEntity : Entities) {
+    if (tEntity.expired())
       throw std::runtime_error("Entity is expired");
-
-    auto entity = tentity.lock();
+    
+    if(tEntity.lock()->isActive() == false) continue;
+    auto entity = tEntity.lock();
     std::vector<std::pair<int, float>> col;
     float t = 0, min_t = INFINITY;
     Vector2 cp, cn;

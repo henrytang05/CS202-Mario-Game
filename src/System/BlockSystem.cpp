@@ -7,6 +7,7 @@ void BlockSystem::update(float dt) {
   for (auto tEntity : Entities) {
     if (tEntity.expired())
       continue;
+    if(tEntity.lock()->isActive() == false) continue;
     auto entity = tEntity.lock();
     auto &blocktrigger = entity->getComponent<BlockTriggerComponent>();
     blocktrigger.update(dt);

@@ -123,9 +123,10 @@ void EntityManager::destroyEntity(uint32_t id) {
   entities[id].reset();
   entities[id] = nullptr;
   entityBitsetMap.erase(id);
-  for (auto &[k, v] : bitsetEntityMap) {
-    v.erase(id);
-  }
+  bitsetEntityMap[entityBitsetMap[id]].erase(id);
+  // for (auto &[k, v] : bitsetEntityMap) {
+  //   v.erase(id);
+  // }
 }
 
 void EntityManager::destroyEntity(std::string name) {

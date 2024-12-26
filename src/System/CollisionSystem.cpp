@@ -340,10 +340,6 @@ void CollisionHandlingSystem::handleAICollision(Weak<AbstractEntity> _entity) {
 
   auto &trans = entity->getComponent<TransformComponent>();
   Vector2 v = trans.getVelocity();
-  if (entity->getComponent<TextureComponent>().state == "Die") {
-    // entity->destroy();
-    return; 
-  }
   if (left.lock())
     v.x = -ENEMY_SPEED;
   if (right.lock())

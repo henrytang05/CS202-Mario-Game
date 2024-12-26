@@ -20,24 +20,12 @@ void CollisionSystem::update(float dt) {
       throw std::runtime_error("Entity is expired");
 
     auto entity = tentity.lock();
-    if (entity->hasComponent<PlayerTag>() &&
-        entity->getComponent<CharacterStateComponent>().getState() == "DEATH") {
-      continue;
-    }
     std::vector<std::pair<int, float>> col;
     float t = 0, min_t = INFINITY;
     Vector2 cp, cn;
     for (int i = 0; i < (int)otherEntities.size(); i++) {
       if (*otherEntities[i].lock() == *entity)
         continue;
-
-      if (otherEntities[i].lock()->hasComponent<PlayerTag>() &&
-          otherEntities[i]
-                  .lock()
-                  ->getComponent<CharacterStateComponent>()
-                  .getState() == "DEATH") {
-        continue;
-      }
       Vector2 position = otherEntities[i]
                              .lock()
                              ->getComponent<PositionComponent>()
@@ -232,15 +220,6 @@ void CollisionHandlingSystem::handlePlayerCollision(
   auto &tf = entity->getComponent<TransformComponent>();
   // Below Collision
   if (cc.getBelow().lock() == nullptr) {
-    if (entity->getComponent<CharacterStateComponent>().getState() == "DEATH") {
-      tf.setVelocity({0.0f, tf.y + 10.0f});
-      entity->getComponent<BoundingBoxComponent>().setSize({0.0f, 0.0f});
-      if (entity->getComponent<PositionComponent>().getPosition().y >= 784.0f) {
-        entity->removeComponent<PlayerTag>();
-        sleep(1);
-      }
-      return;
-    }
     entity->getComponent<CharacterStateComponent>().setEnumState("DROPPING");
     if (entity->getComponent<PositionComponent>().y > screenHeight * 1.2f) {
       EventQueue &EQ = EventQueue::getInstance();
@@ -270,12 +249,12 @@ void CollisionHandlingSystem::handlePlayerCollision(
       if (entity->getComponent<CharacterStateComponent>().getSize() ==
           "SMALL") {
         aboveBlock->getComponent<BlockTriggerComponent>().setTrigger(
-            new TriggerBrokenBlockWhenHitByLarge(
+            new TriggerBrokenBlockWhenHitBySmall(
                 aboveBlock->getComponent<PositionComponent>().getPosition()));
         entity->getComponent<MarioSoundComponent>().PlayBumpEffect();
       } else {
-        // aboveBlock->getComponent<BlockTriggerComponent>().setTrigger(new
-        // TriggerBrokenBlockWhenHitByLarge(aboveBlock->getComponent<PositionComponent>().getPosition()));
+        aboveBlock->getComponent<BlockTriggerComponent>().setTrigger(new
+        TriggerBrokenBlockWhenHitByLarge(aboveBlock->getComponent<PositionComponent>().getPosition()));
         entity->getComponent<MarioSoundComponent>().PlayBreakBlockEffect();
       }
     } else if (aboveBlock->hasComponent<EnemyTag>()) {

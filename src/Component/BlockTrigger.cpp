@@ -4,6 +4,7 @@
 #include "EntityManager.h"
 #include "Entity/EntityFactory.h"
 #include "GameObject.h"
+
 using namespace std;
 
 // BlockTriggerComponent
@@ -119,6 +120,7 @@ TriggerQuestionBlock::TriggerQuestionBlock(Vector2 _fixedPosition) {
 TriggerBehaviour *TriggerQuestionBlock::trigger(AbstractEntity *entity,
                                                 float deltaTime) {
   // entity->notify();
+  
   TriggerBehaviour *retVal = this;
   sumFrame += deltaTime;
   Vector2 velocity = entity->getComponent<TransformComponent>().getVelocity();
@@ -131,6 +133,20 @@ TriggerBehaviour *TriggerQuestionBlock::trigger(AbstractEntity *entity,
   if (velocity.y <= -600.0f)
     velocity.y = -600.0f;
   if (sumFrame >= 0.3f) {
+    if(entity->hasComponent<PowerUpComponent>()) {
+      if(entity->getComponent<PowerUpComponent>().powerUp)
+      {
+        //Set event
+        EventQueue &EQ = EventQueue::getInstance();
+        EQ.pushEvent(make_unique<PowerUpEvent>(entity->getComponent<PositionComponent>().getPosition()));
+      }
+      else
+      {
+        //Set event
+        EventQueue &EQ = EventQueue::getInstance();
+        EQ.pushEvent(make_unique<CoinEvent>(entity->getComponent<PositionComponent>().getPosition()));
+      }
+    }
     createHardBlock(fixedPosition);
     entity->destroy();
     retVal = nullptr;

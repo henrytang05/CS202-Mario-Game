@@ -3911,7 +3911,7 @@
          "name":"Piranha",
          "objects":[
                 {
-                 "gid":84,
+                 "gid":79,
                  "height":32,
                  "id":696,
                  "name":"",
@@ -3923,7 +3923,7 @@
                  "y":712
                 }, 
                 {
-                 "gid":84,
+                 "gid":79,
                  "height":32,
                  "id":697,
                  "name":"",
@@ -3931,7 +3931,7 @@
                  "type":"",
                  "visible":true,
                  "width":16,
-                 "x":1608.125,
+                 "x":1608.13,
                  "y":728
                 }],
          "opacity":1,
@@ -4302,6 +4302,30 @@
                  "width":16,
                  "x":2192,
                  "y":768
+                }, 
+                {
+                 "gid":78,
+                 "height":16,
+                 "id":694,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":80,
+                 "y":720
+                }, 
+                {
+                 "gid":81,
+                 "height":16,
+                 "id":696,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":960,
+                 "y":0
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -4478,19 +4502,15 @@
         }, 
         {
          "firstgid":78,
-         "source":"Coin.json"
+         "source":"Coin-1.json"
         }, 
         {
          "firstgid":79,
          "source":"Piranha.json"
         }, 
         {
-         "firstgid":83,
+         "firstgid":81,
          "source":"Mushroom.json"
-        }, 
-        {
-         "firstgid":84,
-         "source":"Piranha.json"
         }],
  "tilewidth":16,
  "type":"map",

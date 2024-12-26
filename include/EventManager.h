@@ -8,7 +8,7 @@
 #include <queue>
 #include <string>
 #include <variant>
-
+#include "Entity/EntityFactory.h"
 struct Event {
   virtual void handle() = 0;
 };
@@ -30,7 +30,19 @@ struct MarioLargeToSmall : public Event {
   MarioLargeToSmall(uint32_t player) : MarioID(player) {}
   void handle() override;
   uint32_t MarioID;
+};//Event so that Mushroom can be created
+struct PowerUpEvent : public Event {
+  PowerUpEvent(Vector2 position) : position(position) {}
+  void handle() override;
+  Vector2 position;
 };
+
+struct CoinEvent : public Event {
+  CoinEvent(Vector2 position) : position(position) {}
+  void handle() override;
+  Vector2 position;
+};
+
 struct MarioSmallToLarge : public Event {
   MarioSmallToLarge(uint32_t player) : MarioID(player) {}
   void handle() override;

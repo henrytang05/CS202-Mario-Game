@@ -45,22 +45,6 @@ public:
   void init(Vector2 position);
 };
 
-class Piranha : public AbstractEntity {
-public:
-  Piranha(Vector2 position);
-  ~Piranha() = default;
-  void init(Vector2 position);
-};
 
-class Mushroom : public AbstractEntity, public Observer {
-public:
-  Mushroom(Vector2 position);
-  void init(Vector2 position);
-  void onNotify() override;
-  void update(float deltaTime) override;
 
-private:
-  bool isTriggered = false;
-  float elapsedTime = 0;
-  Vector2 position_fixed;
-};
+

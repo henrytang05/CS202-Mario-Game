@@ -63,7 +63,21 @@ Weak<FlagPole> EntityFactory::createFlagPole(Vector2 position) {
 }
 
 
-Weak<Mushroom> EntityFactory::createMushroom(Vector2 position) {
-  Shared<Mushroom> powerUp = std::make_shared<Mushroom>(position);
-  return powerUp;
+Weak<AbstractEntity> EntityFactory::createMushroom(Vector2 position) {
+  //initMushroom(position) is implmented below
+  EntityManager &EM = EntityManager::getInstance();
+  Shared<AbstractEntity> entity = EM.createEntity("Mushroom").lock();
+  Vector2 size = {16,16};
+  entity->addComponent<PositionComponent>(position);
+  entity->addComponent<BoundingBoxComponent>(size);
+  entity->addComponent<TextureComponent>().addTexture("Normal", TextureManager::getInstance().getTexture("Mushroom"));
+  entity->getComponent<TextureComponent>().addTexture("Left-Moving", TextureManager::getInstance().getTexture("Mushroom"));
+  entity->getComponent<TextureComponent>().addTexture("Right-Moving", TextureManager::getInstance().getTexture("Mushroom"));
+  entity->getComponent<TextureComponent>().changeState("Normal");
+  entity->addComponent<AITag>();
+  entity->addComponent<CollisionComponent>();
+  entity->addComponent<TransformComponent>(Vector2{50.0f, -16.0f});
+  return entity;
+
 }
+

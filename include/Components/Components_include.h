@@ -10,4 +10,5 @@
 #include "Components/Texture.h"
 #include "Components/CharacterState.h"
 #include "Components/CharacterParemeters.h"
+#include "Components/PowerUp.h"
 #endif // COMPONENTS_H

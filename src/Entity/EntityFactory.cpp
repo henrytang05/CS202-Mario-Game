@@ -1,8 +1,7 @@
 #include "Entity/EntityFactory.h"
 
-#include <cstddef>
-
 #include "Components/Components_include.h"
+#include "Entity/Enemy.h"
 #include "Entity/Mario.h"
 #include "EntityManager.h"
 #include "GameObject.h"
@@ -13,10 +12,14 @@ EntityFactory::EntityFactory(EntityManager &EM) : IFactory(EM) {}
 //
 Weak<AbstractEntity> EntityFactory::createMario() { return initMario(); }
 Weak<AbstractEntity> EntityFactory::createLuigi() { return initLuigi(); }
-Weak<AbstractEntity> EntityFactory::createGoomba(Vector2 position, Vector2 size) { return initGoomba(position, size); }
-
-Weak<AbstractEntity> EntityFactory::createEnemy(Vector2 position, Vector2 size) {
+Weak<AbstractEntity> EntityFactory::createGoomba(Vector2 position,
+                                                 Vector2 size) {
   return initGoomba(position, size);
+}
+
+Weak<AbstractEntity> EntityFactory::createKoopa(Vector2 position,
+                                                Vector2 size) {
+  return initKoopa(position, size);
 }
 
 Weak<AbstractEntity> EntityFactory::createBlock(std::string type,
@@ -27,20 +30,15 @@ Weak<AbstractEntity> EntityFactory::createBlock(std::string type,
   Weak<AbstractEntity> block;
   if (type == "NormalBlock") {
     block = createNormalBlock(position);
-  } 
-  else if (type == "BrokenBlock") {
+  } else if (type == "BrokenBlock") {
     block = createBrokenBlock(position);
-  } 
-  else if (type == "HardBlock") {
+  } else if (type == "HardBlock") {
     block = createHardBlock(position);
-  } 
-  else if (type == "GroundBlock") {
+  } else if (type == "GroundBlock") {
     block = createGroundBlock(position);
-  } 
-  else if (type == "QuestionBlock") {  
+  } else if (type == "QuestionBlock") {
     block = createQuestionBlock(position);
-  } 
-  else {
+  } else {
     throw std::runtime_error("Block type not found");
   }
   return block;

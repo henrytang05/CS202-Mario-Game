@@ -11,6 +11,7 @@ Weak<AbstractEntity> createBrokenBlock(Vector2 position);
 Weak<AbstractEntity> createHardBlock(Vector2 position);
 Weak<AbstractEntity> createNormalBlock(Vector2 position);
 Weak<AbstractEntity> createQuestionBlock(Vector2 position);
+
 // Derived class for a pipe
 class Pipe : public AbstractEntity {
 private:

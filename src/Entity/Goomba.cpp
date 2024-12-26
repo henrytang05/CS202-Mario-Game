@@ -1,6 +1,5 @@
-#include "Entity/Enemy.h"
 #include "Components/Components_include.h"
-
+#include "Entity/Enemy.h"
 
 // TODO: change to goomba
 Weak<AbstractEntity> initGoomba(Vector2 position, Vector2 size) {
@@ -38,20 +37,4 @@ Weak<AbstractEntity> initGoomba(Vector2 position, Vector2 size) {
   enemy->getComponent<TextureComponent>().changeState("Left-Moving");
 
   return enemy;
-}
-
-void Goomba::changeState() {
-  auto collision = getComponent<CollisionComponent>();
-  auto _above = collision.getAbove();
-  if (_above.expired())
-    throw std::runtime_error("Entity is expired");
-  auto above = _above.lock();
-
-  if (above != nullptr) {
-    if (above->hasComponent<PlayerTag>()) {
-      destroy();
-      getComponent<TextureComponent>().changeState("Die");
-    }
-  }
-  getComponent<CollisionComponent>().reset();
 }

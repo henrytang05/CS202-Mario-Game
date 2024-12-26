@@ -7,7 +7,6 @@
 #include "Components/Components_include.h"
 #include "Components/Position.h"
 #include "Components/Texture.h"
-#include "Entity/EnemySystem.h"
 #include "Entity/EntityFactory.h"
 #include "EntityManager.h"
 #include "Logger.h"

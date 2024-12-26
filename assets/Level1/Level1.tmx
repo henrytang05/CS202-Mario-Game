@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="164" height="50" tilewidth="16" tileheight="16" infinite="0" nextlayerid="30" nextobjectid="697">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="164" height="50" tilewidth="16" tileheight="16" infinite="0" nextlayerid="30" nextobjectid="698">
  <editorsettings>
-  <export target="Level1new.json" format="json"/>
+  <export target="Level1.json" format="json"/>
  </editorsettings>
  <properties>
   <property name="Level" value="Level1"/>
@@ -12,9 +12,10 @@
  <tileset firstgid="73" source="Castle.json"/>
  <tileset firstgid="74" source="Checkpoint.json"/>
  <tileset firstgid="77" source="Pipe.json"/>
- <tileset firstgid="78" source="Coin.json"/>
- <tileset firstgid="81" source="Piranha.json"/>
+ <tileset firstgid="78" source="Coin-1.json"/>
+ <tileset firstgid="79" source="Piranha.json"/>
  <tileset firstgid="83" source="Mushroom.json"/>
+ <tileset firstgid="84" source="Piranha.json"/>
  <layer id="13" name="Sky" width="164" height="50">
   <data encoding="csv">
 32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,
@@ -444,14 +445,7 @@
  <objectgroup id="15" name="Flag">
   <object id="66" gid="74" x="2487.15" y="687.818" width="16" height="16"/>
  </objectgroup>
- <objectgroup id="23" name="Piranha">
-  <object id="692" gid="81" x="407.5" y="711.583" width="16" height="32"/>
-  <object id="693" gid="81" x="1607.2" y="727.5" width="16" height="32"/>
- </objectgroup>
- <objectgroup id="14" name="Castle" visible="0">
-  <object id="64" x="2544" y="688" width="80" height="80"/>
- </objectgroup>
- <objectgroup draworder="index" id="25" name="Pipe" visible="0">
+ <objectgroup draworder="index" id="25" name="Pipe">
   <object id="624" gid="77" x="400" y="704" width="32" height="32">
    <properties>
     <property name="height" type="float" value="80"/>
@@ -464,6 +458,13 @@
     <property name="width" type="float" value="32"/>
    </properties>
   </object>
+ </objectgroup>
+ <objectgroup id="23" name="Piranha">
+  <object id="696" gid="84" x="408" y="712" width="16" height="32"/>
+  <object id="697" gid="84" x="1608.13" y="728" width="16" height="32"/>
+ </objectgroup>
+ <objectgroup id="14" name="Castle" visible="0">
+  <object id="64" x="2544" y="688" width="80" height="80"/>
  </objectgroup>
  <objectgroup id="26" name="Coin">
   <object id="643" gid="78" x="640" y="752" width="16" height="16"/>

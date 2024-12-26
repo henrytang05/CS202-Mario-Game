@@ -28,6 +28,7 @@ GameScene::GameScene() : Scene(), EM(EntityManager::getInstance()) {
   Shared<CollisionSystem> collisionSystem = std::make_shared<CollisionSystem>();
   Shared<TransformSystem> transformSystem = std::make_shared<TransformSystem>();
   Shared<AnimationSystem> animationSystem = std::make_shared<AnimationSystem>();
+  Shared<SwingSystem> swingSystem = std::make_shared<SwingSystem>();
   Shared<PlayerSystem> playerSystem = std::make_shared<PlayerSystem>();
   Shared<CollisionHandlingSystem> collisionHandlingSystem =
       std::make_shared<CollisionHandlingSystem>();
@@ -36,12 +37,18 @@ GameScene::GameScene() : Scene(), EM(EntityManager::getInstance()) {
   systems.push_back(transformSystem);
   systems.push_back(collisionHandlingSystem);
   systems.push_back(animationSystem);
-
+  systems.push_back(swingSystem);
+  systems.push_back(blockSystem);
   update_systems.push_back(playerSystem);
   update_systems.push_back(collisionSystem);
   update_systems.push_back(transformSystem);
   update_systems.push_back(collisionHandlingSystem);
   draw_systems.push_back(animationSystem);
+  update_systems.push_back(swingSystem);
+  configure_systems.push_back(playerSystem);
+  configure_systems.push_back(collisionHandlingSystem);
+  for(auto &system : configure_systems)
+    system.lock()->configure();
 }
 
 void GameScene::init() {
@@ -81,7 +88,7 @@ void GameScene::loadResources() {
 void GameScene::draw() {
   float dt = GetFrameTime();
   BeginMode2D(camera);
-  DrawTexture(background, 0, 0, WHITE);
+  //DrawTexture(background, 0, 0, WHITE);
 
   for (auto &system : draw_systems) {
     system.lock()->draw(dt);

@@ -26,7 +26,7 @@ public:
   virtual Weak<Pipe> createPipe(Vector2 position, Vector2 size) = 0;
   virtual Weak<Flag> createFlag(Vector2 position) = 0;
   virtual Weak<FlagPole> createFlagPole(Vector2 position) = 0;
-  virtual Weak<Piranha> createPiranha(Vector2 position) = 0;
+  virtual Weak<AbstractEntity> createPiranha(Vector2 position) = 0;
   virtual Weak<Mushroom> createMushroom(Vector2 position) = 0;
 
 protected:
@@ -45,7 +45,7 @@ public:
   Weak<Pipe> createPipe(Vector2 position, Vector2 size) override;
   Weak<Flag> createFlag(Vector2 position) override;
   Weak<FlagPole> createFlagPole(Vector2 position) override;
-  Weak<Piranha> createPiranha(Vector2 position) override;
+  Weak<AbstractEntity> createPiranha(Vector2 position) override;
   Weak<Mushroom> createMushroom(Vector2 position) override;
 };
 

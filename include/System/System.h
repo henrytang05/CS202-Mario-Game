@@ -5,7 +5,9 @@
 #include "EntityManager.h"
 #include "EventManager.h"
 #include "Interface.h"
+#include "TextureManager.h"
 #include "pch.h"
+
 
 class System {
 public:
@@ -25,6 +27,10 @@ public:
 };
 
 class TransformSystem : public IUpdatableSystem {
+public:
+  void update(float dt) override;
+};
+class SwingSystem : public IUpdatableSystem {
 public:
   void update(float dt) override;
 };
@@ -69,10 +75,6 @@ private:
                                  Weak<AbstractEntity> coin);
 };
 
-class SwingSystem : public IUpdatableSystem {
-public:
-  void update(float dt) override;
-};
 
 class PlayerSystem : public IUpdatableSystem {
 public:

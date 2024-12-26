@@ -34,8 +34,7 @@ void MarioJumpOnGoomba::handle() {
   goomba->getComponent<TextureComponent>().changeState("Die");
   goomba->getComponent<TransformComponent>().setVelocity({0.0f, 0.0f});
   mario->getComponent<CharacterStateComponent>().setEnumState("JUMPING");
-  mario->getComponent<TransformComponent>().setVelocity(
-      {mario->getComponent<TransformComponent>().x, -180.0f});
+  mario->getComponent<TransformComponent>().setVelocity({mario->getComponent<TransformComponent>().x, -180.0f});
 }
 
 void EventQueue::pushEvent(Unique<Event> &e) { eventQueue.push(std::move(e)); }

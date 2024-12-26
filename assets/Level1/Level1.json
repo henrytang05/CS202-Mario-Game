@@ -3849,63 +3849,6 @@
          "y":0
         }, 
         {
-         "draworder":"topdown",
-         "id":23,
-         "name":"Piranha",
-         "objects":[
-                {
-                 "gid":79,
-                 "height":32,
-                 "id":690,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":16,
-                 "x":407.667,
-                 "y":712
-                }, 
-                {
-                 "gid":79,
-                 "height":32,
-                 "id":691,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":16,
-                 "x":1608.18,
-                 "y":727.909
-                }],
-         "opacity":1,
-         "type":"objectgroup",
-         "visible":true,
-         "x":0,
-         "y":0
-        }, 
-        {
-         "draworder":"topdown",
-         "id":14,
-         "name":"Castle",
-         "objects":[
-                {
-                 "height":80,
-                 "id":64,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":80,
-                 "x":2544,
-                 "y":688
-                }],
-         "opacity":1,
-         "type":"objectgroup",
-         "visible":false,
-         "x":0,
-         "y":0
-        }, 
-        {
          "draworder":"index",
          "id":25,
          "name":"Pipe",
@@ -3955,6 +3898,63 @@
                  "width":32,
                  "x":1600,
                  "y":720
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":23,
+         "name":"Piranha",
+         "objects":[
+                {
+                 "gid":84,
+                 "height":32,
+                 "id":696,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":408,
+                 "y":712
+                }, 
+                {
+                 "gid":84,
+                 "height":32,
+                 "id":697,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":1608.125,
+                 "y":728
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":14,
+         "name":"Castle",
+         "objects":[
+                {
+                 "height":80,
+                 "id":64,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":80,
+                 "x":2544,
+                 "y":688
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -4440,7 +4440,7 @@
          "y":0
         }],
  "nextlayerid":30,
- "nextobjectid":692,
+ "nextobjectid":698,
  "orientation":"orthogonal",
  "properties":[
         {
@@ -4478,15 +4478,19 @@
         }, 
         {
          "firstgid":78,
-         "source":"Coin-1.json"
+         "source":"Coin.json"
         }, 
         {
          "firstgid":79,
          "source":"Piranha.json"
         }, 
         {
-         "firstgid":81,
+         "firstgid":83,
          "source":"Mushroom.json"
+        }, 
+        {
+         "firstgid":84,
+         "source":"Piranha.json"
         }],
  "tilewidth":16,
  "type":"map",

@@ -70,8 +70,6 @@ void Game::update(float deltaTime) {
   }
 }
 void Game::clean() {
-  delete QuitButton;
-  clearScene();
   CloseAudioDevice();
   CloseWindow();
 }

@@ -21,6 +21,10 @@ Weak<AbstractEntity> EntityFactory::createKoopa(Vector2 position,
                                                 Vector2 size) {
   return initKoopa(position, size);
 }
+//Create Piranha
+Weak<AbstractEntity> EntityFactory::createPiranha(Vector2 position) {
+  return initPiranha(position);
+}
 
 Weak<AbstractEntity> EntityFactory::createBlock(std::string type,
                                                 Vector2 position) {
@@ -57,18 +61,9 @@ Weak<FlagPole> EntityFactory::createFlagPole(Vector2 position) {
   Shared<FlagPole> flagPole = std::make_shared<FlagPole>(position);
   return flagPole;
 }
-Weak<Piranha> EntityFactory::createPiranha(Vector2 position) {
-  Shared<Piranha> piranha = std::make_shared<Piranha>(position);
-  return piranha;
-}
+
 
 Weak<Mushroom> EntityFactory::createMushroom(Vector2 position) {
   Shared<Mushroom> powerUp = std::make_shared<Mushroom>(position);
   return powerUp;
-}
- 
-Shared<Coin> EntityFactory::createCoin(Vector2 position)
-{
-  Shared<Coin> coin = std::make_shared<Coin>(position);
-  return coin;
 }

@@ -14,6 +14,8 @@ public:
   void init() override;
 
 private:
+  bool changeGameScreen, changeLoadScreen, changeRankingScreen,
+      changeSettingsScreen, changeGuideScreen;
   Texture background;
   GUI::ImageButton *NewGameButton;
   GUI::ImageButton *LoadGameButton;

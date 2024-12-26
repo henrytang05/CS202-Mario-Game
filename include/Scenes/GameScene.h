@@ -29,8 +29,10 @@ private:
   EntityManager &EM;
   Weak<AbstractEntity> player;
   bool gameOver;
-  GUI::ImageButton *GuideButton;
+<<<<<<<<< Temporary merge branch 1
+  GUI::ImageButton* GuideButton;
   // TODO: remove this later
+=========
   Unique<IFactory> entityFactory;
   std::vector<Weak<AbstractEntity>> entities;
 

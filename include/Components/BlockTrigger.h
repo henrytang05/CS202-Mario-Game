@@ -45,16 +45,6 @@ public:
   TriggerBehaviour *trigger(AbstractEntity *entity, float deltaTime) override;
 };
 
-class TriggerCoin : public TriggerBehaviour {
-private:
-    float sumFrame;
-    Vector2 fixedPosition;
-public:
-    TriggerCoin();
-    TriggerCoin(Vector2 _fixedPosition);
-    TriggerBehaviour* trigger(AbstractEntity *entity, float deltaTime) override;
-};
-
 class BlockTriggerComponent : public Component {
 public:
   ~BlockTriggerComponent();
@@ -66,5 +56,4 @@ public:
 private:
   TriggerBehaviour *trigger;
 };
-
 #endif // BLOCKTRIGGER_H

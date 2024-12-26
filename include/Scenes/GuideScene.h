@@ -17,6 +17,7 @@ public:
   void update(float deltaTime);
 private:
   Texture background;
+  GUI::ImageButton* QuitButton;
   // Shared<PlayableEntity> player;
   // std::vector<Shared<AbstractEntity>> entities;
   // Unique<IFactory> entityFactory;

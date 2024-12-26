@@ -6,13 +6,3 @@ namespace SceneSpace {
     }
     Scene::~Scene() = default;
 }
-
-void SceneSpace::Scene::setEnd(bool end)
-{
-    isEnd = end;
-}
-
-bool SceneSpace::Scene::checkEnd()
-{
-    return isEnd;
-}

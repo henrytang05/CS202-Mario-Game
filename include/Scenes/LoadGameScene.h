@@ -15,6 +15,7 @@ public:
 
 private:
   Texture background;
+  GUI::ImageButton* QuitButton;
 };
 } // namespace SceneSpace
 #endif // LOADGAMESCENE_H

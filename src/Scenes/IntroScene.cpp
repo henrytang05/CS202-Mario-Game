@@ -8,6 +8,10 @@
 
 namespace SceneSpace {
 IntroScene::IntroScene() : Scene() {
+  changeGameScreen = false;
+  changeLoadScreen = false;
+  changeRankingScreen = false;
+  changeSettingsScreen = false;
   SoundCtrl.PlayGroundTheme();
 }
 IntroScene::~IntroScene() {
@@ -33,30 +37,37 @@ Unique<Scene> IntroScene::updateScene(float deltaTime) {
 
   if (NewGameButton->isPressed())
   {
+    changeGameScreen = true;
     SoundCtrl.PlayTingSound();
-    return std::make_unique<SceneSpace::GameScene>();
   }
   if (LoadGameButton->isPressed())
   {
+    changeLoadScreen = true;
     SoundCtrl.PlayTingSound();
-    return std::make_unique<SceneSpace::LoadGameScene>();
   }  
   if (RankingButton->isPressed())
   {
+    changeRankingScreen = true;
     SoundCtrl.PlayTingSound();
   }  
   if (SettingsButton->isPressed())
   {
+    changeSettingsScreen = true;
     SoundCtrl.PlayTingSound();
-    return std::make_unique<SceneSpace::SettingScene>();
-
   }
   if(GuideButton->isPressed())
   {
+    changeGuideScreen = true;
     SoundCtrl.PlayTingSound();
-    return std::make_unique<SceneSpace::GuideScene>();
   }
- 
+  if (changeGameScreen)
+    return std::make_unique<SceneSpace::GameScene>();
+  if (changeLoadScreen)
+    return std::make_unique<SceneSpace::LoadGameScene>();
+  if (changeGuideScreen)
+    return std::make_unique<SceneSpace::GuideScene>();
+  if (changeSettingsScreen)
+    return std::make_unique<SceneSpace::SettingScene>();
   return nullptr;
 }
 void IntroScene::draw() {
@@ -77,10 +88,14 @@ void IntroScene::loadResources() {
                                        "./assets/Hover_RankingButton.png");
   SettingsButton = new GUI::ImageButton(545, 595, "./assets/SettingsButton.png",
                                         "./assets/Hover_SettingsButton.png");
-  GuideButton = new GUI::ImageButton(1350, 20, "./assets/GuideButton.png",
+  GuideButton = new GUI::ImageButton(30, 20, "./assets/GuideButton.png",
                                         "./assets/Hover_GuideButton.png");
 };
 void IntroScene::init() {
-
+  changeGameScreen = false;
+  changeLoadScreen = false;
+  changeRankingScreen = false;
+  changeSettingsScreen = false;
+  changeGuideScreen = false;
 };
 } // namespace SceneSpace

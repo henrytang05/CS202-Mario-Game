@@ -17,18 +17,16 @@ public:
   std::map<std::string, Texture2D> mapTexture;
   IFactory(EntityManager &EM) : EM(EM) {}
   virtual ~IFactory() = default;
-  virtual Shared<Coin> createCoin(Vector2 position) = 0;
   virtual Weak<AbstractEntity> createMario() = 0;
   virtual Weak<AbstractEntity> createLuigi() = 0;
   virtual Weak<AbstractEntity> createGoomba(Vector2 position, Vector2 size) = 0;
   virtual Weak<AbstractEntity> createKoopa(Vector2 position, Vector2 size) = 0;
-
+  virtual Weak<AbstractEntity> createPiranha(Vector2 position) = 0;
   virtual Weak<AbstractEntity> createBlock(std::string type,
                                            Vector2 position) = 0;
   virtual Weak<Pipe> createPipe(Vector2 position, Vector2 size) = 0;
   virtual Weak<Flag> createFlag(Vector2 position) = 0;
   virtual Weak<FlagPole> createFlagPole(Vector2 position) = 0;
-  virtual Weak<Piranha> createPiranha(Vector2 position) = 0;
   virtual Weak<Mushroom> createMushroom(Vector2 position) = 0;
 
 protected:
@@ -41,16 +39,15 @@ public:
   Weak<AbstractEntity> createMario() override;
   Weak<AbstractEntity> createLuigi() override;
 
-  Shared<Coin> createCoin(Vector2 position) override;
   Weak<AbstractEntity> createGoomba(Vector2 position, Vector2 size) override;
-
+  Weak<AbstractEntity> createPiranha(Vector2 position) override;
   Weak<AbstractEntity> createKoopa(Vector2 position, Vector2 size) override;
   Weak<AbstractEntity> createBlock(std::string type, Vector2 position) override;
 
   Weak<Pipe> createPipe(Vector2 position, Vector2 size) override;
   Weak<Flag> createFlag(Vector2 position) override;
   Weak<FlagPole> createFlagPole(Vector2 position) override;
-  Weak<Piranha> createPiranha(Vector2 position) override;
+
   Weak<Mushroom> createMushroom(Vector2 position) override;
 };
 

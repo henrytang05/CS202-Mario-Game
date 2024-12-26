@@ -6,6 +6,7 @@
 #include "Components/Texture.h"
 
 SceneSpace::GuideScene::GuideScene() {
+    SoundCtrl.PlayGroundTheme();
 }
 
 SceneSpace::GuideScene::~GuideScene()
@@ -13,6 +14,7 @@ SceneSpace::GuideScene::~GuideScene()
     #ifdef _DEBUG
     Log("GuideScene destroyed");
     #endif
+    delete QuitButton;
 }
 
 Unique<SceneSpace::Scene> SceneSpace::GuideScene::updateScene(float deltaTime)
@@ -23,12 +25,20 @@ Unique<SceneSpace::Scene> SceneSpace::GuideScene::updateScene(float deltaTime)
     // }
     Vector2 mousePos = GetMousePosition();
     bool isLeftClick = IsMouseButtonPressed(MOUSE_BUTTON_LEFT);
+    QuitButton->update(mousePos, isLeftClick);
+
+    if (QuitButton->isPressed())
+    {
+        SoundCtrl.PlayTingSound();
+        return std::make_unique<SceneSpace::IntroScene>();
+    }
     return nullptr;
 }
 
 void SceneSpace::GuideScene::draw()
 {
     DrawTexture(background, 0, 0, WHITE);
+    QuitButton->draw();
     // for (auto &entity : entities) {
     //     if (entity != nullptr)
     //     entity->draw();
@@ -38,6 +48,8 @@ void SceneSpace::GuideScene::draw()
 void SceneSpace::GuideScene::loadResources()
 {
     background = LoadTexture("./assets/GuideBackground.png");
+    QuitButton = new GUI::ImageButton(30, 20, "./assets/QuitButton.png",
+                                       "./assets/Hover_QuitButton.png");
 }
 
 void SceneSpace::GuideScene::init()

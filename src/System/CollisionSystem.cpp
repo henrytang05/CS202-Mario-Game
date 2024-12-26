@@ -231,6 +231,10 @@ void CollisionHandlingSystem::handlePlayerCollision(Weak<AbstractEntity> _entity
           EQ.pushEvent(std::make_unique<MarioJumpOnGoomba>(
               entity->getID(), belowEntity->getID()));
         }
+        else if(belowEntity->getName() == "Piranha") {
+          EventQueue &EQ = EventQueue::getInstance();
+          EQ.pushEvent(std::make_unique<MarioDieEvent>(entity->getID()));
+        }
       }
     } 
     else if (entity->getComponent<CharacterStateComponent>().getState() == "DROPPING") {

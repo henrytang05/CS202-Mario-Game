@@ -24,11 +24,6 @@ public:
   virtual void update(float dt) = 0;
 };
 
-class IConfigurableSystem : virtual public System {
-public:
-  virtual ~IConfigurableSystem() = default;
-  virtual void configure() = 0;
-};
 class TransformSystem : public IUpdatableSystem {
 public:
   void update(float dt) override;
@@ -45,10 +40,12 @@ public:
 class CollisionSystem : public IUpdatableSystem {
 public:
   void update(float dt) override;
+
 private:
   bool DynamicRectVsRect(const float deltaTime, const Rectangle &r_static,
                          Vector2 &contact_point, Vector2 &contact_normal,
-                         float &contact_time, Weak<AbstractEntity> entity, Vector2 secondVelo);
+                         float &contact_time, Weak<AbstractEntity> entity,
+                         Vector2 secondVelo);
   bool ResolveDynamicRectVsRect(const float deltaTime,
                                 Weak<AbstractEntity> r_static,
                                 Weak<AbstractEntity> entity);
@@ -60,16 +57,14 @@ bool RayVsRect(const Vector2 &ray_origin, const Vector2 &ray_dir,
                const Rectangle &target, Vector2 &contact_point,
                Vector2 &contact_normal, float &t_hit_near);
 
-class CollisionHandlingSystem : public IUpdatableSystem, public IConfigurableSystem {
+class CollisionHandlingSystem : public IUpdatableSystem {
 public:
-  void configure() override;
   void update(float dt) override;
   void handleAICollision(Weak<AbstractEntity> entity);
   void handlePlayerCollision(Weak<AbstractEntity> entity);
   void handleEnemyCollision(Weak<AbstractEntity> entity);
 
 private:
-  static void onMarioJumpOnGoomba(const Event &event);
   static void onMarioDie(const Event &event);
   void handlePlayerEnemyCollision(Weak<AbstractEntity> player,
                                   Weak<AbstractEntity> enemy);
@@ -82,9 +77,8 @@ public:
   void update(float dt) override;
 };
 
-class PlayerSystem : public IUpdatableSystem, public IConfigurableSystem {
+class PlayerSystem : public IUpdatableSystem {
 public:
-  void configure() override;
   void update(float dt) override;
 
 private:

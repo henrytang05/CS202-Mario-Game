@@ -2,6 +2,7 @@
 #include "Components/Position.h"
 #include "Components/Tags.h"
 #include "EntityManager.h"
+#include "EventManager.h"
 #include "System/System.h"
 
 void CollisionSystem::reset(CollisionComponent &cc) {
@@ -11,14 +12,16 @@ void CollisionSystem::reset(CollisionComponent &cc) {
 
 void CollisionSystem::update(float dt) {
   EntityManager &EM = EntityManager::getInstance();
-  auto Entities = EM.getHasAll<CollisionComponent, PositionComponent, BoundingBoxComponent>();
+  auto Entities = EM.getHasAll<CollisionComponent, PositionComponent,
+                               BoundingBoxComponent>();
   auto otherEntities = EM.getHasAll<BoundingBoxComponent>();
   for (auto tentity : Entities) {
     if (tentity.expired())
       throw std::runtime_error("Entity is expired");
 
     auto entity = tentity.lock();
-    if(entity->hasComponent<PlayerTag>() && entity->getComponent<CharacterStateComponent>().getState() == "DEATH") {
+    if (entity->hasComponent<PlayerTag>() &&
+        entity->getComponent<CharacterStateComponent>().getState() == "DEATH") {
       continue;
     }
     std::vector<std::pair<int, float>> col;
@@ -27,16 +30,30 @@ void CollisionSystem::update(float dt) {
     for (int i = 0; i < (int)otherEntities.size(); i++) {
       if (*otherEntities[i].lock() == *entity)
         continue;
-        
-      if(otherEntities[i].lock()->hasComponent<PlayerTag>() && otherEntities[i].lock()->getComponent<CharacterStateComponent>().getState() == "DEATH") {
+
+      if (otherEntities[i].lock()->hasComponent<PlayerTag>() &&
+          otherEntities[i]
+                  .lock()
+                  ->getComponent<CharacterStateComponent>()
+                  .getState() == "DEATH") {
         continue;
       }
-      Vector2 position = otherEntities[i].lock()->getComponent<PositionComponent>().getPosition();
-      Vector2 size = otherEntities[i].lock()->getComponent<BoundingBoxComponent>().getSize();
+      Vector2 position = otherEntities[i]
+                             .lock()
+                             ->getComponent<PositionComponent>()
+                             .getPosition();
+      Vector2 size = otherEntities[i]
+                         .lock()
+                         ->getComponent<BoundingBoxComponent>()
+                         .getSize();
       Vector2 velo = {0.0f, 0.0f};
       if (otherEntities[i].lock()->hasComponent<TransformComponent>())
-        velo = otherEntities[i].lock()->getComponent<TransformComponent>().getVelocity();
-      Rectangle bbOtherEntity = (Rectangle){position.x, position.y, size.x, size.y};
+        velo = otherEntities[i]
+                   .lock()
+                   ->getComponent<TransformComponent>()
+                   .getVelocity();
+      Rectangle bbOtherEntity =
+          (Rectangle){position.x, position.y, size.x, size.y};
       if (DynamicRectVsRect(dt, bbOtherEntity, cp, cn, t, entity, velo)) {
         col.push_back(std::make_pair(i, t));
       }
@@ -91,13 +108,10 @@ bool CollisionSystem::ResolveDynamicRectVsRect(const float deltaTime,
   }
   return false;
 }
-bool CollisionSystem::DynamicRectVsRect(const float deltaTime,
-                                        const Rectangle &r_static,
-                                        Vector2 &contact_point,
-                                        Vector2 &contact_normal,
-                                        float &contact_time,
-                                        Weak<AbstractEntity> _entity,
-                                        Vector2 secondVelo) {
+bool CollisionSystem::DynamicRectVsRect(
+    const float deltaTime, const Rectangle &r_static, Vector2 &contact_point,
+    Vector2 &contact_normal, float &contact_time, Weak<AbstractEntity> _entity,
+    Vector2 secondVelo) {
   if (_entity.expired())
     throw std::runtime_error("Entity is expired");
   auto entity = _entity.lock();
@@ -117,7 +131,8 @@ bool CollisionSystem::DynamicRectVsRect(const float deltaTime,
   Vector2 ray_origin =
       (Vector2){position.x + size.x / 2.0f, position.y + size.y / 2.0f};
   Vector2 ray_dir = (Vector2){velocity.x * deltaTime, velocity.y * deltaTime};
-  if (RayVsRect(ray_origin, ray_dir, expanded_target, contact_point, contact_normal, contact_time))
+  if (RayVsRect(ray_origin, ray_dir, expanded_target, contact_point,
+                contact_normal, contact_time))
     return (contact_time >= 0.0f && contact_time < 1.0f);
   else
     return false;
@@ -184,48 +199,7 @@ bool RayVsRect(const Vector2 &ray_origin, const Vector2 &ray_dir,
   // considered a hit, the resolver wont change anything.
   return true;
 }
-void CollisionHandlingSystem::configure() {
-  EventQueue &EQ = EventQueue::getInstance();
-  EQ.registerHandler(EventType::MarioJumpOnGoomba, this->onMarioJumpOnGoomba);
-  EQ.registerHandler(EventType::MarioDie, this->onMarioDie);
-}
 
-void CollisionHandlingSystem::onMarioDie(const Event &event) {
-  ASSERT(event.type == EventType::MarioDie);
-  const auto &MJOG = std::get<MarioDieEvent>(event.data);
-  EntityManager &EM = EntityManager::getInstance();
-  auto _mario = EM.getEntityPtr(MJOG.marioID);
-
-  ASSERT(!_mario.expired());
-
-  auto mario = _mario.lock();
-  if(mario->getComponent<CharacterStateComponent>().getState() == "DEATH") return;
-  mario->getComponent<BoundingBoxComponent>().setSize({0.0f, 0.0f});
-  mario->getComponent<CharacterStateComponent>().setEnumState("DEATH");
-  mario->getComponent<CharacterStateComponent>().setSizeState("SMALL");
-  mario->getComponent<TextureComponent>().changeState(mario->getComponent<CharacterStateComponent>().getCurrentState());
-  mario->getComponent<TransformComponent>().setVelocity({0.0f, -240.0f});
-  mario->getComponent<MarioSoundComponent>().PlayMarioDieEffect();
-}
-
-
-void CollisionHandlingSystem::onMarioJumpOnGoomba(const Event &event) {
-  ASSERT(event.type == EventType::MarioJumpOnGoomba);
-  const auto &MJOG = std::get<MarioJumpOnGoombaEvent>(event.data);
-  EntityManager &EM = EntityManager::getInstance();
-  auto _mario = EM.getEntityPtr(MJOG.marioID);
-  auto _goomba = EM.getEntityPtr(MJOG.goombaID);
-
-  ASSERT(!_mario.expired());
-  ASSERT(!_goomba.expired());
-
-  auto mario = _mario.lock();
-  auto goomba = _goomba.lock();
-  goomba->getComponent<TextureComponent>().changeState("Die");
-  goomba->getComponent<TransformComponent>().setVelocity({0.0f, 0.0f});
-  mario->getComponent<CharacterStateComponent>().setEnumState("JUMPING");
-  mario->getComponent<TransformComponent>().setVelocity({mario->getComponent<TransformComponent>().x, -180.0f});
-}
 void CollisionHandlingSystem::update(float dt) {
   EntityManager &EM = EntityManager::getInstance();
   auto Entities = EM.getHasAll<CollisionComponent, PositionComponent,
@@ -249,7 +223,8 @@ void CollisionHandlingSystem::update(float dt) {
     entity->getComponent<CollisionComponent>().reset();
   }
 }
-void CollisionHandlingSystem::handlePlayerCollision(Weak<AbstractEntity> _entity) {
+void CollisionHandlingSystem::handlePlayerCollision(
+    Weak<AbstractEntity> _entity) {
   if (_entity.expired())
     throw std::runtime_error("Entity is expired");
   auto entity = _entity.lock();
@@ -257,35 +232,33 @@ void CollisionHandlingSystem::handlePlayerCollision(Weak<AbstractEntity> _entity
   auto &tf = entity->getComponent<TransformComponent>();
   // Below Collision
   if (cc.getBelow().lock() == nullptr) {
-    if(entity->getComponent<CharacterStateComponent>().getState() == "DEATH") {
+    if (entity->getComponent<CharacterStateComponent>().getState() == "DEATH") {
       tf.setVelocity({0.0f, tf.y + 10.0f});
       entity->getComponent<BoundingBoxComponent>().setSize({0.0f, 0.0f});
-      if(entity->getComponent<PositionComponent>().getPosition().y >= 784.0f) {
+      if (entity->getComponent<PositionComponent>().getPosition().y >= 784.0f) {
         entity->removeComponent<PlayerTag>();
         sleep(1);
       }
       return;
     }
     entity->getComponent<CharacterStateComponent>().setEnumState("DROPPING");
-    if(entity->getComponent<PositionComponent>().y > screenHeight * 1.2f) {
+    if (entity->getComponent<PositionComponent>().y > screenHeight * 1.2f) {
       EventQueue &EQ = EventQueue::getInstance();
-      Event event(EventType::MarioDie, MarioDieEvent{entity->getID()});
-      EQ.pushEvent(event);
+      EQ.pushEvent(std::make_unique<MarioDieEvent>(entity->getID()));
     }
-  } 
-  else {
+  } else {
     if (cc.getBelow().lock()->hasComponent<EnemyTag>()) {
       auto below = entity->getComponent<CollisionComponent>().getBelow();
       if (!below.expired()) {
         auto belowEntity = below.lock();
         if (belowEntity->hasComponent<EnemyTag>()) {
           EventQueue &EQ = EventQueue::getInstance();
-          Event event(EventType::MarioJumpOnGoomba, MarioJumpOnGoombaEvent{entity->getID(), belowEntity->getID()});
-          EQ.pushEvent(event);
+          EQ.pushEvent(
+              std::make_unique<PlayerEnemyCollisionEvent>(entity, below));
         }
       }
-    }
-    else if (entity->getComponent<CharacterStateComponent>().getState() == "DROPPING") {
+    } else if (entity->getComponent<CharacterStateComponent>().getState() ==
+               "DROPPING") {
       entity->getComponent<CharacterStateComponent>().setEnumState("IDLE");
     }
   }
@@ -294,19 +267,20 @@ void CollisionHandlingSystem::handlePlayerCollision(Weak<AbstractEntity> _entity
   if (cc.getAbove().lock() != nullptr) {
     auto aboveBlock = cc.getAbove().lock();
     if (aboveBlock->getName() == "BrokenBlock") {
-      if (entity->getComponent<CharacterStateComponent>().getSize() == "SMALL") {
-        aboveBlock->getComponent<BlockTriggerComponent>().setTrigger(new TriggerBrokenBlockWhenHitBySmall(aboveBlock->getComponent<PositionComponent>().getPosition()));
+      if (entity->getComponent<CharacterStateComponent>().getSize() ==
+          "SMALL") {
+        aboveBlock->getComponent<BlockTriggerComponent>().setTrigger(
+            new TriggerBrokenBlockWhenHitBySmall(
+                aboveBlock->getComponent<PositionComponent>().getPosition()));
         entity->getComponent<MarioSoundComponent>().PlayBumpEffect();
-      } 
-      else {
-        //aboveBlock->getComponent<BlockTriggerComponent>().setTrigger(new TriggerBrokenBlockWhenHitByLarge(aboveBlock->getComponent<PositionComponent>().getPosition()));
+      } else {
+        // aboveBlock->getComponent<BlockTriggerComponent>().setTrigger(new
+        // TriggerBrokenBlockWhenHitByLarge(aboveBlock->getComponent<PositionComponent>().getPosition()));
         entity->getComponent<MarioSoundComponent>().PlayBreakBlockEffect();
       }
-    } 
-    else if (aboveBlock->hasComponent<EnemyTag>()) {
+    } else if (aboveBlock->hasComponent<EnemyTag>()) {
       EventQueue &EQ = EventQueue::getInstance();
-      Event event(EventType::MarioDie, MarioDieEvent{entity->getID()});
-      EQ.pushEvent(event);
+      EQ.pushEvent(std::make_unique<MarioDieEvent>(entity->getID()));
     }
   }
 
@@ -315,8 +289,7 @@ void CollisionHandlingSystem::handlePlayerCollision(Weak<AbstractEntity> _entity
     auto rightBlock = cc.getRight().lock();
     if (rightBlock->hasComponent<EnemyTag>()) {
       EventQueue &EQ = EventQueue::getInstance();
-      Event event(EventType::MarioDie, MarioDieEvent{entity->getID()});
-      EQ.pushEvent(event);
+      EQ.pushEvent(std::make_unique<MarioDieEvent>(entity->getID()));
     }
   }
 
@@ -325,13 +298,13 @@ void CollisionHandlingSystem::handlePlayerCollision(Weak<AbstractEntity> _entity
     auto leftBlock = cc.getLeft().lock();
     if (leftBlock->hasComponent<EnemyTag>()) {
       EventQueue &EQ = EventQueue::getInstance();
-      Event event(EventType::MarioDie, MarioDieEvent{entity->getID()});
-      EQ.pushEvent(event);
+      EQ.pushEvent(std::make_unique<MarioDieEvent>(entity->getID()));
     }
   }
 }
 
-void CollisionHandlingSystem::handleEnemyCollision(Weak<AbstractEntity> _entity) {
+void CollisionHandlingSystem::handleEnemyCollision(
+    Weak<AbstractEntity> _entity) {
   if (_entity.expired())
     throw std::runtime_error("Entity is expired");
 
@@ -348,24 +321,21 @@ void CollisionHandlingSystem::handleEnemyCollision(Weak<AbstractEntity> _entity)
     auto leftEntity = left.lock();
     if (leftEntity->hasComponent<PlayerTag>()) {
       EventQueue &EQ = EventQueue::getInstance();
-      Event event(EventType::MarioDie, MarioDieEvent{leftEntity->getID()});
-      EQ.pushEvent(event);
+      EQ.pushEvent(std::make_unique<MarioDieEvent>(leftEntity->getID()));
     }
   }
   if (right.lock()) {
     auto rightEntity = right.lock();
     if (rightEntity->hasComponent<PlayerTag>()) {
       EventQueue &EQ = EventQueue::getInstance();
-      Event event(EventType::MarioDie, MarioDieEvent{rightEntity->getID()});
-      EQ.pushEvent(event);
+      EQ.pushEvent(std::make_unique<MarioDieEvent>(rightEntity->getID()));
     }
   }
   if (below.lock()) {
     auto belowEntity = below.lock();
     if (belowEntity->hasComponent<PlayerTag>()) {
       EventQueue &EQ = EventQueue::getInstance();
-      Event event(EventType::MarioDie, MarioDieEvent{belowEntity->getID()});
-      EQ.pushEvent(event);
+      EQ.pushEvent(std::make_unique<MarioDieEvent>(belowEntity->getID()));
     }
   }
   trans.setVelocity(v);
@@ -384,7 +354,7 @@ void CollisionHandlingSystem::handleAICollision(Weak<AbstractEntity> _entity) {
 
   auto &trans = entity->getComponent<TransformComponent>();
   Vector2 v = trans.getVelocity();
-  if(entity->getComponent<TextureComponent>().state == "Die") {
+  if (entity->getComponent<TextureComponent>().state == "Die") {
     // entity->destroy();
   }
   if (left.lock())

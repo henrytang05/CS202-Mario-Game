@@ -172,8 +172,9 @@ public:
   static EntityManager &getInstance();
   ~EntityManager();
 
-private:
   EntityManager();
+
+private:
   EntityManager(const EntityManager &) = delete;
   EntityManager &operator=(const EntityManager &) = delete;
 };
@@ -267,9 +268,9 @@ inline void EntityManager::removeComponent(AbstractEntity *entity) {
   }
 
   EntityID eid = entity->getID();
-  auto bitset = entityBitsetMap[eid];
+  auto &bitset = entityBitsetMap[eid];
   auto &bs = bitsetEntityMap[bitset];
-  bs.erase(bs.find(eid));
+  bs.erase(eid);
 
   bitset[getComponentTypeID<T>()] = false;
   bitsetEntityMap[bitset].insert(eid);
@@ -277,8 +278,17 @@ inline void EntityManager::removeComponent(AbstractEntity *entity) {
 
   ComponentArray<T> &componentsArr = *getComponentsArray<T>();
   std::vector<T> &components = componentsArr.components;
-  size_t index = componentsArr.entityComponentIndexMap[eid];
-  componentsArr.components[index] = std::move(components.back());
+  auto &ECIM = componentsArr.entityComponentIndexMap;
+  size_t index = ECIM[eid];
+  std::swap(components[index], components.back());
+
+  for (size_t i = 0; i < ECIM.size(); i++) {
+    if (ECIM[i] != components.size() - 1)
+      continue;
+    ECIM[i] = index;
+    break;
+  }
+
   components.pop_back();
   componentsArr.entityComponentIndexMap[eid] = -1;
 }

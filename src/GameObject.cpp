@@ -1,4 +1,5 @@
 #include "GameObject.h"
+
 #include "Components/BlockTrigger.h"
 #include "Components/Component.h"
 #include "Components/Components_include.h"
@@ -35,6 +36,7 @@ void BrokenBlock::init(Vector2 position) {
   addComponent<PositionComponent>(position);
   addComponent<BoundingBoxComponent>(size);
   addComponent<BlockTriggerComponent>();
+  auto BT = getComponent<BlockTriggerComponent>();
   addComponent<TransformComponent>((Vector2){0.0f, 0.0f});
   addComponent<TextureComponent>();
   getComponent<TextureComponent>().addTexture(

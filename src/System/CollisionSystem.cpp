@@ -38,8 +38,9 @@ void CollisionSystem::update(float dt) {
                    .lock()
                    ->getComponent<TransformComponent>()
                    .getVelocity();
-      Rectangle bbOtherEntity =
-          (Rectangle){position.x, position.y, size.x, size.y};
+      Rectangle bbOtherEntity =(Rectangle){position.x, position.y, size.x, size.y};
+      if(otherEntities[i].lock()->hasComponent<CoinTag>()) 
+        bbOtherEntity =(Rectangle){position.x + 8.0f, position.y + 8.0f, size.x, size.y};
       if (DynamicRectVsRect(dt, bbOtherEntity, cp, cn, t, entity, velo)) {
         col.push_back(std::make_pair(i, t));
       }
@@ -69,6 +70,8 @@ bool CollisionSystem::ResolveDynamicRectVsRect(const float deltaTime,
   if (r_static.lock()->hasComponent<TransformComponent>())
     velo = r_static.lock()->getComponent<TransformComponent>().getVelocity();
   Rectangle bbOtherEntity = (Rectangle){position.x, position.y, size.x, size.y};
+  if(r_static.lock()->hasComponent<CoinTag>()) 
+    bbOtherEntity =(Rectangle){position.x + 8.0f, position.y + 8.0f, size.x, size.y};
   if (DynamicRectVsRect(deltaTime, bbOtherEntity, contact_point, contact_normal,
                         contact_time, entity, velo)) {
     if (contact_normal.y > 0.0f)
@@ -82,13 +85,14 @@ bool CollisionSystem::ResolveDynamicRectVsRect(const float deltaTime,
 
     if (contact_normal.x > 0.0f)
       cc.contact[3] = r_static;
-
     Vector2 velocity =
         entity.lock()->getComponent<TransformComponent>().getVelocity();
-    velocity = velocity + (Vector2){contact_normal.x * std::fabs(velocity.x) *
-                                        (1 - contact_time),
-                                    contact_normal.y * std::fabs(velocity.y) *
-                                        (1 - contact_time)};
+    
+    if(r_static.lock()->hasComponent<CoinTag>() == false)
+      velocity = velocity + (Vector2){contact_normal.x * std::fabs(velocity.x) *
+                                          (1 - contact_time),
+                                      contact_normal.y * std::fabs(velocity.y) *
+                                          (1 - contact_time)};
     entity.lock()->getComponent<TransformComponent>().setVelocity(velocity);
     return true;
   }
@@ -252,9 +256,13 @@ void CollisionHandlingSystem::handlePlayerCollision(Weak<AbstractEntity> _entity
         }
       }
     }
-    else if (below.lock()->getName() == "Mushroom") {
+    else if (below.lock()->hasComponent<PowerupTag>()) {
       EventQueue &EQ = EventQueue::getInstance();
       EQ.pushEvent(std::make_unique<MarioSmallToLarge>(entity->getID(), below.lock()->getID()));
+    }
+    else if(below.lock()->hasComponent<CoinTag>()) {
+      below.lock()->destroy();
+      entity->getComponent<MarioSoundComponent>().PlayCoinEffect();
     } 
     else if (entity->getComponent<CharacterStateComponent>().getState() == "DROPPING") {
       entity->getComponent<CharacterStateComponent>().setEnumState("IDLE");
@@ -308,6 +316,10 @@ void CollisionHandlingSystem::handlePlayerCollision(Weak<AbstractEntity> _entity
         }
       }
     }
+    else if(rightBlock->hasComponent<CoinTag>()) {
+      rightBlock->destroy();
+      entity->getComponent<MarioSoundComponent>().PlayCoinEffect();
+    }
     else if(rightBlock->getName() == "Mushroom") {
       EventQueue &EQ = EventQueue::getInstance();
         EQ.pushEvent(std::make_unique<MarioSmallToLarge>(entity->getID(), rightBlock->getID()));
@@ -317,8 +329,12 @@ void CollisionHandlingSystem::handlePlayerCollision(Weak<AbstractEntity> _entity
   // Left Collision
   if (cc.getLeft().lock() != nullptr) {
     auto leftBlock = cc.getLeft().lock();
-    if (leftBlock->hasComponent<EnemyTag>()) {
-      if(leftBlock->getName() == "Goomba") {
+    if (leftBlock->hasComponent<EnemyTag>()) {  
+      if(leftBlock->getName() == "Koopa") {
+        EventQueue &EQ = EventQueue::getInstance();
+        EQ.pushEvent(std::make_unique<MarioTouchRightKoopa>(entity->getID(), leftBlock->getID()));
+      }
+      else {
         if(entity->getComponent<CharacterStateComponent>().getSize() == "SMALL") {
           EventQueue &EQ = EventQueue::getInstance();
           EQ.pushEvent(std::make_unique<MarioDieEvent>(entity->getID()));
@@ -328,10 +344,11 @@ void CollisionHandlingSystem::handlePlayerCollision(Weak<AbstractEntity> _entity
           EQ.pushEvent(std::make_unique<MarioLargeToSmall>(entity->getID()));
         }
       }
-      else if(leftBlock->getName() == "Koopa") {
-        EventQueue &EQ = EventQueue::getInstance();
-        EQ.pushEvent(std::make_unique<MarioTouchRightKoopa>(entity->getID(), leftBlock->getID()));
-      }
+    }
+    else if(leftBlock->hasComponent<CoinTag>()) {
+      leftBlock->destroy();
+      entity->getComponent<MarioSoundComponent>().PlayCoinEffect();
+      // event: touch coin
     }
     else if(leftBlock->getName() == "Mushroom") {
       EventQueue &EQ = EventQueue::getInstance();

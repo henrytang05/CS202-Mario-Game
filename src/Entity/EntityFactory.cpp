@@ -86,7 +86,7 @@ Weak<AbstractEntity> EntityFactory::createMushroom(Vector2 position) {
 uint32_t EntityFactory::createCoin(Vector2 position) {
   EntityManager &EM = EntityManager::getInstance();
   Shared<AbstractEntity> entity = EM.createEntity("Coin").lock();
-  Vector2 size = {16,16};
+  Vector2 size = {16.0,16.0};
   entity->addComponent<PositionComponent>(position);
   entity->addComponent<BoundingBoxComponent>(size);
   entity->addComponent<TextureComponent>();
@@ -97,6 +97,6 @@ uint32_t EntityFactory::createCoin(Vector2 position) {
   entity->getComponent<TextureComponent>().addTexture("Normal", textures, 0.1f, true);
   entity->getComponent<TextureComponent>().changeState("Normal");
   //entity->addComponent<TransformComponent>(Vector2{50.0f, -16.0f});
+  entity->addComponent<CoinTag>();
   return entity->getID();
-  
 }

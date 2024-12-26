@@ -19,8 +19,6 @@ void MarioDieEvent::handle() {
   mario->getComponent<TextureComponent>().changeState(mario->getComponent<CharacterStateComponent>().getCurrentState());
   mario->getComponent<TransformComponent>().setVelocity({0.0f, -240.0f});
   mario->getComponent<MarioSoundComponent>().PlayMarioDieEffect();
-
-  mario->destroy();
 }
 
 void MarioJumpOnGoomba::handle() {

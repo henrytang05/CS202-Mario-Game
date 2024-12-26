@@ -15,8 +15,7 @@ void EntityManager::reset() {
   for (auto &entity : entities) {
     entity.reset();
   }
-
-  for (auto &componentArray : componentArrays) {
+  for(auto &componentArray : componentArrays) {
     componentArray.reset();
   }
 }
@@ -128,8 +127,8 @@ void EntityManager::destroyEntity(uint32_t id) {
   entities[id]->deactivate();
   entities[id].reset();
   entities[id] = nullptr;
-  entityBitsetMap.erase(id);
   bitsetEntityMap[entityBitsetMap[id]].erase(id);
+  entityBitsetMap.erase(id);
 }
 
 void EntityManager::destroyEntity(std::string name) {
@@ -184,7 +183,9 @@ AbstractEntity::~AbstractEntity() {
 uint32_t AbstractEntity::getID() const { return id; }
 
 bool AbstractEntity::isActive() const { return active; }
-
+void AbstractEntity::deactivate() {
+  active = false;
+}
 void AbstractEntity::destroy() {
   active = false;
   EM->destroyEntity(id);

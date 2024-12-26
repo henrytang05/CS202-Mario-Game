@@ -42,7 +42,7 @@ public:
   ComponentArray<T>() { entityComponentIndexMap.fill(-1); }
   virtual ~ComponentArray() = default;
   void onEntityDestroyed(EntityID id) override {
-    ASSERT(entityComponentIndexMap[id] != -1, "Entity does not have component");
+    if(entityComponentIndexMap[id] == -1) return;
 
     if (entityComponentIndexMap[id] != -1) {
       size_t index = entityComponentIndexMap[id];

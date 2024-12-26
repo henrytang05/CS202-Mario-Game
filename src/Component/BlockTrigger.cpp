@@ -2,7 +2,8 @@
 
 #include "Components/Components_include.h"
 #include "EntityManager.h"
-
+#include "Entity/EntityFactory.h"
+#include "GameObject.h"
 using namespace std;
 
 // BlockTriggerComponent
@@ -130,14 +131,10 @@ TriggerBehaviour *TriggerQuestionBlock::trigger(AbstractEntity *entity,
   if (velocity.y <= -600.0f)
     velocity.y = -600.0f;
   if (sumFrame >= 0.3f) {
-    entity->setName("HardBlock");
-    entity->modifyComponent<TextureComponent>();
-    vector<Texture2D> textures;
-    entity->getComponent<TextureComponent>().addTexture(
-        "Normal", TextureManager::getInstance().getTexture("HardBlock"));
-    entity->getComponent<PositionComponent>().setPosition(fixedPosition);
-    velocity.y = 0.0f;
+    createHardBlock(fixedPosition);
+    entity->destroy();
     retVal = nullptr;
+    return retVal;
   }
   entity->getComponent<TransformComponent>().setVelocity(velocity);
 

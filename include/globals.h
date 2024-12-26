@@ -17,7 +17,11 @@ void *operator new(size_t size);
 void operator delete(void *ptr) noexcept;
 
 extern bool isMario;
-#define ASSERT(condition) assert((condition) && "Assertion failed: " #condition)
+// #define ASSERT(condition) assert((condition) && "Assertion failed: "
+// #condition)
+
+#define ASSERT(condition, ...)                                                 \
+  assert((condition) && ("Assertion failed: " __VA_ARGS__))
 
 template <typename Base, typename T> inline bool instanceof(const T *ptr) {
   return dynamic_cast<const Base *>(ptr) != nullptr;

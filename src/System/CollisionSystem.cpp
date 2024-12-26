@@ -30,10 +30,7 @@ void CollisionSystem::update(float dt) {
                              .lock()
                              ->getComponent<PositionComponent>()
                              .getPosition();
-      Vector2 size = otherEntities[i]
-                         .lock()
-                         ->getComponent<BoundingBoxComponent>()
-                         .getSize();
+      Vector2 size = otherEntities[i].lock()->getComponent<BoundingBoxComponent>().getSize();
       Vector2 velo = {0.0f, 0.0f};
       if (otherEntities[i].lock()->hasComponent<TransformComponent>())
         velo = otherEntities[i]
@@ -211,8 +208,7 @@ void CollisionHandlingSystem::update(float dt) {
     entity->getComponent<CollisionComponent>().reset();
   }
 }
-void CollisionHandlingSystem::handlePlayerCollision(
-    Weak<AbstractEntity> _entity) {
+void CollisionHandlingSystem::handlePlayerCollision(Weak<AbstractEntity> _entity) {
   if (_entity.expired())
     throw std::runtime_error("Entity is expired");
   auto entity = _entity.lock();
@@ -230,14 +226,14 @@ void CollisionHandlingSystem::handlePlayerCollision(
       auto below = entity->getComponent<CollisionComponent>().getBelow();
       if (!below.expired()) {
         auto belowEntity = below.lock();
-        if (belowEntity->hasComponent<EnemyTag>()) {
+        if (belowEntity->getName() == "Goomba") {
           EventQueue &EQ = EventQueue::getInstance();
           EQ.pushEvent(std::make_unique<MarioJumpOnGoomba>(
               entity->getID(), belowEntity->getID()));
         }
       }
-    } else if (entity->getComponent<CharacterStateComponent>().getState() ==
-               "DROPPING") {
+    } 
+    else if (entity->getComponent<CharacterStateComponent>().getState() == "DROPPING") {
       entity->getComponent<CharacterStateComponent>().setEnumState("IDLE");
     }
   }
@@ -246,18 +242,21 @@ void CollisionHandlingSystem::handlePlayerCollision(
   if (cc.getAbove().lock() != nullptr) {
     auto aboveBlock = cc.getAbove().lock();
     if (aboveBlock->getName() == "BrokenBlock") {
-      if (entity->getComponent<CharacterStateComponent>().getSize() ==
-          "SMALL") {
+      if (entity->getComponent<CharacterStateComponent>().getSize() == "SMALL") {
         aboveBlock->getComponent<BlockTriggerComponent>().setTrigger(
             new TriggerBrokenBlockWhenHitBySmall(
                 aboveBlock->getComponent<PositionComponent>().getPosition()));
         entity->getComponent<MarioSoundComponent>().PlayBumpEffect();
       } else {
-        aboveBlock->getComponent<BlockTriggerComponent>().setTrigger(new
-        TriggerBrokenBlockWhenHitByLarge(aboveBlock->getComponent<PositionComponent>().getPosition()));
+        aboveBlock->getComponent<BlockTriggerComponent>().setTrigger(new TriggerBrokenBlockWhenHitByLarge(aboveBlock->getComponent<PositionComponent>().getPosition()));
         entity->getComponent<MarioSoundComponent>().PlayBreakBlockEffect();
       }
-    } else if (aboveBlock->hasComponent<EnemyTag>()) {
+    }
+    else if (aboveBlock->getName() == "QuestionBlock") {
+      aboveBlock->getComponent<BlockTriggerComponent>().setTrigger(new TriggerQuestionBlock(aboveBlock->getComponent<PositionComponent>().getPosition()));
+      entity->getComponent<MarioSoundComponent>().PlayBumpEffect();
+    } 
+    else if (aboveBlock->hasComponent<EnemyTag>()) {
       EventQueue &EQ = EventQueue::getInstance();
       EQ.pushEvent(std::make_unique<MarioDieEvent>(entity->getID()));
     }
@@ -335,6 +334,7 @@ void CollisionHandlingSystem::handleAICollision(Weak<AbstractEntity> _entity) {
   Vector2 v = trans.getVelocity();
   if (entity->getComponent<TextureComponent>().state == "Die") {
     // entity->destroy();
+    return; 
   }
   if (left.lock())
     v.x = -ENEMY_SPEED;

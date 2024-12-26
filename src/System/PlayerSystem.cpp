@@ -5,23 +5,24 @@
 #include "EventManager.h"
 #include "System/System.h"
 
-void PlayerSystem::configure() {}
-
 void PlayerSystem::update(float dt) {
   EntityManager &EM = EntityManager::getInstance();
   auto Entities = EM.getHasAll<PlayerTag>();
   for (auto tEntity : Entities) {
-    Vector2 velocity = tEntity.lock()->getComponent<TransformComponent>().getVelocity();
-    Vector2 position = tEntity.lock()->getComponent<PositionComponent>().getPosition();
-    auto &playerConstant = tEntity.lock()->getComponent<CharacterParametersComponent>();
+    Vector2 velocity =
+        tEntity.lock()->getComponent<TransformComponent>().getVelocity();
+    Vector2 position =
+        tEntity.lock()->getComponent<PositionComponent>().getPosition();
+    auto &playerConstant =
+        tEntity.lock()->getComponent<CharacterParametersComponent>();
     auto &state = tEntity.lock()->getComponent<CharacterStateComponent>();
     bool keyLeft = IsKeyDown(KEY_LEFT);
     bool keyRight = IsKeyDown(KEY_RIGHT);
     bool keyUp = IsKeyDown(KEY_UP);
     bool keyDown = IsKeyDown(KEY_DOWN);
-    if(state.getState() == "DEATH") {
+    if (state.getState() == "DEATH") {
       return;
-    } 
+    }
     if (state.getState() != "JUMPING" && state.getState() != "DROPPING") {
       if (std::fabs(velocity.x) < playerConstant.MIN_WALKING_VELO) {
         velocity.x = 0.0f;
@@ -92,7 +93,8 @@ void PlayerSystem::update(float dt) {
       }
     } else {
       if (velocity.y < 0.0f && IsKeyDown(KEY_UP)) {
-        velocity.y -= (playerConstant.FALL_ACC - playerConstant.FALL_ACC_A) * dt;
+        velocity.y -=
+            (playerConstant.FALL_ACC - playerConstant.FALL_ACC_A) * dt;
       }
       if (keyRight && !keyLeft) {
         if (fabs(velocity.x) > playerConstant.MAX_WALKING_VELO)

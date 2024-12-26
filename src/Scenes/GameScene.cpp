@@ -28,7 +28,8 @@ GameScene::GameScene() : Scene(), EM(EntityManager::getInstance()) {
   Shared<TransformSystem> transformSystem = std::make_shared<TransformSystem>();
   Shared<AnimationSystem> animationSystem = std::make_shared<AnimationSystem>();
   Shared<PlayerSystem> playerSystem = std::make_shared<PlayerSystem>();
-  Shared<CollisionHandlingSystem> collisionHandlingSystem = std::make_shared<CollisionHandlingSystem>();
+  Shared<CollisionHandlingSystem> collisionHandlingSystem =
+      std::make_shared<CollisionHandlingSystem>();
   Shared<BlockSystem> blockSystem = std::make_shared<BlockSystem>();
   systems.push_back(playerSystem);
   systems.push_back(collisionSystem);
@@ -42,10 +43,6 @@ GameScene::GameScene() : Scene(), EM(EntityManager::getInstance()) {
   update_systems.push_back(collisionHandlingSystem);
   update_systems.push_back(blockSystem);
   draw_systems.push_back(animationSystem);
-  configure_systems.push_back(playerSystem);
-  configure_systems.push_back(collisionHandlingSystem);
-  for(auto &system : configure_systems)
-    system.lock()->configure();
 }
 
 void GameScene::init() {
@@ -92,15 +89,15 @@ void GameScene::draw() {
   EndMode2D();
   DrawText(TextFormat("Time: %03i", (int)time), 1200, 35, GAMEPLAY_TEXT_SIZE,
            WHITE);
-  DrawText(TextFormat("Lives: %03i", (int)lives), 1200 - 35*6, 35, GAMEPLAY_TEXT_SIZE,
-          WHITE);
+  DrawText(TextFormat("Lives: %03i", (int)lives), 1200 - 35 * 6, 35,
+           GAMEPLAY_TEXT_SIZE, WHITE);
 }
 Unique<Scene> GameScene::updateScene(float deltaTime) {
   this->update(deltaTime);
   auto players = EM.getHasAll<PlayerTag>();
   if (players.empty()) {
     lives -= 1;
-    if(lives == 0) {
+    if (lives == 0) {
       lives = 3;
       return make_unique<SceneSpace::IntroScene>();
     }

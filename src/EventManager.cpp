@@ -40,7 +40,12 @@ void MarioDieEvent::handle() {
   mario->getComponent<MarioSoundComponent>().PlayMarioDieEffect();
 }
 
-void MarioJumpOnGoomba::handle() {}
+void MarioJumpOnGoomba::handle() {
+  EntityManager &EM = EntityManager::getInstance();
+  auto _mario = EM.getEntityPtr(MarioID);
+  auto _goomba = EM.getEntityPtr(EnemyID);
+  std::make_unique<PlayerEnemyCollisionEvent>(_mario, _goomba)->handle();
+}
 
 void EventQueue::pushEvent(Unique<Event> &e) { eventQueue.push(std::move(e)); }
 

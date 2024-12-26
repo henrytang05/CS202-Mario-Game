@@ -15,6 +15,10 @@ void EntityManager::reset() {
   for (auto &entity : entities) {
     entity.reset();
   }
+
+  for (auto &componentArray : componentArrays) {
+    componentArray.reset();
+  }
 }
 
 EntityManager::EntityManager() {}

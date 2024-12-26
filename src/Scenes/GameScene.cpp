@@ -91,10 +91,12 @@ void GameScene::draw() {
   }
 
   EndMode2D();
+  int scores =0;
   DrawText(TextFormat("Time: %03i", (int)time), 1200, 35, GAMEPLAY_TEXT_SIZE,
            WHITE);
   DrawText(TextFormat("Lives: %03i", (int)lives), 1200 - 35 * 6, 35,
            GAMEPLAY_TEXT_SIZE, WHITE);
+  DrawText(TextFormat("Score: %03i", (int)scores), 1200 - 35 * 12, 35, GAMEPLAY_TEXT_SIZE, WHITE);
 }
 Unique<Scene> GameScene::updateScene(float deltaTime) {
   this->update(deltaTime);

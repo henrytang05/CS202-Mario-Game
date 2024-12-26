@@ -85,6 +85,20 @@ void CoinEvent::handle() {
   EM.getEntityRef(coin).addComponent<CoinInBlockTag>(position);
 }
 
+void CoinCollectEvent::handle() {
+  EntityManager &EM = EntityManager::getInstance();
+  auto _mario = EM.getEntityPtr(MarioID);
+  auto _coin = EM.getEntityPtr(CoinID);
+
+  ASSERT(!_mario.expired());
+  ASSERT(!_coin.expired());
+
+  auto mario = _mario.lock();
+  auto coin = _coin.lock();
+  coin->destroy();
+  mario->getComponent<MarioSoundComponent>().PlayCoinEffect();
+}
+
 void EventQueue::pushEvent(Unique<Event> &e) { eventQueue.push(std::move(e)); }
 
 void EventQueue::pushEvent(Unique<Event> e) { eventQueue.push(std::move(e)); }

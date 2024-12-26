@@ -3739,7 +3739,7 @@
                         {
                          "name":"isMushroom",
                          "type":"bool",
-                         "value":false
+                         "value":true
                         }],
                  "rotation":0,
                  "type":"",
@@ -4164,7 +4164,7 @@
          "y":0
         }],
  "nextlayerid":30,
- "nextobjectid":704,
+ "nextobjectid":703,
  "orientation":"orthogonal",
  "properties":[
         {

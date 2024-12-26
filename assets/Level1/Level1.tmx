@@ -431,7 +431,7 @@
   <object id="449" gid="5" x="160" y="720" width="16" height="16">
    <properties>
     <property name="isCoin" type="bool" value="false"/>
-    <property name="isMushroom" type="bool" value="false"/>
+    <property name="isMushroom" type="bool" value="true"/>
    </properties>
   </object>
   <object id="496" gid="5" x="976" y="720" width="16" height="16"/>

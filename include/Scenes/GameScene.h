@@ -6,7 +6,7 @@
 #include "Map.h"
 #include "Scenes/Scene.h"
 #include "System/System.h"
-
+#include "ScoreManager.h"
 namespace SceneSpace {
 class GameScene : public Scene {
 public:

@@ -44,11 +44,19 @@ struct CoinEvent : public Event {
   Vector2 position;
 };
 
+struct CoinCollectEvent : public Event {
+  CoinCollectEvent(uint32_t player, uint32_t coin) : MarioID(player), CoinID(coin) {}
+  void handle() override;
+  uint32_t MarioID, CoinID;
+};
+
 struct MarioSmallToLarge : public Event {
   MarioSmallToLarge(uint32_t player, uint32_t mushroom) : MarioID(player), MushroomID(mushroom) {}
   void handle() override;
   uint32_t MarioID, MushroomID;
 };
+
+
 class EventQueue {
 public:
   void pushEvent(Unique<Event> &e);

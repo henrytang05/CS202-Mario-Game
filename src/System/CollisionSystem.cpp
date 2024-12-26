@@ -281,13 +281,16 @@ void CollisionHandlingSystem::handlePlayerCollision(Weak<AbstractEntity> _entity
   }
 }
 
-void CollisionHandlingSystem::handleEnemyCollision(
-    Weak<AbstractEntity> _entity) {
+void CollisionHandlingSystem::handleEnemyCollision(Weak<AbstractEntity> _entity) {
   if (_entity.expired())
     throw std::runtime_error("Entity is expired");
 
   auto entity = _entity.lock();
   CollisionComponent &collision = entity->getComponent<CollisionComponent>();
+  if(entity->getComponent<TextureComponent>().state == "Die") {
+    entity->removeComponent<BoundingBoxComponent>();
+    return;
+  }
   auto above = collision.getAbove();
   auto below = collision.getBelow();
   auto left = collision.getLeft();

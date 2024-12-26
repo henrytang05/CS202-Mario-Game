@@ -19,16 +19,9 @@ struct MarioDieEvent : public Event {
   uint32_t marioID;
 };
 
-struct PlayerEnemyCollisionEvent : public Event {
-  PlayerEnemyCollisionEvent(Weak<AbstractEntity> player,
-                            Weak<AbstractEntity> enemy)
-      : player(player), enemy(enemy) {}
-  void handle() override;
-  Weak<AbstractEntity> player;
-  Weak<AbstractEntity> enemy;
-};
-
 struct MarioJumpOnGoomba : public Event {
+  MarioJumpOnGoomba(uint32_t player, uint32_t enemy)
+      : MarioID(player), EnemyID(enemy) {}
   void handle() override;
   uint32_t MarioID;
   uint32_t EnemyID;

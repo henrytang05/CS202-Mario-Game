@@ -4,25 +4,6 @@
 #include "globals.h"
 #include "pch.h"
 
-void PlayerEnemyCollisionEvent::handle() {
-  // ASSERT(event.type == EventType::MarioJumpOnGoomba);
-  // const auto &MJOG = std::get<MarioJumpOnGoombaEvent>(event.data);
-  EntityManager &EM = EntityManager::getInstance();
-  auto _mario = player;
-  auto _goomba = enemy;
-
-  ASSERT(!_mario.expired());
-  ASSERT(!_goomba.expired());
-
-  auto mario = _mario.lock();
-  auto goomba = _goomba.lock();
-  goomba->getComponent<TextureComponent>().changeState("Die");
-  goomba->getComponent<TransformComponent>().setVelocity({0.0f, 0.0f});
-  mario->getComponent<CharacterStateComponent>().setEnumState("JUMPING");
-  mario->getComponent<TransformComponent>().setVelocity(
-      {mario->getComponent<TransformComponent>().x, -180.0f});
-}
-
 void MarioDieEvent::handle() {
   EntityManager &EM = EntityManager::getInstance();
   auto _mario = EM.getEntityPtr(marioID);
@@ -44,7 +25,17 @@ void MarioJumpOnGoomba::handle() {
   EntityManager &EM = EntityManager::getInstance();
   auto _mario = EM.getEntityPtr(MarioID);
   auto _goomba = EM.getEntityPtr(EnemyID);
-  std::make_unique<PlayerEnemyCollisionEvent>(_mario, _goomba)->handle();
+
+  ASSERT(!_mario.expired());
+  ASSERT(!_goomba.expired());
+
+  auto mario = _mario.lock();
+  auto goomba = _goomba.lock();
+  goomba->getComponent<TextureComponent>().changeState("Die");
+  goomba->getComponent<TransformComponent>().setVelocity({0.0f, 0.0f});
+  mario->getComponent<CharacterStateComponent>().setEnumState("JUMPING");
+  mario->getComponent<TransformComponent>().setVelocity(
+      {mario->getComponent<TransformComponent>().x, -180.0f});
 }
 
 void EventQueue::pushEvent(Unique<Event> &e) { eventQueue.push(std::move(e)); }

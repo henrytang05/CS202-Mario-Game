@@ -253,8 +253,8 @@ void CollisionHandlingSystem::handlePlayerCollision(
         auto belowEntity = below.lock();
         if (belowEntity->hasComponent<EnemyTag>()) {
           EventQueue &EQ = EventQueue::getInstance();
-          EQ.pushEvent(
-              std::make_unique<PlayerEnemyCollisionEvent>(entity, below));
+          EQ.pushEvent(std::make_unique<MarioJumpOnGoomba>(
+              entity->getID(), belowEntity->getID()));
         }
       }
     } else if (entity->getComponent<CharacterStateComponent>().getState() ==
@@ -267,8 +267,11 @@ void CollisionHandlingSystem::handlePlayerCollision(
   if (cc.getAbove().lock() != nullptr) {
     auto aboveBlock = cc.getAbove().lock();
     if (aboveBlock->getName() == "BrokenBlock") {
-      if (entity->getComponent<CharacterStateComponent>().getSize() == "SMALL") {
-        aboveBlock->getComponent<BlockTriggerComponent>().setTrigger(new TriggerBrokenBlockWhenHitByLarge(aboveBlock->getComponent<PositionComponent>().getPosition()));
+      if (entity->getComponent<CharacterStateComponent>().getSize() ==
+          "SMALL") {
+        aboveBlock->getComponent<BlockTriggerComponent>().setTrigger(
+            new TriggerBrokenBlockWhenHitByLarge(
+                aboveBlock->getComponent<PositionComponent>().getPosition()));
         entity->getComponent<MarioSoundComponent>().PlayBumpEffect();
       } else {
         // aboveBlock->getComponent<BlockTriggerComponent>().setTrigger(new

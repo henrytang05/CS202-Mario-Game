@@ -65,7 +65,6 @@ public:
   void handleEnemyCollision(Weak<AbstractEntity> entity);
 
 private:
-  static void onMarioDie(const Event &event);
   void handlePlayerEnemyCollision(Weak<AbstractEntity> player,
                                   Weak<AbstractEntity> enemy);
   void handlePlayerCoinCollision(Weak<AbstractEntity> player,

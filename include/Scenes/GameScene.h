@@ -3,7 +3,6 @@
 
 #include "Entity/EntityFactory.h"
 #include "EntityManager.h"
-#include "GUI.h"
 #include "Map.h"
 #include "Scenes/Scene.h"
 #include "System/System.h"
@@ -29,10 +28,6 @@ private:
   EntityManager &EM;
   Weak<AbstractEntity> player;
   bool gameOver;
-<<<<<<<<< Temporary merge branch 1
-  GUI::ImageButton* GuideButton;
-  // TODO: remove this later
-=========
   Unique<IFactory> entityFactory;
   std::vector<Weak<AbstractEntity>> entities;
 

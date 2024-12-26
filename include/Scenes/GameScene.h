@@ -7,8 +7,6 @@
 #include "Scenes/Scene.h"
 #include "System/System.h"
 
-#include "Entity/EnemySystem.h"
-
 namespace SceneSpace {
 class GameScene : public Scene {
 public:

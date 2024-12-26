@@ -63,7 +63,7 @@ public:
   void handleAICollision(Weak<AbstractEntity> entity);
   void handlePlayerCollision(Weak<AbstractEntity> entity);
   void handleEnemyCollision(Weak<AbstractEntity> entity);
-
+  void handlePowerupCollision(Weak<AbstractEntity> entity);
 private:
   void handlePlayerEnemyCollision(Weak<AbstractEntity> player,
                                   Weak<AbstractEntity> enemy);

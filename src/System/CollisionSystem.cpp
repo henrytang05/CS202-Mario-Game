@@ -196,17 +196,21 @@ void CollisionHandlingSystem::update(float dt) {
       throw std::runtime_error("Entity is expired");
 
     auto entity = _entity.lock();
-
-    if (entity->hasComponent<AITag>()) {
+    
+    if(entity->isActive() && entity->hasComponent<PowerupTag>()) {
+      handlePowerupCollision(entity);
+    }
+    if (entity->isActive() &&entity->hasComponent<AITag>()) {
       handleAICollision(entity);
     }
-    if (entity->hasComponent<EnemyTag>()) {
+    if (entity->isActive() &&entity->hasComponent<EnemyTag>()) {
       handleEnemyCollision(entity);
     }
-    if (entity->hasComponent<PlayerTag>()) {
+    if (entity->isActive() &&entity->hasComponent<PlayerTag>()) {
       handlePlayerCollision(entity);
     }
-    entity->getComponent<CollisionComponent>().reset();
+    if(entity->isActive())
+      entity->getComponent<CollisionComponent>().reset();
   }
 }
 void CollisionHandlingSystem::handlePlayerCollision(Weak<AbstractEntity> _entity) {
@@ -320,7 +324,37 @@ void CollisionHandlingSystem::handlePlayerCollision(Weak<AbstractEntity> _entity
     }
   }
 }
+void CollisionHandlingSystem::handlePowerupCollision(Weak<AbstractEntity> _entity) {
+    if (_entity.expired())
+    throw std::runtime_error("Entity is expired");
 
+  auto entity = _entity.lock();
+  if(entity->getComponent<TextureComponent>().state == "Die") {
+    entity->destroy();
+    return;
+  }
+  CollisionComponent &collision = entity->getComponent<CollisionComponent>();
+  auto above = collision.getAbove();
+  auto below = collision.getBelow();
+  auto left = collision.getLeft();
+  auto right = collision.getRight();
+  if(!above.expired() && above.lock()->hasComponent<PlayerTag>()) {
+    EventQueue &EQ = EventQueue::getInstance();
+    EQ.pushEvent(std::make_unique<MarioSmallToLarge>(above.lock()->getID(), entity->getID()));
+  }
+  if(!below.expired() && below.lock()->hasComponent<PlayerTag>()) {
+    EventQueue &EQ = EventQueue::getInstance();
+    EQ.pushEvent(std::make_unique<MarioSmallToLarge>(below.lock()->getID(), entity->getID()));
+  } 
+  if(!left.expired() && left.lock()->hasComponent<PlayerTag>()) {
+    EventQueue &EQ = EventQueue::getInstance();
+    EQ.pushEvent(std::make_unique<MarioSmallToLarge>(left.lock()->getID(), entity->getID()));
+  }  
+  if(!right.expired() && right.lock()->hasComponent<PlayerTag>()) {
+    EventQueue &EQ = EventQueue::getInstance();
+    EQ.pushEvent(std::make_unique<MarioSmallToLarge>(right.lock()->getID(), entity->getID()));
+  } 
+}
 void CollisionHandlingSystem::handleEnemyCollision(Weak<AbstractEntity> _entity) {
   if (_entity.expired())
     throw std::runtime_error("Entity is expired");

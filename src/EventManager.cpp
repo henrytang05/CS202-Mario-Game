@@ -52,7 +52,7 @@ void MarioSmallToLarge::handle() {
   position.y -= 10.0f;
   velocity.x = 0.0f;
   mario->getComponent<TextureComponent>().changeState(mario->getComponent<CharacterStateComponent>().getCurrentState());
-  mushroom->destroy();
+  mushroom->getComponent<TextureComponent>().changeState("Die");
 }
 void MarioJumpOnGoomba::handle() {
   EntityManager &EM = EntityManager::getInstance();

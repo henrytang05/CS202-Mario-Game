@@ -1,7 +1,6 @@
 #ifndef GAMESCENE_H
 #define GAMESCENE_H
 
-#include "Entity/EnemySystem.h"
 #include "Entity/EntityFactory.h"
 #include "EntityManager.h"
 #include "GUI.h"

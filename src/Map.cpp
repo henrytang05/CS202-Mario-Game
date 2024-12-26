@@ -118,22 +118,22 @@ void MapRenderer::loadObjectGroup(const json &layer) {
         for (auto const &property : object_layer["properties"]) {
           if (property["name"] == "isCoin") {
             if (property["value"] == true) {
-              auto coin = entityFactory->createCoin({x, y});
-              if (coin) {
-                objects.push_back(coin);
-                obj->addObserver(coin);
-              }
+              // auto coin = entityFactory->createCoin({x, y});
+              // if (coin) {
+              //   objects.push_back(coin);
+              //   obj->addObserver(coin);
+              // }
             }
           }
-          if (property["name"] == "isMushroom") {
-            if (property["value"] == true) {
-              auto mushroom = entityFactory->createMushroom({x, y}).lock();
-              if (mushroom) {
-                objects.push_back(mushroom);
-                obj->addObserver(mushroom);
-              }
-            }
-          }
+          // if (property["name"] == "isMushroom") {
+          //   if (property["value"] == true) {
+          //     auto mushroom = entityFactory->createMushroom({x, y}).lock();
+          //     if (mushroom) {
+          //       objects.push_back(mushroom);
+          //       obj->addObserver(mushroom);
+          //     }
+          //   }
+          // }
         }
       }
     } else if (name == "Goomba") {

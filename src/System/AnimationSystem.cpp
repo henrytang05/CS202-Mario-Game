@@ -7,6 +7,7 @@ void AnimationSystem::draw(float dt) {
   for (auto tEntity : Entities) {
     if (tEntity.expired())
       throw std::runtime_error("Entity is expired");
+    if(tEntity.lock()->isActive() == false) continue;
     auto entity = tEntity.lock();
     entity->changeState();
 

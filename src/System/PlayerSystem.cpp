@@ -9,6 +9,8 @@ void PlayerSystem::update(float dt) {
   EntityManager &EM = EntityManager::getInstance();
   auto Entities = EM.getHasAll<PlayerTag>();
   for (auto tEntity : Entities) {
+    if(tEntity.expired()) continue;
+    if(tEntity.lock()->isActive() == false) continue;
     Vector2 velocity =
         tEntity.lock()->getComponent<TransformComponent>().getVelocity();
     Vector2 position =

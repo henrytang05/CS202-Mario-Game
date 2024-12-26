@@ -21,7 +21,12 @@ void AnimationSystem::draw(float dt) {
     animation.elapsedTime += dt;
     if (!entity->isActive() && animation.elapsedTime >= animation.frameDelay)
       return;
-
+    if(animation.elapsedTime >= animation.frameDelay) {     
+      if(texture.state == "Die") {
+        EM.removeComponent<TextureComponent>(entity);    
+        continue;
+      }
+    }
     while (animation.elapsedTime >= animation.frameDelay) {
       animation.elapsedTime -= animation.frameDelay;
       animation.currentFrame++;

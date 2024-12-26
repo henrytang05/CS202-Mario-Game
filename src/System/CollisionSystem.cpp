@@ -224,8 +224,8 @@ void CollisionHandlingSystem::handlePlayerCollision(Weak<AbstractEntity> _entity
     }
   } 
   else {
+    auto below = entity->getComponent<CollisionComponent>().getBelow();
     if (cc.getBelow().lock()->hasComponent<EnemyTag>()) {
-      auto below = entity->getComponent<CollisionComponent>().getBelow();
       if (!below.expired()) {
         auto belowEntity = below.lock();
         if (belowEntity->getName() == "Goomba") {
@@ -244,6 +244,10 @@ void CollisionHandlingSystem::handlePlayerCollision(Weak<AbstractEntity> _entity
           }
         }
       }
+    }
+    else if (below.lock()->getName() == "Mushroom") {
+      EventQueue &EQ = EventQueue::getInstance();
+      EQ.pushEvent(std::make_unique<MarioSmallToLarge>(entity->getID(), below.lock()->getID()));
     } 
     else if (entity->getComponent<CharacterStateComponent>().getState() == "DROPPING") {
       entity->getComponent<CharacterStateComponent>().setEnumState("IDLE");
@@ -267,6 +271,10 @@ void CollisionHandlingSystem::handlePlayerCollision(Weak<AbstractEntity> _entity
     else if (aboveBlock->getName() == "QuestionBlock") {
       aboveBlock->getComponent<BlockTriggerComponent>().setTrigger(new TriggerQuestionBlock(aboveBlock->getComponent<PositionComponent>().getPosition()));
       entity->getComponent<MarioSoundComponent>().PlayBumpEffect();
+    }
+    else if (aboveBlock->getName() == "Mushroom") {
+      EventQueue &EQ = EventQueue::getInstance();
+      EQ.pushEvent(std::make_unique<MarioSmallToLarge>(entity->getID(), aboveBlock->getID()));
     } 
     else if (aboveBlock->hasComponent<EnemyTag>()) {
       EventQueue &EQ = EventQueue::getInstance();
@@ -287,6 +295,10 @@ void CollisionHandlingSystem::handlePlayerCollision(Weak<AbstractEntity> _entity
         EQ.pushEvent(std::make_unique<MarioLargeToSmall>(entity->getID()));
       }
     }
+    else if(rightBlock->getName() == "Mushroom") {
+      EventQueue &EQ = EventQueue::getInstance();
+      EQ.pushEvent(std::make_unique<MarioSmallToLarge>(entity->getID(), rightBlock->getID()));
+    }
   }
 
   // Left Collision
@@ -301,6 +313,10 @@ void CollisionHandlingSystem::handlePlayerCollision(Weak<AbstractEntity> _entity
         EventQueue &EQ = EventQueue::getInstance();
         EQ.pushEvent(std::make_unique<MarioLargeToSmall>(entity->getID()));
       }
+    }
+    else if(leftBlock->getName() == "Mushroom") {
+      EventQueue &EQ = EventQueue::getInstance();
+      EQ.pushEvent(std::make_unique<MarioSmallToLarge>(entity->getID(), leftBlock->getID()));
     }
   }
 }

@@ -37,10 +37,13 @@ void MarioLargeToSmall::handle() {
 void MarioSmallToLarge::handle() {
   EntityManager &EM = EntityManager::getInstance();
   auto _mario = EM.getEntityPtr(MarioID);
+  auto _mushroom = EM.getEntityPtr(MushroomID);
 
   ASSERT(!_mario.expired());
+  ASSERT(!_mushroom.expired());
 
   auto mario = _mario.lock();
+  auto mushroom = _mushroom.lock();
   mario->getComponent<CharacterStateComponent>().setSizeState("LARGE");
   auto &velocity = mario->getComponent<TransformComponent>();
   auto &position = mario->getComponent<PositionComponent>();
@@ -49,6 +52,7 @@ void MarioSmallToLarge::handle() {
   position.y -= 10.0f;
   velocity.x = 0.0f;
   mario->getComponent<TextureComponent>().changeState(mario->getComponent<CharacterStateComponent>().getCurrentState());
+  mushroom->destroy();
 }
 void MarioJumpOnGoomba::handle() {
   EntityManager &EM = EntityManager::getInstance();

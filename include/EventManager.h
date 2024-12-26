@@ -44,9 +44,9 @@ struct CoinEvent : public Event {
 };
 
 struct MarioSmallToLarge : public Event {
-  MarioSmallToLarge(uint32_t player) : MarioID(player) {}
+  MarioSmallToLarge(uint32_t player, uint32_t mushroom) : MarioID(player), MushroomID(mushroom) {}
   void handle() override;
-  uint32_t MarioID;
+  uint32_t MarioID, MushroomID;
 };
 class EventQueue {
 public:

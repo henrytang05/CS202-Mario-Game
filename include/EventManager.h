@@ -1,5 +1,7 @@
 #pragma once
 
+#include "EntityManager.h"
+#include "pch.h"
 #include <functional>
 #include <iostream>
 #include <map>
@@ -7,36 +9,28 @@
 #include <string>
 #include <variant>
 
-// Declare event data structures BEFORE using them in the variant
-struct MarioJumpOnGoombaEvent {
-  uint32_t marioID;
-  uint32_t goombaID;
-};
-
-struct UserClickButtonEvent {
-  int buttonID;
-};
-
-enum class EventType { MarioJumpOnGoomba, UserClickButton };
-
-using EventData = std::variant<MarioJumpOnGoombaEvent, UserClickButtonEvent>;
-
 struct Event {
-  Event(EventType type, EventData data) : type(type), data(data) {}
-  EventType type;
-  EventData data;
+  virtual void handle() = 0;
 };
 
-void handleMarioJumpOnGoomba(const Event &event);
+struct MarioDieEvent : public Event {
+  MarioDieEvent(uint32_t marioID) : marioID(marioID) {}
+  void handle() override;
+  uint32_t marioID;
+};
 
-void handleUserClickButton(const Event &event);
+struct MarioJumpOnGoomba : public Event {
+  MarioJumpOnGoomba(uint32_t player, uint32_t enemy)
+      : MarioID(player), EnemyID(enemy) {}
+  void handle() override;
+  uint32_t MarioID;
+  uint32_t EnemyID;
+};
 
 class EventQueue {
 public:
-  void registerHandler(EventType type,
-                       std::function<void(const Event &)> handler);
-  //
-  void pushEvent(const Event &event);
+  void pushEvent(Unique<Event> &e);
+  void pushEvent(Unique<Event> e);
   void processAllEvents();
   void reset();
   static EventQueue &getInstance();
@@ -47,8 +41,5 @@ private:
   EventQueue &operator=(const EventQueue &) = delete;
 
 private:
-  std::queue<Event> eventQueue;
-  std::map<EventType, std::function<void(const Event &)>> eventHandlers;
+  std::queue<Unique<Event>> eventQueue;
 };
-
-void produceEvents(EventQueue &eventQueue);

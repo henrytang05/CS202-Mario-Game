@@ -5,27 +5,6 @@
 #include "EventManager.h"
 #include "System/System.h"
 
-void PlayerSystem::onMarioJumpOnGoomba(const Event &event) {
-  ASSERT(event.type == EventType::MarioJumpOnGoomba);
-  const auto &MJOG = std::get<MarioJumpOnGoombaEvent>(event.data);
-  EntityManager &EM = EntityManager::getInstance();
-  auto _mario = EM.getEntityPtr(MJOG.marioID);
-  auto _goomba = EM.getEntityPtr(MJOG.goombaID);
-
-  ASSERT(!_mario.expired());
-  ASSERT(!_goomba.expired());
-
-  auto mario = _mario.lock();
-  auto goomba = _goomba.lock();
-
-  goomba->getComponent<TextureComponent>().changeState("Die");
-}
-
-void PlayerSystem::configure() {
-  EventQueue &EQ = EventQueue::getInstance();
-  EQ.registerHandler(EventType::MarioJumpOnGoomba, this->onMarioJumpOnGoomba);
-}
-
 void PlayerSystem::update(float dt) {
   EntityManager &EM = EntityManager::getInstance();
   auto Entities = EM.getHasAll<PlayerTag>();
@@ -41,6 +20,9 @@ void PlayerSystem::update(float dt) {
     bool keyRight = IsKeyDown(KEY_RIGHT);
     bool keyUp = IsKeyDown(KEY_UP);
     bool keyDown = IsKeyDown(KEY_DOWN);
+    if (state.getState() == "DEATH") {
+      return;
+    }
     if (state.getState() != "JUMPING" && state.getState() != "DROPPING") {
       if (std::fabs(velocity.x) < playerConstant.MIN_WALKING_VELO) {
         velocity.x = 0.0f;
@@ -164,17 +146,5 @@ void PlayerSystem::update(float dt) {
     tEntity.lock()->getComponent<TextureComponent>().changeState(
         state.getCurrentState());
     tEntity.lock()->getComponent<TransformComponent>().setVelocity(velocity);
-
-    auto below = tEntity.lock()->getComponent<CollisionComponent>().getBelow();
-    if (!below.expired()) {
-      auto belowEntity = below.lock();
-      if (belowEntity->hasComponent<EnemyTag>()) {
-        EventQueue &EQ = EventQueue::getInstance();
-        Event event(EventType::MarioJumpOnGoomba,
-                    MarioJumpOnGoombaEvent{tEntity.lock()->getID(),
-                                           belowEntity->getID()});
-        EQ.pushEvent(event);
-      }
-    }
   }
 }

@@ -1,79 +1,9 @@
 #include "GameObject.h"
+
 #include "Components/BlockTrigger.h"
 #include "Components/Component.h"
 #include "Components/Components_include.h"
 #include "EntityManager.h"
-
-NormalBlock::NormalBlock(Vector2 position) : AbstractEntity("NormalBlock") {
-  initEntity();
-  init(position);
-}
-
-void NormalBlock::init(Vector2 position) {
-  Vector2 size({16, 16});
-  addComponent<PositionComponent>(position);
-  addComponent<BoundingBoxComponent>(size);
-  addComponent<TextureComponent>();
-  getComponent<TextureComponent>().addTexture(
-      "Normal", TextureManager::getInstance().getTexture("NormalBlock"));
-}
-
-// void NormalBlock::draw() {
-//   ASSERT(hasComponent<TextureComponent>());
-//   getComponent<TextureComponent>().drawTexture("Normal");
-// }
-//
-// void NormalBlock::update(float deltaTime) {}
-//
-BrokenBlock::BrokenBlock(Vector2 position) : AbstractEntity("BrokenBlock") {
-  initEntity();
-  init(position);
-}
-
-void BrokenBlock::init(Vector2 position) {
-  Vector2 size({16, 16});
-  addComponent<PositionComponent>(position);
-  addComponent<BoundingBoxComponent>(size);
-  addComponent<BlockTriggerComponent>();
-  addComponent<TransformComponent>((Vector2){0.0f, 0.0f});
-  addComponent<TextureComponent>();
-  getComponent<TextureComponent>().addTexture(
-      "Normal", TextureManager::getInstance().getTexture("BrokenBlock"));
-}
-//
-// void BrokenBlock::draw() {
-//   ASSERT(hasComponent<TextureComponent>());
-//   getComponent<TextureComponent>().drawTexture("Normal");
-// }
-//
-// void BrokenBlock::update(float deltaTime) {}
-
-HardBlock::HardBlock(Vector2 position) : AbstractEntity("HardBlock") {
-  initEntity();
-  init(position);
-}
-
-void HardBlock::init(Vector2 position) {
-  Vector2 size({16, 16});
-  addComponent<PositionComponent>(position);
-  addComponent<BoundingBoxComponent>(size);
-  addComponent<TextureComponent>();
-  getComponent<TextureComponent>().addTexture(
-      "Normal", TextureManager::getInstance().getTexture("HardBlock"));
-}
-//
-// void HardBlock::draw() {
-//   ASSERT(hasComponent<TextureComponent>());
-//   getComponent<TextureComponent>().drawTexture("Normal");
-// }
-
-// void HardBlock::update(float deltaTime) {}
-
-// GroundBlock::GroundBlock(Vector2 position) : AbstractEntity("GroundBlock") {
-//   initEntity();
-//   init(position);
-// }
-
 Weak<AbstractEntity> createGroundBlock(Vector2 position) {
   EntityManager &EM = EntityManager::getInstance();
   Shared<AbstractEntity> entity = EM.createEntity("GroundBlock").lock();
@@ -82,50 +12,60 @@ Weak<AbstractEntity> createGroundBlock(Vector2 position) {
   entity->addComponent<PositionComponent>(position);
   entity->addComponent<BoundingBoxComponent>(size);
   entity->addComponent<TextureComponent>();
-  entity->getComponent<TextureComponent>().addTexture(
-      "Normal", TextureManager::getInstance().getTexture("GroundBlock"));
+  entity->getComponent<TextureComponent>().addTexture("Normal", TextureManager::getInstance().getTexture("GroundBlock"));
 
   return entity;
 }
 
-// void GroundBlock::init(Vector2 position) {
-//   Vector2 size({16, 16});
-//   addComponent<PositionComponent>(position);
-//   addComponent<BoundingBoxComponent>(size);
-//   addComponent<TextureComponent>();
-//   getComponent<TextureComponent>().addTexture(
-//       "Normal", TextureManager::getInstance().getTexture("GroundBlock"));
-// }
-
-// void GroundBlock::draw() {
-//   ASSERT(hasComponent<TextureComponent>());
-//   getComponent<TextureComponent>().drawTexture("Normal");
-// }
-//
-// void GroundBlock::update(float deltaTime) {}
-
-QuestionBlock::QuestionBlock(Vector2 position)
-    : AbstractEntity("QuestionBlock") {
-  initEntity();
-  init(position);
-}
-
-void QuestionBlock::init(Vector2 position) {
+Weak<AbstractEntity> createBrokenBlock(Vector2 position) {
   Vector2 size({16, 16});
-  addComponent<PositionComponent>(position);
-  addComponent<BoundingBoxComponent>(size);
-  addComponent<TextureComponent>();
-  getComponent<TextureComponent>().addTexture(
-      "Normal", TextureManager::getInstance().getTexture("QuestionBlock"));
+  EntityManager &EM = EntityManager::getInstance();
+  Shared<AbstractEntity> entity = EM.createEntity("BrokenBlock").lock();
+  entity->addComponent<PositionComponent>(position);
+  entity->addComponent<BoundingBoxComponent>(size);
+  entity->addComponent<BlockTriggerComponent>();
+  entity->addComponent<TransformComponent>((Vector2){0.0f, 0.0f});
+  entity->addComponent<TextureComponent>();
+  entity->getComponent<TextureComponent>().addTexture("Normal", TextureManager::getInstance().getTexture("BrokenBlock"));
+  return entity;
 }
 
-// void QuestionBlock::draw() {
-//   ASSERT(hasComponent<TextureComponent>());
-//   getComponent<TextureComponent>().drawTexture("Normal");
-// }
-//
-// void QuestionBlock::update(float deltaTime) {}
+Weak<AbstractEntity> createHardBlock(Vector2 position) {
+  Vector2 size({16, 16});
+  EntityManager &EM = EntityManager::getInstance();
+  Shared<AbstractEntity> entity = EM.createEntity("HardBlock").lock();
 
+  entity->addComponent<PositionComponent>(position);
+  entity->addComponent<BoundingBoxComponent>(size);
+  entity->addComponent<TextureComponent>();
+  entity->getComponent<TextureComponent>().addTexture("Normal", TextureManager::getInstance().getTexture("HardBlock"));
+
+  return entity;
+}
+Weak<AbstractEntity> createNormalBlock(Vector2 position) {
+  Vector2 size({16, 16});
+  EntityManager &EM = EntityManager::getInstance();
+  Shared<AbstractEntity> entity = EM.createEntity("NormalBlock").lock();
+
+  entity->addComponent<PositionComponent>(position);
+  entity->addComponent<BoundingBoxComponent>(size);
+  entity->addComponent<TextureComponent>();
+  entity->getComponent<TextureComponent>().addTexture("Normal", TextureManager::getInstance().getTexture("NormalBlock"));
+
+  return entity;
+}
+Weak<AbstractEntity> createQuestionBlock(Vector2 position) {
+  Vector2 size({16, 16});
+  EntityManager &EM = EntityManager::getInstance();
+  Shared<AbstractEntity> entity = EM.createEntity("QuestionBlock").lock();
+  entity->addComponent<PositionComponent>(position);
+  entity->addComponent<BoundingBoxComponent>(size);
+  entity->addComponent<BlockTriggerComponent>();
+  entity->addComponent<TransformComponent>((Vector2){0.0f, 0.0f});
+  entity->addComponent<TextureComponent>();
+  entity->getComponent<TextureComponent>().addTexture("Normal", TextureManager::getInstance().getTexture("QuestionBlock"));
+  return entity;
+}
 Pipe::Pipe(Vector2 position, Vector2 size) : AbstractEntity("Pipe") {
   initEntity();
   init(position, {32, 128});
@@ -134,6 +74,7 @@ Pipe::Pipe(Vector2 position, Vector2 size) : AbstractEntity("Pipe") {
 void Pipe::init(Vector2 position, Vector2 size) {
   addComponent<PositionComponent>(position);
   addComponent<BoundingBoxComponent>(size);
+  addComponent<TextureComponent>().addTexture("Normal", TextureManager::getInstance().getTexture("Pipe"));
   std::cerr << "create pipe" << std::endl;
 }
 // void Pipe::draw() {

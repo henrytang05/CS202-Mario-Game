@@ -7,62 +7,10 @@ using json = nlohmann::json;
 // typedef AbstractEntity GroundBlock;
 
 Weak<AbstractEntity> createGroundBlock(Vector2 position);
-
-// Derived class for a normal block
-class NormalBlock : public AbstractEntity {
-private:
-  bool isCollision = false;
-
-public:
-  NormalBlock(Vector2 position);
-  ~NormalBlock() = default;
-  void init(Vector2 position);
-};
-
-// Derived class for a broken block
-class BrokenBlock : public AbstractEntity {
-private:
-  bool isCollision = false;
-
-public:
-  BrokenBlock(Vector2 position);
-  ~BrokenBlock() = default;
-  void init(Vector2 position);
-};
-
-// Derived class for a hard block
-class HardBlock : public AbstractEntity {
-private:
-  bool isCollision = false;
-
-public:
-  HardBlock(Vector2 position);
-  ~HardBlock() = default;
-  void init(Vector2 position);
-};
-
-// Derived class for a ground block
-// class GroundBlock : public AbstractEntity {
-// private:
-//   bool isCollision = false;
-//
-// public:
-//   GroundBlock(Vector2 position);
-//   ~GroundBlock() = default;
-//   void init(Vector2 position);
-// };
-//
-// Derived class for a question block
-class QuestionBlock : public AbstractEntity {
-private:
-  bool isCollision = false;
-
-public:
-  QuestionBlock(Vector2 position);
-  ~QuestionBlock() = default;
-  void init(Vector2 position);
-};
-
+Weak<AbstractEntity> createBrokenBlock(Vector2 position);
+Weak<AbstractEntity> createHardBlock(Vector2 position);
+Weak<AbstractEntity> createNormalBlock(Vector2 position);
+Weak<AbstractEntity> createQuestionBlock(Vector2 position);
 // Derived class for a pipe
 class Pipe : public AbstractEntity {
 private:

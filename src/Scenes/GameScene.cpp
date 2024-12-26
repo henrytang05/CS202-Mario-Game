@@ -20,7 +20,7 @@
 #include "Scenes/GuideScene.h"
 class TextureComponent;
 namespace SceneSpace {
-
+int GameScene::lives = 3;
 GameScene::GameScene() : Scene(), EM(EntityManager::getInstance()) {
   // TODO: remove this later
   entityFactory = std::make_unique<EntityFactory>(EM);
@@ -32,6 +32,7 @@ GameScene::GameScene() : Scene(), EM(EntityManager::getInstance()) {
   Shared<PlayerSystem> playerSystem = std::make_shared<PlayerSystem>();
   Shared<CollisionHandlingSystem> collisionHandlingSystem =
       std::make_shared<CollisionHandlingSystem>();
+  Shared<BlockSystem> blockSystem = std::make_shared<BlockSystem>();
   systems.push_back(playerSystem);
   systems.push_back(collisionSystem);
   systems.push_back(transformSystem);
@@ -43,17 +44,15 @@ GameScene::GameScene() : Scene(), EM(EntityManager::getInstance()) {
   update_systems.push_back(collisionSystem);
   update_systems.push_back(transformSystem);
   update_systems.push_back(collisionHandlingSystem);
+  update_systems.push_back(blockSystem);
   draw_systems.push_back(animationSystem);
   update_systems.push_back(swingSystem);
-  configure_systems.push_back(playerSystem);
-  configure_systems.push_back(collisionHandlingSystem);
-  for(auto &system : configure_systems)
-    system.lock()->configure();
+
 }
 
 void GameScene::init() {
-  GuideButton = new GUI::ImageButton(100, 20, "./assets/GuideButton.png",
-                                      "./assets/Hover_GuideButton.png");
+  // GuideButton = new GUI::ImageButton(100, 20, "./assets/GuideButton.png",
+  //                                     "./assets/Hover_GuideButton.png");
   time = 360.f;
 
   // create player type?
@@ -69,13 +68,13 @@ void GameScene::init() {
   camera.target.y = 784.0f - 186.0f;
   camera.zoom = 2.0f;
   SoundCtrl.PlayGroundTheme();
-  loadResources();
 }
 
 GameScene::~GameScene() {
 #ifdef _DEBUG
   Log("GameScene destroyed");
 #endif
+  EM.reset();
 }
 void GameScene::loadResources() {
   // Loading BackGround
@@ -97,15 +96,19 @@ void GameScene::draw() {
   EndMode2D();
   DrawText(TextFormat("Time: %03i", (int)time), 1200, 35, GAMEPLAY_TEXT_SIZE,
            WHITE);
-  GuideButton->draw();
+  DrawText(TextFormat("Lives: %03i", (int)lives), 1200 - 35 * 6, 35,
+           GAMEPLAY_TEXT_SIZE, WHITE);
 }
 Unique<Scene> GameScene::updateScene(float deltaTime) {
   this->update(deltaTime);
-  if (player.lock()->isActive() == false) {
-    SoundCtrl.Pause();
-  }
-  if (gameOver) {
-    return make_unique<SceneSpace::IntroScene>();
+  auto players = EM.getHasAll<PlayerTag>();
+  if (players.empty()) {
+    lives -= 1;
+    if (lives == 0) {
+      lives = 3;
+      return make_unique<SceneSpace::IntroScene>();
+    }
+    return make_unique<SceneSpace::GameScene>();
   }
   return nullptr;
 }

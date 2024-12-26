@@ -6,5 +6,4 @@
 class PlayerTag : public Component {};
 class EnemyTag : public Component {};
 class AITag : public Component {};
-
 #endif // TAG_COMPONENT_H

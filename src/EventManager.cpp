@@ -1,40 +1,61 @@
 #include "EventManager.h"
-void handleMarioJumpOnGoomba(const Event &event) {
-  const auto &MJOG = std::get<MarioJumpOnGoombaEvent>(event.data);
-  std::cout << "Mario (" << MJOG.marioID << ") jumped on Goomba ("
-            << MJOG.goombaID << ").\n";
+#include "Components/Components_include.h"
+#include "System/System.h"
+#include "globals.h"
+#include "pch.h"
+
+void MarioDieEvent::handle() {
+  EntityManager &EM = EntityManager::getInstance();
+  auto _mario = EM.getEntityPtr(marioID);
+  ASSERT(!_mario.expired());
+
+  auto mario = _mario.lock();
+  if (mario->getComponent<CharacterStateComponent>().getState() == "DEATH")
+    return;
+  mario->getComponent<BoundingBoxComponent>().setSize({0.0f, 0.0f});
+  mario->getComponent<CharacterStateComponent>().setEnumState("DEATH");
+  mario->getComponent<CharacterStateComponent>().setSizeState("SMALL");
+  mario->getComponent<TextureComponent>().changeState(
+      mario->getComponent<CharacterStateComponent>().getCurrentState());
+  mario->getComponent<TransformComponent>().setVelocity({0.0f, -240.0f});
+  mario->getComponent<MarioSoundComponent>().PlayMarioDieEffect();
 }
 
-void handleUserClickButton(const Event &event) {
-  const auto &UCB = std::get<UserClickButtonEvent>(event.data);
-  std::cout << "User clicked button (" << UCB.buttonID << ").\n";
+void MarioJumpOnGoomba::handle() {
+  EntityManager &EM = EntityManager::getInstance();
+  auto _mario = EM.getEntityPtr(MarioID);
+  auto _goomba = EM.getEntityPtr(EnemyID);
+
+  ASSERT(!_mario.expired());
+  ASSERT(!_goomba.expired());
+
+  auto mario = _mario.lock();
+  auto goomba = _goomba.lock();
+  goomba->getComponent<TextureComponent>().changeState("Die");
+  goomba->getComponent<TransformComponent>().setVelocity({0.0f, 0.0f});
+  mario->getComponent<CharacterStateComponent>().setEnumState("JUMPING");
+  mario->getComponent<TransformComponent>().setVelocity(
+      {mario->getComponent<TransformComponent>().x, -180.0f});
 }
 
-void EventQueue::registerHandler(EventType type,
-                                 std::function<void(const Event &)> handler) {
-  eventHandlers[type] = handler;
-}
+void EventQueue::pushEvent(Unique<Event> &e) { eventQueue.push(std::move(e)); }
 
-void EventQueue::pushEvent(const Event &event) { eventQueue.push(event); }
+void EventQueue::pushEvent(Unique<Event> e) { eventQueue.push(std::move(e)); }
 
 void EventQueue::processAllEvents() {
   while (!eventQueue.empty()) {
-    Event event = eventQueue.front();
+    Unique<Event> event = std::move(eventQueue.front());
     eventQueue.pop();
 
-    EventType type = event.type;
-    eventHandlers[type](event);
+    event->handle();
   }
 }
 
-void produceEvents(EventQueue &eventQueue) {
-  eventQueue.pushEvent(
-      Event(EventType::MarioJumpOnGoomba, MarioJumpOnGoombaEvent({1, 2})));
-  eventQueue.pushEvent(
-      Event(EventType::UserClickButton, UserClickButtonEvent({1})));
+void EventQueue::reset() {
+  while (!eventQueue.empty()) {
+    eventQueue.pop();
+  }
 }
-
-void EventQueue::reset() { eventQueue = std::queue<Event>(); }
 
 EventQueue &EventQueue::getInstance() {
   static EventQueue instance;

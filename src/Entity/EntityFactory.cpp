@@ -15,8 +15,7 @@ Weak<AbstractEntity> EntityFactory::createMario() { return initMario(); }
 Weak<AbstractEntity> EntityFactory::createLuigi() { return initLuigi(); }
 Weak<AbstractEntity> EntityFactory::createGoomba(Vector2 position, Vector2 size) { return initGoomba(position, size); }
 
-Weak<AbstractEntity> EntityFactory::createEnemy(Vector2 position,
-                                                Vector2 size) {
+Weak<AbstractEntity> EntityFactory::createEnemy(Vector2 position, Vector2 size) {
   return initGoomba(position, size);
 }
 
@@ -27,16 +26,21 @@ Weak<AbstractEntity> EntityFactory::createBlock(std::string type,
   std::cerr << "Still good get into createBlock" << std::endl;
   Weak<AbstractEntity> block;
   if (type == "NormalBlock") {
-    block = std::make_shared<NormalBlock>(position);
-  } else if (type == "BrokenBlock") {
-    block = std::make_shared<BrokenBlock>(position);
-  } else if (type == "HardBlock") {
-    block = std::make_shared<HardBlock>(position);
-  } else if (type == "GroundBlock") {
+    block = createNormalBlock(position);
+  } 
+  else if (type == "BrokenBlock") {
+    block = createBrokenBlock(position);
+  } 
+  else if (type == "HardBlock") {
+    block = createHardBlock(position);
+  } 
+  else if (type == "GroundBlock") {
     block = createGroundBlock(position);
-  } else if (type == "QuestionBlock") {
-    block = std::make_shared<QuestionBlock>(position);
-  } else {
+  } 
+  else if (type == "QuestionBlock") {  
+    block = createQuestionBlock(position);
+  } 
+  else {
     throw std::runtime_error("Block type not found");
   }
   return block;

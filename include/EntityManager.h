@@ -196,12 +196,12 @@ inline T &EntityManager::addComponent(AbstractEntity *entity,
     throw std::runtime_error("Entity already has component");
   }
 
-  auto bitset = entityBitsetMap[entity->getID()];
+  auto &bitset = entityBitsetMap[entity->getID()];
 
   EntityID eid = entity->getID();
 
   // remove from old bitsetEntityMap
-  bitsetEntityMap[bitset].erase(bitsetEntityMap[bitset].find(eid));
+  bitsetEntityMap[bitset].erase(eid);
 
   // add to new bitsetEntityMap
   bitset[getComponentTypeID<T>()] = true;
@@ -216,8 +216,7 @@ inline T &EntityManager::addComponent(AbstractEntity *entity,
   components.back().setEntityManager(this);
 
   size_t index = componentsArr.components.size() - 1;
-  std::array<ComponentIDType, maxEntity> &ECM =
-      componentsArr.entityComponentIndexMap;
+  std::array<ComponentIDType, maxEntity> &ECM = componentsArr.entityComponentIndexMap;
   ECM[eid] = index;
 
   T &ret = componentsArr.components.at(index);
@@ -278,12 +277,12 @@ inline void EntityManager::removeComponent(AbstractEntity *entity) {
 
   ComponentArray<T> &componentsArr = *getComponentsArray<T>();
   std::vector<T> &components = componentsArr.components;
+  size_t index = componentsArr.entityComponentIndexMap[eid];
   auto &ECIM = componentsArr.entityComponentIndexMap;
-  size_t index = ECIM[eid];
-  std::swap(components[index], components.back());
+  componentsArr.components[index] = std::move(components.back());
 
   for (size_t i = 0; i < ECIM.size(); i++) {
-    if (ECIM[i] != components.size() - 1)
+    if (ECIM[i] != (int)components.size() - 1)
       continue;
     ECIM[i] = index;
     break;
@@ -292,7 +291,6 @@ inline void EntityManager::removeComponent(AbstractEntity *entity) {
   components.pop_back();
   componentsArr.entityComponentIndexMap[eid] = -1;
 }
-
 template <typename T>
 inline void EntityManager::removeComponent(Shared<AbstractEntity> entity) {
   removeComponent<T>(entity.get());

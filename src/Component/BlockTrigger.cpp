@@ -75,29 +75,40 @@ TriggerBrokenBlockWhenHitByLarge::TriggerBrokenBlockWhenHitByLarge(Vector2 _fixe
     sumFrame = 0.0f;
 }
 
-TriggerBehaviour *TriggerBrokenBlockWhenHitByLarge::trigger(
-    AbstractEntity *entity, float deltaTime
-) {
-    TriggerBehaviour *retVal = this;
+TriggerBrokenBlockWhenHitByLarge::TriggerBrokenBlockWhenHitByLarge() {
+  sumFrame = 0.0f;
+}
+
+TriggerBrokenBlockWhenHitByLarge::TriggerBrokenBlockWhenHitByLarge(
+    Vector2 _fixedPosition) {
+  fixedPosition = _fixedPosition;
+  sumFrame = 0.0f;
+}
+
+TriggerBehaviour *TriggerBrokenBlockWhenHitByLarge::trigger(AbstractEntity *entity, float deltaTime) {
+  TriggerBehaviour *retVal = this;
+  sumFrame += deltaTime;
+  if (sumFrame <= 0.1f) {
+    entity->modifyComponent<TextureComponent>();
+    vector<Texture2D> textures;
+    textures.push_back(
+        LoadTextureFromImage(LoadImage("assets/Block/Pieces1.png")));
+    textures.push_back(
+        LoadTextureFromImage(LoadImage("assets/Block/Pieces2.png")));
+    textures.push_back(
+        LoadTextureFromImage(LoadImage("assets/Block/Pieces3.png")));
+    textures.push_back(
+        LoadTextureFromImage(LoadImage("assets/Block/Pieces4.png")));
+    entity->getComponent<TextureComponent>().addTexture("Normal", textures, 0.1f, true);
+    entity->getComponent<PositionComponent>().setPosition(fixedPosition);
+    entity->getComponent<TextureComponent>().changeState("Normal");
+  } 
+  else if (sumFrame >= 0.2f) {
     entity->removeComponent<BoundingBoxComponent>();
-    sumFrame += deltaTime;
-    if (sumFrame <= 0.1f) {
-        entity->modifyComponent<TextureComponent>();
-        vector<Texture2D> textures;
-        textures.push_back(LoadTextureFromImage(LoadImage("assets/Block/Pieces1.png")));
-        textures.push_back(LoadTextureFromImage(LoadImage("assets/Block/Pieces2.png")));
-        textures.push_back(LoadTextureFromImage(LoadImage("assets/Block/Pieces3.png")));
-        textures.push_back(LoadTextureFromImage(LoadImage("assets/Block/Pieces4.png")));
-        entity->getComponent<TextureComponent>().addTexture(
-            "Normal", textures, 0.1f, true
-        );
-        entity->getComponent<PositionComponent>().setPosition(fixedPosition);
-        entity->getComponent<TextureComponent>().changeState("Normal");
-    } else if (sumFrame >= 0.2f) {
-        entity->removeComponent<TextureComponent>();
-        retVal = nullptr;
-    }
-    return retVal;
+    entity->removeComponent<TextureComponent>();
+    retVal = nullptr;
+  }
+  return retVal;
 }
 
 // QuestionBlock

@@ -71,8 +71,12 @@ Weak<AbstractEntity> EntityFactory::createMushroom(Vector2 position) {
   entity->addComponent<PositionComponent>(position);
   entity->addComponent<BoundingBoxComponent>(size);
   entity->addComponent<TextureComponent>().addTexture("Normal", TextureManager::getInstance().getTexture("Mushroom"));
+  entity->getComponent<TextureComponent>().addTexture("Left-Moving", TextureManager::getInstance().getTexture("Mushroom"));
+  entity->getComponent<TextureComponent>().addTexture("Right-Moving", TextureManager::getInstance().getTexture("Mushroom"));
+  entity->getComponent<TextureComponent>().changeState("Normal");
   entity->addComponent<AITag>();
-  entity->addComponent<TransformComponent>(Vector2{0.0f, -16.0f});
+  entity->addComponent<CollisionComponent>();
+  entity->addComponent<TransformComponent>(Vector2{50.0f, -16.0f});
   return entity;
 
 }

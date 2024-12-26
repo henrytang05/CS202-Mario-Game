@@ -133,9 +133,6 @@ TriggerBehaviour *TriggerQuestionBlock::trigger(AbstractEntity *entity,
   if (velocity.y <= -600.0f)
     velocity.y = -600.0f;
   if (sumFrame >= 0.3f) {
-    createHardBlock(fixedPosition);
-    entity->destroy();
-    retVal = nullptr;
     if(entity->hasComponent<PowerUpComponent>()) {
       if(entity->getComponent<PowerUpComponent>().powerUp)
       {
@@ -149,7 +146,10 @@ TriggerBehaviour *TriggerQuestionBlock::trigger(AbstractEntity *entity,
         EventQueue &EQ = EventQueue::getInstance();
         EQ.pushEvent(make_unique<CoinEvent>(entity->getComponent<PositionComponent>().getPosition()));
       }
-  }
+    }
+    createHardBlock(fixedPosition);
+    entity->destroy();
+    retVal = nullptr;
     return retVal;
   }
   entity->getComponent<TransformComponent>().setVelocity(velocity);

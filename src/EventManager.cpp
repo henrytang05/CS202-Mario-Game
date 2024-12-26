@@ -54,7 +54,7 @@ void PowerUpEvent::handle() {
   EntityManager &EM = EntityManager::getInstance();
   Unique<IFactory> entityFactory;
   entityFactory = std::make_unique<EntityFactory>(EM);
-  auto powerUp = entityFactory->createMushroom(Vector2{position.x, position.y+16.0f});
+  auto powerUp = entityFactory->createMushroom(Vector2{position.x, position.y - 16.0f});
 }
 
 void CoinEvent::handle() {

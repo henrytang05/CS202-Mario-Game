@@ -382,7 +382,7 @@ void CollisionHandlingSystem::handleAICollision(Weak<AbstractEntity> _entity) {
   if (right.lock())
     v.x = ENEMY_SPEED;
   if (below.lock() == nullptr)
-    v.y = 10.0f;
+    v.y = 50.0f;
   if (v.x < 0.0f)
     entity->getComponent<TextureComponent>().changeState("Left-Moving");
   if (v.x > 0.0f)

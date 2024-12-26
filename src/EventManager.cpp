@@ -134,30 +134,21 @@ void MarioJumpOnKoopa::handle()
 
   auto mario = _mario.lock();
   auto koopa = _koopa.lock();
-  if(koopa->getComponent<TextureComponent>().state == "Shell") {
+
+  if(koopa->getComponent<TextureComponent>().state == "Shell" || koopa->getComponent<TextureComponent>().state == "Shell-Moving") {
       koopa->getComponent<TextureComponent>().changeState("Die");
+      koopa->getComponent<TransformComponent>().setVelocity({0.0f, 0.0f});
       mario->getComponent<CharacterStateComponent>().setEnumState("JUMPING");
       mario->getComponent<TransformComponent>().setVelocity({mario->getComponent<TransformComponent>().x, -180.0f});
   }
   else {
-    koopa->modifyComponent<TextureComponent>();
-    koopa->getComponent<TextureComponent>().addTexture("Shell", LoadTexture("./assets/Koopa/Shell-Koopa-Idle.png"));
-    koopa->getComponent<TextureComponent>().addTexture("Die", LoadTexture("./assets/Koopa/Shell-Koopa-Idle.png"));
-    std::vector<Texture2D> textures;
-    textures.push_back(LoadTexture("./assets/Koopa/Shell-Koopa-Idle.png"));
-    textures.push_back(LoadTexture("./assets/Koopa/Shell-Koopa-Moving.png"));
-    textures.push_back(LoadTexture("./assets/Koopa/Shell-Koopa-Moving2.png"));
-    koopa->getComponent<TextureComponent>().addTexture("Left-Moving", textures);
-    std::reverse(textures.begin(), textures.end());
-    koopa->getComponent<TextureComponent>().addTexture("Right-Moving", textures);
-    koopa->removeComponent<EnemyTag>();
     koopa->getComponent<TextureComponent>().changeState("Shell");
-    
     koopa->getComponent<BoundingBoxComponent>().setSize(Vector2{16,16});
     koopa->getComponent<PositionComponent>().setPosition(koopa->getComponent<PositionComponent>().getPosition() + Vector2{0,11});
     koopa->getComponent<TransformComponent>().setVelocity({0.0f, 0.0f});
     mario->getComponent<CharacterStateComponent>().setEnumState("JUMPING");
     mario->getComponent<TransformComponent>().setVelocity({mario->getComponent<TransformComponent>().x, -180.0f});
+
   }
 }
 
@@ -173,10 +164,13 @@ void MarioTouchRightKoopa::handle()
   auto mario = _mario.lock();
   auto koopa = _koopa.lock();
 
-  if(koopa->getComponent<TextureComponent>().state == "Left-Moving" || koopa->getComponent<TextureComponent>().state == "Right-Moving") {
-    if(mario->getComponent<CharacterStateComponent>().getSize() == "LARGE") {
-      EventQueue &EQ = EventQueue::getInstance();
-      EQ.pushEvent(std::make_unique<MarioLargeToSmall>(MarioID));
-    }
+  if(koopa->getComponent<TextureComponent>().state == "Shell") {
+    koopa->getComponent<TextureComponent>().changeState("Shell-Moving");
+    koopa->getComponent<TransformComponent>().setVelocity({ENEMY_SPEED * 3, 0.0f});
+    mario->getComponent<PositionComponent>().setPosition(mario->getComponent<PositionComponent>().getPosition() + Vector2{-2,0});
+  }
+  else {
+    EventQueue &EQ = EventQueue::getInstance();
+    EQ.pushEvent(std::make_unique<MarioDieEvent>(MarioID));
   }
 }

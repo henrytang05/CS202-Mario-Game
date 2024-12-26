@@ -48,7 +48,7 @@ Weak<AbstractEntity> initKoopa(Vector2 position, Vector2 size) {
                                                      0.1f, true);
 
   koopa->getComponent<TextureComponent>().addTexture(
-      "Die", {LoadTexture(shellKoopaIdle.c_str())}, .3f, false);
+      "Die", {LoadTexture(shellKoopaIdle.c_str())}, 0.3f, false);
 
   textures = {
       LoadTexture(shellKoopaMoving.c_str()),

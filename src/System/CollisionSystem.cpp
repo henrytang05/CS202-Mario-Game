@@ -459,23 +459,78 @@ void CollisionHandlingSystem::handleAICollision(Weak<AbstractEntity> _entity) {
 
   auto &trans = entity->getComponent<TransformComponent>();
   Vector2 v = trans.getVelocity();
+
   if (left.lock()) {
-    v.x = -ENEMY_SPEED;
-    if(entity->getName() == "Koopa" && entity->hasComponent<EnemyTag>() == false && left.lock()->hasComponent<PlayerTag>()) {
-      entity->addComponent<EnemyTag>();
+    if(left.lock()->getName() == "Koopa" && left.lock()->getComponent<TextureComponent>().state == "Shell-Moving") {
+      entity->getComponent<TextureComponent>().changeState("Die");
+      v.x = 0.f;
+    }
+    else {
+      if(entity->getName() == "Koopa"){
+        std::string state = entity->getComponent<TextureComponent>().state;
+        if(state == "Shell" || state == "Shell-Moving") {
+          if(left.lock()->hasComponent<EnemyTag>()){
+            left.lock()->getComponent<TextureComponent>().changeState("Die");
+            left.lock()->getComponent<TransformComponent>().setVelocity({0,0});
+            v.x = ENEMY_SPEED * 3;
+          }
+          else {
+            v.x = - (ENEMY_SPEED * 3);
+            entity->getComponent<TextureComponent>().changeState("Shell-Moving");
+          }
+        }
+        else v.x = -ENEMY_SPEED;
+      }
+      else v.x = -ENEMY_SPEED; 
+      if(entity->getName() == "Koopa" && entity->hasComponent<EnemyTag>() == false && left.lock()->hasComponent<PlayerTag>()) {
+        entity->addComponent<EnemyTag>();
+      }
     }
   }
   if (right.lock()) {
-    v.x = ENEMY_SPEED;
-    if(entity->getName() == "Koopa" && entity->hasComponent<EnemyTag>() == false && right.lock()->hasComponent<PlayerTag>()) {
-      entity->addComponent<EnemyTag>();
+    if(right.lock()->getName() == "Koopa" && right.lock()->getComponent<TextureComponent>().state == "Shell-Moving") {
+      entity->getComponent<TextureComponent>().changeState("Die");
+      v.x = 0.f;
     }
+    else {
+      if(entity->getName() == "Koopa"){
+        std::string state = entity->getComponent<TextureComponent>().state;
+        if(state == "Shell" || state == "Shell-Moving") {
+          if(right.lock()->hasComponent<EnemyTag>()){
+            right.lock()->getComponent<TextureComponent>().changeState("Die");
+            right.lock()->getComponent<TransformComponent>().setVelocity({0,0});
+            v.x = - (ENEMY_SPEED * 3);
+          }
+          else {
+            v.x = (ENEMY_SPEED * 3);
+            entity->getComponent<TextureComponent>().changeState("Shell-Moving");
+          }
+        }
+        else v.x = ENEMY_SPEED;
+      }
+      else v.x = ENEMY_SPEED; 
+      if(entity->getName() == "Koopa" && entity->hasComponent<EnemyTag>() == false && right.lock()->hasComponent<PlayerTag>()) {
+        entity->addComponent<EnemyTag>();
+      }
+    }
+    
   }
   if (below.lock() == nullptr)
     v.y = 50.0f;
-  if (v.x < 0.0f)
-    entity->getComponent<TextureComponent>().changeState("Left-Moving");
-  if (v.x > 0.0f)
-    entity->getComponent<TextureComponent>().changeState("Right-Moving");
+  if(entity->getName() == "Koopa"){
+    if(entity->getComponent<TextureComponent>().state == "Shell-Moving") {}
+    else {
+      if (v.x < 0.0f)
+        entity->getComponent<TextureComponent>().changeState("Left-Moving");
+      if (v.x > 0.0f)
+        entity->getComponent<TextureComponent>().changeState("Right-Moving");
+    }
+  }
+  else {
+    if (v.x < 0.0f)
+      entity->getComponent<TextureComponent>().changeState("Left-Moving");
+    if (v.x > 0.0f)
+      entity->getComponent<TextureComponent>().changeState("Right-Moving");
+  }
   trans.setVelocity(v);
 }

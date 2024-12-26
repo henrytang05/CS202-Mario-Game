@@ -34,6 +34,22 @@ void MarioLargeToSmall::handle() {
   velocity.x = 0.0f;
   mario->getComponent<TextureComponent>().changeState(mario->getComponent<CharacterStateComponent>().getCurrentState());
 }
+void MarioSmallToLarge::handle() {
+  EntityManager &EM = EntityManager::getInstance();
+  auto _mario = EM.getEntityPtr(MarioID);
+
+  ASSERT(!_mario.expired());
+
+  auto mario = _mario.lock();
+  mario->getComponent<CharacterStateComponent>().setSizeState("LARGE");
+  auto &velocity = mario->getComponent<TransformComponent>();
+  auto &position = mario->getComponent<PositionComponent>();
+  auto &size = mario->getComponent<BoundingBoxComponent>();
+  size.setSize({16.0f, 28.0f});
+  position.y -= 10.0f;
+  velocity.x = 0.0f;
+  mario->getComponent<TextureComponent>().changeState(mario->getComponent<CharacterStateComponent>().getCurrentState());
+}
 void MarioJumpOnGoomba::handle() {
   EntityManager &EM = EntityManager::getInstance();
   auto _mario = EM.getEntityPtr(MarioID);

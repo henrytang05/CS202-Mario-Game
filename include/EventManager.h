@@ -31,6 +31,11 @@ struct MarioLargeToSmall : public Event {
   void handle() override;
   uint32_t MarioID;
 };
+struct MarioSmallToLarge : public Event {
+  MarioSmallToLarge(uint32_t player) : MarioID(player) {}
+  void handle() override;
+  uint32_t MarioID;
+};
 class EventQueue {
 public:
   void pushEvent(Unique<Event> &e);

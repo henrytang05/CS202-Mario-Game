@@ -6,6 +6,7 @@
 class PlayerTag : public Component {};
 class EnemyTag : public Component {};
 class AITag : public Component {};
+class PowerupTag : public Component {};
 class CoinInBlockTag : public Component {
 public:
     CoinInBlockTag(Vector2 pos) : position_fixed(pos) {} ;

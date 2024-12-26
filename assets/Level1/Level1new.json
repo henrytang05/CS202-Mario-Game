@@ -209,29 +209,6 @@
         }, 
         {
          "draworder":"topdown",
-         "id":29,
-         "name":"Mushroom",
-         "objects":[
-                {
-                 "gid":79,
-                 "height":16,
-                 "id":688,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":16,
-                 "x":160,
-                 "y":720
-                }],
-         "opacity":1,
-         "type":"objectgroup",
-         "visible":true,
-         "x":0,
-         "y":0
-        }, 
-        {
-         "draworder":"topdown",
          "id":16,
          "name":"GroundBlock",
          "objects":[
@@ -3757,12 +3734,12 @@
                         {
                          "name":"isCoin",
                          "type":"bool",
-                         "value":false
+                         "value":true
                         }, 
                         {
                          "name":"isMushroom",
                          "type":"bool",
-                         "value":true
+                         "value":false
                         }],
                  "rotation":0,
                  "type":"",
@@ -3877,28 +3854,28 @@
          "name":"Piranha",
          "objects":[
                 {
-                 "gid":80,
+                 "gid":81,
                  "height":32,
-                 "id":690,
+                 "id":692,
                  "name":"",
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":16,
-                 "x":407.667,
-                 "y":712
+                 "x":407.5,
+                 "y":711.583
                 }, 
                 {
-                 "gid":80,
+                 "gid":81,
                  "height":32,
-                 "id":691,
+                 "id":693,
                  "name":"",
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":16,
-                 "x":1608.18,
-                 "y":727.909
+                 "x":1607.2,
+                 "y":727.5
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -4325,6 +4302,30 @@
                  "width":16,
                  "x":2192,
                  "y":768
+                }, 
+                {
+                 "gid":78,
+                 "height":16,
+                 "id":694,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":80,
+                 "y":720
+                }, 
+                {
+                 "gid":83,
+                 "height":16,
+                 "id":696,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":960,
+                 "y":0
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -4463,7 +4464,7 @@
          "y":0
         }],
  "nextlayerid":30,
- "nextobjectid":692,
+ "nextobjectid":697,
  "orientation":"orthogonal",
  "properties":[
         {
@@ -4501,15 +4502,15 @@
         }, 
         {
          "firstgid":78,
-         "source":"Coin-1.json"
+         "source":"Coin.json"
         }, 
         {
-         "firstgid":79,
-         "source":"Mushroom.json"
-        }, 
-        {
-         "firstgid":80,
+         "firstgid":81,
          "source":"Piranha.json"
+        }, 
+        {
+         "firstgid":83,
+         "source":"Mushroom.json"
         }],
  "tilewidth":16,
  "type":"map",

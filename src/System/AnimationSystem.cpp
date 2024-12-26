@@ -24,7 +24,7 @@ void AnimationSystem::draw(float dt) {
       return;
     if (animation.elapsedTime >= animation.frameDelay) {     
       if(texture.state == "Die") {
-        EM.removeComponent<TextureComponent>(entity);    
+        entity->destroy();
         continue;
       }
     }

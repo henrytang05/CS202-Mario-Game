@@ -82,22 +82,6 @@ void PlayerSystem::update(float dt) {
               ->getComponent<MarioSoundComponent>()
               .PlayJumpSuperEffect();
       }
-
-      if (keyDown && std::fabs(velocity.x) < playerConstant.MIN_WALKING_VELO &&
-          state.getSize() == "LARGE" && state.getState() != "DUCKLING") {
-        state.setEnumState("DUCKLING");
-        tEntity.lock()->getComponent<BoundingBoxComponent>().setSize(
-            {16.0f, 16.0f});
-        tEntity.lock()->getComponent<PositionComponent>().setPosition(
-            {position.x, position.y + 13.0f});
-      }
-      if (IsKeyReleased(KEY_DOWN) && state.getState() == "DUCKLING") {
-        state.setEnumState("IDLE");
-        tEntity.lock()->getComponent<BoundingBoxComponent>().setSize(
-            {16.0f, 28.0f});
-        tEntity.lock()->getComponent<PositionComponent>().setPosition(
-            {position.x, position.y - 13.0f});
-      }
     } else {
       if (velocity.y < 0.0f && IsKeyDown(KEY_UP)) {
         velocity.y -=
@@ -142,8 +126,7 @@ void PlayerSystem::update(float dt) {
       if (std::fabs(velocity.x) < playerConstant.MIN_SKIDDING)
         state.setEnumState("IDLE");
     } else if (state.getState() != "JUMPING" &&
-               state.getState() != "DROPPING" &&
-               state.getState() != "DUCKLING") {
+               state.getState() != "DROPPING") {
       if (std::fabs(velocity.x) >= playerConstant.MIN_WALKING_VELO) {
         state.setEnumState("MOVING");
       } else {

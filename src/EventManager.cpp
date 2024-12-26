@@ -20,7 +20,20 @@ void MarioDieEvent::handle() {
   mario->getComponent<TransformComponent>().setVelocity({0.0f, -240.0f});
   mario->getComponent<MarioSoundComponent>().PlayMarioDieEffect();
 }
+void MarioLargeToSmall::handle() {
+  EntityManager &EM = EntityManager::getInstance();
+  auto _mario = EM.getEntityPtr(MarioID);
 
+  ASSERT(!_mario.expired());
+
+  auto mario = _mario.lock();
+  mario->getComponent<CharacterStateComponent>().setSizeState("SMALL");
+  auto &velocity = mario->getComponent<TransformComponent>();
+  auto &size = mario->getComponent<BoundingBoxComponent>();
+  size.setSize({16.0f, 20.0f});
+  velocity.x = 0.0f;
+  mario->getComponent<TextureComponent>().changeState(mario->getComponent<CharacterStateComponent>().getCurrentState());
+}
 void MarioJumpOnGoomba::handle() {
   EntityManager &EM = EntityManager::getInstance();
   auto _mario = EM.getEntityPtr(MarioID);

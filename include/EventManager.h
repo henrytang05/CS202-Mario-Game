@@ -26,7 +26,11 @@ struct MarioJumpOnGoomba : public Event {
   uint32_t MarioID;
   uint32_t EnemyID;
 };
-//Event so that Mushroom can be created
+struct MarioLargeToSmall : public Event {
+  MarioLargeToSmall(uint32_t player) : MarioID(player) {}
+  void handle() override;
+  uint32_t MarioID;
+};//Event so that Mushroom can be created
 struct PowerUpEvent : public Event {
   PowerUpEvent(Vector2 position) : position(position) {}
   void handle() override;

@@ -66,7 +66,7 @@ public:
       entityComponentIndexMap; // entityID : componentIndex
 };
 
-class AbstractEntity : public IUpdatable, public Subject {
+class AbstractEntity : public IUpdatable {
 private:
   bool active;       // check if entity is active
   uint32_t id;       // entity id

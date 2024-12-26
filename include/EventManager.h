@@ -9,6 +9,7 @@
 #include <string>
 #include <variant>
 #include "Entity/EntityFactory.h"
+#include "Components/Components_include.h"
 struct Event {
   virtual void handle() = 0;
 };

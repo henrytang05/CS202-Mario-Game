@@ -12,83 +12,14 @@
  "tiles":[
         {
          "id":0,
-         "objectgroup":
-            {
-             "draworder":"index",
-             "id":2,
-             "name":"",
-             "objects":[
-                    {
-                     "height":16,
-                     "id":1,
-                     "name":"",
-                     "rotation":0,
-                     "type":"",
-                     "visible":true,
-                     "width":10,
-                     "x":3,
-                     "y":0
-                    }],
-             "opacity":1,
-             "type":"objectgroup",
-             "visible":true,
-             "x":0,
-             "y":0
-            },
          "type":"Coin1"
         }, 
         {
          "id":1,
-         "objectgroup":
-            {
-             "draworder":"index",
-             "id":2,
-             "name":"",
-             "objects":[
-                    {
-                     "height":16,
-                     "id":1,
-                     "name":"",
-                     "rotation":0,
-                     "type":"",
-                     "visible":true,
-                     "width":8,
-                     "x":4,
-                     "y":0
-                    }],
-             "opacity":1,
-             "type":"objectgroup",
-             "visible":true,
-             "x":0,
-             "y":0
-            },
          "type":"Coin2"
         }, 
         {
          "id":2,
-         "objectgroup":
-            {
-             "draworder":"index",
-             "id":2,
-             "name":"",
-             "objects":[
-                    {
-                     "height":16,
-                     "id":1,
-                     "name":"",
-                     "rotation":0,
-                     "type":"",
-                     "visible":true,
-                     "width":4,
-                     "x":6,
-                     "y":0
-                    }],
-             "opacity":1,
-             "type":"objectgroup",
-             "visible":true,
-             "x":0,
-             "y":0
-            },
          "type":"Coin3"
         }],
  "tilewidth":16,

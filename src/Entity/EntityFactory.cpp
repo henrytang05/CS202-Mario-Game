@@ -75,9 +75,27 @@ Weak<AbstractEntity> EntityFactory::createMushroom(Vector2 position) {
   entity->getComponent<TextureComponent>().addTexture("Right-Moving", TextureManager::getInstance().getTexture("Mushroom"));
   entity->getComponent<TextureComponent>().changeState("Normal");
   entity->addComponent<AITag>();
+  entity->addComponent<CoinTag>(position);
   entity->addComponent<CollisionComponent>();
   entity->addComponent<TransformComponent>(Vector2{50.0f, -16.0f});
   return entity;
 
 }
 
+uint32_t EntityFactory::createCoin(Vector2 position) {
+  EntityManager &EM = EntityManager::getInstance();
+  Shared<AbstractEntity> entity = EM.createEntity("Coin").lock();
+  Vector2 size = {16,16};
+  entity->addComponent<PositionComponent>(position);
+  entity->addComponent<BoundingBoxComponent>(size);
+  entity->addComponent<TextureComponent>();
+  std::vector<Texture2D> textures;
+  textures.push_back(TextureManager::getInstance().getTexture("Coin1"));
+  textures.push_back(TextureManager::getInstance().getTexture("Coin2"));
+  textures.push_back(TextureManager::getInstance().getTexture("Coin3"));
+  entity->getComponent<TextureComponent>().addTexture("Normal", textures, 0.1f, true);
+  entity->getComponent<TextureComponent>().changeState("Normal");
+  //entity->addComponent<TransformComponent>(Vector2{50.0f, -16.0f});
+  return entity->getID();
+  
+}

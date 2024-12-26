@@ -19,6 +19,34 @@ void TransformSystem::update(float dt) {
     position.setPosition({x, y});
   }
 }
+// class CoinInBlockTag : public Component {
+//     CoinInBlockTag(Vector2 pos) : position_fixed(pos) {} ;
+//     CoinInBlockTag(float x, float y) : position_fixed({x, y}) {} ;
+//     CoinInBlockTag() : position_fixed({0, 0}) {} ;
+// private:
+//     Vector2 position_fixed;
+// };
+void CoinSystem::update(float dt) {
+  EntityManager &EM = EntityManager::getInstance();
+  auto Entities = EM.getHasAll<CoinInBlockTag, PositionComponent>();
+  for (auto tEntity : Entities) {
+    if (tEntity.expired())
+      throw std::runtime_error("Entity is expired");
+    auto entity = tEntity.lock();
+    auto &position = EM.getComponent<PositionComponent>(entity);
+    auto &coin = EM.getComponent<CoinInBlockTag>(entity);
+
+    if(position.y > coin.position_fixed.y - 20.0f) {
+      Vector2 position_change = position.getPosition();
+      position_change.y -= 16.0f * dt;
+      position.setPosition(position_change);
+    }
+    else {
+      entity->destroy();
+    }
+  }
+ 
+}
 
 void SwingSystem::update(float dt) {
   EntityManager &EM = EntityManager::getInstance();

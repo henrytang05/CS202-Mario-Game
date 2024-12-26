@@ -74,6 +74,8 @@ Pipe::Pipe(Vector2 position, Vector2 size) : AbstractEntity("Pipe") {
 void Pipe::init(Vector2 position, Vector2 size) {
   addComponent<PositionComponent>(position);
   addComponent<BoundingBoxComponent>(size);
+  addComponent<TextureComponent>().addTexture(
+      "Normal", TextureManager::getInstance().getTexture("Pipe"));
   std::cerr << "create pipe" << std::endl;
 }
 // void Pipe::draw() {

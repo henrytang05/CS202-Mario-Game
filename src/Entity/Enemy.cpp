@@ -1,59 +1,57 @@
 #include "Entity/Enemy.h"
+#include "Components/Components_include.h"
 
-#include "AbstractEntity.h"
-#include "Components/Collision.h"
-#include "Components/EnemyComponents.h"
-#include "Components/Gravity.h"
-#include "Components/Position.h"
-#include "Components/Texture.h"
-#include "Components/Transform.h"
-#include "globals.h"
-#include "raylib.h"
 
-Enemy::Enemy(std::string name) : AbstractEntity(name) {
-  // Initialize enemy
+// TODO: change to goomba
+Weak<AbstractEntity> initGoomba(Vector2 position, Vector2 size) {
+  EntityManager &EM = EntityManager::getInstance();
+  static int cnt = 1;
+  std::string name = "Goomba" + std::to_string(cnt++);
+
+  // TODO: change to make shared
+  Weak<AbstractEntity> rEnemy = EM.createEntity(name);
+  Shared<AbstractEntity> enemy = rEnemy.lock();
+
+  enemy->addComponent<CollisionComponent>();
+  enemy->addComponent<PositionComponent>(position);
+  enemy->addComponent<TransformComponent>(Vector2{-ENEMY_SPEED, 10});
+  enemy->addComponent<BoundingBoxComponent>(size);
+  enemy->addComponent<EnemyTag>();
+  enemy->addComponent<AITag>();
+  enemy->addComponent<TextureComponent>();
+
+  std::vector<Texture2D> textures{
+      LoadTexture("assets/Goomba/Goomba-Left-Idle.png"),
+      LoadTexture("assets/Goomba/Goomba-Left-Moving.png")};
+  enemy->getComponent<TextureComponent>().addTexture("Left-Moving", textures,
+                                                     0.1f, true);
+
+  enemy->getComponent<TextureComponent>().addTexture(
+      "Right-Moving",
+      {LoadTexture("assets/Goomba/Goomba-Right-Idle.png"),
+       LoadTexture("assets/Goomba/Goomba-Right-Moving.png")},
+      0.1f, true);
+
+  enemy->getComponent<TextureComponent>().addTexture(
+      "Die", {LoadTexture("assets/Goomba/Goomba-Die.png")}, .3f, false);
+
+  enemy->getComponent<TextureComponent>().changeState("Left-Moving");
+
+  return enemy;
 }
-void Enemy::update(float deltatime) {
-  for (auto &component : components) {
-    component->update(deltatime);
-  }
 
-  handleCollision();
-}
+void Goomba::changeState() {
+  auto collision = getComponent<CollisionComponent>();
+  auto _above = collision.getAbove();
+  if (_above.expired())
+    throw std::runtime_error("Entity is expired");
+  auto above = _above.lock();
 
-void Enemy::handleCollision() {
-  CollisionComponent &collision = getComponent<CollisionComponent>();
-  auto above = collision.getAbove();
-  auto below = collision.getBelow();
-  auto left = collision.getLeft();
-  auto right = collision.getRight();
-
-  auto &trans = getComponent<TransformComponent>();
-
-  Vector2 v = trans.getVelocity();
-  if (left.lock() && !left.lock()->hasComponent<EnemyTag>())
-    v.x = ENEMY_SPEED;
-  else if (right.lock() && !right.lock()->hasComponent<EnemyTag>())
-    v.x = -ENEMY_SPEED;
-
-  if (!below.lock()) {
-    if (getComponent<PositionComponent>().getY() > screenHeight) {
-      destroy();
-      getComponent<TextureComponent>().changeState("Die");
-    }
-  }
-  trans.setVelocity(v);
-  if (above.lock() != nullptr) {
-    if (above.lock()->hasComponent<PlayerTag>()) {
+  if (above != nullptr) {
+    if (above->hasComponent<PlayerTag>()) {
       destroy();
       getComponent<TextureComponent>().changeState("Die");
     }
   }
   getComponent<CollisionComponent>().reset();
-}
-
-void Enemy::draw() {
-  // for (auto &component : components) {
-  //   component->draw();
-  // }
 }

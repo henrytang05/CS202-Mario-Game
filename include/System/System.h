@@ -1,21 +1,86 @@
 #ifndef SYSTEM_H
 #define SYSTEM_H
 
-#include "AbstractEntity.h"
-class System {
+#include "Components/Collision.h"
+#include "EntityManager.h"
+#include "EventManager.h"
+#include "Interface.h"
+#include "pch.h"
 
+class System {
 public:
   virtual ~System() = default;
-  virtual void update(Shared<AbstractEntity> entity, float dt) = 0;
 };
 
-class TransformSystem : public System {
+class IDrawableSystem : public System {
 public:
-  void update(Shared<AbstractEntity> entity, float dt) override;
+  virtual ~IDrawableSystem() = default;
+  virtual void draw(float dt) = 0;
 };
 
-class AnimationSystem : public System {
-  void update(Shared<AbstractEntity> entity, float dt) override;
+class IUpdatableSystem : public System {
+public:
+  virtual ~IUpdatableSystem() = default;
+  virtual void update(float dt) = 0;
 };
 
+class TransformSystem : public IUpdatableSystem {
+public:
+  void update(float dt) override;
+};
+
+class AnimationSystem : public IDrawableSystem {
+public:
+  void draw(float dt) override;
+};
+
+class CollisionSystem : public IUpdatableSystem {
+public:
+  void update(float dt) override;
+
+private:
+  bool DynamicRectVsRect(const float deltaTime, const Rectangle &r_static,
+                         Vector2 &contact_point, Vector2 &contact_normal,
+                         float &contact_time, Weak<AbstractEntity> entity);
+  bool ResolveDynamicRectVsRect(const float deltaTime,
+                                Weak<AbstractEntity> r_static,
+                                Weak<AbstractEntity> entity);
+
+  void reset(CollisionComponent &cc);
+};
+
+bool RayVsRect(const Vector2 &ray_origin, const Vector2 &ray_dir,
+               const Rectangle &target, Vector2 &contact_point,
+               Vector2 &contact_normal, float &t_hit_near);
+
+class CollisionHandlingSystem : public IUpdatableSystem {
+public:
+  void configure();
+  void unconfigure();
+  void update(float dt) override;
+  void handleAICollision(Weak<AbstractEntity> entity);
+  void handlePlayerCollision(Weak<AbstractEntity> entity);
+  void handleEnemyCollision(Weak<AbstractEntity> entity);
+
+private:
+  void handlePlayerEnemyCollision(Weak<AbstractEntity> player,
+                                  Weak<AbstractEntity> enemy);
+  void handlePlayerCoinCollision(Weak<AbstractEntity> player,
+                                 Weak<AbstractEntity> coin);
+};
+
+class SwingSystem : public IUpdatableSystem {
+public:
+  void update(float dt) override;
+};
+
+class PlayerSystem : public IUpdatableSystem {
+public:
+  void configure();
+  void update(float dt) override;
+
+private:
+  static void onMarioJumpOnGoomba(const Event &event);
+  static void onUserClickButton(const Event &event);
+};
 #endif // SYSTEM_H

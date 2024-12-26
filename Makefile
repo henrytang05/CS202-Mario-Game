@@ -52,3 +52,26 @@ clean:
 	rm -rf $(BUILD)
 	rm -f $(TARGET)
 
+
+
+TEST_TARGET := MarioTest.exe
+TESTS := tests
+BUILD := build
+TEST_BUILD := $(BUILD)/tests
+TEST_FLAGS := -std=c++17 -I$(INCLUDE) -g -O0 -include $(PCH_H) -lgtest -lgtest_main -pthread
+TEST_SRCS := $(shell find $(TESTS) -type f -name '*.cpp')
+TEST_OBJS := $(subst $(TESTS)/,$(TEST_BUILD)/,$(addsuffix .o,$(basename $(TEST_SRCS))))
+
+
+$(TEST_BUILD)/%.o: $(TESTS)/%.cpp
+	@mkdir -p $(dir $@)
+	g++ $(TEST_FLAGS) -c $< -o $@
+
+test: FLAGS := $(TEST_FLAGS)
+test: $(TEST_OBJS) $(PCH_GCH)
+	g++ $(TEST_OBJS) -o $(TEST_TARGET) $(TEST_FLAGS)
+	./$(TEST_TARGET)
+
+clean_test: 
+	rm -rf $(TEST_BUILD)
+	rm -f $(TEST_TARGET)

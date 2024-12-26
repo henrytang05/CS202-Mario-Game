@@ -295,7 +295,7 @@ void CollisionHandlingSystem::handlePlayerCollision(Weak<AbstractEntity> _entity
     auto aboveBlock = cc.getAbove().lock();
     if (aboveBlock->getName() == "BrokenBlock") {
       if (entity->getComponent<CharacterStateComponent>().getSize() == "SMALL") {
-        aboveBlock->getComponent<BlockTriggerComponent>().setTrigger(new TriggerBrokenBlockWhenHitBySmall(aboveBlock->getComponent<PositionComponent>().getPosition()));
+        aboveBlock->getComponent<BlockTriggerComponent>().setTrigger(new TriggerBrokenBlockWhenHitByLarge(aboveBlock->getComponent<PositionComponent>().getPosition()));
         entity->getComponent<MarioSoundComponent>().PlayBumpEffect();
       } 
       else {

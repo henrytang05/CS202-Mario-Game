@@ -8,6 +8,7 @@
 
 class TriggerBehaviour {
 public:
+  virtual ~TriggerBehaviour() = default;
   virtual TriggerBehaviour *trigger(AbstractEntity* entity, float deltaTime) = 0;
 };
 

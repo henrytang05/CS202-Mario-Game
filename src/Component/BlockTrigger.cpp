@@ -75,7 +75,6 @@ TriggerBrokenBlockWhenHitByLarge::TriggerBrokenBlockWhenHitByLarge(
 
 TriggerBehaviour *TriggerBrokenBlockWhenHitByLarge::trigger(AbstractEntity *entity, float deltaTime) {
   TriggerBehaviour *retVal = this;
-  entity->removeComponent<BoundingBoxComponent>();
   sumFrame += deltaTime;
   if (sumFrame <= 0.1f) {
     entity->modifyComponent<TextureComponent>();
@@ -91,7 +90,9 @@ TriggerBehaviour *TriggerBrokenBlockWhenHitByLarge::trigger(AbstractEntity *enti
     entity->getComponent<TextureComponent>().addTexture("Normal", textures, 0.1f, true);
     entity->getComponent<PositionComponent>().setPosition(fixedPosition);
     entity->getComponent<TextureComponent>().changeState("Normal");
-  } else if (sumFrame >= 0.2f) {
+  } 
+  else if (sumFrame >= 0.2f) {
+    entity->removeComponent<BoundingBoxComponent>();
     entity->removeComponent<TextureComponent>();
     retVal = nullptr;
   }

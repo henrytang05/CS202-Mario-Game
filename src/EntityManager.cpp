@@ -120,6 +120,12 @@ void EntityManager::destroyEntity(uint32_t id) {
       componentArrays[i]->onEntityDestroyed(id);
     }
   }
+
+  entities[id]->deactivate();
+  entities[id].reset();
+  entities[id] = nullptr;
+  entityBitsetMap.erase(id);
+  bitsetEntityMap[entityBitsetMap[id]].erase(id);
 }
 
 void EntityManager::destroyEntity(std::string name) {

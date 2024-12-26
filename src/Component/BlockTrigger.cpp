@@ -1,5 +1,7 @@
 #include "Components/BlockTrigger.h"
+
 #include "Components/Components_include.h"
+#include "EntityManager.h"
 
 using namespace std;
 
@@ -23,7 +25,10 @@ void BlockTriggerComponent::setTrigger(TriggerBehaviour *_trigger) {
 }
 void BlockTriggerComponent::update(float deltaTime) {
   if (trigger) {
-    if (trigger->trigger(entity, deltaTime) == nullptr) {
+    EntityManager &EM = EntityManager::getInstance();
+    auto entity = EM.getEntityRef(this->entity->getID());
+    TriggerBehaviour *ptr = trigger->trigger(&entity, deltaTime);
+    if (ptr == nullptr) {
       delete trigger;
       trigger = nullptr;
     }
@@ -108,7 +113,6 @@ TriggerBehaviour *
 TriggerBrokenBlockWhenHitByLarge::trigger(AbstractEntity *entity,
                                           float deltaTime) {
   TriggerBehaviour *retVal = this;
-  entity->removeComponent<BoundingBoxComponent>();
   sumFrame += deltaTime;
   if (sumFrame <= 0.1f) {
     entity->modifyComponent<TextureComponent>();
@@ -126,6 +130,7 @@ TriggerBrokenBlockWhenHitByLarge::trigger(AbstractEntity *entity,
     entity->getComponent<PositionComponent>().setPosition(fixedPosition);
     entity->getComponent<TextureComponent>().changeState("Normal");
   } else if (sumFrame >= 0.2f) {
+    entity->removeComponent<BoundingBoxComponent>();
     entity->removeComponent<TextureComponent>();
     retVal = nullptr;
   }

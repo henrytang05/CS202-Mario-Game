@@ -1,4 +1,5 @@
 #include "Scenes/GameScene.h"
+#include "EventManager.h"
 
 #include <memory>
 
@@ -8,7 +9,6 @@
 #include "Components/Texture.h"
 #include "Entity/EnemySystem.h"
 #include "Entity/EntityFactory.h"
-#include "Entity/PlayableEntity.h"
 #include "EntityManager.h"
 #include "Logger.h"
 #include "Scenes/GuideScene.h"
@@ -19,7 +19,7 @@
 #include "raylib.h"
 class TextureComponent;
 namespace SceneSpace {
-
+int GameScene::lives = 3;
 GameScene::GameScene() : Scene(), EM(EntityManager::getInstance()) {
   // TODO: remove this later
   entityFactory = std::make_unique<EntityFactory>(EM);
@@ -30,22 +30,22 @@ GameScene::GameScene() : Scene(), EM(EntityManager::getInstance()) {
   Shared<PlayerSystem> playerSystem = std::make_shared<PlayerSystem>();
   Shared<CollisionHandlingSystem> collisionHandlingSystem =
       std::make_shared<CollisionHandlingSystem>();
+  Shared<BlockSystem> blockSystem = std::make_shared<BlockSystem>();
   systems.push_back(playerSystem);
   systems.push_back(collisionSystem);
   systems.push_back(transformSystem);
   systems.push_back(collisionHandlingSystem);
   systems.push_back(animationSystem);
-
+  systems.push_back(blockSystem);
   update_systems.push_back(playerSystem);
   update_systems.push_back(collisionSystem);
   update_systems.push_back(transformSystem);
   update_systems.push_back(collisionHandlingSystem);
+  update_systems.push_back(blockSystem);
   draw_systems.push_back(animationSystem);
 }
 
 void GameScene::init() {
-  GuideButton = new GUI::ImageButton(100, 20, "./assets/GuideButton.png",
-                                     "./assets/Hover_GuideButton.png");
   time = 360.f;
 
   // create player type?
@@ -61,13 +61,13 @@ void GameScene::init() {
   camera.target.y = 784.0f - 186.0f;
   camera.zoom = 2.0f;
   SoundCtrl.PlayGroundTheme();
-  loadResources();
 }
 
 GameScene::~GameScene() {
 #ifdef _DEBUG
   Log("GameScene destroyed");
 #endif
+  EM.reset();
 }
 void GameScene::loadResources() {
   // Loading BackGround
@@ -85,36 +85,33 @@ void GameScene::draw() {
   for (auto &system : draw_systems) {
     system.lock()->draw(dt);
   }
+
   EndMode2D();
   DrawText(TextFormat("Time: %03i", (int)time), 1200, 35, GAMEPLAY_TEXT_SIZE,
            WHITE);
-  GuideButton->draw();
+  DrawText(TextFormat("Lives: %03i", (int)lives), 1200 - 35 * 6, 35,
+           GAMEPLAY_TEXT_SIZE, WHITE);
 }
-} // namespace SceneSpace
-Unique<SceneSpace::Scene> SceneSpace::GameScene::updateScene(float deltaTime) {
+Unique<Scene> GameScene::updateScene(float deltaTime) {
   this->update(deltaTime);
-
-  Vector2 mousePos = GetMousePosition();
-  bool isLeftClick = IsMouseButtonPressed(MOUSE_BUTTON_LEFT);
-  GuideButton->update(mousePos, isLeftClick);
-  if (GuideButton->isPressed()) {
-    SoundCtrl.PlayTingSound();
-    return std::make_unique<SceneSpace::GuideScene>();
-  }
-
-  if (player.lock()->isActive()) {
-    SoundCtrl.Pause();
-  }
-  if (gameOver) {
-    return std::make_unique<IntroScene>();
+  if (player.lock()->hasComponent<PlayerTag>() == false) {
+    sleep(1);
+    lives -= 1;
+    if (lives == 0) {
+      lives = 3;
+      return make_unique<SceneSpace::IntroScene>();
+    }
+    return make_unique<SceneSpace::GameScene>();
   }
   return nullptr;
 }
-void SceneSpace::GameScene::update(float deltaTime) {
+void GameScene::update(float deltaTime) {
   time -= deltaTime;
   for (auto &system : update_systems) {
     system.lock()->update(deltaTime);
   }
+  EventQueue &eventQueue = EventQueue::getInstance();
+  eventQueue.processAllEvents();
 
   camera.target.x = player.lock()->getComponent<PositionComponent>().x;
   if (camera.target.x <= screenWidth / (2.0f * camera.zoom))
@@ -124,5 +121,5 @@ void SceneSpace::GameScene::update(float deltaTime) {
   SoundCtrl.Update((int)time);
 }
 
-bool SceneSpace::GameScene::isFinished() { return gameOver; }
-// namespace SceneSpace
+bool GameScene::isFinished() { return gameOver; }
+} // namespace SceneSpace

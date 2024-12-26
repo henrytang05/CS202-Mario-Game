@@ -2,6 +2,7 @@
 #include "Components/Position.h"
 #include "Components/Tags.h"
 #include "EntityManager.h"
+#include "EventManager.h"
 #include "System/System.h"
 
 void CollisionSystem::reset(CollisionComponent &cc) {
@@ -19,23 +20,26 @@ void CollisionSystem::update(float dt) {
       throw std::runtime_error("Entity is expired");
 
     auto entity = tentity.lock();
-
-    auto &cc = entity->getComponent<CollisionComponent>();
     std::vector<std::pair<int, float>> col;
     float t = 0, min_t = INFINITY;
     Vector2 cp, cn;
     for (int i = 0; i < (int)otherEntities.size(); i++) {
       if (*otherEntities[i].lock() == *entity)
-        continue;  
-      Vector2 position = otherEntities[i].lock()->getComponent<PositionComponent>().getPosition();
+        continue;
+      Vector2 position = otherEntities[i]
+                             .lock()
+                             ->getComponent<PositionComponent>()
+                             .getPosition();
       Vector2 size = otherEntities[i].lock()->getComponent<BoundingBoxComponent>().getSize();
       Vector2 velo = {0.0f, 0.0f};
-      if(otherEntities[i].lock()->hasComponent<TransformComponent>())
-        velo = otherEntities[i].lock()->getComponent<TransformComponent>().getVelocity();
-      Rectangle bbOtherEntity = (Rectangle){position.x + velo.x * dt,
-                                          position.y + velo.y * dt,
-                                          size.x + abs(velo.x) * dt, size.y + abs(velo.y) * dt};
-      if (DynamicRectVsRect(dt, bbOtherEntity, cp, cn, t, entity)) {
+      if (otherEntities[i].lock()->hasComponent<TransformComponent>())
+        velo = otherEntities[i]
+                   .lock()
+                   ->getComponent<TransformComponent>()
+                   .getVelocity();
+      Rectangle bbOtherEntity =
+          (Rectangle){position.x, position.y, size.x, size.y};
+      if (DynamicRectVsRect(dt, bbOtherEntity, cp, cn, t, entity, velo)) {
         col.push_back(std::make_pair(i, t));
       }
     }
@@ -52,21 +56,20 @@ void CollisionSystem::update(float dt) {
 bool CollisionSystem::ResolveDynamicRectVsRect(const float deltaTime,
                                                Weak<AbstractEntity> r_static,
                                                Weak<AbstractEntity> entity) {
-  EntityManager &EM = EntityManager::getInstance();
   CollisionComponent &cc = entity.lock()->getComponent<CollisionComponent>();
   Vector2 contact_point, contact_normal;
   float contact_time = 0.0f;
 
-  Vector2 position = r_static.lock()->getComponent<PositionComponent>().getPosition();
-  Vector2 size = r_static.lock()->getComponent<BoundingBoxComponent>().getSize();
+  Vector2 position =
+      r_static.lock()->getComponent<PositionComponent>().getPosition();
+  Vector2 size =
+      r_static.lock()->getComponent<BoundingBoxComponent>().getSize();
   Vector2 velo = {0.0f, 0.0f};
-  if(r_static.lock()->hasComponent<TransformComponent>())
+  if (r_static.lock()->hasComponent<TransformComponent>())
     velo = r_static.lock()->getComponent<TransformComponent>().getVelocity();
-  Rectangle bbOtherEntity = (Rectangle){position.x + velo.x * deltaTime,
-                                       position.y + velo.y * deltaTime,
-                                       size.x + abs(velo.x) * deltaTime, size.y + abs(velo.y) * deltaTime};
+  Rectangle bbOtherEntity = (Rectangle){position.x, position.y, size.x, size.y};
   if (DynamicRectVsRect(deltaTime, bbOtherEntity, contact_point, contact_normal,
-                        contact_time, entity)) {
+                        contact_time, entity, velo)) {
     if (contact_normal.y > 0.0f)
       cc.contact[0] = r_static;
 
@@ -79,7 +82,8 @@ bool CollisionSystem::ResolveDynamicRectVsRect(const float deltaTime,
     if (contact_normal.x > 0.0f)
       cc.contact[3] = r_static;
 
-    Vector2 velocity = entity.lock()->getComponent<TransformComponent>().getVelocity();
+    Vector2 velocity =
+        entity.lock()->getComponent<TransformComponent>().getVelocity();
     velocity = velocity + (Vector2){contact_normal.x * std::fabs(velocity.x) *
                                         (1 - contact_time),
                                     contact_normal.y * std::fabs(velocity.y) *
@@ -89,18 +93,17 @@ bool CollisionSystem::ResolveDynamicRectVsRect(const float deltaTime,
   }
   return false;
 }
-bool CollisionSystem::DynamicRectVsRect(const float deltaTime,
-                                        const Rectangle &r_static,
-                                        Vector2 &contact_point,
-                                        Vector2 &contact_normal,
-                                        float &contact_time,
-                                        Weak<AbstractEntity> _entity) {
+bool CollisionSystem::DynamicRectVsRect(
+    const float deltaTime, const Rectangle &r_static, Vector2 &contact_point,
+    Vector2 &contact_normal, float &contact_time, Weak<AbstractEntity> _entity,
+    Vector2 secondVelo) {
   if (_entity.expired())
     throw std::runtime_error("Entity is expired");
   auto entity = _entity.lock();
   Vector2 velocity = entity->getComponent<TransformComponent>().getVelocity();
   Vector2 size = entity->getComponent<BoundingBoxComponent>().getSize();
   Vector2 position = entity->getComponent<PositionComponent>().getPosition();
+  velocity = (Vector2){velocity.x - secondVelo.x, velocity.y - secondVelo.y};
   if (velocity.x == 0 && velocity.y == 0)
     return false;
 
@@ -196,7 +199,10 @@ void CollisionHandlingSystem::update(float dt) {
     if (entity->hasComponent<AITag>()) {
       handleAICollision(entity);
     }
-    if(entity->hasComponent<PlayerTag>()) {
+    if (entity->hasComponent<EnemyTag>()) {
+      handleEnemyCollision(entity);
+    }
+    if (entity->hasComponent<PlayerTag>()) {
       handlePlayerCollision(entity);
     }
     entity->getComponent<CollisionComponent>().reset();
@@ -209,37 +215,111 @@ void CollisionHandlingSystem::handlePlayerCollision(Weak<AbstractEntity> _entity
   auto &cc = entity->getComponent<CollisionComponent>();
   auto &tf = entity->getComponent<TransformComponent>();
   // Below Collision
-  if(cc.getBelow().lock() == nullptr) {
+  if (cc.getBelow().lock() == nullptr) {
     entity->getComponent<CharacterStateComponent>().setEnumState("DROPPING");
-  }
-  else {
-    if(cc.getBelow().lock()->hasComponent<EnemyTag>()) {
-      // TODO: notify to the enemy
-      entity->getComponent<CharacterStateComponent>().setEnumState("JUMPING");
-      tf.setVelocity(Vector2{tf.getVelocity().x, -150.0f});
+    if (entity->getComponent<PositionComponent>().y > screenHeight * 1.2f) {
+      EventQueue &EQ = EventQueue::getInstance();
+      EQ.pushEvent(std::make_unique<MarioDieEvent>(entity->getID()));
+    }
+  } else {
+    if (cc.getBelow().lock()->hasComponent<EnemyTag>()) {
+      auto below = entity->getComponent<CollisionComponent>().getBelow();
+      if (!below.expired()) {
+        auto belowEntity = below.lock();
+        if (belowEntity->getName() == "Goomba") {
+          EventQueue &EQ = EventQueue::getInstance();
+          EQ.pushEvent(std::make_unique<MarioJumpOnGoomba>(
+              entity->getID(), belowEntity->getID()));
+        }
+      }
     } 
-    else if(entity->getComponent<CharacterStateComponent>().getState() == "DROPPING") {
+    else if (entity->getComponent<CharacterStateComponent>().getState() == "DROPPING") {
       entity->getComponent<CharacterStateComponent>().setEnumState("IDLE");
     }
   }
 
   // Above Collision
-  if(cc.getAbove().lock() != nullptr) {
+  if (cc.getAbove().lock() != nullptr) {
     auto aboveBlock = cc.getAbove().lock();
-    if(aboveBlock->getName() == "BrokenBlock") {
+    if (aboveBlock->getName() == "BrokenBlock") {
       if (entity->getComponent<CharacterStateComponent>().getSize() == "SMALL") {
         aboveBlock->getComponent<BlockTriggerComponent>().setTrigger(
             new TriggerBrokenBlockWhenHitBySmall(
                 aboveBlock->getComponent<PositionComponent>().getPosition()));
         entity->getComponent<MarioSoundComponent>().PlayBumpEffect();
       } else {
-        aboveBlock->getComponent<BlockTriggerComponent>().setTrigger(
-            new TriggerBrokenBlockWhenHitByLarge(
-                aboveBlock->getComponent<PositionComponent>().getPosition()));
-         entity->getComponent<MarioSoundComponent>().PlayBreakBlockEffect();
+        aboveBlock->getComponent<BlockTriggerComponent>().setTrigger(new TriggerBrokenBlockWhenHitByLarge(aboveBlock->getComponent<PositionComponent>().getPosition()));
+        entity->getComponent<MarioSoundComponent>().PlayBreakBlockEffect();
       }
     }
+    else if (aboveBlock->getName() == "QuestionBlock") {
+      aboveBlock->getComponent<BlockTriggerComponent>().setTrigger(new TriggerQuestionBlock(aboveBlock->getComponent<PositionComponent>().getPosition()));
+      entity->getComponent<MarioSoundComponent>().PlayBumpEffect();
+    } 
+    else if (aboveBlock->hasComponent<EnemyTag>()) {
+      EventQueue &EQ = EventQueue::getInstance();
+      EQ.pushEvent(std::make_unique<MarioDieEvent>(entity->getID()));
+    }
   }
+
+  // Right Collision
+  if (cc.getRight().lock() != nullptr) {
+    auto rightBlock = cc.getRight().lock();
+    if (rightBlock->hasComponent<EnemyTag>()) {
+      EventQueue &EQ = EventQueue::getInstance();
+      EQ.pushEvent(std::make_unique<MarioDieEvent>(entity->getID()));
+    }
+  }
+
+  // Left Collision
+  if (cc.getLeft().lock() != nullptr) {
+    auto leftBlock = cc.getLeft().lock();
+    if (leftBlock->hasComponent<EnemyTag>()) {
+      EventQueue &EQ = EventQueue::getInstance();
+      EQ.pushEvent(std::make_unique<MarioDieEvent>(entity->getID()));
+    }
+  }
+}
+
+void CollisionHandlingSystem::handleEnemyCollision(Weak<AbstractEntity> _entity) {
+  if (_entity.expired())
+    throw std::runtime_error("Entity is expired");
+
+  auto entity = _entity.lock();
+  CollisionComponent &collision = entity->getComponent<CollisionComponent>();
+  if(entity->getComponent<TextureComponent>().state == "Die") {
+    entity->removeComponent<BoundingBoxComponent>();
+    return;
+  }
+  auto above = collision.getAbove();
+  auto below = collision.getBelow();
+  auto left = collision.getLeft();
+  auto right = collision.getRight();
+
+  auto &trans = entity->getComponent<TransformComponent>();
+  Vector2 v = trans.getVelocity();
+  if (left.lock()) {
+    auto leftEntity = left.lock();
+    if (leftEntity->hasComponent<PlayerTag>()) {
+      EventQueue &EQ = EventQueue::getInstance();
+      EQ.pushEvent(std::make_unique<MarioDieEvent>(leftEntity->getID()));
+    }
+  }
+  if (right.lock()) {
+    auto rightEntity = right.lock();
+    if (rightEntity->hasComponent<PlayerTag>()) {
+      EventQueue &EQ = EventQueue::getInstance();
+      EQ.pushEvent(std::make_unique<MarioDieEvent>(rightEntity->getID()));
+    }
+  }
+  if (below.lock()) {
+    auto belowEntity = below.lock();
+    if (belowEntity->hasComponent<PlayerTag>()) {
+      EventQueue &EQ = EventQueue::getInstance();
+      EQ.pushEvent(std::make_unique<MarioDieEvent>(belowEntity->getID()));
+    }
+  }
+  trans.setVelocity(v);
 }
 void CollisionHandlingSystem::handleAICollision(Weak<AbstractEntity> _entity) {
   if (_entity.expired())
@@ -255,13 +335,19 @@ void CollisionHandlingSystem::handleAICollision(Weak<AbstractEntity> _entity) {
 
   auto &trans = entity->getComponent<TransformComponent>();
   Vector2 v = trans.getVelocity();
+  if (entity->getComponent<TextureComponent>().state == "Die") {
+    // entity->destroy();
+    return; 
+  }
   if (left.lock())
     v.x = -ENEMY_SPEED;
   if (right.lock())
     v.x = ENEMY_SPEED;
   if (below.lock() == nullptr)
     v.y = 10.0f;
-  if(v.x < 0.0f) entity->getComponent<TextureComponent>().changeState("Left-Moving");
-  if(v.x > 0.0f) entity->getComponent<TextureComponent>().changeState("Right-Moving");
+  if (v.x < 0.0f)
+    entity->getComponent<TextureComponent>().changeState("Left-Moving");
+  if (v.x > 0.0f)
+    entity->getComponent<TextureComponent>().changeState("Right-Moving");
   trans.setVelocity(v);
 }

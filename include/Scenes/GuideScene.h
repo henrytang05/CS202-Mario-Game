@@ -3,7 +3,6 @@
 #include "GUI.h"
 #include "Scenes/Scene.h"
 #include "EntityManager.h"
-#include "Entity/PlayableEntity.h"
 #include "Entity/EntityFactory.h"
 
 namespace SceneSpace {

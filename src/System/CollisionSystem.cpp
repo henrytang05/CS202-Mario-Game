@@ -20,10 +20,6 @@ void CollisionSystem::update(float dt) {
       throw std::runtime_error("Entity is expired");
 
     auto entity = tentity.lock();
-    if (entity->hasComponent<PlayerTag>() &&
-        entity->getComponent<CharacterStateComponent>().getState() == "DEATH") {
-      continue;
-    }
     std::vector<std::pair<int, float>> col;
     float t = 0, min_t = INFINITY;
     Vector2 cp, cn;
@@ -274,8 +270,8 @@ void CollisionHandlingSystem::handlePlayerCollision(
                 aboveBlock->getComponent<PositionComponent>().getPosition()));
         entity->getComponent<MarioSoundComponent>().PlayBumpEffect();
       } else {
-        // aboveBlock->getComponent<BlockTriggerComponent>().setTrigger(new
-        // TriggerBrokenBlockWhenHitByLarge(aboveBlock->getComponent<PositionComponent>().getPosition()));
+        aboveBlock->getComponent<BlockTriggerComponent>().setTrigger(new
+        TriggerBrokenBlockWhenHitByLarge(aboveBlock->getComponent<PositionComponent>().getPosition()));
         entity->getComponent<MarioSoundComponent>().PlayBreakBlockEffect();
       }
     } else if (aboveBlock->hasComponent<EnemyTag>()) {

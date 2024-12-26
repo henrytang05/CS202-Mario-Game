@@ -20,7 +20,12 @@ void PlayerSystem::update(float dt) {
     bool keyRight = IsKeyDown(KEY_RIGHT);
     bool keyUp = IsKeyDown(KEY_UP);
     bool keyDown = IsKeyDown(KEY_DOWN);
-    if (state.getState() == "DEATH") {
+    if(state.getState() == "DEATH") {
+      velocity.y += 10.0f;
+      tEntity.lock()->getComponent<TransformComponent>().setVelocity(velocity);
+      if(position.y >= 810.0f) {
+        tEntity.lock()->removeComponent<PlayerTag>();
+      }
       return;
     }
     if (state.getState() != "JUMPING" && state.getState() != "DROPPING") {

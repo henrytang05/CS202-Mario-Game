@@ -38,7 +38,6 @@ GameScene::GameScene() : Scene(), EM(EntityManager::getInstance()) {
   systems.push_back(transformSystem);
   systems.push_back(collisionHandlingSystem);
   systems.push_back(animationSystem);
-  systems.push_back(swingSystem);
   systems.push_back(blockSystem);
   update_systems.push_back(playerSystem);
   update_systems.push_back(collisionSystem);
@@ -101,8 +100,8 @@ void GameScene::draw() {
 }
 Unique<Scene> GameScene::updateScene(float deltaTime) {
   this->update(deltaTime);
-  auto players = EM.getHasAll<PlayerTag>();
-  if (players.empty()) {
+  if (player.lock()->hasComponent<PlayerTag>() == false) {
+    sleep(1);
     lives -= 1;
     if (lives == 0) {
       lives = 3;

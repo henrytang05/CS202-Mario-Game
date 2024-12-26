@@ -12,11 +12,11 @@ void MarioDieEvent::handle() {
   auto mario = _mario.lock();
   if (mario->getComponent<CharacterStateComponent>().getState() == "DEATH")
     return;
-  mario->getComponent<BoundingBoxComponent>().setSize({0.0f, 0.0f});
+  mario->removeComponent<CollisionComponent>();
+  mario->removeComponent<BoundingBoxComponent>();
   mario->getComponent<CharacterStateComponent>().setEnumState("DEATH");
   mario->getComponent<CharacterStateComponent>().setSizeState("SMALL");
-  mario->getComponent<TextureComponent>().changeState(
-      mario->getComponent<CharacterStateComponent>().getCurrentState());
+  mario->getComponent<TextureComponent>().changeState(mario->getComponent<CharacterStateComponent>().getCurrentState());
   mario->getComponent<TransformComponent>().setVelocity({0.0f, -240.0f});
   mario->getComponent<MarioSoundComponent>().PlayMarioDieEffect();
 }

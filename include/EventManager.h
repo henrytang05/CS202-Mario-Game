@@ -26,7 +26,11 @@ struct MarioJumpOnGoomba : public Event {
   uint32_t MarioID;
   uint32_t EnemyID;
 };
-
+struct MarioLargeToSmall : public Event {
+  MarioLargeToSmall(uint32_t player) : MarioID(player) {}
+  void handle() override;
+  uint32_t MarioID;
+};
 class EventQueue {
 public:
   void pushEvent(Unique<Event> &e);

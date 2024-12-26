@@ -222,7 +222,8 @@ void CollisionHandlingSystem::handlePlayerCollision(Weak<AbstractEntity> _entity
       EventQueue &EQ = EventQueue::getInstance();
       EQ.pushEvent(std::make_unique<MarioDieEvent>(entity->getID()));
     }
-  } else {
+  } 
+  else {
     if (cc.getBelow().lock()->hasComponent<EnemyTag>()) {
       auto below = entity->getComponent<CollisionComponent>().getBelow();
       if (!below.expired()) {
@@ -233,8 +234,14 @@ void CollisionHandlingSystem::handlePlayerCollision(Weak<AbstractEntity> _entity
               entity->getID(), belowEntity->getID()));
         }
         else if(belowEntity->getName() == "Piranha") {
-          EventQueue &EQ = EventQueue::getInstance();
-          EQ.pushEvent(std::make_unique<MarioDieEvent>(entity->getID()));
+          if(entity->getComponent<CharacterStateComponent>().getSize() == "SMALL") {
+            EventQueue &EQ = EventQueue::getInstance();
+            EQ.pushEvent(std::make_unique<MarioDieEvent>(entity->getID()));
+          }
+          else {
+            EventQueue &EQ = EventQueue::getInstance();
+            EQ.pushEvent(std::make_unique<MarioLargeToSmall>(entity->getID()));
+          }
         }
       }
     } 
@@ -270,9 +277,15 @@ void CollisionHandlingSystem::handlePlayerCollision(Weak<AbstractEntity> _entity
   // Right Collision
   if (cc.getRight().lock() != nullptr) {
     auto rightBlock = cc.getRight().lock();
-    if (rightBlock->hasComponent<EnemyTag>()) {
-      EventQueue &EQ = EventQueue::getInstance();
-      EQ.pushEvent(std::make_unique<MarioDieEvent>(entity->getID()));
+    if(rightBlock->hasComponent<EnemyTag>()) {
+      if(entity->getComponent<CharacterStateComponent>().getSize() == "SMALL") {
+        EventQueue &EQ = EventQueue::getInstance();
+        EQ.pushEvent(std::make_unique<MarioDieEvent>(entity->getID()));
+      }
+      else {
+        EventQueue &EQ = EventQueue::getInstance();
+        EQ.pushEvent(std::make_unique<MarioLargeToSmall>(entity->getID()));
+      }
     }
   }
 
@@ -280,8 +293,14 @@ void CollisionHandlingSystem::handlePlayerCollision(Weak<AbstractEntity> _entity
   if (cc.getLeft().lock() != nullptr) {
     auto leftBlock = cc.getLeft().lock();
     if (leftBlock->hasComponent<EnemyTag>()) {
-      EventQueue &EQ = EventQueue::getInstance();
-      EQ.pushEvent(std::make_unique<MarioDieEvent>(entity->getID()));
+      if(entity->getComponent<CharacterStateComponent>().getSize() == "SMALL") {
+        EventQueue &EQ = EventQueue::getInstance();
+        EQ.pushEvent(std::make_unique<MarioDieEvent>(entity->getID()));
+      }
+      else {
+        EventQueue &EQ = EventQueue::getInstance();
+        EQ.pushEvent(std::make_unique<MarioLargeToSmall>(entity->getID()));
+      }
     }
   }
 }
@@ -305,23 +324,41 @@ void CollisionHandlingSystem::handleEnemyCollision(Weak<AbstractEntity> _entity)
   Vector2 v = trans.getVelocity();
   if (left.lock()) {
     auto leftEntity = left.lock();
-    if (leftEntity->hasComponent<PlayerTag>()) {
-      EventQueue &EQ = EventQueue::getInstance();
-      EQ.pushEvent(std::make_unique<MarioDieEvent>(leftEntity->getID()));
+    if (leftEntity->hasComponent<PlayerTag>()) {      
+      if(leftEntity->getComponent<CharacterStateComponent>().getSize() == "SMALL") {
+        EventQueue &EQ = EventQueue::getInstance();
+        EQ.pushEvent(std::make_unique<MarioDieEvent>(leftEntity->getID()));
+      }
+      else {
+        EventQueue &EQ = EventQueue::getInstance();
+        EQ.pushEvent(std::make_unique<MarioLargeToSmall>(leftEntity->getID()));
+      }
     }
   }
   if (right.lock()) {
     auto rightEntity = right.lock();
-    if (rightEntity->hasComponent<PlayerTag>()) {
-      EventQueue &EQ = EventQueue::getInstance();
-      EQ.pushEvent(std::make_unique<MarioDieEvent>(rightEntity->getID()));
+    if (rightEntity->hasComponent<PlayerTag>()) {      
+      if(rightEntity->getComponent<CharacterStateComponent>().getSize() == "SMALL") {
+        EventQueue &EQ = EventQueue::getInstance();
+        EQ.pushEvent(std::make_unique<MarioDieEvent>(rightEntity->getID()));
+      }
+      else {
+        EventQueue &EQ = EventQueue::getInstance();
+        EQ.pushEvent(std::make_unique<MarioLargeToSmall>(rightEntity->getID()));
+      }
     }
   }
   if (below.lock()) {
     auto belowEntity = below.lock();
-    if (belowEntity->hasComponent<PlayerTag>()) {
-      EventQueue &EQ = EventQueue::getInstance();
-      EQ.pushEvent(std::make_unique<MarioDieEvent>(belowEntity->getID()));
+    if (belowEntity->hasComponent<PlayerTag>()) {      
+      if(belowEntity->getComponent<CharacterStateComponent>().getSize() == "SMALL") {
+        EventQueue &EQ = EventQueue::getInstance();
+        EQ.pushEvent(std::make_unique<MarioDieEvent>(belowEntity->getID()));
+      }
+      else {
+        EventQueue &EQ = EventQueue::getInstance();
+        EQ.pushEvent(std::make_unique<MarioLargeToSmall>(belowEntity->getID()));
+      }
     }
   }
   trans.setVelocity(v);

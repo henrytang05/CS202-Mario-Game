@@ -124,6 +124,12 @@ void MapRenderer::loadObjectGroup(const json &layer) {
         objects.push_back(obj);
       }
     }
+    else if (name == "Piranha") {
+      auto obj = entityFactory->createPiranha({x, y});
+      if (obj.lock()) {
+        objects.push_back(obj);
+      }
+    }
   }
 }
 

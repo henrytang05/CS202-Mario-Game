@@ -247,10 +247,17 @@ void CollisionHandlingSystem::handlePlayerCollision(
       auto below = entity->getComponent<CollisionComponent>().getBelow();
       if (!below.expired()) {
         auto belowEntity = below.lock();
-        if (belowEntity->hasComponent<EnemyTag>()) {
+        if (belowEntity->getName() == "Goomba") {
           EventQueue &EQ = EventQueue::getInstance();
           EQ.pushEvent(std::make_unique<MarioJumpOnGoomba>(
               entity->getID(), belowEntity->getID()));
+        }
+        else if (belowEntity->getName() == "Piranha") {
+          if (entity->getComponent<CharacterStateComponent>().getSize() ==
+              "SMALL"){
+            EventQueue &EQ = EventQueue::getInstance();
+            EQ.pushEvent(std::make_unique<MarioDieEvent>(entity->getID()));
+              }
         }
       }
     } else if (entity->getComponent<CharacterStateComponent>().getState() ==

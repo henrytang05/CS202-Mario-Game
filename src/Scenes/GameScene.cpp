@@ -39,6 +39,7 @@ GameScene::GameScene() : Scene(), EM(EntityManager::getInstance()) {
   systems.push_back(collisionHandlingSystem);
   systems.push_back(animationSystem);
   systems.push_back(blockSystem);
+  systems.push_back(swingSystem);
   update_systems.push_back(playerSystem);
   update_systems.push_back(collisionSystem);
   update_systems.push_back(transformSystem);

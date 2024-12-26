@@ -6,7 +6,7 @@
 Weak<AbstractEntity> initGoomba(Vector2 position, Vector2 size) {
   EntityManager &EM = EntityManager::getInstance();
   static int cnt = 1;
-  std::string name = "Goomba" + std::to_string(cnt++);
+  std::string name = "Goomba";
 
   // TODO: change to make shared
   Weak<AbstractEntity> rEnemy = EM.createEntity(name);

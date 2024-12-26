@@ -139,7 +139,9 @@ void MapRenderer::loadObjectGroup(const json &layer) {
       if (obj.lock()) {
         objects.push_back(obj);
       }
-    }
+    } else if (name == "Coin") {
+      auto obj = entityFactory->createCoin({x, y});
+    } 
   }
 }
 

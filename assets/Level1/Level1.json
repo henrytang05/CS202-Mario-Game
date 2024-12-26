@@ -3734,12 +3734,12 @@
                         {
                          "name":"isCoin",
                          "type":"bool",
-                         "value":true
+                         "value":false
                         }, 
                         {
                          "name":"isMushroom",
                          "type":"bool",
-                         "value":false
+                         "value":true
                         }],
                  "rotation":0,
                  "type":"",
@@ -3753,6 +3753,12 @@
                  "height":16,
                  "id":496,
                  "name":"",
+                 "properties":[
+                        {
+                         "name":"isMushroom",
+                         "type":"bool",
+                         "value":true
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -3807,6 +3813,42 @@
                  "width":16,
                  "x":1744,
                  "y":656
+                }, 
+                {
+                 "gid":5,
+                 "height":16,
+                 "id":705,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"isMushroom",
+                         "type":"bool",
+                         "value":false
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":1056,
+                 "y":720
+                }, 
+                {
+                 "gid":5,
+                 "height":16,
+                 "id":706,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"isMushroom",
+                         "type":"bool",
+                         "value":false
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":256,
+                 "y":720
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -3982,7 +4024,31 @@
                 {
                  "gid":81,
                  "height":16,
-                 "id":698,
+                 "id":703,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":1120,
+                 "y":736
+                }, 
+                {
+                 "gid":81,
+                 "height":16,
+                 "id":704,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":1136,
+                 "y":720
+                }, 
+                {
+                 "gid":81,
+                 "height":16,
+                 "id":707,
                  "name":"",
                  "rotation":0,
                  "type":"",
@@ -3994,7 +4060,7 @@
                 {
                  "gid":81,
                  "height":16,
-                 "id":700,
+                 "id":708,
                  "name":"",
                  "rotation":0,
                  "type":"",
@@ -4006,7 +4072,7 @@
                 {
                  "gid":81,
                  "height":16,
-                 "id":701,
+                 "id":709,
                  "name":"",
                  "rotation":0,
                  "type":"",
@@ -4018,7 +4084,7 @@
                 {
                  "gid":81,
                  "height":16,
-                 "id":702,
+                 "id":710,
                  "name":"",
                  "rotation":0,
                  "type":"",
@@ -4164,7 +4230,7 @@
          "y":0
         }],
  "nextlayerid":30,
- "nextobjectid":703,
+ "nextobjectid":713,
  "orientation":"orthogonal",
  "properties":[
         {

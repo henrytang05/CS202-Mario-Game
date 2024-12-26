@@ -27,7 +27,7 @@ public:
   virtual Weak<Pipe> createPipe(Vector2 position, Vector2 size) = 0;
   virtual Weak<Flag> createFlag(Vector2 position) = 0;
   virtual Weak<FlagPole> createFlagPole(Vector2 position) = 0;
-  virtual Weak<Mushroom> createMushroom(Vector2 position) = 0;
+  virtual Weak<AbstractEntity> createMushroom(Vector2 position) = 0;
 
 protected:
   EntityManager &EM;
@@ -48,7 +48,7 @@ public:
   Weak<Flag> createFlag(Vector2 position) override;
   Weak<FlagPole> createFlagPole(Vector2 position) override;
 
-  Weak<Mushroom> createMushroom(Vector2 position) override;
+  Weak<AbstractEntity> createMushroom(Vector2 position) override;
 };
 
 #endif // ENTITY_FACTORY_H

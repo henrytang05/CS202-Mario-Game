@@ -37,6 +37,20 @@ void MarioJumpOnGoomba::handle() {
   mario->getComponent<TransformComponent>().setVelocity({mario->getComponent<TransformComponent>().x, -180.0f});
 }
 
+void PowerUpEvent::handle() {
+  EntityManager &EM = EntityManager::getInstance();
+  Unique<IFactory> entityFactory;
+  entityFactory = std::make_unique<EntityFactory>(EM);
+  auto powerUp = entityFactory->createMushroom(Vector2{position.x, position.y+16.0f});
+}
+
+void CoinEvent::handle() {
+  EntityManager &EM = EntityManager::getInstance();
+  Unique<IFactory> entityFactory;
+  entityFactory = std::make_unique<EntityFactory>(EM);
+  //auto coin = entityFactory->createCoin(Vector2{position.x, position.y+16.0f});
+}
+
 void EventQueue::pushEvent(Unique<Event> &e) { eventQueue.push(std::move(e)); }
 
 void EventQueue::pushEvent(Unique<Event> e) { eventQueue.push(std::move(e)); }

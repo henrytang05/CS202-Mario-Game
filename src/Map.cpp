@@ -114,6 +114,13 @@ void MapRenderer::loadObjectGroup(const json &layer) {
       }
     } else if (name == "QuestionBlock") {
       auto obj = entityFactory->createBlock("QuestionBlock", {x, y});
+      if(object_layer.find("properties") != object_layer.end()){
+          for (auto const &property : object_layer["properties"]) {
+              if(property["name"]=="isMushroom"&&property["value"]==true){
+                   obj.lock()->getComponent<PowerUpComponent>().setPowerUp(1);//set power up type 1, Mushroom, 0, Coin
+              }
+          }
+      } 
       if (obj.lock()) {
         objects.push_back(obj);
       }

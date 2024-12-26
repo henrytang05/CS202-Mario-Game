@@ -2,7 +2,7 @@
 #define ENTITY_MANAGER_H
 
 #include "Interface.h"
-#include "pch.h"
+#include "globals.h"
 #include <bitset>
 #include <unordered_map>
 #include <unordered_set>
@@ -18,9 +18,12 @@ constexpr std::size_t maxComponents = 64;
 constexpr std::size_t maxEntity = 1024;
 using ComponentIDType = uint32_t;
 
-inline ComponentIDType getComponentTypeID() {
+inline ComponentIDType getComponentTypeID(bool next = true) {
   static ComponentIDType lastID = 0;
-  return lastID++;
+  if (next)
+    return lastID++;
+  else
+    return lastID;
 }
 
 template <typename T> inline ComponentIDType getComponentTypeID() noexcept {
@@ -39,7 +42,23 @@ public:
   ComponentArray<T>() { entityComponentIndexMap.fill(-1); }
   virtual ~ComponentArray() = default;
   void onEntityDestroyed(EntityID id) override {
-    throw std::runtime_error("Not implemented");
+    ASSERT(entityComponentIndexMap[id] != -1, "Entity does not have component");
+
+    if (entityComponentIndexMap[id] != -1) {
+      size_t index = entityComponentIndexMap[id];
+      auto &ECIM = entityComponentIndexMap;
+      components[index] = std::move(components.back());
+
+      for (size_t i = 0; i < ECIM.size(); i++) {
+        if (ECIM[i] != (int)components.size() - 1)
+          continue;
+        ECIM[i] = index;
+        break;
+      }
+
+      components.pop_back();
+      entityComponentIndexMap[id] = -1;
+    }
   }
 
   std::vector<T> components;
@@ -70,6 +89,7 @@ public:
   bool operator!=(const AbstractEntity &other) const;
 
   bool isActive() const;
+  void deactivate();
   void destroy();
 
   virtual void update(float deltaTime) override;
@@ -181,6 +201,7 @@ private:
 
 template <typename T>
 inline bool EntityManager::hasComponent(const AbstractEntity *entity) const {
+  ASSERT(entity->getID() <= lastID, "Invalid entity ID in hasComponent");
   return entityBitsetMap.at(entity->getID())[getComponentTypeID<T>()];
 }
 
@@ -192,6 +213,8 @@ inline bool EntityManager::hasComponent(Shared<AbstractEntity> entity) const {
 template <typename T, typename... TArgs>
 inline T &EntityManager::addComponent(AbstractEntity *entity,
                                       TArgs &&...mArgs) {
+
+  ASSERT(entity->getID() <= lastID, "Invalid entity ID in addComponent");
   if (hasComponent<T>(entity)) {
     throw std::runtime_error("Entity already has component");
   }
@@ -216,7 +239,8 @@ inline T &EntityManager::addComponent(AbstractEntity *entity,
   components.back().setEntityManager(this);
 
   size_t index = componentsArr.components.size() - 1;
-  std::array<ComponentIDType, maxEntity> &ECM = componentsArr.entityComponentIndexMap;
+  std::array<ComponentIDType, maxEntity> &ECM =
+      componentsArr.entityComponentIndexMap;
   ECM[eid] = index;
 
   T &ret = componentsArr.components.at(index);
@@ -243,6 +267,7 @@ EntityManager::hasAllComponents(Shared<AbstractEntity> entity) const {
 
 template <typename T>
 inline T &EntityManager::getComponent(AbstractEntity *entity) {
+  ASSERT(entity->getID() <= lastID, "Invalid entity ID in removeComponent");
   if (!hasComponent<T>(entity)) {
     throw std::runtime_error("Entity does not have component");
   }

@@ -23,7 +23,7 @@ void BlockTriggerComponent::setTrigger(TriggerBehaviour *_trigger) {
 }
 void BlockTriggerComponent::update(float deltaTime) {
   if (trigger) {
-    if (trigger->trigger(entity, deltaTime) == nullptr) {
+    if (trigger->trigger(&EntityManager::getInstance().getEntityRef(entity->getID()), deltaTime) == nullptr) {
       delete trigger;
       trigger = nullptr;
     }
@@ -37,15 +37,12 @@ TriggerBrokenBlockWhenHitBySmall::TriggerBrokenBlockWhenHitBySmall() {
   sumFrame = 0.0f;
 }
 
-TriggerBrokenBlockWhenHitBySmall::TriggerBrokenBlockWhenHitBySmall(
-    Vector2 _fixedPosition) {
+TriggerBrokenBlockWhenHitBySmall::TriggerBrokenBlockWhenHitBySmall(Vector2 _fixedPosition) {
   fixedPosition = _fixedPosition;
   sumFrame = 0.0f;
 }
 
-TriggerBehaviour *
-TriggerBrokenBlockWhenHitBySmall::trigger(AbstractEntity *entity,
-                                          float deltaTime) {
+TriggerBehaviour *TriggerBrokenBlockWhenHitBySmall::trigger(AbstractEntity *entity, float deltaTime) {
   TriggerBehaviour *retVal = this;
   sumFrame += deltaTime;
   Vector2 velocity = entity->getComponent<TransformComponent>().getVelocity();
@@ -76,9 +73,7 @@ TriggerBrokenBlockWhenHitByLarge::TriggerBrokenBlockWhenHitByLarge(
   sumFrame = 0.0f;
 }
 
-TriggerBehaviour *
-TriggerBrokenBlockWhenHitByLarge::trigger(AbstractEntity *entity,
-                                          float deltaTime) {
+TriggerBehaviour *TriggerBrokenBlockWhenHitByLarge::trigger(AbstractEntity *entity, float deltaTime) {
   TriggerBehaviour *retVal = this;
   entity->removeComponent<BoundingBoxComponent>();
   sumFrame += deltaTime;
@@ -93,8 +88,7 @@ TriggerBrokenBlockWhenHitByLarge::trigger(AbstractEntity *entity,
         LoadTextureFromImage(LoadImage("assets/Block/Pieces3.png")));
     textures.push_back(
         LoadTextureFromImage(LoadImage("assets/Block/Pieces4.png")));
-    entity->getComponent<TextureComponent>().addTexture("Normal", textures,
-                                                        0.1f, true);
+    entity->getComponent<TextureComponent>().addTexture("Normal", textures, 0.1f, true);
     entity->getComponent<PositionComponent>().setPosition(fixedPosition);
     entity->getComponent<TextureComponent>().changeState("Normal");
   } else if (sumFrame >= 0.2f) {
@@ -110,8 +104,7 @@ TriggerQuestionBlock::TriggerQuestionBlock(Vector2 _fixedPosition) {
   sumFrame = 0.0f;
   fixedPosition = _fixedPosition;
 }
-TriggerBehaviour *TriggerQuestionBlock::trigger(AbstractEntity *entity,
-                                                float deltaTime) {
+TriggerBehaviour *TriggerQuestionBlock::trigger(AbstractEntity *entity, float deltaTime) {
   // entity->notify();
   TriggerBehaviour *retVal = this;
   sumFrame += deltaTime;

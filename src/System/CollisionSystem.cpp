@@ -284,7 +284,7 @@ void CollisionHandlingSystem::handlePlayerCollision(Weak<AbstractEntity> _entity
           EQ.pushEvent(event);
         }
       }
-    } 
+    }
     else if (entity->getComponent<CharacterStateComponent>().getState() == "DROPPING") {
       entity->getComponent<CharacterStateComponent>().setEnumState("IDLE");
     }
@@ -294,16 +294,12 @@ void CollisionHandlingSystem::handlePlayerCollision(Weak<AbstractEntity> _entity
   if (cc.getAbove().lock() != nullptr) {
     auto aboveBlock = cc.getAbove().lock();
     if (aboveBlock->getName() == "BrokenBlock") {
-      if (entity->getComponent<CharacterStateComponent>().getSize() ==
-          "SMALL") {
-        aboveBlock->getComponent<BlockTriggerComponent>().setTrigger(
-            new TriggerBrokenBlockWhenHitBySmall(
-                aboveBlock->getComponent<PositionComponent>().getPosition()));
+      if (entity->getComponent<CharacterStateComponent>().getSize() == "SMALL") {
+        aboveBlock->getComponent<BlockTriggerComponent>().setTrigger(new TriggerBrokenBlockWhenHitBySmall(aboveBlock->getComponent<PositionComponent>().getPosition()));
         entity->getComponent<MarioSoundComponent>().PlayBumpEffect();
-      } else {
-        aboveBlock->getComponent<BlockTriggerComponent>().setTrigger(
-            new TriggerBrokenBlockWhenHitByLarge(
-                aboveBlock->getComponent<PositionComponent>().getPosition()));
+      } 
+      else {
+        //aboveBlock->getComponent<BlockTriggerComponent>().setTrigger(new TriggerBrokenBlockWhenHitByLarge(aboveBlock->getComponent<PositionComponent>().getPosition()));
         entity->getComponent<MarioSoundComponent>().PlayBreakBlockEffect();
       }
     } 

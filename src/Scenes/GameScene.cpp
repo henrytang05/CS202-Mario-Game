@@ -29,15 +29,18 @@ GameScene::GameScene() : Scene(), EM(EntityManager::getInstance()) {
   Shared<AnimationSystem> animationSystem = std::make_shared<AnimationSystem>();
   Shared<PlayerSystem> playerSystem = std::make_shared<PlayerSystem>();
   Shared<CollisionHandlingSystem> collisionHandlingSystem = std::make_shared<CollisionHandlingSystem>();
+  Shared<BlockSystem> blockSystem = std::make_shared<BlockSystem>();
   systems.push_back(playerSystem);
   systems.push_back(collisionSystem);
   systems.push_back(transformSystem);
   systems.push_back(collisionHandlingSystem);
   systems.push_back(animationSystem);
+  systems.push_back(blockSystem);
   update_systems.push_back(playerSystem);
   update_systems.push_back(collisionSystem);
   update_systems.push_back(transformSystem);
   update_systems.push_back(collisionHandlingSystem);
+  update_systems.push_back(blockSystem);
   draw_systems.push_back(animationSystem);
   configure_systems.push_back(playerSystem);
   configure_systems.push_back(collisionHandlingSystem);

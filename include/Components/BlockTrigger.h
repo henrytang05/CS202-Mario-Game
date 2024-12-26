@@ -8,8 +8,7 @@
 
 class TriggerBehaviour {
 public:
-  virtual TriggerBehaviour *trigger(AbstractEntity *entity,
-                                    float deltaTime) = 0;
+  virtual TriggerBehaviour *trigger(AbstractEntity* entity, float deltaTime) = 0;
 };
 
 class TriggerBrokenBlockWhenHitBySmall : public TriggerBehaviour {
@@ -20,7 +19,7 @@ private:
 public:
   TriggerBrokenBlockWhenHitBySmall();
   TriggerBrokenBlockWhenHitBySmall(Vector2 _fixedPosition);
-  TriggerBehaviour *trigger(AbstractEntity *entity, float deltaTime) override;
+  TriggerBehaviour *trigger(AbstractEntity* entity, float deltaTime) override;
 };
 
 class TriggerBrokenBlockWhenHitByLarge : public TriggerBehaviour {
@@ -31,7 +30,7 @@ private:
 public:
   TriggerBrokenBlockWhenHitByLarge();
   TriggerBrokenBlockWhenHitByLarge(Vector2 _fixedPosition);
-  TriggerBehaviour *trigger(AbstractEntity *entityy, float deltaTime) override;
+  TriggerBehaviour *trigger(AbstractEntity* entity, float deltaTime) override;
 };
 
 class TriggerQuestionBlock : public TriggerBehaviour {
@@ -42,7 +41,7 @@ private:
 public:
   TriggerQuestionBlock();
   TriggerQuestionBlock(Vector2 _fixedPosition);
-  TriggerBehaviour *trigger(AbstractEntity *entity, float deltaTime) override;
+  TriggerBehaviour *trigger(AbstractEntity* entity, float deltaTime) override;
 };
 
 class BlockTriggerComponent : public Component {

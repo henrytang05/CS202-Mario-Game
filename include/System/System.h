@@ -38,7 +38,10 @@ class AnimationSystem : public IDrawableSystem {
 public:
   void draw(float dt) override;
 };
-
+class BlockSystem : public IUpdatableSystem {
+public:
+  void update(float dt) override;
+};
 class CollisionSystem : public IUpdatableSystem {
 public:
   void update(float dt) override;

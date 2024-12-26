@@ -124,14 +124,17 @@ void MapRenderer::loadObjectGroup(const json &layer) {
       if (obj.lock()) {
         objects.push_back(obj);
       }
-    }
-    else if (name == "Goomba") {
-      auto obj = entityFactory->createGoomba({x, y}, {16.0f, 16.0f});
+    } else if (name == "Goomba") {
+      auto obj = entityFactory->createGoomba({x, y}, {width, height});
       if (obj.lock()) {
         objects.push_back(obj);
       }
-    }
-    else if (name == "Piranha") {
+    } else if (name == "Koopa") {
+      auto obj = entityFactory->createKoopa({x, y}, {width, height});
+      if (obj.lock()) {
+        objects.push_back(obj);
+      }
+    } else if (name == "Piranha") {
       auto obj = entityFactory->createPiranha({x, y});
       if (obj.lock()) {
         objects.push_back(obj);

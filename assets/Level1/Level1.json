@@ -3734,12 +3734,12 @@
                         {
                          "name":"isCoin",
                          "type":"bool",
-                         "value":false
+                         "value":true
                         }, 
                         {
                          "name":"isMushroom",
                          "type":"bool",
-                         "value":true
+                         "value":false
                         }],
                  "rotation":0,
                  "type":"",
@@ -4341,18 +4341,6 @@
                 {
                  "gid":71,
                  "height":16,
-                 "id":5,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":16,
-                 "x":304,
-                 "y":768
-                }, 
-                {
-                 "gid":71,
-                 "height":16,
                  "id":6,
                  "name":"",
                  "rotation":0,
@@ -4456,6 +4444,18 @@
                  "width":16,
                  "x":991.818,
                  "y":755.818
+                }, 
+                {
+                 "gid":72,
+                 "height":27,
+                 "id":701,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":304,
+                 "y":752
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -4464,7 +4464,7 @@
          "y":0
         }],
  "nextlayerid":30,
- "nextobjectid":698,
+ "nextobjectid":702,
  "orientation":"orthogonal",
  "properties":[
         {

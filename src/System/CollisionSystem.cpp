@@ -197,17 +197,17 @@ void CollisionHandlingSystem::update(float dt) {
 
     auto entity = _entity.lock();
     
+    if (entity->isActive() &&entity->hasComponent<PlayerTag>()) {
+      handlePlayerCollision(entity);
+    }
     if(entity->isActive() && entity->hasComponent<PowerupTag>()) {
       handlePowerupCollision(entity);
-    }
-    if (entity->isActive() &&entity->hasComponent<AITag>()) {
-      handleAICollision(entity);
     }
     if (entity->isActive() &&entity->hasComponent<EnemyTag>()) {
       handleEnemyCollision(entity);
     }
-    if (entity->isActive() &&entity->hasComponent<PlayerTag>()) {
-      handlePlayerCollision(entity);
+    if (entity->isActive() &&entity->hasComponent<AITag>()) {
+      handleAICollision(entity);
     }
     if(entity->isActive())
       entity->getComponent<CollisionComponent>().reset();
@@ -234,8 +234,11 @@ void CollisionHandlingSystem::handlePlayerCollision(Weak<AbstractEntity> _entity
         auto belowEntity = below.lock();
         if (belowEntity->getName() == "Goomba") {
           EventQueue &EQ = EventQueue::getInstance();
-          EQ.pushEvent(std::make_unique<MarioJumpOnGoomba>(
-              entity->getID(), belowEntity->getID()));
+          EQ.pushEvent(std::make_unique<MarioJumpOnGoomba>(entity->getID(), belowEntity->getID()));
+        }
+        else if(belowEntity->getName() == "Koopa") {
+          EventQueue &EQ = EventQueue::getInstance();
+          EQ.pushEvent(std::make_unique<MarioJumpOnKoopa>(entity->getID(), belowEntity->getID()));
         }
         else if(belowEntity->getName() == "Piranha") {
           if(entity->getComponent<CharacterStateComponent>().getSize() == "SMALL") {
@@ -290,32 +293,44 @@ void CollisionHandlingSystem::handlePlayerCollision(Weak<AbstractEntity> _entity
   if (cc.getRight().lock() != nullptr) {
     auto rightBlock = cc.getRight().lock();
     if(rightBlock->hasComponent<EnemyTag>()) {
-      if(entity->getComponent<CharacterStateComponent>().getSize() == "SMALL") {
+      if(rightBlock->getName() == "Koopa") {
         EventQueue &EQ = EventQueue::getInstance();
-        EQ.pushEvent(std::make_unique<MarioDieEvent>(entity->getID()));
+        EQ.pushEvent(std::make_unique<MarioTouchRightKoopa>(entity->getID(), rightBlock->getID()));
       }
       else {
-        EventQueue &EQ = EventQueue::getInstance();
-        EQ.pushEvent(std::make_unique<MarioLargeToSmall>(entity->getID()));
+        if(entity->getComponent<CharacterStateComponent>().getSize() == "SMALL") {
+          EventQueue &EQ = EventQueue::getInstance();
+          EQ.pushEvent(std::make_unique<MarioDieEvent>(entity->getID()));
+        }
+        else {
+          EventQueue &EQ = EventQueue::getInstance();
+          EQ.pushEvent(std::make_unique<MarioLargeToSmall>(entity->getID()));
+        }
       }
     }
     else if(rightBlock->getName() == "Mushroom") {
       EventQueue &EQ = EventQueue::getInstance();
-      EQ.pushEvent(std::make_unique<MarioSmallToLarge>(entity->getID(), rightBlock->getID()));
-    }
+        EQ.pushEvent(std::make_unique<MarioSmallToLarge>(entity->getID(), rightBlock->getID()));
+      }
   }
 
   // Left Collision
   if (cc.getLeft().lock() != nullptr) {
     auto leftBlock = cc.getLeft().lock();
     if (leftBlock->hasComponent<EnemyTag>()) {
-      if(entity->getComponent<CharacterStateComponent>().getSize() == "SMALL") {
-        EventQueue &EQ = EventQueue::getInstance();
-        EQ.pushEvent(std::make_unique<MarioDieEvent>(entity->getID()));
+      if(leftBlock->getName() == "Goomba") {
+        if(entity->getComponent<CharacterStateComponent>().getSize() == "SMALL") {
+          EventQueue &EQ = EventQueue::getInstance();
+          EQ.pushEvent(std::make_unique<MarioDieEvent>(entity->getID()));
+        }
+        else {
+          EventQueue &EQ = EventQueue::getInstance();
+          EQ.pushEvent(std::make_unique<MarioLargeToSmall>(entity->getID()));
+        }
       }
-      else {
+      else if(leftBlock->getName() == "Koopa") {
         EventQueue &EQ = EventQueue::getInstance();
-        EQ.pushEvent(std::make_unique<MarioLargeToSmall>(entity->getID()));
+        EQ.pushEvent(std::make_unique<MarioTouchRightKoopa>(entity->getID(), leftBlock->getID()));
       }
     }
     else if(leftBlock->getName() == "Mushroom") {
@@ -427,10 +442,18 @@ void CollisionHandlingSystem::handleAICollision(Weak<AbstractEntity> _entity) {
 
   auto &trans = entity->getComponent<TransformComponent>();
   Vector2 v = trans.getVelocity();
-  if (left.lock())
+  if (left.lock()) {
     v.x = -ENEMY_SPEED;
-  if (right.lock())
+    if(entity->getName() == "Koopa" && entity->hasComponent<EnemyTag>() == false && left.lock()->hasComponent<PlayerTag>()) {
+      entity->addComponent<EnemyTag>();
+    }
+  }
+  if (right.lock()) {
     v.x = ENEMY_SPEED;
+    if(entity->getName() == "Koopa" && entity->hasComponent<EnemyTag>() == false && right.lock()->hasComponent<PlayerTag>()) {
+      entity->addComponent<EnemyTag>();
+    }
+  }
   if (below.lock() == nullptr)
     v.y = 50.0f;
   if (v.x < 0.0f)

@@ -60,3 +60,51 @@ EventQueue &EventQueue::getInstance() {
   static EventQueue instance;
   return instance;
 }
+
+void MarioJumpOnKoopa::handle()
+{
+  EntityManager &EM = EntityManager::getInstance();
+  auto _mario = EM.getEntityPtr(MarioID);
+  auto _koopa = EM.getEntityPtr(EnemyID);
+
+  ASSERT(!_mario.expired());
+  ASSERT(!_koopa.expired());
+
+  auto mario = _mario.lock();
+  auto koopa = _koopa.lock();
+  if(koopa->getComponent<TextureComponent>().state == "Shell") {
+      koopa->getComponent<TextureComponent>().changeState("Die");
+      mario->getComponent<CharacterStateComponent>().setEnumState("JUMPING");
+      mario->getComponent<TransformComponent>().setVelocity({mario->getComponent<TransformComponent>().x, -180.0f});
+  }
+  else { 
+    koopa->getComponent<TextureComponent>().changeState("Shell");
+    koopa->getComponent<BoundingBoxComponent>().setSize(Vector2{16,16});
+    koopa->getComponent<PositionComponent>().setPosition(koopa->getComponent<PositionComponent>().getPosition() + Vector2{0,11});
+    koopa->getComponent<TransformComponent>().setVelocity({0.0f, 0.0f});
+    mario->getComponent<CharacterStateComponent>().setEnumState("JUMPING");
+    mario->getComponent<TransformComponent>().setVelocity({mario->getComponent<TransformComponent>().x, -180.0f});
+  }
+}
+
+void MarioTouchRightKoopa::handle()
+{
+  EntityManager &EM = EntityManager::getInstance();
+  auto _mario = EM.getEntityPtr(MarioID);
+  auto _koopa = EM.getEntityPtr(EnemyID);
+
+  ASSERT(!_mario.expired());
+  ASSERT(!_koopa.expired());
+
+  auto mario = _mario.lock();
+  auto koopa = _koopa.lock();
+
+  if(koopa->getComponent<TextureComponent>().state == "Shell") {
+    koopa->getComponent<TextureComponent>().changeState("Shell-Moving");
+    koopa->getComponent<TransformComponent>().setVelocity({ENEMY_SPEED * 2, 0.0f});
+  }
+  else {
+    EventQueue& EQ = EventQueue::getInstance();
+    EQ.pushEvent(std::make_unique<MarioDieEvent>(MarioID));
+  }
+}

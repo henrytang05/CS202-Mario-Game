@@ -232,6 +232,11 @@ void CollisionHandlingSystem::handlePlayerCollision(Weak<AbstractEntity> _entity
           EQ.pushEvent(std::make_unique<MarioJumpOnGoomba>(
               entity->getID(), belowEntity->getID()));
         }
+        else if(belowEntity->getName() == "Koopa") {
+          EventQueue &EQ = EventQueue::getInstance();
+          EQ.pushEvent(std::make_unique<MarioJumpOnKoopa>(
+              entity->getID(), belowEntity->getID()));
+        }
         else if(belowEntity->getName() == "Piranha") {
           EventQueue &EQ = EventQueue::getInstance();
           EQ.pushEvent(std::make_unique<MarioDieEvent>(entity->getID()));
@@ -271,8 +276,11 @@ void CollisionHandlingSystem::handlePlayerCollision(Weak<AbstractEntity> _entity
   if (cc.getRight().lock() != nullptr) {
     auto rightBlock = cc.getRight().lock();
     if (rightBlock->hasComponent<EnemyTag>()) {
-      EventQueue &EQ = EventQueue::getInstance();
-      EQ.pushEvent(std::make_unique<MarioDieEvent>(entity->getID()));
+      if(rightBlock->getName() == "Koopa") {}
+      else {
+        EventQueue &EQ = EventQueue::getInstance();
+        EQ.pushEvent(std::make_unique<MarioDieEvent>(entity->getID()));
+      }
     }
   }
 
@@ -280,8 +288,14 @@ void CollisionHandlingSystem::handlePlayerCollision(Weak<AbstractEntity> _entity
   if (cc.getLeft().lock() != nullptr) {
     auto leftBlock = cc.getLeft().lock();
     if (leftBlock->hasComponent<EnemyTag>()) {
-      EventQueue &EQ = EventQueue::getInstance();
-      EQ.pushEvent(std::make_unique<MarioDieEvent>(entity->getID()));
+      if(leftBlock->getName() == "Koopa") {
+        EventQueue &EQ = EventQueue::getInstance();
+        EQ.pushEvent(std::make_unique<MarioTouchRightKoopa>(entity->getID(), leftBlock->getID()));
+      }
+      else {
+        EventQueue &EQ = EventQueue::getInstance();
+        EQ.pushEvent(std::make_unique<MarioDieEvent>(entity->getID()));
+      }
     }
   }
 }

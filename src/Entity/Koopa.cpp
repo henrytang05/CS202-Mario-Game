@@ -27,8 +27,9 @@ Weak<AbstractEntity> initKoopa(Vector2 position, Vector2 size) {
   std::string koopaRightIdle = koopaPath + "Koopa-Right-Idle.png";
   std::string koopaRightMoving = koopaPath + "Koopa-Right-Moving.png";
   std::string shellKoopaIdle = koopaPath + "Shell-Koopa-Idle.png";
-  std::string shellKoopaMoving = koopaPath + "Shell-Koopa-Moving.png";
-  std::string shellKoopaMoving2 = koopaPath + "Shell-Koopa-Moving2.png";
+  std::string shellKoopaMoving = koopaPath + "Shell-Koopa-Idle.png";
+  std::string shellKoopaMoving2 = koopaPath + "Shell-Koopa-Moving.png";
+  std::string shellKoopaMoving3 = koopaPath + "Shell-Koopa-Moving2.png";
 
   std::vector<Texture2D> textures = {
       LoadTexture(koopaLeftIdle.c_str()),
@@ -52,7 +53,11 @@ Weak<AbstractEntity> initKoopa(Vector2 position, Vector2 size) {
   textures = {
       LoadTexture(shellKoopaMoving.c_str()),
       LoadTexture(shellKoopaMoving2.c_str()),
+      LoadTexture(shellKoopaMoving3.c_str()),
   };
+
+  koopa->getComponent<TextureComponent>().addTexture("Shell", textures,
+                                                     0.1f, true);
 
   koopa->getComponent<TextureComponent>().addTexture("Shell-Moving", textures,
                                                      0.1f, true);

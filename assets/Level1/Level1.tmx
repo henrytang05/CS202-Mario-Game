@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="164" height="50" tilewidth="16" tileheight="16" infinite="0" nextlayerid="30" nextobjectid="698">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="164" height="50" tilewidth="16" tileheight="16" infinite="0" nextlayerid="30" nextobjectid="702">
  <editorsettings>
   <export target="Level1.json" format="json"/>
  </editorsettings>
@@ -14,8 +14,7 @@
  <tileset firstgid="77" source="Pipe.json"/>
  <tileset firstgid="78" source="Coin-1.json"/>
  <tileset firstgid="79" source="Piranha.json"/>
- <tileset firstgid="83" source="Mushroom.json"/>
- <tileset firstgid="84" source="Piranha.json"/>
+ <tileset firstgid="81" source="Mushroom.json"/>
  <layer id="13" name="Sky" width="164" height="50">
   <data encoding="csv">
 32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,
@@ -460,8 +459,8 @@
   </object>
  </objectgroup>
  <objectgroup id="23" name="Piranha">
-  <object id="696" gid="84" x="408" y="712" width="16" height="32"/>
-  <object id="697" gid="84" x="1608.13" y="728" width="16" height="32"/>
+  <object id="696" gid="79" x="408" y="712" width="16" height="32"/>
+  <object id="697" gid="79" x="1608.13" y="728" width="16" height="32"/>
  </objectgroup>
  <objectgroup id="14" name="Castle" visible="0">
   <object id="64" x="2544" y="688" width="80" height="80"/>
@@ -496,10 +495,9 @@
   <object id="674" gid="78" x="2176" y="768" width="16" height="16"/>
   <object id="675" gid="78" x="2192" y="768" width="16" height="16"/>
   <object id="694" gid="78" x="80" y="720" width="16" height="16"/>
-  <object id="696" gid="83" x="960" y="0" width="16" height="16"/>
+  <object id="696" gid="81" x="960" y="0" width="16" height="16"/>
  </objectgroup>
  <objectgroup id="7" name="Goomba">
-  <object id="5" gid="71" x="304" y="768" width="16" height="16"/>
   <object id="6" gid="71" x="592" y="768" width="16" height="16"/>
   <object id="7" gid="71" x="576" y="768" width="16" height="16"/>
   <object id="8" gid="71" x="560" y="768" width="16" height="16"/>
@@ -510,5 +508,6 @@
  <objectgroup id="8" name="Koopa">
   <object id="11" gid="72" x="1039.77" y="756" width="16" height="27"/>
   <object id="13" gid="72" x="991.818" y="755.818" width="16" height="27"/>
+  <object id="701" gid="72" x="304" y="752" width="16" height="27"/>
  </objectgroup>
 </map>

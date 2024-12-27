@@ -256,6 +256,10 @@ void CollisionHandlingSystem::handlePlayerCollision(Weak<AbstractEntity> _entity
         }
       }
     }
+    else if(below.lock()->getComponent<TextureComponent>().state == "Shell") {
+      EventQueue &EQ = EventQueue::getInstance();
+      EQ.pushEvent(std::make_unique<MarioJumpOnKoopa>(entity->getID(), below.lock()->getID()));
+    }
     else if (below.lock()->hasComponent<PowerupTag>()) {
       EventQueue &EQ = EventQueue::getInstance();
       EQ.pushEvent(std::make_unique<MarioSmallToLarge>(entity->getID(), below.lock()->getID()));
@@ -285,15 +289,26 @@ void CollisionHandlingSystem::handlePlayerCollision(Weak<AbstractEntity> _entity
     }
     else if (aboveBlock->getName() == "QuestionBlock") {
       aboveBlock->getComponent<BlockTriggerComponent>().setTrigger(new TriggerQuestionBlock(aboveBlock->getComponent<PositionComponent>().getPosition()));
-      entity->getComponent<MarioSoundComponent>().PlayBumpEffect();
+      if(aboveBlock->getComponent<PowerUpComponent>().powerUp) {
+        entity->getComponent<MarioSoundComponent>().PlayPowerupAppearsEffect();
+      }
+      else {
+        entity->getComponent<MarioSoundComponent>().PlayCoinEffect();
+      }
     }
     else if (aboveBlock->getName() == "Mushroom") {
       EventQueue &EQ = EventQueue::getInstance();
       EQ.pushEvent(std::make_unique<MarioSmallToLarge>(entity->getID(), aboveBlock->getID()));
     } 
     else if (aboveBlock->hasComponent<EnemyTag>()) {
-      EventQueue &EQ = EventQueue::getInstance();
-      EQ.pushEvent(std::make_unique<MarioDieEvent>(entity->getID()));
+      if(entity->getComponent<CharacterStateComponent>().getSize() == "SMALL") {
+        EventQueue &EQ = EventQueue::getInstance();
+        EQ.pushEvent(std::make_unique<MarioDieEvent>(entity->getID()));
+      }
+      else {
+        EventQueue &EQ = EventQueue::getInstance();
+        EQ.pushEvent(std::make_unique<MarioLargeToSmall>(entity->getID()));
+      }
     }
   }
 
@@ -303,7 +318,7 @@ void CollisionHandlingSystem::handlePlayerCollision(Weak<AbstractEntity> _entity
     if(rightBlock->hasComponent<EnemyTag>()) {
       if(rightBlock->getName() == "Koopa") {
         EventQueue &EQ = EventQueue::getInstance();
-        EQ.pushEvent(std::make_unique<MarioTouchRightKoopa>(entity->getID(), rightBlock->getID()));
+        EQ.pushEvent(std::make_unique<MarioTouchLeftKoopa>(entity->getID(), rightBlock->getID()));
       }
       else {
         if(entity->getComponent<CharacterStateComponent>().getSize() == "SMALL") {
@@ -468,14 +483,14 @@ void CollisionHandlingSystem::handleAICollision(Weak<AbstractEntity> _entity) {
     else {
       if(entity->getName() == "Koopa"){
         std::string state = entity->getComponent<TextureComponent>().state;
-        if(state == "Shell" || state == "Shell-Moving") {
+        if(state == "Shell-Moving") {
           if(left.lock()->hasComponent<EnemyTag>()){
             left.lock()->getComponent<TextureComponent>().changeState("Die");
             left.lock()->getComponent<TransformComponent>().setVelocity({0,0});
             v.x = ENEMY_SPEED * 3;
           }
           else {
-            v.x = - (ENEMY_SPEED * 3);
+            v.x = -(ENEMY_SPEED * 3);
             entity->getComponent<TextureComponent>().changeState("Shell-Moving");
           }
         }
@@ -495,11 +510,11 @@ void CollisionHandlingSystem::handleAICollision(Weak<AbstractEntity> _entity) {
     else {
       if(entity->getName() == "Koopa"){
         std::string state = entity->getComponent<TextureComponent>().state;
-        if(state == "Shell" || state == "Shell-Moving") {
+        if(state == "Shell-Moving") {
           if(right.lock()->hasComponent<EnemyTag>()){
             right.lock()->getComponent<TextureComponent>().changeState("Die");
             right.lock()->getComponent<TransformComponent>().setVelocity({0,0});
-            v.x = - (ENEMY_SPEED * 3);
+            v.x = -(ENEMY_SPEED * 3);
           }
           else {
             v.x = (ENEMY_SPEED * 3);
@@ -518,7 +533,7 @@ void CollisionHandlingSystem::handleAICollision(Weak<AbstractEntity> _entity) {
   if (below.lock() == nullptr)
     v.y = 50.0f;
   if(entity->getName() == "Koopa"){
-    if(entity->getComponent<TextureComponent>().state == "Shell-Moving") {}
+    if(entity->getComponent<TextureComponent>().state == "Shell-Moving" || entity->getComponent<TextureComponent>().state == "Shell") {}
     else {
       if (v.x < 0.0f)
         entity->getComponent<TextureComponent>().changeState("Left-Moving");

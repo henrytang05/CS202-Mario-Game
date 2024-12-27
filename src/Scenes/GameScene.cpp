@@ -31,9 +31,9 @@ void SceneSpace::GameScene::save() {
 
 namespace SceneSpace {
 int GameScene::lives = 3;
-GameScene::GameScene(const std::string &_nameScene)
-    : Scene(), EM(EntityManager::getInstance()) {
+GameScene::GameScene(const std::string &_nameScene, const std::string &_level) : Scene(), EM(EntityManager::getInstance()) {
   nameScene = _nameScene;
+  level = _level;
   entityFactory = std::make_unique<EntityFactory>(EM);
   Shared<CollisionSystem> collisionSystem = std::make_shared<CollisionSystem>();
   Shared<TransformSystem> transformSystem = std::make_shared<TransformSystem>();
@@ -94,8 +94,7 @@ void GameScene::loadResources() {
   background = LoadTextureFromImage(bImage);
   UnloadImage(bImage);
   // Create Map
-  entities =
-      mapRenderer.createMap("assets/" + nameScene + "/" + nameScene + ".json");
+  entities = mapRenderer.createMap("assets/" + nameScene + "/" + nameScene + "-" + level + ".json");
 }
 void GameScene::draw() {
   float dt = GetFrameTime();
@@ -124,7 +123,7 @@ Unique<Scene> GameScene::updateScene(float deltaTime) {
       lives = 3;
       return make_unique<SceneSpace::IntroScene>();
     }
-    return make_unique<SceneSpace::GameScene>(nameScene);
+    return make_unique<SceneSpace::GameScene>(nameScene, level);
   }
   return nullptr;
 }

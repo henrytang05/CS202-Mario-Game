@@ -5,13 +5,10 @@
 #include "Scenes/GuideScene.h"
 #include "Scenes/Scene.h"
 #include "Scenes/SettingScene.h"
+#include "Scenes/ChooseThemeScene.h"
 
 namespace SceneSpace {
 IntroScene::IntroScene() : Scene() {
-  changeGameScreen = false;
-  changeLoadScreen = false;
-  changeRankingScreen = false;
-  changeSettingsScreen = false;
   SoundCtrl.PlayGroundTheme();
 }
 IntroScene::~IntroScene() {
@@ -37,37 +34,28 @@ Unique<Scene> IntroScene::updateScene(float deltaTime) {
 
   if (NewGameButton->isPressed())
   {
-    changeGameScreen = true;
     SoundCtrl.PlayTingSound();
+    return std::make_unique<SceneSpace::ChooseThemeScene>();
   }
   if (LoadGameButton->isPressed())
   {
-    changeLoadScreen = true;
     SoundCtrl.PlayTingSound();
+    return std::make_unique<SceneSpace::LoadGameScene>();
   }  
   if (RankingButton->isPressed())
   {
-    changeRankingScreen = true;
     SoundCtrl.PlayTingSound();
   }  
   if (SettingsButton->isPressed())
   {
-    changeSettingsScreen = true;
     SoundCtrl.PlayTingSound();
+    return std::make_unique<SceneSpace::SettingScene>();
   }
   if(GuideButton->isPressed())
   {
-    changeGuideScreen = true;
     SoundCtrl.PlayTingSound();
-  }
-  if (changeGameScreen)
-    return std::make_unique<SceneSpace::GameScene>("Level1");
-  if (changeLoadScreen)
-    return std::make_unique<SceneSpace::LoadGameScene>();
-  if (changeGuideScreen)
     return std::make_unique<SceneSpace::GuideScene>();
-  if (changeSettingsScreen)
-    return std::make_unique<SceneSpace::SettingScene>();
+  }
   return nullptr;
 }
 void IntroScene::draw() {
@@ -92,10 +80,5 @@ void IntroScene::loadResources() {
                                         "./assets/Hover_GuideButton.png");
 };
 void IntroScene::init() {
-  changeGameScreen = false;
-  changeLoadScreen = false;
-  changeRankingScreen = false;
-  changeSettingsScreen = false;
-  changeGuideScreen = false;
 };
 } // namespace SceneSpace

@@ -15,7 +15,6 @@ public:
   void update(float deltaTime);
 private:
   Texture background;
-  GUI::ImageButton* QuitButton;
   GUI::Slider* musicSetting;
   GUI::Slider* soundSetting;
   GUI::TickBox* mario;

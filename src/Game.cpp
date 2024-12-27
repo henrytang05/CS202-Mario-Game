@@ -21,9 +21,12 @@ void Game::init() {
   InitWindow(screenWidth, screenHeight, "Super Mario");
   InitAudioDevice();
   SetTargetFPS(60);
-  currentScene = std::make_shared<SceneSpace::IntroScene>();
-  currentScene->loadResources();
-  currentScene->init();
+  pushScene(std::make_unique<SceneSpace::IntroScene>());
+  QuitButton = new GUI::ImageButton(30, 20, "./assets/QuitButton.png",
+                                       "./assets/Hover_QuitButton.png");
+  YES = new GUI::ImageButton(540, 485, "./assets/YES.png", "./assets/Hover_YES.png");
+  NO = new GUI::ImageButton(750, 485, "./assets/NO.png", "./assets/Hover_NO.png");
+  QuitGame = LoadTexture("./assets/QuitGame.png");
 }
 
 void Game::run() {
@@ -33,21 +36,72 @@ void Game::run() {
     draw();
   }
 }
+
 void Game::update(float deltaTime) {
-  Shared<SceneSpace::Scene> nextScene = currentScene->updateScene(deltaTime);
-  if (nextScene) {
-    currentScene = nextScene;
-    currentScene->loadResources();
-    currentScene->init();
+  pushScene(scenes.top()->updateScene(deltaTime));  
+  Vector2 mousePos = GetMousePosition();
+  bool isLeftClick = IsMouseButtonPressed(MOUSE_BUTTON_LEFT);
+  if(typeid(*scenes.top()) != typeid(SceneSpace::IntroScene)) {
+    QuitButton->update(mousePos, isLeftClick);
+    if (QuitButton->isPressed())
+    {
+      if(typeid(*scenes.top()) == typeid(SceneSpace::GameScene)){
+        quittingGame = true;
+      }
+      else popScene();
+    }
   }
+  if(quittingGame){
+    YES->update(mousePos, isLeftClick);
+    NO->update(mousePos, isLeftClick);
+    if(YES->isPressed()){
+      quittingGame = false;
+      popScene();
+    }
+    if(NO->isPressed()) quittingGame = false;
+  } 
 }
 void Game::clean() {
+  delete QuitButton;
+  clearScene();
   CloseAudioDevice();
   CloseWindow();
 }
 void Game::draw() {
   BeginDrawing();
   ClearBackground(RAYWHITE);
-  currentScene->draw();
+  scenes.top()->draw();
+  if(typeid(*scenes.top()) != typeid(SceneSpace::IntroScene)) {
+    QuitButton->draw();
+  }
+  if(quittingGame){
+    DrawTexture(QuitGame, 420, 198, WHITE);
+    YES->draw();
+    NO->draw();
+  }
   EndDrawing();
+}
+
+void Game::pushScene(Shared<SceneSpace::Scene> scene)
+{
+  if(scene){
+    scene->loadResources();
+    scene->init();
+    scenes.push(scene);
+  }
+}
+
+void Game::popScene()
+{
+  if(!scenes.empty()){
+    scenes.pop();
+  }
+
+}
+
+void Game::clearScene()
+{
+  while(!scenes.empty()){
+    scenes.pop();
+  }
 }

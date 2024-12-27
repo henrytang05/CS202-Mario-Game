@@ -20,10 +20,10 @@ class TextureComponent;
 namespace SceneSpace {
 int GameScene::lives = 3;
 GameScene::GameScene(const std::string &_nameScene, const std::string &_level)
-    : Scene(), EM(EntityManager::getInstance()) {
+    : Scene(), EM(&EntityManager::getInstance()) {
   nameScene = _nameScene;
   level = _level;
-  entityFactory = std::make_unique<EntityFactory>(EM);
+  entityFactory = std::make_unique<EntityFactory>(*EM);
   Shared<CollisionSystem> collisionSystem = std::make_shared<CollisionSystem>();
   Shared<TransformSystem> transformSystem = std::make_shared<TransformSystem>();
   Shared<AnimationSystem> animationSystem = std::make_shared<AnimationSystem>();
@@ -52,7 +52,37 @@ GameScene::GameScene(const std::string &_nameScene, const std::string &_level)
   update_systems.push_back(swingSystem);
   update_systems.push_back(coinSystem);
 }
-GameScene::GameScene() : Scene(), EM(EntityManager::getInstance()) {}
+GameScene::GameScene() : Scene(), EM(&EntityManager::getInstance()) {}
+GameScene &GameScene::operator=(GameScene &&other) noexcept {
+  if (this == &other)
+    return *this;
+  nameScene = std::move(other.nameScene);
+  level = std::move(other.level);
+  time = std::move(other.time);
+  background = std::move(other.background);
+  camera = std::move(other.camera);
+  player = std::move(other.player);
+  gameOver = std::move(other.gameOver);
+  entityFactory = std::move(other.entityFactory);
+  entities = std::move(other.entities);
+  lives = std::move(other.lives);
+  systems = std::move(other.systems);
+  update_systems = std::move(other.update_systems);
+  draw_systems = std::move(other.draw_systems);
+  return *this;
+}
+GameScene::GameScene(bool resume) : Scene(), EM(&EntityManager::getInstance()) {
+  if (resume) {
+    level = "Level1";
+    nameScene = "Easy";
+    GameScene game = GameScene(nameScene, level);
+    *this = std::move(game);
+    EM = &EntityManager::getInstance();
+    // JSONImporter importer;
+    // importer.load();
+    // EM.accept(importer);
+  }
+}
 
 void GameScene::init() {
   time = 360.f;
@@ -77,7 +107,7 @@ GameScene::~GameScene() {
   Log("GameScene destroyed");
 #endif
   save();
-  EM.reset();
+  EM->reset();
 }
 void GameScene::loadResources() {
   // Loading BackGround
@@ -139,7 +169,7 @@ bool GameScene::isFinished() { return gameOver; }
 
 void GameScene::save() {
   JSONExporter exporter;
-  EM.accept(exporter);
+  EM->accept(exporter);
   exporter.save();
 }
 } // namespace SceneSpace

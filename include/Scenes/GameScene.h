@@ -12,6 +12,8 @@ class GameScene : public Scene {
 public:
   GameScene();
   GameScene(const std::string &_nameScene, const std::string &_level);
+  GameScene(bool resume);
+  GameScene &operator=(GameScene &&other) noexcept;
   ~GameScene();
   Unique<Scene> updateScene(float deltaTime) override;
   void update(float deltaTime);
@@ -28,7 +30,7 @@ private:
   Texture2D background;
   MapRenderer mapRenderer;
   Camera2D camera;
-  EntityManager &EM;
+  EntityManager *EM;
   Weak<AbstractEntity> player;
   bool gameOver;
   Unique<IFactory> entityFactory;

@@ -53,10 +53,9 @@ public:
   void init();
   void setTrigger(TriggerBehaviour *_trigger);
   void update(float deltaTime);
+  void to_json(json &j) const override;
 
 private:
   TriggerBehaviour *trigger;
-
-  void to_json(json &j) const override;
 };
 #endif // BLOCKTRIGGER_H

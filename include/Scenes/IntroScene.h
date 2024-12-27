@@ -20,6 +20,7 @@ private:
   GUI::ImageButton *RankingButton;
   GUI::ImageButton *SettingsButton;
   GUI::ImageButton *GuideButton;
+  GUI::ImageButton *ResumeButton;
 };
 } // namespace SceneSpace
 #endif // INTROSCENE_H

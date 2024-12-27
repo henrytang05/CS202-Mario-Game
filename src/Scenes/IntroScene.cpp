@@ -1,16 +1,14 @@
 #include "Scenes/IntroScene.h"
 #include "Logger.h"
+#include "Scenes/ChooseThemeScene.h"
 #include "Scenes/GameScene.h"
-#include "Scenes/LoadGameScene.h"
 #include "Scenes/GuideScene.h"
+#include "Scenes/LoadGameScene.h"
 #include "Scenes/Scene.h"
 #include "Scenes/SettingScene.h"
-#include "Scenes/ChooseThemeScene.h"
 
 namespace SceneSpace {
-IntroScene::IntroScene() : Scene() {
-  SoundCtrl.PlayGroundTheme();
-}
+IntroScene::IntroScene() : Scene() { SoundCtrl.PlayGroundTheme(); }
 IntroScene::~IntroScene() {
 #ifdef _DEBUG
   Log("IntroScene destroyed");
@@ -20,6 +18,7 @@ IntroScene::~IntroScene() {
   delete RankingButton;
   delete SettingsButton;
   delete GuideButton;
+  delete ResumeButton;
 }
 
 Unique<Scene> IntroScene::updateScene(float deltaTime) {
@@ -31,31 +30,35 @@ Unique<Scene> IntroScene::updateScene(float deltaTime) {
   RankingButton->update(mousePos, isLeftClick);
   SettingsButton->update(mousePos, isLeftClick);
   GuideButton->update(mousePos, isLeftClick);
+  ResumeButton->update(mousePos, isLeftClick);
 
-  if (NewGameButton->isPressed())
-  {
+  if (NewGameButton->isPressed()) {
     SoundCtrl.PlayTingSound();
-    return std::make_unique<SceneSpace::ChooseThemeScene>();
+    return std::make_unique<SceneSpace::GameScene>(true);
+    // return std::make_unique<SceneSpace::ChooseThemeScene>();
   }
-  if (LoadGameButton->isPressed())
-  {
+  if (LoadGameButton->isPressed()) {
     SoundCtrl.PlayTingSound();
     return std::make_unique<SceneSpace::LoadGameScene>();
-  }  
-  if (RankingButton->isPressed())
-  {
+  }
+  if (RankingButton->isPressed()) {
     SoundCtrl.PlayTingSound();
-  }  
-  if (SettingsButton->isPressed())
-  {
+    return std::make_unique<SceneSpace::GameScene>(true);
+  }
+  if (SettingsButton->isPressed()) {
     SoundCtrl.PlayTingSound();
     return std::make_unique<SceneSpace::SettingScene>();
   }
-  if(GuideButton->isPressed())
-  {
+  if (GuideButton->isPressed()) {
     SoundCtrl.PlayTingSound();
     return std::make_unique<SceneSpace::GuideScene>();
   }
+
+  if (ResumeButton->isPressed()) {
+    SoundCtrl.PlayTingSound();
+    return std::make_unique<SceneSpace::GameScene>(true);
+  }
+
   return nullptr;
 }
 void IntroScene::draw() {
@@ -77,8 +80,9 @@ void IntroScene::loadResources() {
   SettingsButton = new GUI::ImageButton(545, 595, "./assets/SettingsButton.png",
                                         "./assets/Hover_SettingsButton.png");
   GuideButton = new GUI::ImageButton(30, 20, "./assets/GuideButton.png",
-                                        "./assets/Hover_GuideButton.png");
+                                     "./assets/Hover_GuideButton.png");
+  ResumeButton = new GUI::ImageButton(30, 80, "./assets/ResumeButton.png",
+                                      "./assets/Hover_NewGameButton.png");
 };
-void IntroScene::init() {
-};
+void IntroScene::init() {};
 } // namespace SceneSpace

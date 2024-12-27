@@ -22,9 +22,9 @@ void AnimationSystem::draw(float dt) {
     animation.elapsedTime += dt;
     if (!entity->isActive() && animation.elapsedTime >= animation.frameDelay)
       return;
-    if(animation.elapsedTime >= animation.frameDelay) {     
+    if (animation.elapsedTime >= animation.frameDelay) {     
       if(texture.state == "Die") {
-        EM.removeComponent<TextureComponent>(entity);    
+        entity->destroy();
         continue;
       }
     }
@@ -37,6 +37,6 @@ void AnimationSystem::draw(float dt) {
     }
 
     Texture2D choosen_texture = frames[animation.currentFrame];
-    DrawTexture(choosen_texture, position.x, position.y, WHITE);
+    DrawTexture (choosen_texture, position.x, position.y, WHITE);
   }
 }

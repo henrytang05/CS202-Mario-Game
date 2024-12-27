@@ -61,7 +61,7 @@ Unique<Scene> IntroScene::updateScene(float deltaTime) {
     SoundCtrl.PlayTingSound();
   }
   if (changeGameScreen)
-    return std::make_unique<SceneSpace::GameScene>();
+    return std::make_unique<SceneSpace::GameScene>("Level1");
   if (changeLoadScreen)
     return std::make_unique<SceneSpace::LoadGameScene>();
   if (changeGuideScreen)

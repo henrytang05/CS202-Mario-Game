@@ -4,6 +4,7 @@
 #include "Components/Component.h"
 #include "EntityManager.h"
 #include "TextureManager.h"
+#include "EventManager.h"
 #include "globals.h"
 
 class TriggerBehaviour {

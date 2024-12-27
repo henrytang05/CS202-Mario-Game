@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="164" height="50" tilewidth="16" tileheight="16" infinite="0" nextlayerid="30" nextobjectid="698">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="164" height="50" tilewidth="16" tileheight="16" infinite="0" nextlayerid="30" nextobjectid="716">
  <editorsettings>
   <export target="Level1.json" format="json"/>
  </editorsettings>
@@ -12,10 +12,9 @@
  <tileset firstgid="73" source="Castle.json"/>
  <tileset firstgid="74" source="Checkpoint.json"/>
  <tileset firstgid="77" source="Pipe.json"/>
- <tileset firstgid="78" source="Coin-1.json"/>
- <tileset firstgid="79" source="Piranha.json"/>
- <tileset firstgid="83" source="Mushroom.json"/>
- <tileset firstgid="84" source="Piranha.json"/>
+ <tileset firstgid="78" source="Piranha.json"/>
+ <tileset firstgid="80" source="Mushroom.json"/>
+ <tileset firstgid="81" source="Coin.json"/>
  <layer id="13" name="Sky" width="164" height="50">
   <data encoding="csv">
 32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,
@@ -419,27 +418,41 @@
   <object id="597" gid="2" x="2272" y="752" width="16" height="16"/>
  </objectgroup>
  <objectgroup id="18" name="BrokenBlock">
-  <object id="445" gid="1" x="128" y="720" width="16" height="16"/>
-  <object id="446" gid="1" x="144" y="720" width="16" height="16"/>
-  <object id="447" gid="1" x="176" y="720" width="16" height="16"/>
-  <object id="448" gid="1" x="192" y="720" width="16" height="16"/>
-  <object id="492" gid="1" x="944" y="720" width="16" height="16"/>
-  <object id="493" gid="1" x="960" y="720" width="16" height="16"/>
-  <object id="494" gid="1" x="992" y="720" width="16" height="16"/>
-  <object id="495" gid="1" x="1008" y="720" width="16" height="16"/>
+  <object id="445" gid="1" x="112" y="720" width="16" height="16"/>
+  <object id="446" gid="1" x="128" y="720" width="16" height="16"/>
+  <object id="447" gid="1" x="192" y="720" width="16" height="16"/>
+  <object id="448" gid="1" x="208" y="720" width="16" height="16"/>
+  <object id="492" gid="1" x="928" y="720" width="16" height="16"/>
+  <object id="493" gid="1" x="944" y="720" width="16" height="16"/>
+  <object id="494" gid="1" x="1008" y="720" width="16" height="16"/>
+  <object id="495" gid="1" x="1024" y="720" width="16" height="16"/>
  </objectgroup>
  <objectgroup id="19" name="QuestionBlock">
   <object id="449" gid="5" x="160" y="720" width="16" height="16">
    <properties>
-    <property name="isCoin" type="bool" value="true"/>
-    <property name="isMushroom" type="bool" value="false"/>
+    <property name="isCoin" type="bool" value="false"/>
+    <property name="isMushroom" type="bool" value="true"/>
    </properties>
   </object>
-  <object id="496" gid="5" x="976" y="720" width="16" height="16"/>
+  <object id="496" gid="5" x="976" y="720" width="16" height="16">
+   <properties>
+    <property name="isMushroom" type="bool" value="true"/>
+   </properties>
+  </object>
   <object id="539" gid="5" x="1696" y="720" width="16" height="16"/>
   <object id="540" gid="5" x="1744" y="720" width="16" height="16"/>
   <object id="541" gid="5" x="1792" y="720" width="16" height="16"/>
   <object id="542" gid="5" x="1744" y="656" width="16" height="16"/>
+  <object id="705" gid="5" x="1056" y="720" width="16" height="16">
+   <properties>
+    <property name="isMushroom" type="bool" value="false"/>
+   </properties>
+  </object>
+  <object id="706" gid="5" x="240" y="720" width="16" height="16">
+   <properties>
+    <property name="isMushroom" type="bool" value="false"/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup id="20" name="HardBlock"/>
  <objectgroup id="15" name="Flag">
@@ -460,46 +473,22 @@
   </object>
  </objectgroup>
  <objectgroup id="23" name="Piranha">
-  <object id="696" gid="84" x="408" y="712" width="16" height="32"/>
-  <object id="697" gid="84" x="1608.13" y="728" width="16" height="32"/>
+  <object id="696" gid="78" x="408" y="712" width="16" height="32"/>
+  <object id="697" gid="78" x="1608.13" y="728" width="16" height="32"/>
  </objectgroup>
  <objectgroup id="14" name="Castle" visible="0">
   <object id="64" x="2544" y="688" width="80" height="80"/>
  </objectgroup>
  <objectgroup id="26" name="Coin">
-  <object id="643" gid="78" x="640" y="752" width="16" height="16"/>
-  <object id="644" gid="78" x="656" y="736" width="16" height="16"/>
-  <object id="645" gid="78" x="672" y="720" width="16" height="16"/>
-  <object id="646" gid="78" x="688" y="704" width="16" height="16"/>
-  <object id="647" gid="78" x="704" y="688" width="16" height="16"/>
-  <object id="648" gid="78" x="752" y="688" width="16" height="16"/>
-  <object id="649" gid="78" x="768" y="704" width="16" height="16"/>
-  <object id="650" gid="78" x="784" y="720" width="16" height="16"/>
-  <object id="651" gid="78" x="800" y="736" width="16" height="16"/>
-  <object id="652" gid="78" x="815.5" y="747.75" width="16" height="16"/>
-  <object id="653" gid="78" x="1184" y="768" width="16" height="16"/>
-  <object id="654" gid="78" x="1200" y="768" width="16" height="16"/>
-  <object id="655" gid="78" x="1184" y="752" width="16" height="16"/>
-  <object id="656" gid="78" x="1200" y="752" width="16" height="16"/>
-  <object id="657" gid="78" x="1200" y="736" width="16" height="16"/>
-  <object id="658" gid="78" x="1184" y="736" width="16" height="16"/>
-  <object id="659" gid="78" x="1184" y="720" width="16" height="16"/>
-  <object id="660" gid="78" x="1200" y="720" width="16" height="16"/>
-  <object id="666" gid="78" x="1792" y="704" width="16" height="16"/>
-  <object id="667" gid="78" x="1744" y="704" width="16" height="16"/>
-  <object id="668" gid="78" x="1696" y="704" width="16" height="16"/>
-  <object id="669" gid="78" x="1952" y="768" width="16" height="16"/>
-  <object id="670" gid="78" x="1936" y="768" width="16" height="16"/>
-  <object id="671" gid="78" x="1920" y="768" width="16" height="16"/>
-  <object id="672" gid="78" x="1904" y="768" width="16" height="16"/>
-  <object id="673" gid="78" x="2160" y="768" width="16" height="16"/>
-  <object id="674" gid="78" x="2176" y="768" width="16" height="16"/>
-  <object id="675" gid="78" x="2192" y="768" width="16" height="16"/>
-  <object id="694" gid="78" x="80" y="720" width="16" height="16"/>
-  <object id="696" gid="83" x="960" y="0" width="16" height="16"/>
+  <object id="696" gid="80" x="960" y="0" width="16" height="16"/>
+  <object id="703" gid="81" x="1120" y="736" width="16" height="16"/>
+  <object id="704" gid="81" x="1136" y="720" width="16" height="16"/>
+  <object id="707" gid="81" x="336" y="752" width="16" height="16"/>
+  <object id="708" gid="81" x="352" y="736" width="16" height="16"/>
+  <object id="709" gid="81" x="368" y="720" width="16" height="16"/>
+  <object id="710" gid="81" x="384" y="704" width="16" height="16"/>
  </objectgroup>
  <objectgroup id="7" name="Goomba">
-  <object id="5" gid="71" x="304" y="768" width="16" height="16"/>
   <object id="6" gid="71" x="592" y="768" width="16" height="16"/>
   <object id="7" gid="71" x="576" y="768" width="16" height="16"/>
   <object id="8" gid="71" x="560" y="768" width="16" height="16"/>

@@ -8,7 +8,8 @@
 #include <queue>
 #include <string>
 #include <variant>
-
+#include "Entity/EntityFactory.h"
+#include "Components/Components_include.h"
 struct Event {
   virtual void handle() = 0;
 };
@@ -27,6 +28,43 @@ struct MarioJumpOnGoomba : public Event {
   uint32_t EnemyID;
 };
 
+struct MarioJumpOnKoopa : public Event {
+  MarioJumpOnKoopa(uint32_t player, uint32_t enemy)
+    : MarioID(player), EnemyID(enemy) {}
+  void handle() override;
+  uint32_t MarioID;
+  uint32_t EnemyID;
+};
+struct MarioLargeToSmall : public Event {
+  MarioLargeToSmall(uint32_t player) : MarioID(player) {}
+  void handle() override;
+  uint32_t MarioID;
+};//Event so that Mushroom can be created
+struct PowerUpEvent : public Event {
+  PowerUpEvent(Vector2 position) : position(position) {}
+  void handle() override;
+  Vector2 position;
+};
+
+struct CoinEvent : public Event {
+  CoinEvent(Vector2 position) : position(position) {}
+  void handle() override;
+  Vector2 position;
+};
+
+struct CoinCollectEvent : public Event {
+  CoinCollectEvent(uint32_t player, uint32_t coin) : MarioID(player), CoinID(coin) {}
+  void handle() override;
+  uint32_t MarioID, CoinID;
+};
+
+struct MarioSmallToLarge : public Event {
+  MarioSmallToLarge(uint32_t player, uint32_t mushroom) : MarioID(player), MushroomID(mushroom) {}
+  void handle() override;
+  uint32_t MarioID, MushroomID;
+};
+
+
 class EventQueue {
 public:
   void pushEvent(Unique<Event> &e);
@@ -42,4 +80,20 @@ private:
 
 private:
   std::queue<Unique<Event>> eventQueue;
+};
+
+
+struct MarioTouchRightKoopa : public Event {
+  MarioTouchRightKoopa(uint32_t player, uint32_t enemy)
+    : MarioID(player), EnemyID(enemy) {}
+  void handle() override;
+  uint32_t MarioID;
+  uint32_t EnemyID;
+};
+struct MarioTouchLeftKoopa : public Event {
+  MarioTouchLeftKoopa(uint32_t player, uint32_t enemy)
+    : MarioID(player), EnemyID(enemy) {}
+  void handle() override;
+  uint32_t MarioID;
+  uint32_t EnemyID;
 };

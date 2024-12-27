@@ -6,11 +6,12 @@
 #include "Map.h"
 #include "Scenes/Scene.h"
 #include "System/System.h"
-
+#include "ScoreManager.h"
 namespace SceneSpace {
 class GameScene : public Scene {
 public:
   GameScene();
+  GameScene(const std::string &_nameScene);
   ~GameScene();
   Unique<Scene> updateScene(float deltaTime) override;
   void update(float deltaTime);
@@ -20,6 +21,7 @@ public:
   void init() override;
 
 private:
+  std::string nameScene;
   bool IsMario = isMario;
   double time;
   Texture2D background;

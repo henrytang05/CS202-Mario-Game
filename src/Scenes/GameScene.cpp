@@ -22,10 +22,10 @@ class TextureComponent;
 namespace SceneSpace {
 int GameScene::lives = 3;
 GameScene::GameScene(const std::string &_nameScene, const std::string &_level)
-    : Scene(), EM(&EntityManager::getInstance()) {
+    : Scene(), EM(EntityManager::getInstance()) {
   nameScene = _nameScene;
   level = _level;
-  entityFactory = std::make_unique<EntityFactory>(*EM);
+  entityFactory = std::make_unique<EntityFactory>(EM);
   Shared<CollisionSystem> collisionSystem = std::make_shared<CollisionSystem>();
   Shared<TransformSystem> transformSystem = std::make_shared<TransformSystem>();
   Shared<AnimationSystem> animationSystem = std::make_shared<AnimationSystem>();
@@ -55,7 +55,7 @@ GameScene::GameScene(const std::string &_nameScene, const std::string &_level)
   update_systems.push_back(coinSystem);
   update_systems.push_back(flagSystem);
 }
-GameScene::GameScene() : Scene(), EM(&EntityManager::getInstance()) {}
+GameScene::GameScene() : Scene(), EM(EntityManager::getInstance()) {}
 GameScene &GameScene::operator=(GameScene &&other) noexcept {
   if (this == &other)
     return *this;
@@ -74,13 +74,12 @@ GameScene &GameScene::operator=(GameScene &&other) noexcept {
   draw_systems = std::move(other.draw_systems);
   return *this;
 }
-GameScene::GameScene(bool resume) : Scene(), EM(&EntityManager::getInstance()) {
+GameScene::GameScene(bool resume) : Scene(), EM(EntityManager::getInstance()) {
   if (resume) {
     load();
 
     GameScene game = GameScene(nameScene, level);
     *this = std::move(game);
-    EM = &EntityManager::getInstance();
   }
 }
 
@@ -108,7 +107,7 @@ GameScene::~GameScene() {
 #endif
   if (!gameOver)
     save();
-  EM->reset();
+  EM.reset();
 }
 void GameScene::loadResources() {
   // Loading BackGround
@@ -180,20 +179,19 @@ void GameScene::update(float deltaTime) {
 bool GameScene::isFinished() { return gameOver; }
 
 void GameScene::save() {
-  string path = savePath + level + nameScene + ".txt";
-  std::ofstream o(path);
+  std::ofstream o(savePath);
   ASSERT(o.is_open(), "Failed to open file");
   o << lives << "\n";
   ScoreManager::getInstance().save(o);
   o << level << "\n";
   o << time << "\n";
   o << nameScene << "\n";
+
   o.close();
 }
 
 void GameScene::load() {
-  string path = savePath + level + nameScene + ".txt";
-  std::ifstream i(path);
+  std::ifstream i(savePath);
   // ASSERT(i.is_open(), "Failed to open file");
   if (!i.is_open()) {
     throw 1;

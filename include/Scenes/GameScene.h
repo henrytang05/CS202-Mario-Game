@@ -31,7 +31,7 @@ private:
   Texture2D background;
   MapRenderer mapRenderer;
   Camera2D camera;
-  EntityManager *EM;
+  EntityManager &EM;
   Weak<AbstractEntity> player;
   bool gameOver;
   Unique<IFactory> entityFactory;
@@ -39,7 +39,7 @@ private:
 
 private:
   static int lives;
-  static inline std::string savePath = "data/GameScene/";
+  static inline std::string savePath = "data/GameScene.txt";
   std::vector<Shared<System>> systems;
   std::vector<Weak<IUpdatableSystem>> update_systems;
   std::vector<Weak<IDrawableSystem>> draw_systems;

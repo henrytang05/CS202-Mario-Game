@@ -8,6 +8,7 @@ Vector2 operator+(const Vector2 &v1, const Vector2 &v2);
 Vector2 operator-(const Vector2 &v);
 
 class PositionComponent : public Component, public Vector2 {
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(PositionComponent, x, y)
 public:
   PositionComponent();
   PositionComponent(Vector2 pos);

@@ -5,8 +5,8 @@
 #include "EntityManager.h"
 #include "Map.h"
 #include "Scenes/Scene.h"
-#include "System/System.h"
 #include "ScoreManager.h"
+#include "System/System.h"
 namespace SceneSpace {
 class GameScene : public Scene {
 public:
@@ -19,6 +19,7 @@ public:
   void loadResources() override;
   bool isFinished();
   void init() override;
+  void save();
 
 private:
   std::string nameScene;

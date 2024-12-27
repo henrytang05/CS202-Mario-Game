@@ -1,6 +1,7 @@
 #ifndef ENTITY_MANAGER_H
 #define ENTITY_MANAGER_H
 
+#include "Exporter.h"
 #include "Interface.h"
 #include "globals.h"
 #include <bitset>
@@ -35,6 +36,10 @@ class IComponentArray {
 public:
   virtual ~IComponentArray() = default;
   virtual void onEntityDestroyed(EntityID id) = 0;
+  std::string getName() const { return name; }
+  void setName(std::string name) { this->name = name; }
+
+  std::string name;
 };
 
 template <typename T> class ComponentArray : public IComponentArray {
@@ -42,7 +47,8 @@ public:
   ComponentArray<T>() { entityComponentIndexMap.fill(-1); }
   virtual ~ComponentArray() = default;
   void onEntityDestroyed(EntityID id) override {
-    if(entityComponentIndexMap[id] == -1) return;
+    if (entityComponentIndexMap[id] == -1)
+      return;
 
     if (entityComponentIndexMap[id] != -1) {
       size_t index = entityComponentIndexMap[id];
@@ -67,6 +73,8 @@ public:
 };
 
 class AbstractEntity : public IUpdatable {
+
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(AbstractEntity, id, name, active)
 private:
   bool active;       // check if entity is active
   uint32_t id;       // entity id
@@ -74,7 +82,8 @@ private:
   EntityManager *EM; // Haven't find a way to make this safer
 
 public:
-  // AbstractEntity(); // Avoid using this constructor
+  AbstractEntity() = default; // Avoid using this constructor
+                              // this is a temporary solution
   AbstractEntity(EntityManager &EM, uint32_t id = INVALID_ENTITY_ID,
                  std::string name = UNNAMED, bool active = true);
 
@@ -114,8 +123,11 @@ public:
   inline T &modifyComponent(TArgs &&...mArgs);
 };
 
-class EntityManager {
+class EntityManager : public IExportable {
 
+  friend void to_json(json &j, const EntityManager &entity);
+  friend void from_json(const json &j, EntityManager &entity);
+  void accept(IExporter &e) override;
   inline static EntityID lastID = 0;
 
 private:
@@ -416,5 +428,8 @@ template <typename T, typename... TArgs>
 inline T &AbstractEntity::modifyComponent(TArgs &&...mArgs) {
   return EM->modifyComponent<T>(this, std::forward<TArgs>(mArgs)...);
 }
+
+void to_json(json &j, const EntityManager &entity);
+void from_json(const json &j, EntityManager &entity);
 
 #endif // ENTITY_MANAGER_H

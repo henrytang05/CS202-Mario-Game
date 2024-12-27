@@ -10,6 +10,7 @@
 #include <variant>
 #include "Entity/EntityFactory.h"
 #include "Components/Components_include.h"
+#include "ScoreManager.h"
 struct Event {
   virtual void handle() = 0;
 };
@@ -64,6 +65,11 @@ struct MarioSmallToLarge : public Event {
   uint32_t MarioID, MushroomID;
 };
 
+struct FinishLevelEvent : public Event {
+  FinishLevelEvent(uint32_t player) : MarioID(player) {}
+  void handle() override;
+  uint32_t MarioID;
+};
 
 class EventQueue {
 public:

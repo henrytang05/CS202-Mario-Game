@@ -254,6 +254,7 @@ void CollisionHandlingSystem::handlePlayerCollision(Weak<AbstractEntity> _entity
             EQ.pushEvent(std::make_unique<MarioLargeToSmall>(entity->getID()));
           }
         }
+        
       }
     }
     else if(below.lock()->getComponent<TextureComponent>().state == "Shell") {
@@ -264,13 +265,19 @@ void CollisionHandlingSystem::handlePlayerCollision(Weak<AbstractEntity> _entity
       EventQueue &EQ = EventQueue::getInstance();
       EQ.pushEvent(std::make_unique<MarioSmallToLarge>(entity->getID(), below.lock()->getID()));
     }
-    else if(below.lock()->hasComponent<CoinTag>()) {
-      below.lock()->destroy();
-      entity->getComponent<MarioSoundComponent>().PlayCoinEffect();
-    } 
     else if (entity->getComponent<CharacterStateComponent>().getState() == "DROPPING") {
       entity->getComponent<CharacterStateComponent>().setEnumState("IDLE");
     }
+    else if(below.lock()->hasComponent<CoinTag>()) {
+      below.lock()->destroy();
+      entity->getComponent<MarioSoundComponent>().PlayCoinEffect();
+      ScoreManager::getInstance().addScore(1);
+    } 
+    else if(below.lock()->getName() == "FlagPole") {
+      EventQueue &EQ = EventQueue::getInstance();
+      EQ.pushEvent(std::make_unique<FinishLevelEvent>(entity->getID()));
+    }
+
   }
 
   // Above Collision
@@ -310,6 +317,15 @@ void CollisionHandlingSystem::handlePlayerCollision(Weak<AbstractEntity> _entity
         EQ.pushEvent(std::make_unique<MarioLargeToSmall>(entity->getID()));
       }
     }
+    else if(aboveBlock->hasComponent<CoinTag>()) {
+      aboveBlock->destroy();
+      entity->getComponent<MarioSoundComponent>().PlayCoinEffect();
+      ScoreManager::getInstance().addScore(1);
+    } 
+    else if(aboveBlock->getName() == "FlagPole") {
+      EventQueue &EQ = EventQueue::getInstance();
+      EQ.pushEvent(std::make_unique<FinishLevelEvent>(entity->getID()));
+    }
   }
 
   // Right Collision
@@ -334,11 +350,16 @@ void CollisionHandlingSystem::handlePlayerCollision(Weak<AbstractEntity> _entity
     else if(rightBlock->hasComponent<CoinTag>()) {
       rightBlock->destroy();
       entity->getComponent<MarioSoundComponent>().PlayCoinEffect();
+      ScoreManager::getInstance().addScore(1);
     }
     else if(rightBlock->getName() == "Mushroom") {
       EventQueue &EQ = EventQueue::getInstance();
         EQ.pushEvent(std::make_unique<MarioSmallToLarge>(entity->getID(), rightBlock->getID()));
       }
+    else if(rightBlock->getName() == "FlagPole") {
+      EventQueue &EQ = EventQueue::getInstance();
+      EQ.pushEvent(std::make_unique<FinishLevelEvent>(entity->getID()));
+    }
   }
 
   // Left Collision
@@ -363,11 +384,16 @@ void CollisionHandlingSystem::handlePlayerCollision(Weak<AbstractEntity> _entity
     else if(leftBlock->hasComponent<CoinTag>()) {
       leftBlock->destroy();
       entity->getComponent<MarioSoundComponent>().PlayCoinEffect();
+      ScoreManager::getInstance().addScore(1);
       // event: touch coin
     }
     else if(leftBlock->getName() == "Mushroom") {
       EventQueue &EQ = EventQueue::getInstance();
       EQ.pushEvent(std::make_unique<MarioSmallToLarge>(entity->getID(), leftBlock->getID()));
+    }
+    else if(leftBlock->getName() == "FlagPole") {
+      EventQueue &EQ = EventQueue::getInstance();
+      EQ.pushEvent(std::make_unique<FinishLevelEvent>(entity->getID()));
     }
   }
 }

@@ -71,3 +71,25 @@ void SwingSystem::update(float dt) {
     position.setPosition(position_change);
   }
 }
+
+
+void FlagSystem::update(float dt) {
+  EntityManager &EM = EntityManager::getInstance();
+  auto Entities = EM.getHasAll<FlagTag, PositionComponent>();
+  for (auto tEntity : Entities) {
+    if (tEntity.expired())
+      throw std::runtime_error("Entity is expired");
+    auto entity = tEntity.lock();
+    auto &position = EM.getComponent<PositionComponent>(entity);
+    auto &flag = EM.getComponent<FlagTag>(entity);
+    if(flag.triggered == false) continue;
+
+    Vector2 position_change = position.getPosition();
+    position_change.y += 1.0f;
+    if(position_change.y > flag.position_fixed.y + 80.0f) {
+      position_change.y = flag.position_fixed.y + 80.0f;
+    }
+    position.setPosition(position_change);
+
+  }
+}

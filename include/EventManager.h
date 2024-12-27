@@ -66,9 +66,9 @@ struct MarioSmallToLarge : public Event {
 };
 
 struct FinishLevelEvent : public Event {
-  FinishLevelEvent(uint32_t player) : MarioID(player) {}
+  FinishLevelEvent(uint32_t player, uint32_t FlagPole) : MarioID(player), FlagPoleID(FlagPole) {}
   void handle() override;
-  uint32_t MarioID;
+  uint32_t MarioID, FlagPoleID;
 };
 
 class EventQueue {

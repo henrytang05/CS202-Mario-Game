@@ -78,6 +78,7 @@ void Pipe::init(Vector2 position, Vector2 size) {
   addComponent<BoundingBoxComponent>(size);
   addComponent<TextureComponent>().addTexture(
       "Normal", TextureManager::getInstance().getTexture("Pipe"));
+  addComponent<PipeTag>();
   std::cerr << "create pipe" << std::endl;
 }
 // void Pipe::draw() {
@@ -100,6 +101,8 @@ void Flag::init(Vector2 position) {
   addComponent<TextureComponent>();
   getComponent<TextureComponent>().addTexture(
       "Normal", TextureManager::getInstance().getTexture("Flag"));
+  addComponent<FlagTag>(position);
+
 }
 
 // void Flag::draw() {

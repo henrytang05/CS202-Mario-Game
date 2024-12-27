@@ -9,6 +9,7 @@ void AnimationSystem::draw(float dt) {
       throw std::runtime_error("Entity is expired");
     if(tEntity.lock()->isActive() == false) continue;
     auto entity = tEntity.lock();
+    if(entity->hasComponent<PipeTag>()) continue;
     entity->changeState();
 
     auto &position = EM.getComponent<PositionComponent>(entity);
@@ -39,4 +40,41 @@ void AnimationSystem::draw(float dt) {
     Texture2D choosen_texture = frames[animation.currentFrame];
     DrawTexture (choosen_texture, position.x, position.y, WHITE);
   }
+  Entities = EM.getHasAll<PipeTag>();
+  for (auto tEntity : Entities) {
+    if (tEntity.expired())
+      throw std::runtime_error("Entity is expired");
+    if(tEntity.lock()->isActive() == false) continue;
+    auto entity = tEntity.lock();
+    entity->changeState();
+
+    auto &position = EM.getComponent<PositionComponent>(entity);
+    auto &texture = EM.getComponent<TextureComponent>(entity);
+    auto &animation = texture.textures[texture.state];
+    auto &frames = animation.frames;
+    if (frames.empty()) {
+      throw std::runtime_error("No frames in animation");
+    }
+
+    animation.elapsedTime += dt;
+    if (!entity->isActive() && animation.elapsedTime >= animation.frameDelay)
+      return;
+    if (animation.elapsedTime >= animation.frameDelay) {     
+      if(texture.state == "Die") {
+        entity->destroy();
+        continue;
+      }
+    }
+    while (animation.elapsedTime >= animation.frameDelay) {
+      animation.elapsedTime -= animation.frameDelay;
+      animation.currentFrame++;
+      if (animation.currentFrame >= frames.size()) {
+        animation.currentFrame = animation.isLooping ? 0 : frames.size() - 1;
+      }
+    }
+
+    Texture2D choosen_texture = frames[animation.currentFrame];
+    DrawTexture (choosen_texture, position.x, position.y, WHITE);
+  }
+
 }

@@ -96,7 +96,7 @@ uint32_t EntityFactory::createCoin(Vector2 position) {
   textures.push_back(TextureManager::getInstance().getTexture("Coin3"));
   entity->getComponent<TextureComponent>().addTexture("Normal", textures, 0.1f, true);
   entity->getComponent<TextureComponent>().changeState("Normal");
-  //entity->addComponent<TransformComponent>(Vector2{50.0f, -16.0f});
+  entity->addComponent<TransformComponent>(Vector2{0.0f, 0.0f});
   entity->addComponent<CoinTag>();
   return entity->getID();
 }

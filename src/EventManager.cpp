@@ -19,6 +19,7 @@ void MarioDieEvent::handle() {
   mario->getComponent<TextureComponent>().changeState(mario->getComponent<CharacterStateComponent>().getCurrentState());
   mario->getComponent<TransformComponent>().setVelocity({0.0f, -240.0f});
   mario->getComponent<MarioSoundComponent>().PlayMarioDieEffect();
+  ScoreManager::getInstance().resetScore();
 }
 void MarioLargeToSmall::handle() {
   EntityManager &EM = EntityManager::getInstance();
@@ -68,6 +69,7 @@ void MarioJumpOnGoomba::handle() {
   goomba->getComponent<TransformComponent>().setVelocity({0.0f, 0.0f});
   mario->getComponent<CharacterStateComponent>().setEnumState("JUMPING");
   mario->getComponent<TransformComponent>().setVelocity({mario->getComponent<TransformComponent>().x, -180.0f});
+  ScoreManager::getInstance().addScore(1);
 }
 
 void PowerUpEvent::handle() {
@@ -83,6 +85,8 @@ void CoinEvent::handle() {
   entityFactory = std::make_unique<EntityFactory>(EM);
   auto coin = entityFactory->createCoin(Vector2{position.x, position.y - 10.0f});
   EM.getEntityRef(coin).addComponent<CoinInBlockTag>(position);
+  EM.getEntityRef(coin).removeComponent<TransformComponent>();
+  ScoreManager::getInstance().addScore(1);
 }
 
 void CoinCollectEvent::handle() {
@@ -97,6 +101,20 @@ void CoinCollectEvent::handle() {
   auto coin = _coin.lock();
   coin->destroy();
   mario->getComponent<MarioSoundComponent>().PlayCoinEffect();
+  ScoreManager::getInstance().addScore(1);
+}
+
+void FinishLevelEvent::handle() {
+  EntityManager &EM = EntityManager::getInstance();
+  auto _mario = EM.getEntityPtr(MarioID);
+
+  ASSERT(!_mario.expired());
+
+  auto mario = _mario.lock();
+  mario->getComponent<TransformComponent>().setVelocity({50.0f, 0.0f});
+  mario->getComponent<MarioSoundComponent>().PlayStageClearEffect();
+  mario->removeComponent<PlayerTag>();
+  
 }
 
 void EventQueue::pushEvent(Unique<Event> &e) { eventQueue.push(std::move(e)); }
@@ -140,6 +158,7 @@ void MarioJumpOnKoopa::handle()
       koopa->getComponent<TransformComponent>().setVelocity({0.0f, 0.0f});
       mario->getComponent<CharacterStateComponent>().setEnumState("JUMPING");
       mario->getComponent<TransformComponent>().setVelocity({mario->getComponent<TransformComponent>().x, -180.0f});
+      ScoreManager::getInstance().addScore(1);
   }
   else {
     koopa->getComponent<TextureComponent>().changeState("Shell");

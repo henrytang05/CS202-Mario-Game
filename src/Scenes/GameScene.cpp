@@ -75,11 +75,11 @@ GameScene::~GameScene() {
 }
 void GameScene::loadResources() {
   // Loading BackGround
-  Image bImage = LoadImage("assets/Level4/BackGround.png");
+  Image bImage = LoadImage("assets/Level1/BackGround.png");
   background = LoadTextureFromImage(bImage);
   UnloadImage(bImage);
   // Create Map
-  entities = mapRenderer.createMap("assets/Level4/Level4.json");
+  entities = mapRenderer.createMap("assets/Level1/Level1.json");
 }
 void GameScene::draw() {
   float dt = GetFrameTime();
@@ -91,12 +91,11 @@ void GameScene::draw() {
   }
 
   EndMode2D();
-  int scores =0;
   DrawText(TextFormat("Time: %03i", (int)time), 1200, 35, GAMEPLAY_TEXT_SIZE,
            WHITE);
   DrawText(TextFormat("Lives: %03i", (int)lives), 1200 - 35 * 6, 35,
            GAMEPLAY_TEXT_SIZE, WHITE);
-  DrawText(TextFormat("Score: %03i", (int)scores), 1200 - 35 * 12, 35, GAMEPLAY_TEXT_SIZE, WHITE);
+  DrawText(TextFormat("Score: %03i", (int)ScoreManager::getInstance().getScore()), 1200 - 35 * 12, 35, GAMEPLAY_TEXT_SIZE, WHITE);
 }
 Unique<Scene> GameScene::updateScene(float deltaTime) {
   this->update(deltaTime);

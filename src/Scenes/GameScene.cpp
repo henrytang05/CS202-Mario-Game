@@ -2,6 +2,7 @@
 #include "Scenes/GuideScene.h"
 #include "EventManager.h"
 
+#include <iterator>
 #include <memory>
 
 #include "Components/Collision.h"
@@ -10,8 +11,11 @@
 #include "Components/Texture.h"
 #include "Entity/EntityFactory.h"
 #include "EntityManager.h"
+#include "EventManager.h"
+#include "Exporter.h"
 #include "Logger.h"
 #include "Scenes/IntroScene.h"
+#include "ScoreManager.h"
 #include "System/System.h"
 #include "globals.h"
 #include "pch.h"
@@ -19,7 +23,8 @@
 class TextureComponent;
 namespace SceneSpace {
 int GameScene::lives = 3;
-GameScene::GameScene(const std::string &_nameScene, const std::string &_level) : Scene(), EM(EntityManager::getInstance()) {
+GameScene::GameScene(const std::string &_nameScene, const std::string &_level)
+    : Scene(), EM(EntityManager::getInstance()) {
   nameScene = _nameScene;
   level = _level;
   entityFactory = std::make_unique<EntityFactory>(EM);
@@ -30,7 +35,8 @@ GameScene::GameScene(const std::string &_nameScene, const std::string &_level) :
   Shared<SwingSystem> swingSystem = std::make_shared<SwingSystem>();
   Shared<CoinSystem> coinSystem = std::make_shared<CoinSystem>();
   Shared<FlagSystem> flagSystem = std::make_shared<FlagSystem>();
-  Shared<CollisionHandlingSystem> collisionHandlingSystem = std::make_shared<CollisionHandlingSystem>();
+  Shared<CollisionHandlingSystem> collisionHandlingSystem =
+      std::make_shared<CollisionHandlingSystem>();
   Shared<BlockSystem> blockSystem = std::make_shared<BlockSystem>();
   systems.push_back(playerSystem);
   systems.push_back(collisionSystem);
@@ -54,9 +60,35 @@ GameScene::GameScene(const std::string &_nameScene, const std::string &_level) :
                                         "./assets/Hover_GuideButton.png");
 }
 GameScene::GameScene() : Scene(), EM(EntityManager::getInstance()) {}
+GameScene &GameScene::operator=(GameScene &&other) noexcept {
+  if (this == &other)
+    return *this;
+  nameScene = std::move(other.nameScene);
+  level = std::move(other.level);
+  time = std::move(other.time);
+  background = std::move(other.background);
+  camera = std::move(other.camera);
+  player = std::move(other.player);
+  gameOver = std::move(other.gameOver);
+  entityFactory = std::move(other.entityFactory);
+  entities = std::move(other.entities);
+  lives = std::move(other.lives);
+  systems = std::move(other.systems);
+  update_systems = std::move(other.update_systems);
+  draw_systems = std::move(other.draw_systems);
+  return *this;
+}
+GameScene::GameScene(bool resume) : Scene(), EM(EntityManager::getInstance()) {
+  if (resume) {
+    load();
+
+    GameScene game = GameScene(nameScene, level);
+    *this = std::move(game);
+  }
+}
 
 void GameScene::init() {
-    time = 360.f;
+  time = 360.f;
 
   // create player type?
   if (isMario)
@@ -77,15 +109,19 @@ GameScene::~GameScene() {
 #ifdef _DEBUG
   Log("GameScene destroyed");
 #endif
+  if (!gameOver)
+    save();
   EM.reset();
 }
 void GameScene::loadResources() {
   // Loading BackGround
-  Image bImage = LoadImage(("assets/" + nameScene + "/Background-"+level+".png").c_str());
+  Image bImage = LoadImage(
+      ("assets/" + nameScene + "/Background-" + level + ".png").c_str());
   background = LoadTextureFromImage(bImage);
   UnloadImage(bImage);
   // Create Map
-  entities = mapRenderer.createMap("assets/" + nameScene + "/" + nameScene + "-" + level + ".json");
+  entities = mapRenderer.createMap("assets/" + nameScene + "/" + nameScene +
+                                   "-" + level + ".json");
 }
 void GameScene::draw() {
   float dt = GetFrameTime();
@@ -105,7 +141,9 @@ void GameScene::draw() {
            WHITE);
   DrawText(TextFormat("Lives: %03i", (int)lives), 1200 - 35 * 6, 35,
            GAMEPLAY_TEXT_SIZE, WHITE);
-  DrawText(TextFormat("Score: %03i", (int)ScoreManager::getInstance().getScore()), 1200 - 35 * 12, 35, GAMEPLAY_TEXT_SIZE, WHITE);
+  DrawText(
+      TextFormat("Score: %03i", (int)ScoreManager::getInstance().getScore()),
+      1200 - 35 * 12, 35, GAMEPLAY_TEXT_SIZE, WHITE);
 }
 Unique<Scene> GameScene::updateScene(float deltaTime) {
   this->update(deltaTime);
@@ -123,12 +161,13 @@ Unique<Scene> GameScene::updateScene(float deltaTime) {
       return make_unique<SceneSpace::IntroScene>();
     }
     return make_unique<SceneSpace::GameScene>(nameScene, level);
-  }
-  else if(player.lock()->hasComponent<PlayerTag>() == false && player.lock()->getComponent<PositionComponent>().x > 164.0f * 16.0f) {
-    if(level == "Easy") {
+  } else if (player.lock()->hasComponent<PlayerTag>() == false &&
+             player.lock()->getComponent<PositionComponent>().x >
+                 164.0f * 16.0f) {
+    if (level == "Easy") {
       return make_unique<SceneSpace::GameScene>(nameScene, "Medium");
     }
-    if(level == "Medium") {
+    if (level == "Medium") {
       return make_unique<SceneSpace::GameScene>(nameScene, "Hard");
     }
     return make_unique<SceneSpace::IntroScene>();
@@ -156,4 +195,30 @@ void GameScene::update(float deltaTime) {
 }
 
 bool GameScene::isFinished() { return gameOver; }
+
+void GameScene::save() {
+  std::ofstream o(savePath);
+  ASSERT(o.is_open(), "Failed to open file");
+  o << lives << "\n";
+  ScoreManager::getInstance().save(o);
+  o << level << "\n";
+  o << time << "\n";
+  o << nameScene << "\n";
+
+  o.close();
+}
+
+void GameScene::load() {
+  std::ifstream i(savePath);
+  // ASSERT(i.is_open(), "Failed to open file");
+  if (!i.is_open()) {
+    throw 1;
+  }
+  i >> lives;
+  ScoreManager::getInstance().load(i);
+  i >> level;
+  i >> time;
+  i >> nameScene;
+  i.close();
+}
 } // namespace SceneSpace

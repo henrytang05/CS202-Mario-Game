@@ -8,6 +8,7 @@
 class CharacterStateComponent : public Component, public CharacterState {
 public:
   CharacterStateComponent();
+  void to_json(json &j) const override;
 };
 
 #endif // CHARACTER_STATE_COMPONENT_H

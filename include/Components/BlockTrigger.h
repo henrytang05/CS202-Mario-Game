@@ -4,13 +4,13 @@
 #include "Components/Component.h"
 #include "EntityManager.h"
 #include "TextureManager.h"
-#include "EventManager.h"
 #include "globals.h"
 
 class TriggerBehaviour {
 public:
   virtual ~TriggerBehaviour() = default;
-  virtual TriggerBehaviour *trigger(AbstractEntity* entity, float deltaTime) = 0;
+  virtual TriggerBehaviour *trigger(AbstractEntity *entity,
+                                    float deltaTime) = 0;
 };
 
 class TriggerBrokenBlockWhenHitBySmall : public TriggerBehaviour {
@@ -53,6 +53,7 @@ public:
   void init();
   void setTrigger(TriggerBehaviour *_trigger);
   void update(float deltaTime);
+  void to_json(json &j) const override;
 
 private:
   TriggerBehaviour *trigger;

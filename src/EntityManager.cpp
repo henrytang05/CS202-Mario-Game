@@ -15,12 +15,12 @@ void EntityManager::reset() {
   for (auto &entity : entities) {
     entity.reset();
   }
-  for(auto &componentArray : componentArrays) {
+  for (auto &componentArray : componentArrays) {
     componentArray.reset();
   }
 }
 
-EntityManager::EntityManager() {}
+EntityManager::EntityManager() { componentArrays.fill(nullptr); }
 EntityManager::~EntityManager() {
   std::cout << "Cleaning up EntityManager" << std::endl;
 }
@@ -183,9 +183,7 @@ AbstractEntity::~AbstractEntity() {
 uint32_t AbstractEntity::getID() const { return id; }
 
 bool AbstractEntity::isActive() const { return active; }
-void AbstractEntity::deactivate() {
-  active = false;
-}
+void AbstractEntity::deactivate() { active = false; }
 void AbstractEntity::destroy() {
   active = false;
   EM->destroyEntity(id);
@@ -193,3 +191,47 @@ void AbstractEntity::destroy() {
 
 std::string AbstractEntity::getName() const { return name; }
 void AbstractEntity::setName(std::string name) { this->name = name; }
+
+void to_json(json &j, const EntityManager &entity) {
+  for (auto &e : entity.entities) {
+    if (e) {
+      j["entities"].push_back(*e);
+    }
+  }
+
+  for (auto &[k, v] : entity.entityBitsetMap) {
+    j["entityBitsetMap"][k] = v.to_string();
+  }
+
+  for (auto &[k, v] : entity.bitsetEntityMap) {
+    j["bitsetEntityMap"][k.to_string()] =
+        std::vector<EntityID>(v.begin(), v.end());
+  }
+
+  for (auto &[k, v] : entity.entityNameMap) {
+    j["entityNameMap"][k] = std::vector<EntityID>(v.begin(), v.end());
+  }
+
+  for (auto &c : entity.componentArrays) {
+    if (c) {
+      json j97;
+      c->to_json(j97);
+      j["componentArrays"][c->getName()] = j97;
+    }
+  }
+}
+
+void from_json(const json &j, EntityManager &entity) {
+  // // entity = std::move(*std::make_unique<EntityManager>());
+  // for (auto &e : j["entities"]) {
+  //   EntityID id = e.at("id").get<EntityID>();
+  //   std::string name = e.at("name").get<std::string>();
+  //   bool acitve = e.at("active").get<bool>();
+  //
+  //   entity.createEntity(name);
+  // }
+}
+
+void EntityManager::accept(IVisitor &e) { e.visit(*this); }
+
+void to_json(json &j, const IComponentArray &ic) {}

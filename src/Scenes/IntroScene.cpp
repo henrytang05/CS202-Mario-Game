@@ -1,16 +1,15 @@
 #include "Scenes/IntroScene.h"
 #include "Logger.h"
+#include "Scenes/ChooseThemeScene.h"
 #include "Scenes/GameScene.h"
-#include "Scenes/LoadGameScene.h"
 #include "Scenes/GuideScene.h"
+#include "Scenes/LoadGameScene.h"
 #include "Scenes/Scene.h"
 #include "Scenes/SettingScene.h"
 #include "Scenes/ChooseThemeScene.h"
 #include "Scenes/RankingScene.h"
 namespace SceneSpace {
-IntroScene::IntroScene() : Scene() {
-  SoundCtrl.PlayGroundTheme();
-}
+IntroScene::IntroScene() : Scene() { SoundCtrl.PlayGroundTheme(); }
 IntroScene::~IntroScene() {
 #ifdef _DEBUG
   Log("IntroScene destroyed");
@@ -32,18 +31,18 @@ Unique<Scene> IntroScene::updateScene(float deltaTime) {
   SettingsButton->update(mousePos, isLeftClick);
   GuideButton->update(mousePos, isLeftClick);
 
-  if (NewGameButton->isPressed())
-  {
+  if (NewGameButton->isPressed()) {
     SoundCtrl.PlayTingSound();
     return std::make_unique<SceneSpace::ChooseThemeScene>();
   }
-  if (LoadGameButton->isPressed())
-  {
+  if (LoadGameButton->isPressed()) {
     SoundCtrl.PlayTingSound();
-    return std::make_unique<SceneSpace::LoadGameScene>();
-  }  
-  if (RankingButton->isPressed())
-  {
+    try {
+      return std::make_unique<SceneSpace::GameScene>(true);
+    } catch (int a) {
+    }
+  }
+  if (RankingButton->isPressed()) {
     SoundCtrl.PlayTingSound();
     return std::make_unique<SceneSpace::RankingScene>();
   }  
@@ -52,11 +51,11 @@ Unique<Scene> IntroScene::updateScene(float deltaTime) {
     SoundCtrl.PlayTingSound();
     return std::make_unique<SceneSpace::SettingScene>();
   }
-  if(GuideButton->isPressed())
-  {
+  if (GuideButton->isPressed()) {
     SoundCtrl.PlayTingSound();
     return std::make_unique<SceneSpace::GuideScene>();
   }
+
   return nullptr;
 }
 void IntroScene::draw() {
@@ -82,4 +81,5 @@ void IntroScene::loadResources() {
 };
 void IntroScene::init() {
 };
+void IntroScene::init() {};
 } // namespace SceneSpace

@@ -5,7 +5,6 @@
 #include "EntityManager.h"
 #include "Map.h"
 #include "Scenes/Scene.h"
-#include "System/System.h"
 #include "ScoreManager.h"
 #include "GUI.h"
 namespace SceneSpace {
@@ -13,6 +12,8 @@ class GameScene : public Scene {
 public:
   GameScene();
   GameScene(const std::string &_nameScene, const std::string &_level);
+  GameScene(bool resume);
+  GameScene &operator=(GameScene &&other) noexcept;
   ~GameScene();
   Unique<Scene> updateScene(float deltaTime) override;
   void update(float deltaTime);
@@ -20,6 +21,8 @@ public:
   void loadResources() override;
   bool isFinished();
   void init() override;
+  void save();
+  void load();
 
   static int lives;
 private:
@@ -37,6 +40,8 @@ private:
   std::vector<Weak<AbstractEntity>> entities;
 
 private:
+  static int lives;
+  static inline std::string savePath = "data/GameScene.txt";
   std::vector<Shared<System>> systems;
   std::vector<Weak<IUpdatableSystem>> update_systems;
   std::vector<Weak<IDrawableSystem>> draw_systems;

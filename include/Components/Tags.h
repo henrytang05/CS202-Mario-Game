@@ -8,6 +8,7 @@ class EnemyTag : public Component {};
 class AITag : public Component {};
 class PowerupTag : public Component {};
 class CoinInBlockTag : public Component {
+    NLOHMANN_DEFINE_TYPE_INTRUSIVE(CoinInBlockTag, position_fixed.x, position_fixed.y)
 public:
     CoinInBlockTag(Vector2 pos) : position_fixed(pos) {} ;
     CoinInBlockTag(float x, float y) : position_fixed({x, y}) {} ;
@@ -16,6 +17,7 @@ public:
 };
 class CoinTag : public Component {};
 class FlagTag : public Component {
+    NLOHMANN_DEFINE_TYPE_INTRUSIVE(FlagTag, position_fixed.x, position_fixed.y, triggered)
 public:
     FlagTag(Vector2 pos) : position_fixed(pos) {} ;
     FlagTag(float x, float y) : position_fixed({x, y}) {} ;

@@ -90,3 +90,10 @@ struct MarioTouchRightKoopa : public Event {
   uint32_t MarioID;
   uint32_t EnemyID;
 };
+struct MarioTouchLeftKoopa : public Event {
+  MarioTouchLeftKoopa(uint32_t player, uint32_t enemy)
+    : MarioID(player), EnemyID(enemy) {}
+  void handle() override;
+  uint32_t MarioID;
+  uint32_t EnemyID;
+};

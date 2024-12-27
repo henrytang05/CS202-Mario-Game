@@ -51,6 +51,8 @@ GameScene::GameScene(const std::string &_nameScene, const std::string &_level)
   draw_systems.push_back(animationSystem);
   update_systems.push_back(swingSystem);
   update_systems.push_back(coinSystem);
+  update_systems.push_back(flagSystem);
+
 }
 GameScene::GameScene() : Scene(), EM(&EntityManager::getInstance()) {}
 GameScene &GameScene::operator=(GameScene &&other) noexcept {
@@ -111,7 +113,7 @@ GameScene::~GameScene() {
 }
 void GameScene::loadResources() {
   // Loading BackGround
-  Image bImage = LoadImage(("assets/" + nameScene + "/Background.png").c_str());
+  Image bImage = LoadImage(("assets/" + nameScene + "/Background-"+level+".png").c_str());
   background = LoadTextureFromImage(bImage);
   UnloadImage(bImage);
   // Create Map
@@ -138,7 +140,7 @@ void GameScene::draw() {
 }
 Unique<Scene> GameScene::updateScene(float deltaTime) {
   this->update(deltaTime);
-  if (player.lock()->hasComponent<PlayerTag>() == false) {
+  if (player.lock()->isActive() == false) {
     sleep(1);
     lives -= 1;
     if (lives == 0) {
@@ -146,6 +148,15 @@ Unique<Scene> GameScene::updateScene(float deltaTime) {
       return make_unique<SceneSpace::IntroScene>();
     }
     return make_unique<SceneSpace::GameScene>(nameScene, level);
+  }
+  else if(player.lock()->hasComponent<PlayerTag>() == false && player.lock()->getComponent<PositionComponent>().x > 164.0f * 16.0f) {
+    if(level == "Easy") {
+      return make_unique<SceneSpace::GameScene>(nameScene, "Medium");
+    }
+    if(level == "Medium") {
+      return make_unique<SceneSpace::GameScene>(nameScene, "Hard");
+    }
+    return make_unique<SceneSpace::IntroScene>();
   }
   return nullptr;
 }

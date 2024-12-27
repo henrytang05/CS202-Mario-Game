@@ -117,7 +117,18 @@ void FinishLevelEvent::handle() {
   ASSERT(!_mario.expired());
   auto mario = _mario.lock();
   auto flagPole = _flagPole.lock();
+  mario->removeComponent<PlayerTag>();
+  mario->getComponent<TransformComponent>().setVelocity({30.0f, 0.0f});
+  mario->getComponent<CharacterStateComponent>().setEnumState("MOVING");
+  mario->getComponent<CharacterStateComponent>().setFacingState("RIGHT");
+  mario->getComponent<TextureComponent>().changeState(mario->getComponent<CharacterStateComponent>().getCurrentState());
   mario->getComponent<MarioSoundComponent>().PlayStageClearEffect();
+  Vector2 flagPolePosition = flagPole->getComponent<PositionComponent>().getPosition();
+  if(mario->getComponent<CharacterStateComponent>().getSize() == "SMALL")
+    mario->getComponent<PositionComponent>().setPosition({flagPolePosition.x + 8.0f, 764.0f});
+  else {
+    mario->getComponent<PositionComponent>().setPosition({flagPolePosition.x + 8.0f, 756.0f});
+  }
   flagPole->removeComponent<BoundingBoxComponent>();
 }
 

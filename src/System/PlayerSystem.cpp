@@ -26,7 +26,7 @@ void PlayerSystem::update(float dt) {
       velocity.y += 10.0f;
       tEntity.lock()->getComponent<TransformComponent>().setVelocity(velocity);
       if(position.y >= 810.0f) {
-        tEntity.lock()->removeComponent<PlayerTag>();
+        tEntity.lock()->deactivate();
       }
       return;
     }

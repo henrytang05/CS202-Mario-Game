@@ -95,6 +95,9 @@ void GameScene::draw() {
   }
 
   EndMode2D();
+  std::string mapName = (nameScene == "Level1" ? "Air" : (nameScene == "Level2" ? "Water" : "Fire"));
+  DrawText(TextFormat(("Map: " + mapName + " - " + level).c_str()), 1200 - 35 * 6 - 35 * 20, 35, GAMEPLAY_TEXT_SIZE,
+           WHITE); 
   DrawText(TextFormat("Time: %03i", (int)time), 1200, 35, GAMEPLAY_TEXT_SIZE,
            WHITE);
   DrawText(TextFormat("Lives: %03i", (int)lives), 1200 - 35 * 6, 35,
@@ -103,7 +106,7 @@ void GameScene::draw() {
 }
 Unique<Scene> GameScene::updateScene(float deltaTime) {
   this->update(deltaTime);
-  if (player.lock()->isActive() == false) {
+  if (player.lock()->isActive() == false || time <= 0.0f) {
     sleep(1);
     lives -= 1;
     if (lives == 0) {

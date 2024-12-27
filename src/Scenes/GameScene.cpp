@@ -9,6 +9,7 @@
 #include "Components/Texture.h"
 #include "Entity/EntityFactory.h"
 #include "EntityManager.h"
+#include "Exporter.h"
 #include "Logger.h"
 #include "Scenes/IntroScene.h"
 #include "System/System.h"
@@ -18,7 +19,8 @@
 class TextureComponent;
 namespace SceneSpace {
 int GameScene::lives = 3;
-GameScene::GameScene(const std::string &_nameScene) : Scene(), EM(EntityManager::getInstance()) {
+GameScene::GameScene(const std::string &_nameScene)
+    : Scene(), EM(EntityManager::getInstance()) {
   nameScene = _nameScene;
   entityFactory = std::make_unique<EntityFactory>(EM);
   Shared<CollisionSystem> collisionSystem = std::make_shared<CollisionSystem>();
@@ -28,7 +30,8 @@ GameScene::GameScene(const std::string &_nameScene) : Scene(), EM(EntityManager:
   Shared<SwingSystem> swingSystem = std::make_shared<SwingSystem>();
   Shared<CoinSystem> coinSystem = std::make_shared<CoinSystem>();
   Shared<FlagSystem> flagSystem = std::make_shared<FlagSystem>();
-  Shared<CollisionHandlingSystem> collisionHandlingSystem = std::make_shared<CollisionHandlingSystem>();
+  Shared<CollisionHandlingSystem> collisionHandlingSystem =
+      std::make_shared<CollisionHandlingSystem>();
   Shared<BlockSystem> blockSystem = std::make_shared<BlockSystem>();
   systems.push_back(playerSystem);
   systems.push_back(collisionSystem);
@@ -48,12 +51,11 @@ GameScene::GameScene(const std::string &_nameScene) : Scene(), EM(EntityManager:
   update_systems.push_back(swingSystem);
   update_systems.push_back(coinSystem);
   update_systems.push_back(flagSystem);
-
 }
 GameScene::GameScene() : Scene(), EM(EntityManager::getInstance()) {}
 
 void GameScene::init() {
-    time = 360.f;
+  time = 360.f;
 
   // create player type?
   if (isMario)
@@ -82,7 +84,8 @@ void GameScene::loadResources() {
   background = LoadTextureFromImage(bImage);
   UnloadImage(bImage);
   // Create Map
-  entities = mapRenderer.createMap("assets/" + nameScene + "/" + nameScene + ".json");
+  entities =
+      mapRenderer.createMap("assets/" + nameScene + "/" + nameScene + ".json");
 }
 void GameScene::draw() {
   float dt = GetFrameTime();
@@ -98,7 +101,9 @@ void GameScene::draw() {
            WHITE);
   DrawText(TextFormat("Lives: %03i", (int)lives), 1200 - 35 * 6, 35,
            GAMEPLAY_TEXT_SIZE, WHITE);
-  DrawText(TextFormat("Score: %03i", (int)ScoreManager::getInstance().getScore()), 1200 - 35 * 12, 35, GAMEPLAY_TEXT_SIZE, WHITE);
+  DrawText(
+      TextFormat("Score: %03i", (int)ScoreManager::getInstance().getScore()),
+      1200 - 35 * 12, 35, GAMEPLAY_TEXT_SIZE, WHITE);
 }
 Unique<Scene> GameScene::updateScene(float deltaTime) {
   this->update(deltaTime);
@@ -130,4 +135,10 @@ void GameScene::update(float deltaTime) {
 }
 
 bool GameScene::isFinished() { return gameOver; }
+
+void GameScene::save() {
+  JSONExporter exporter;
+  EM.accept(exporter);
+  exporter.save();
+}
 } // namespace SceneSpace

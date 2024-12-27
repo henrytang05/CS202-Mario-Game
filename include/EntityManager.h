@@ -125,12 +125,13 @@ public:
 
 class EntityManager : public IExportable {
 
+public:
   friend void to_json(json &j, const EntityManager &entity);
   friend void from_json(const json &j, EntityManager &entity);
   void accept(IExporter &e) override;
-  inline static EntityID lastID = 0;
 
 private:
+  inline static EntityID lastID = 0;
   std::array<Shared<AbstractEntity>, maxEntity>
       entities; // id : entity
                 // TODO: change ptr type later

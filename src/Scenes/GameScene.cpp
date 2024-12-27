@@ -19,7 +19,8 @@
 class TextureComponent;
 namespace SceneSpace {
 int GameScene::lives = 3;
-GameScene::GameScene(const std::string &_nameScene, const std::string &_level) : Scene(), EM(EntityManager::getInstance()) {
+GameScene::GameScene(const std::string &_nameScene, const std::string &_level)
+    : Scene(), EM(EntityManager::getInstance()) {
   nameScene = _nameScene;
   level = _level;
   entityFactory = std::make_unique<EntityFactory>(EM);
@@ -75,6 +76,7 @@ GameScene::~GameScene() {
 #ifdef _DEBUG
   Log("GameScene destroyed");
 #endif
+  save();
   EM.reset();
 }
 void GameScene::loadResources() {
@@ -83,7 +85,8 @@ void GameScene::loadResources() {
   background = LoadTextureFromImage(bImage);
   UnloadImage(bImage);
   // Create Map
-  entities = mapRenderer.createMap("assets/" + nameScene + "/" + nameScene + "-" + level + ".json");
+  entities = mapRenderer.createMap("assets/" + nameScene + "/" + nameScene +
+                                   "-" + level + ".json");
 }
 void GameScene::draw() {
   float dt = GetFrameTime();

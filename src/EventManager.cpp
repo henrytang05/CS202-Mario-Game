@@ -33,7 +33,9 @@ void MarioLargeToSmall::handle() {
   auto &size = mario->getComponent<BoundingBoxComponent>();
   size.setSize({16.0f, 20.0f});
   velocity.x = 0.0f;
+  velocity.y = -180.0f;
   mario->getComponent<TextureComponent>().changeState(mario->getComponent<CharacterStateComponent>().getCurrentState());
+  mario->getComponent<MarioSoundComponent>().PlayVineEffect();
 }
 void MarioSmallToLarge::handle() {
   EntityManager &EM = EntityManager::getInstance();
@@ -52,6 +54,7 @@ void MarioSmallToLarge::handle() {
   size.setSize({16.0f, 28.0f});
   position.y -= 10.0f;
   velocity.x = 0.0f;
+  mario->getComponent<MarioSoundComponent>().PlayPowerupEffect();
   mario->getComponent<TextureComponent>().changeState(mario->getComponent<CharacterStateComponent>().getCurrentState());
   mushroom->getComponent<TextureComponent>().changeState("Die");
 }
@@ -68,6 +71,7 @@ void MarioJumpOnGoomba::handle() {
   goomba->getComponent<TextureComponent>().changeState("Die");
   goomba->getComponent<TransformComponent>().setVelocity({0.0f, 0.0f});
   mario->getComponent<CharacterStateComponent>().setEnumState("JUMPING");
+  mario->getComponent<MarioSoundComponent>().PlayTingSound();
   mario->getComponent<TransformComponent>().setVelocity({mario->getComponent<TransformComponent>().x, -180.0f});
   ScoreManager::getInstance().addScore(1);
 }
@@ -162,6 +166,7 @@ void MarioJumpOnKoopa::handle()
   }
   else {
     koopa->getComponent<TextureComponent>().changeState("Shell");
+    koopa->removeComponent<EnemyTag>();
     koopa->getComponent<BoundingBoxComponent>().setSize(Vector2{16,16});
     koopa->getComponent<PositionComponent>().setPosition(koopa->getComponent<PositionComponent>().getPosition() + Vector2{0,11});
     koopa->getComponent<TransformComponent>().setVelocity({0.0f, 0.0f});
@@ -184,12 +189,49 @@ void MarioTouchRightKoopa::handle()
   auto koopa = _koopa.lock();
 
   if(koopa->getComponent<TextureComponent>().state == "Shell") {
+    //koopa->addComponent<EnemyTag>();
     koopa->getComponent<TextureComponent>().changeState("Shell-Moving");
     koopa->getComponent<TransformComponent>().setVelocity({ENEMY_SPEED * 3, 0.0f});
-    mario->getComponent<PositionComponent>().setPosition(mario->getComponent<PositionComponent>().getPosition() + Vector2{-2,0});
+    mario->getComponent<PositionComponent>().setPosition(mario->getComponent<PositionComponent>().getPosition() + Vector2{-8.5f,0});
   }
   else {
-    EventQueue &EQ = EventQueue::getInstance();
-    EQ.pushEvent(std::make_unique<MarioDieEvent>(MarioID));
+    if(mario->getComponent<CharacterStateComponent>().getSize() == "SMALL") {
+      EventQueue &EQ = EventQueue::getInstance();
+      EQ.pushEvent(std::make_unique<MarioDieEvent>(MarioID));
+    }
+    else {
+      EventQueue &EQ = EventQueue::getInstance();
+      EQ.pushEvent(std::make_unique<MarioLargeToSmall>(MarioID));
+    }
+  }
+}
+
+void MarioTouchLeftKoopa::handle()
+{
+  EntityManager &EM = EntityManager::getInstance();
+  auto _mario = EM.getEntityPtr(MarioID);
+  auto _koopa = EM.getEntityPtr(EnemyID);
+
+  ASSERT(!_mario.expired());
+  ASSERT(!_koopa.expired());
+
+  auto mario = _mario.lock();
+  auto koopa = _koopa.lock();
+
+  if(koopa->getComponent<TextureComponent>().state == "Shell") {
+    //koopa->addComponent<EnemyTag>();
+    koopa->getComponent<TextureComponent>().changeState("Shell-Moving");
+    koopa->getComponent<TransformComponent>().setVelocity({-ENEMY_SPEED * 3, 0.0f});
+    mario->getComponent<PositionComponent>().setPosition(mario->getComponent<PositionComponent>().getPosition() + Vector2{8.5f,0});
+  }
+  else {
+    if(mario->getComponent<CharacterStateComponent>().getSize() == "SMALL") {
+      EventQueue &EQ = EventQueue::getInstance();
+      EQ.pushEvent(std::make_unique<MarioDieEvent>(MarioID));
+    }
+    else {
+      EventQueue &EQ = EventQueue::getInstance();
+      EQ.pushEvent(std::make_unique<MarioLargeToSmall>(MarioID));
+    }
   }
 }

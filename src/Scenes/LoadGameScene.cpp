@@ -2,7 +2,6 @@
 #include "Logger.h"
 #include "Scenes/IntroScene.h"
 SceneSpace::LoadGameScene::LoadGameScene() {
-    SoundCtrl.PlayGroundTheme();
 }
 
 SceneSpace::LoadGameScene::~LoadGameScene()

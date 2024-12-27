@@ -6,7 +6,6 @@
 #include "Components/Texture.h"
 
 SceneSpace::GuideScene::GuideScene() {
-    SoundCtrl.PlayGroundTheme();
 }
 
 SceneSpace::GuideScene::~GuideScene()

@@ -425,7 +425,6 @@
  </objectgroup>
  <objectgroup id="7" name="Goomba">
   <object id="1154" gid="6" x="1184" y="768" width="16" height="16"/>
-  <object id="1155" gid="6" x="1360" y="624" width="16" height="16"/>
   <object id="1156" gid="6" x="1136" y="768" width="16" height="16"/>
   <object id="1158" gid="6" x="464" y="768" width="16" height="16"/>
   <object id="1159" gid="6" x="736" y="768" width="16" height="16"/>

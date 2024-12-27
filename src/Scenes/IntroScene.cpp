@@ -6,7 +6,7 @@
 #include "Scenes/Scene.h"
 #include "Scenes/SettingScene.h"
 #include "Scenes/ChooseThemeScene.h"
-
+#include "Scenes/RankingScene.h"
 namespace SceneSpace {
 IntroScene::IntroScene() : Scene() {
   SoundCtrl.PlayGroundTheme();
@@ -45,6 +45,7 @@ Unique<Scene> IntroScene::updateScene(float deltaTime) {
   if (RankingButton->isPressed())
   {
     SoundCtrl.PlayTingSound();
+    return std::make_unique<SceneSpace::RankingScene>();
   }  
   if (SettingsButton->isPressed())
   {
@@ -76,7 +77,7 @@ void IntroScene::loadResources() {
                                        "./assets/Hover_RankingButton.png");
   SettingsButton = new GUI::ImageButton(545, 595, "./assets/SettingsButton.png",
                                         "./assets/Hover_SettingsButton.png");
-  GuideButton = new GUI::ImageButton(30, 20, "./assets/GuideButton.png",
+  GuideButton = new GUI::ImageButton(1350, 20, "./assets/GuideButton.png",
                                         "./assets/Hover_GuideButton.png");
 };
 void IntroScene::init() {

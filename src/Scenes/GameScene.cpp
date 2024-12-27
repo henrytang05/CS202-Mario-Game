@@ -1,4 +1,5 @@
 #include "Scenes/GameScene.h"
+#include "Scenes/GuideScene.h"
 #include "EventManager.h"
 
 #include <memory>
@@ -49,7 +50,8 @@ GameScene::GameScene(const std::string &_nameScene, const std::string &_level) :
   update_systems.push_back(swingSystem);
   update_systems.push_back(coinSystem);
   update_systems.push_back(flagSystem);
-
+  GuideButton = new GUI::ImageButton(100, 20, "./assets/GuideButton.png",
+                                        "./assets/Hover_GuideButton.png");
 }
 GameScene::GameScene() : Scene(), EM(EntityManager::getInstance()) {}
 
@@ -95,6 +97,7 @@ void GameScene::draw() {
   }
 
   EndMode2D();
+  GuideButton->draw();  
   std::string mapName = (nameScene == "Level1" ? "Air" : (nameScene == "Level2" ? "Water" : "Fire"));
   DrawText(TextFormat(("Map: " + mapName + " - " + level).c_str()), 1200 - 35 * 6 - 35 * 20, 35, GAMEPLAY_TEXT_SIZE,
            WHITE); 
@@ -106,6 +109,12 @@ void GameScene::draw() {
 }
 Unique<Scene> GameScene::updateScene(float deltaTime) {
   this->update(deltaTime);
+
+  if(GuideButton->isPressed())
+  {
+    SoundCtrl.PlayTingSound();
+    return std::make_unique<SceneSpace::GuideScene>();
+  }
   if (player.lock()->isActive() == false || time <= 0.0f) {
     sleep(1);
     lives -= 1;
@@ -140,6 +149,10 @@ void GameScene::update(float deltaTime) {
   if (camera.target.x >= gameWidth - screenWidth / (2.0f * camera.zoom))
     camera.target.x = gameWidth - screenWidth / (2.0f * camera.zoom);
   SoundCtrl.Update((int)time);
+
+  Vector2 mousePos = GetMousePosition();
+  bool isLeftClick = IsMouseButtonPressed(MOUSE_BUTTON_LEFT);
+  GuideButton->update(mousePos, isLeftClick);
 }
 
 bool GameScene::isFinished() { return gameOver; }

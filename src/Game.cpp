@@ -4,6 +4,7 @@
 #include "Map.h"
 #include "Scenes/GameScene.h"
 #include "Scenes/IntroScene.h"
+#include "Scenes/GuideScene.h"
 #include "Scenes/Scene.h"
 #include "globals.h"
 #include "pch.h"
@@ -42,7 +43,9 @@ void Game::update(float deltaTime) {
     if(typeid(*scenes.top()) == typeid(SceneSpace::GameScene)){
       Shared<SceneSpace::Scene> scene = scenes.top()->updateScene(deltaTime);
       if(scene){
-        popScene();
+        if(typeid(*scene) == typeid(SceneSpace::GameScene)) {
+          popScene();
+        }
         pushScene(scene);
       }
     }
@@ -64,6 +67,7 @@ void Game::update(float deltaTime) {
       NO->update(mousePos, isLeftClick);
       if(YES->isPressed()){
         quittingGame = false;
+        SceneSpace::GameScene::lives = 3;
         popScene();
       }
       if(NO->isPressed()) quittingGame = false;

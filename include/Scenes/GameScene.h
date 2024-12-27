@@ -7,6 +7,7 @@
 #include "Scenes/Scene.h"
 #include "System/System.h"
 #include "ScoreManager.h"
+#include "GUI.h"
 namespace SceneSpace {
 class GameScene : public Scene {
 public:
@@ -20,6 +21,7 @@ public:
   bool isFinished();
   void init() override;
 
+  static int lives;
 private:
   std::string nameScene, level;
   bool IsMario = isMario;
@@ -27,6 +29,7 @@ private:
   Texture2D background;
   MapRenderer mapRenderer;
   Camera2D camera;
+  GUI::ImageButton *GuideButton;
   EntityManager &EM;
   Weak<AbstractEntity> player;
   bool gameOver;
@@ -34,7 +37,6 @@ private:
   std::vector<Weak<AbstractEntity>> entities;
 
 private:
-  static int lives;
   std::vector<Shared<System>> systems;
   std::vector<Weak<IUpdatableSystem>> update_systems;
   std::vector<Weak<IDrawableSystem>> draw_systems;

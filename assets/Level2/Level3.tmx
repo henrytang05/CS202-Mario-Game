@@ -513,10 +513,10 @@
   <object id="1243" gid="67" x="672" y="736" width="16" height="16"/>
   <object id="1244" gid="67" x="688" y="768" width="16" height="16"/>
   <object id="1246" gid="67" x="720" y="752" width="16" height="16"/>
-  <object id="1249" gid="67" x="976" y="688" width="16" height="16"/>
+  <object id="1249" gid="67" x="976" y="656" width="16" height="16"/>
   <object id="1252" gid="67" x="944" y="656" width="16" height="16"/>
-  <object id="1257" gid="67" x="992" y="672" width="16" height="16"/>
-  <object id="1259" gid="67" x="960" y="672" width="16" height="16"/>
+  <object id="1257" gid="67" x="992" y="656" width="16" height="16"/>
+  <object id="1259" gid="67" x="960" y="656" width="16" height="16"/>
   <object id="1260" gid="67" x="1280" y="704" width="16" height="16"/>
   <object id="1261" gid="67" x="1296" y="704" width="16" height="16"/>
   <object id="1262" gid="67" x="1312" y="704" width="16" height="16"/>

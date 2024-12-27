@@ -79,7 +79,5 @@ void IntroScene::loadResources() {
   GuideButton = new GUI::ImageButton(1350, 20, "./assets/GuideButton.png",
                                         "./assets/Hover_GuideButton.png");
 };
-void IntroScene::init() {
-};
 void IntroScene::init() {};
 } // namespace SceneSpace

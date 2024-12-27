@@ -7,6 +7,8 @@
 #include "Scenes/Scene.h"
 #include "ScoreManager.h"
 #include "GUI.h"
+#include "System/System.h"
+
 namespace SceneSpace {
 class GameScene : public Scene {
 public:
@@ -40,8 +42,7 @@ private:
   std::vector<Weak<AbstractEntity>> entities;
 
 private:
-  static int lives;
-  static inline std::string savePath = "data/GameScene.txt";
+  static inline std::string savePath = "./data/GameScene.txt";
   std::vector<Shared<System>> systems;
   std::vector<Weak<IUpdatableSystem>> update_systems;
   std::vector<Weak<IDrawableSystem>> draw_systems;

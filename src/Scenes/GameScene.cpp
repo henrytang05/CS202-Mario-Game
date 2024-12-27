@@ -81,9 +81,37 @@ GameScene &GameScene::operator=(GameScene &&other) noexcept {
 GameScene::GameScene(bool resume) : Scene(), EM(EntityManager::getInstance()) {
   if (resume) {
     load();
-
-    GameScene game = GameScene(nameScene, level);
-    *this = std::move(game);
+  entityFactory = std::make_unique<EntityFactory>(EM);
+  Shared<CollisionSystem> collisionSystem = std::make_shared<CollisionSystem>();
+  Shared<TransformSystem> transformSystem = std::make_shared<TransformSystem>();
+  Shared<AnimationSystem> animationSystem = std::make_shared<AnimationSystem>();
+  Shared<PlayerSystem> playerSystem = std::make_shared<PlayerSystem>();
+  Shared<SwingSystem> swingSystem = std::make_shared<SwingSystem>();
+  Shared<CoinSystem> coinSystem = std::make_shared<CoinSystem>();
+  Shared<FlagSystem> flagSystem = std::make_shared<FlagSystem>();
+  Shared<CollisionHandlingSystem> collisionHandlingSystem =
+      std::make_shared<CollisionHandlingSystem>();
+  Shared<BlockSystem> blockSystem = std::make_shared<BlockSystem>();
+  systems.push_back(playerSystem);
+  systems.push_back(collisionSystem);
+  systems.push_back(transformSystem);
+  systems.push_back(collisionHandlingSystem);
+  systems.push_back(animationSystem);
+  systems.push_back(blockSystem);
+  systems.push_back(swingSystem);
+  systems.push_back(coinSystem);
+  systems.push_back(flagSystem);
+  update_systems.push_back(playerSystem);
+  update_systems.push_back(collisionSystem);
+  update_systems.push_back(transformSystem);
+  update_systems.push_back(collisionHandlingSystem);
+  update_systems.push_back(blockSystem);
+  draw_systems.push_back(animationSystem);
+  update_systems.push_back(swingSystem);
+  update_systems.push_back(coinSystem);
+  update_systems.push_back(flagSystem);
+  GuideButton = new GUI::ImageButton(100, 20, "./assets/GuideButton.png",
+                                        "./assets/Hover_GuideButton.png");
   }
 }
 

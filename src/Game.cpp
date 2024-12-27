@@ -67,8 +67,8 @@ void Game::update(float deltaTime) {
       NO->update(mousePos, isLeftClick);
       if(YES->isPressed()){
         quittingGame = false;
-        SceneSpace::GameScene::lives = 3;
         popScene();
+        SceneSpace::GameScene::lives = 3;
       }
       if(NO->isPressed()) quittingGame = false;
     } 

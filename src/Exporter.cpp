@@ -1,11 +1,14 @@
 #include "Exporter.h"
 #include "EntityManager.h"
 
+JSONExporter::JSONExporter() {
+  pathNameMap[ExportableType::EntityManager] = "data/EntityManager.json";
+}
+
 void JSONExporter::visit(EntityManager &e) {
   json j;
   j = e;
   jsonMap[ExportableType::EntityManager] = j;
-  pathNameMap[ExportableType::EntityManager] = "data/EntityManager.json";
 }
 
 void JSONExporter::save() {
@@ -16,3 +19,13 @@ void JSONExporter::save() {
     o.close();
   }
 }
+
+JSONImporter::JSONImporter() {
+  pathNameMap[ExportableType::EntityManager] = "data/EntityManager.json";
+}
+
+void JSONImporter::visit(EntityManager &e) {
+  throw std::runtime_error("Not implemented");
+}
+
+void JSONImporter::load() { throw std::runtime_error("Not implemented"); }

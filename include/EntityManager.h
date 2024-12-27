@@ -138,7 +138,7 @@ class EntityManager : public IExportable {
 public:
   friend void to_json(json &j, const EntityManager &entity);
   friend void from_json(const json &j, EntityManager &entity);
-  void accept(IExporter &e) override;
+  void accept(IVisitor &e) override;
 
 private:
   inline static EntityID lastID = 0;

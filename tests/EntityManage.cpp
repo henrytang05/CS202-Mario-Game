@@ -221,4 +221,4 @@ void to_json(json &j, const EntityManager &entity) {
 //   }
 // }
 
-void EntityManager::accept(IExporter &e) { e.visit(*this); }
+void EntityManager::accept(IVisitor &e) { e.visit(*this); }

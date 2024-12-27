@@ -5,7 +5,7 @@ using json = nlohmann::json;
 
 class EntityManager;
 
-class IExporter;
+class IVisitor;
 
 enum class ExportableType {
   EntityManager,
@@ -14,21 +14,43 @@ enum class ExportableType {
 class IExportable {
 public:
   virtual ~IExportable() = default;
-  virtual void accept(IExporter &e) = 0;
+  virtual void accept(IVisitor &e) = 0;
 };
 
-class IExporter {
+class IVisitor {
+public:
+  virtual ~IVisitor() = default;
+  virtual void visit(EntityManager &e) = 0;
+};
+
+class IExporter : public IVisitor {
 public:
   virtual ~IExporter() = default;
-  virtual void visit(EntityManager &e) = 0;
-
   virtual void save() = 0;
+};
+
+class IImporter : public IVisitor {
+public:
+  virtual ~IImporter() = default;
+  virtual void load() = 0;
 };
 
 class JSONExporter : public IExporter {
 public:
+  JSONExporter();
   void visit(EntityManager &e) override;
   void save() override;
+
+private:
+  std::unordered_map<ExportableType, json> jsonMap;
+  std::unordered_map<ExportableType, std::string> pathNameMap;
+};
+
+class JSONImporter : public IImporter {
+public:
+  JSONImporter();
+  void visit(EntityManager &e) override;
+  void load() override;
 
 private:
   std::unordered_map<ExportableType, json> jsonMap;

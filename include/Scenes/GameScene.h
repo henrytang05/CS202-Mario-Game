@@ -22,6 +22,7 @@ public:
   bool isFinished();
   void init() override;
   void save();
+  void load();
 
 private:
   std::string nameScene, level;
@@ -38,6 +39,7 @@ private:
 
 private:
   static int lives;
+  static inline std::string savePath = "data/GameScene/";
   std::vector<Shared<System>> systems;
   std::vector<Weak<IUpdatableSystem>> update_systems;
   std::vector<Weak<IDrawableSystem>> draw_systems;

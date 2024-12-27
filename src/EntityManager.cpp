@@ -221,14 +221,17 @@ void to_json(json &j, const EntityManager &entity) {
   }
 }
 
-// void from_json(const json &j, EntityManager &entity) {
-//   for (auto &e : j["entities"]) {
-//     EntityID id = e.at("id").get<EntityID>();
-//     std::string name = e.at("name").get<std::string>();
-//     bool acitve = e.at("active").get<bool>();
-//   }
-// }
+void from_json(const json &j, EntityManager &entity) {
+  // // entity = std::move(*std::make_unique<EntityManager>());
+  // for (auto &e : j["entities"]) {
+  //   EntityID id = e.at("id").get<EntityID>();
+  //   std::string name = e.at("name").get<std::string>();
+  //   bool acitve = e.at("active").get<bool>();
+  //
+  //   entity.createEntity(name);
+  // }
+}
 
-void EntityManager::accept(IExporter &e) { e.visit(*this); }
+void EntityManager::accept(IVisitor &e) { e.visit(*this); }
 
 void to_json(json &j, const IComponentArray &ic) {}

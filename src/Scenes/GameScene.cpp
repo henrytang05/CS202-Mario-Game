@@ -1,6 +1,6 @@
 #include "Scenes/GameScene.h"
-#include "EventManager.h"
 
+#include <iterator>
 #include <memory>
 
 #include "Components/Collision.h"
@@ -9,9 +9,11 @@
 #include "Components/Texture.h"
 #include "Entity/EntityFactory.h"
 #include "EntityManager.h"
+#include "EventManager.h"
 #include "Exporter.h"
 #include "Logger.h"
 #include "Scenes/IntroScene.h"
+#include "ScoreManager.h"
 #include "System/System.h"
 #include "globals.h"
 #include "pch.h"
@@ -52,7 +54,6 @@ GameScene::GameScene(const std::string &_nameScene, const std::string &_level)
   update_systems.push_back(swingSystem);
   update_systems.push_back(coinSystem);
   update_systems.push_back(flagSystem);
-
 }
 GameScene::GameScene() : Scene(), EM(&EntityManager::getInstance()) {}
 GameScene &GameScene::operator=(GameScene &&other) noexcept {
@@ -75,14 +76,11 @@ GameScene &GameScene::operator=(GameScene &&other) noexcept {
 }
 GameScene::GameScene(bool resume) : Scene(), EM(&EntityManager::getInstance()) {
   if (resume) {
-    level = "Level1";
-    nameScene = "Easy";
+    load();
+
     GameScene game = GameScene(nameScene, level);
     *this = std::move(game);
     EM = &EntityManager::getInstance();
-    // JSONImporter importer;
-    // importer.load();
-    // EM.accept(importer);
   }
 }
 
@@ -108,12 +106,14 @@ GameScene::~GameScene() {
 #ifdef _DEBUG
   Log("GameScene destroyed");
 #endif
-  save();
+  if (!gameOver)
+    save();
   EM->reset();
 }
 void GameScene::loadResources() {
   // Loading BackGround
-  Image bImage = LoadImage(("assets/" + nameScene + "/Background-"+level+".png").c_str());
+  Image bImage = LoadImage(
+      ("assets/" + nameScene + "/Background-" + level + ".png").c_str());
   background = LoadTextureFromImage(bImage);
   UnloadImage(bImage);
   // Create Map
@@ -148,12 +148,13 @@ Unique<Scene> GameScene::updateScene(float deltaTime) {
       return make_unique<SceneSpace::IntroScene>();
     }
     return make_unique<SceneSpace::GameScene>(nameScene, level);
-  }
-  else if(player.lock()->hasComponent<PlayerTag>() == false && player.lock()->getComponent<PositionComponent>().x > 164.0f * 16.0f) {
-    if(level == "Easy") {
+  } else if (player.lock()->hasComponent<PlayerTag>() == false &&
+             player.lock()->getComponent<PositionComponent>().x >
+                 164.0f * 16.0f) {
+    if (level == "Easy") {
       return make_unique<SceneSpace::GameScene>(nameScene, "Medium");
     }
-    if(level == "Medium") {
+    if (level == "Medium") {
       return make_unique<SceneSpace::GameScene>(nameScene, "Hard");
     }
     return make_unique<SceneSpace::IntroScene>();
@@ -179,8 +180,29 @@ void GameScene::update(float deltaTime) {
 bool GameScene::isFinished() { return gameOver; }
 
 void GameScene::save() {
-  JSONExporter exporter;
-  EM->accept(exporter);
-  exporter.save();
+  string path = savePath + level + nameScene + ".txt";
+  std::ofstream o(path);
+  ASSERT(o.is_open(), "Failed to open file");
+  o << lives << "\n";
+  ScoreManager::getInstance().save(o);
+  o << level << "\n";
+  o << time << "\n";
+  o << nameScene << "\n";
+  o.close();
+}
+
+void GameScene::load() {
+  string path = savePath + level + nameScene + ".txt";
+  std::ifstream i(path);
+  // ASSERT(i.is_open(), "Failed to open file");
+  if (!i.is_open()) {
+    throw 1;
+  }
+  i >> lives;
+  ScoreManager::getInstance().load(i);
+  i >> level;
+  i >> time;
+  i >> nameScene;
+  i.close();
 }
 } // namespace SceneSpace

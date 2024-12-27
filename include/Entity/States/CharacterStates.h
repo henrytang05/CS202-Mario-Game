@@ -14,25 +14,15 @@ public:
   void setSizeState(std::string newSize);
 
 private:
-  enum FACING {
-    RIGHT = 0,
-    LEFT
-  };
-  enum STATE {
-    IDLE = 0,
-    MOVING,
-    SKIDDING,
-    JUMPING,
-    DROPPING,
-    DUCKLING, 
-    DEATH
-  };
-  enum SIZE {
-    SMALL = 0,
-    LARGE
-  };
+  enum FACING { RIGHT = 0, LEFT };
+  enum STATE { IDLE = 0, MOVING, SKIDDING, JUMPING, DROPPING, DUCKLING, DEATH };
+  enum SIZE { SMALL = 0, LARGE };
   STATE enumState;
   SIZE enumSize;
   FACING enumFacing;
+
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(CharacterState, enumState, enumFacing,
+                                 enumSize)
 };
+
 #endif // CHARACTER_STATE_H

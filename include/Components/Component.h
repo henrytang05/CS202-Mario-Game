@@ -1,5 +1,7 @@
 #ifndef COMPONENT_H
 #define COMPONENT_H
+#include "json.h"
+using json = nlohmann::json;
 
 class EntityManager;
 class AbstractEntity;
@@ -13,6 +15,8 @@ public:
   void setEntity(AbstractEntity *e);
   void setEntityManager(EntityManager *em);
   std::string getName() const;
+
+  virtual void to_json(json &j) const {};
 
 protected:
   AbstractEntity *entity; // this is only a reference, dont delete

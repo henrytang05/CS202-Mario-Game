@@ -14,3 +14,5 @@ void BoundingBoxComponent::setSize(Vector2 size) {
   x = size.x;
   y = size.y;
 }
+
+void BoundingBoxComponent::to_json(json &j) const { j = *this; }

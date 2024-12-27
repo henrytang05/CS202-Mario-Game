@@ -39,6 +39,7 @@ public:
   std::string getName() const { return name; }
   void setName(std::string name) { this->name = name; }
 
+  virtual void to_json(json &j) const = 0;
   std::string name;
 };
 
@@ -46,6 +47,15 @@ template <typename T> class ComponentArray : public IComponentArray {
 public:
   ComponentArray<T>() { entityComponentIndexMap.fill(-1); }
   virtual ~ComponentArray() = default;
+
+  void to_json(json &j) const override {
+    for (auto &c : components) {
+      json j97;
+      c.to_json(j97);
+      j["components"].push_back(j97);
+    }
+    j["entityComponentIndexMap"] = entityComponentIndexMap;
+  }
   void onEntityDestroyed(EntityID id) override {
     if (entityComponentIndexMap[id] == -1)
       return;
@@ -371,6 +381,7 @@ inline ComponentArray<T> *EntityManager::getComponentsArray() {
   if (!it) {
     // create new
     auto componentArray = std::make_shared<ComponentArray<T>>();
+    componentArray->setName(typeid(T).name());
     componentArrays[getComponentTypeID<T>()] = std::move(componentArray);
   }
 

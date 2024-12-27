@@ -35,3 +35,7 @@ void TransformComponent::setVelocity(Vector2 pos) {
 Vector2 TransformComponent::getVelocity() { return {x, y}; }
 
 Vector2 operator-(const Vector2 &v) { return {-v.x, -v.y}; }
+
+void PositionComponent::to_json(json &j) const { j = *this; }
+
+void TransformComponent::to_json(json &j) const { j = *this; }

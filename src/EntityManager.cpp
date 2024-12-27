@@ -20,7 +20,7 @@ void EntityManager::reset() {
   }
 }
 
-EntityManager::EntityManager() {}
+EntityManager::EntityManager() { componentArrays.fill(nullptr); }
 EntityManager::~EntityManager() {
   std::cout << "Cleaning up EntityManager" << std::endl;
 }
@@ -211,6 +211,14 @@ void to_json(json &j, const EntityManager &entity) {
   for (auto &[k, v] : entity.entityNameMap) {
     j["entityNameMap"][k] = std::vector<EntityID>(v.begin(), v.end());
   }
+
+  for (auto &c : entity.componentArrays) {
+    if (c) {
+      json j97;
+      c->to_json(j97);
+      j["componentArrays"][c->getName()] = j97;
+    }
+  }
 }
 
 // void from_json(const json &j, EntityManager &entity) {
@@ -222,3 +230,5 @@ void to_json(json &j, const EntityManager &entity) {
 // }
 
 void EntityManager::accept(IExporter &e) { e.visit(*this); }
+
+void to_json(json &j, const IComponentArray &ic) {}

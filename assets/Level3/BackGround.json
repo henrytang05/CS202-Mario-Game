@@ -1,0 +1,14 @@
+{ "columns":31,
+ "image":"BackGround.png",
+ "imageheight":486,
+ "imagewidth":506,
+ "margin":0,
+ "name":"BackGround",
+ "spacing":0,
+ "tilecount":930,
+ "tiledversion":"1.11.0",
+ "tileheight":16,
+ "tilewidth":16,
+ "type":"tileset",
+ "version":"1.10"
+}

@@ -1,0 +1,14 @@
+{ "columns":1,
+ "image":"Volcano.png",
+ "imageheight":17,
+ "imagewidth":16,
+ "margin":0,
+ "name":"Volcano",
+ "spacing":0,
+ "tilecount":1,
+ "tiledversion":"1.11.0",
+ "tileheight":16,
+ "tilewidth":16,
+ "type":"tileset",
+ "version":"1.10"
+}

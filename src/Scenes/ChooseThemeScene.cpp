@@ -37,6 +37,7 @@ Unique<Scene> ChooseThemeScene::updateScene(float deltaTime) {
   if (Fire->isPressed())
   {
     SoundCtrl.PlayTingSound();
+    return std::make_unique<SceneSpace::GameScene>("Level3", "Easy");
   }  
   return nullptr;
 }

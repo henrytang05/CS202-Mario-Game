@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="164" height="50" tilewidth="16" tileheight="16" infinite="0" nextlayerid="30" nextobjectid="731">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="164" height="50" tilewidth="16" tileheight="16" infinite="0" nextlayerid="30" nextobjectid="755">
  <editorsettings>
-  <export target="Level1.json" format="json"/>
+  <export target="Level1-Easy.json" format="json"/>
  </editorsettings>
  <properties>
   <property name="Level" value="Level1"/>
@@ -124,12 +124,12 @@
 </data>
  </layer>
  <objectgroup id="27" name="FlagPole">
-  <object id="723" gid="76" x="296.85" y="688.182" width="16" height="16"/>
-  <object id="724" gid="76" x="296.85" y="704.182" width="16" height="16"/>
-  <object id="725" gid="76" x="296.85" y="720.182" width="16" height="16"/>
-  <object id="726" gid="76" x="296.85" y="736.182" width="16" height="16"/>
-  <object id="727" gid="76" x="296.85" y="752.182" width="16" height="16"/>
-  <object id="728" gid="76" x="296.85" y="768.182" width="16" height="16"/>
+  <object id="745" gid="76" x="2496" y="688" width="16" height="16"/>
+  <object id="746" gid="76" x="2496" y="704" width="16" height="16"/>
+  <object id="747" gid="76" x="2496" y="720" width="16" height="16"/>
+  <object id="748" gid="76" x="2496" y="736" width="16" height="16"/>
+  <object id="749" gid="76" x="2496" y="752" width="16" height="16"/>
+  <object id="750" gid="76" x="2496" y="768" width="16" height="16"/>
  </objectgroup>
  <objectgroup id="16" name="GroundBlock">
   <object id="158" gid="4" x="0" y="784" width="16" height="16"/>
@@ -416,6 +416,9 @@
   <object id="595" gid="2" x="2304" y="752" width="16" height="16"/>
   <object id="596" gid="2" x="2288" y="752" width="16" height="16"/>
   <object id="597" gid="2" x="2272" y="752" width="16" height="16"/>
+  <object id="752" gid="1" x="144" y="720" width="16" height="16"/>
+  <object id="753" gid="1" x="176" y="720" width="16" height="16"/>
+  <object id="754" gid="1" x="224" y="720" width="16" height="16"/>
  </objectgroup>
  <objectgroup id="18" name="BrokenBlock">
   <object id="445" gid="1" x="112" y="720" width="16" height="16"/>
@@ -456,7 +459,7 @@
  </objectgroup>
  <objectgroup id="20" name="HardBlock"/>
  <objectgroup id="15" name="Flag">
-  <object id="730" gid="74" x="288" y="688" width="16" height="16"/>
+  <object id="744" gid="74" x="2487.43" y="687.829" width="16" height="16"/>
  </objectgroup>
  <objectgroup draworder="index" id="25" name="Pipe">
   <object id="624" gid="77" x="400" y="704" width="32" height="32">

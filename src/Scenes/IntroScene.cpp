@@ -5,6 +5,7 @@
 #include "Scenes/GuideScene.h"
 #include "Scenes/Scene.h"
 #include "Scenes/SettingScene.h"
+#include "Scenes/ChooseThemeScene.h"
 
 namespace SceneSpace {
 IntroScene::IntroScene() : Scene() {
@@ -34,7 +35,7 @@ Unique<Scene> IntroScene::updateScene(float deltaTime) {
   if (NewGameButton->isPressed())
   {
     SoundCtrl.PlayTingSound();
-    return std::make_unique<SceneSpace::GameScene>();
+    return std::make_unique<SceneSpace::ChooseThemeScene>();
   }
   if (LoadGameButton->isPressed())
   {

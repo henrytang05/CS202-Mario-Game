@@ -79,7 +79,7 @@ GameScene::~GameScene() {
 }
 void GameScene::loadResources() {
   // Loading BackGround
-  Image bImage = LoadImage(("assets/" + nameScene + "/Background.png").c_str());
+  Image bImage = LoadImage(("assets/" + nameScene + "/Background-"+level+".png").c_str());
   background = LoadTextureFromImage(bImage);
   UnloadImage(bImage);
   // Create Map

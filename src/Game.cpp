@@ -38,28 +38,38 @@ void Game::run() {
 }
 
 void Game::update(float deltaTime) {
-  pushScene(scenes.top()->updateScene(deltaTime));  
-  Vector2 mousePos = GetMousePosition();
-  bool isLeftClick = IsMouseButtonPressed(MOUSE_BUTTON_LEFT);
-  if(typeid(*scenes.top()) != typeid(SceneSpace::IntroScene)) {
-    QuitButton->update(mousePos, isLeftClick);
-    if (QuitButton->isPressed())
-    {
-      if(typeid(*scenes.top()) == typeid(SceneSpace::GameScene)){
-        quittingGame = true;
+  if(!scenes.empty()){
+    if(typeid(*scenes.top()) == typeid(SceneSpace::GameScene)){\
+      Shared<SceneSpace::Scene> scene = scenes.top()->updateScene(deltaTime);
+      if(scene){
+        popScene();
+        pushScene(scene);
       }
-      else popScene();
     }
+    else pushScene(scenes.top()->updateScene(deltaTime));    
+    Vector2 mousePos = GetMousePosition();
+    bool isLeftClick = IsMouseButtonPressed(MOUSE_BUTTON_LEFT);
+    if(typeid(*scenes.top()) != typeid(SceneSpace::IntroScene)) {
+      QuitButton->update(mousePos, isLeftClick);
+      if (QuitButton->isPressed())
+      {
+        if(typeid(*scenes.top()) == typeid(SceneSpace::GameScene)){
+          quittingGame = true;
+        }
+        else popScene();
+      }
+    }
+    if(quittingGame){
+      YES->update(mousePos, isLeftClick);
+      NO->update(mousePos, isLeftClick);
+      if(YES->isPressed()){
+        quittingGame = false;
+        popScene();
+      }
+      if(NO->isPressed()) quittingGame = false;
+    } 
   }
-  if(quittingGame){
-    YES->update(mousePos, isLeftClick);
-    NO->update(mousePos, isLeftClick);
-    if(YES->isPressed()){
-      quittingGame = false;
-      popScene();
-    }
-    if(NO->isPressed()) quittingGame = false;
-  } 
+
 }
 void Game::clean() {
   delete QuitButton;
@@ -81,6 +91,7 @@ void Game::draw() {
   }
   EndDrawing();
 }
+
 
 void Game::pushScene(Shared<SceneSpace::Scene> scene)
 {

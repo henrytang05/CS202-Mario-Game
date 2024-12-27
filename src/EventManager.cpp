@@ -89,7 +89,6 @@ void CoinEvent::handle() {
   entityFactory = std::make_unique<EntityFactory>(EM);
   auto coin = entityFactory->createCoin(Vector2{position.x, position.y - 10.0f});
   EM.getEntityRef(coin).addComponent<CoinInBlockTag>(position);
-  EM.getEntityRef(coin).removeComponent<TransformComponent>();
   ScoreManager::getInstance().addScore(1);
 }
 
@@ -111,14 +110,15 @@ void CoinCollectEvent::handle() {
 void FinishLevelEvent::handle() {
   EntityManager &EM = EntityManager::getInstance();
   auto _mario = EM.getEntityPtr(MarioID);
+  auto _flagPole = EM.getEntityPtr(FlagPoleID);
 
+  auto flag = EM.getHasAll<FlagTag>();
+  flag[0].lock()->getComponent<FlagTag>().triggered = true;
   ASSERT(!_mario.expired());
-
   auto mario = _mario.lock();
-  mario->getComponent<TransformComponent>().setVelocity({50.0f, 0.0f});
+  auto flagPole = _flagPole.lock();
   mario->getComponent<MarioSoundComponent>().PlayStageClearEffect();
-  mario->removeComponent<PlayerTag>();
-  
+  flagPole->removeComponent<BoundingBoxComponent>();
 }
 
 void EventQueue::pushEvent(Unique<Event> &e) { eventQueue.push(std::move(e)); }

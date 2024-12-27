@@ -265,9 +265,6 @@ void CollisionHandlingSystem::handlePlayerCollision(Weak<AbstractEntity> _entity
       EventQueue &EQ = EventQueue::getInstance();
       EQ.pushEvent(std::make_unique<MarioSmallToLarge>(entity->getID(), below.lock()->getID()));
     }
-    else if (entity->getComponent<CharacterStateComponent>().getState() == "DROPPING") {
-      entity->getComponent<CharacterStateComponent>().setEnumState("IDLE");
-    }
     else if(below.lock()->hasComponent<CoinTag>()) {
       below.lock()->destroy();
       entity->getComponent<MarioSoundComponent>().PlayCoinEffect();
@@ -275,8 +272,12 @@ void CollisionHandlingSystem::handlePlayerCollision(Weak<AbstractEntity> _entity
     } 
     else if(below.lock()->getName() == "FlagPole") {
       EventQueue &EQ = EventQueue::getInstance();
-      EQ.pushEvent(std::make_unique<FinishLevelEvent>(entity->getID()));
+      EQ.pushEvent(std::make_unique<FinishLevelEvent>(entity->getID(),below.lock()->getID()));
     }
+    else if (entity->getComponent<CharacterStateComponent>().getState() == "DROPPING") {
+      entity->getComponent<CharacterStateComponent>().setEnumState("IDLE");
+    }
+    
 
   }
 
@@ -324,7 +325,7 @@ void CollisionHandlingSystem::handlePlayerCollision(Weak<AbstractEntity> _entity
     } 
     else if(aboveBlock->getName() == "FlagPole") {
       EventQueue &EQ = EventQueue::getInstance();
-      EQ.pushEvent(std::make_unique<FinishLevelEvent>(entity->getID()));
+      EQ.pushEvent(std::make_unique<FinishLevelEvent>(entity->getID(), aboveBlock->getID()));
     }
   }
 
@@ -357,8 +358,8 @@ void CollisionHandlingSystem::handlePlayerCollision(Weak<AbstractEntity> _entity
         EQ.pushEvent(std::make_unique<MarioSmallToLarge>(entity->getID(), rightBlock->getID()));
       }
     else if(rightBlock->getName() == "FlagPole") {
-      EventQueue &EQ = EventQueue::getInstance();
-      EQ.pushEvent(std::make_unique<FinishLevelEvent>(entity->getID()));
+    EventQueue &EQ = EventQueue::getInstance();
+    EQ.pushEvent(std::make_unique<FinishLevelEvent>(entity->getID(), rightBlock->getID()));
     }
   }
 
@@ -393,7 +394,7 @@ void CollisionHandlingSystem::handlePlayerCollision(Weak<AbstractEntity> _entity
     }
     else if(leftBlock->getName() == "FlagPole") {
       EventQueue &EQ = EventQueue::getInstance();
-      EQ.pushEvent(std::make_unique<FinishLevelEvent>(entity->getID()));
+      EQ.pushEvent(std::make_unique<FinishLevelEvent>(entity->getID(), leftBlock->getID()));
     }
   }
 }

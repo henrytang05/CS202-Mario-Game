@@ -18,18 +18,17 @@
 class TextureComponent;
 namespace SceneSpace {
 int GameScene::lives = 3;
-GameScene::GameScene() : Scene(), EM(EntityManager::getInstance()) {
-  // TODO: remove this later
+GameScene::GameScene(const std::string &_nameScene) : Scene(), EM(EntityManager::getInstance()) {
+  nameScene = _nameScene;
   entityFactory = std::make_unique<EntityFactory>(EM);
-
   Shared<CollisionSystem> collisionSystem = std::make_shared<CollisionSystem>();
   Shared<TransformSystem> transformSystem = std::make_shared<TransformSystem>();
   Shared<AnimationSystem> animationSystem = std::make_shared<AnimationSystem>();
   Shared<PlayerSystem> playerSystem = std::make_shared<PlayerSystem>();
   Shared<SwingSystem> swingSystem = std::make_shared<SwingSystem>();
   Shared<CoinSystem> coinSystem = std::make_shared<CoinSystem>();
-  Shared<CollisionHandlingSystem> collisionHandlingSystem =
-      std::make_shared<CollisionHandlingSystem>();
+  Shared<FlagSystem> flagSystem = std::make_shared<FlagSystem>();
+  Shared<CollisionHandlingSystem> collisionHandlingSystem = std::make_shared<CollisionHandlingSystem>();
   Shared<BlockSystem> blockSystem = std::make_shared<BlockSystem>();
   systems.push_back(playerSystem);
   systems.push_back(collisionSystem);
@@ -39,6 +38,7 @@ GameScene::GameScene() : Scene(), EM(EntityManager::getInstance()) {
   systems.push_back(blockSystem);
   systems.push_back(swingSystem);
   systems.push_back(coinSystem);
+  systems.push_back(flagSystem);
   update_systems.push_back(playerSystem);
   update_systems.push_back(collisionSystem);
   update_systems.push_back(transformSystem);
@@ -47,10 +47,13 @@ GameScene::GameScene() : Scene(), EM(EntityManager::getInstance()) {
   draw_systems.push_back(animationSystem);
   update_systems.push_back(swingSystem);
   update_systems.push_back(coinSystem);
+  update_systems.push_back(flagSystem);
+
 }
+GameScene::GameScene() : Scene(), EM(EntityManager::getInstance()) {}
 
 void GameScene::init() {
-  time = 360.f;
+    time = 360.f;
 
   // create player type?
   if (isMario)
@@ -75,11 +78,11 @@ GameScene::~GameScene() {
 }
 void GameScene::loadResources() {
   // Loading BackGround
-  Image bImage = LoadImage("assets/Level1/BackGround.png");
+  Image bImage = LoadImage(("assets/" + nameScene + "/Background.png").c_str());
   background = LoadTextureFromImage(bImage);
   UnloadImage(bImage);
   // Create Map
-  entities = mapRenderer.createMap("assets/Level1/Level1.json");
+  entities = mapRenderer.createMap("assets/" + nameScene + "/" + nameScene + ".json");
 }
 void GameScene::draw() {
   float dt = GetFrameTime();
@@ -106,7 +109,7 @@ Unique<Scene> GameScene::updateScene(float deltaTime) {
       lives = 3;
       return make_unique<SceneSpace::IntroScene>();
     }
-    return make_unique<SceneSpace::GameScene>();
+    return make_unique<SceneSpace::GameScene>(nameScene);
   }
   return nullptr;
 }

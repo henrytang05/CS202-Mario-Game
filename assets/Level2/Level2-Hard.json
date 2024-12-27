@@ -5934,7 +5934,7 @@
         {
          "name":"Level",
          "type":"string",
-         "value":"Level4"
+         "value":"Level2"
         }],
  "renderorder":"right-down",
  "tiledversion":"1.11.0",

@@ -4,7 +4,7 @@
   <export target="Level2.json" format="json"/>
  </editorsettings>
  <properties>
-  <property name="Level" value="Level3"/>
+  <property name="Level" value="Level2"/>
  </properties>
  <tileset firstgid="1" source="OverWorld.json"/>
  <tileset firstgid="6" source="underwater-Goomba-Left-Idle.json"/>

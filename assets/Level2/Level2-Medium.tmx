@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="164" height="50" tilewidth="16" tileheight="16" infinite="0" nextlayerid="28" nextobjectid="1510">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="164" height="50" tilewidth="16" tileheight="16" infinite="0" nextlayerid="28" nextobjectid="1529">
  <editorsettings>
   <export target="Level2-Medium.json" format="json"/>
  </editorsettings>
@@ -118,20 +118,6 @@
   <object id="329" gid="4" x="2608" y="784" width="16" height="16"/>
   <object id="880" gid="4" x="720" y="784" width="16" height="16"/>
   <object id="881" gid="4" x="736" y="784" width="16" height="16"/>
-  <object id="883" gid="4" x="912" y="656" width="16" height="16"/>
-  <object id="884" gid="4" x="912" y="672" width="16" height="16"/>
-  <object id="885" gid="4" x="912" y="688" width="16" height="16"/>
-  <object id="888" gid="4" x="912" y="704" width="16" height="16"/>
-  <object id="889" gid="4" x="928" y="704" width="16" height="16"/>
-  <object id="894" gid="4" x="944" y="704" width="16" height="16"/>
-  <object id="895" gid="4" x="960" y="704" width="16" height="16"/>
-  <object id="896" gid="4" x="976" y="704" width="16" height="16"/>
-  <object id="897" gid="4" x="992" y="704" width="16" height="16"/>
-  <object id="898" gid="4" x="1008" y="704" width="16" height="16"/>
-  <object id="902" gid="4" x="1024" y="656" width="16" height="16"/>
-  <object id="903" gid="4" x="1024" y="672" width="16" height="16"/>
-  <object id="904" gid="4" x="1024" y="688" width="16" height="16"/>
-  <object id="905" gid="4" x="1024" y="704" width="16" height="16"/>
   <object id="913" gid="4" x="1264" y="640" width="16" height="16"/>
   <object id="916" gid="4" x="1264" y="624" width="16" height="16"/>
   <object id="932" gid="4" x="1280" y="640" width="16" height="16"/>
@@ -379,6 +365,20 @@
   <object id="1270" gid="1" x="176" y="720" width="16" height="16"/>
   <object id="1508" gid="1" x="304" y="736" width="16" height="16"/>
   <object id="1509" gid="1" x="320" y="736" width="16" height="16"/>
+  <object id="1510" gid="1" x="912" y="656" width="16" height="16"/>
+  <object id="1511" gid="1" x="912" y="672" width="16" height="16"/>
+  <object id="1513" gid="1" x="912" y="688" width="16" height="16"/>
+  <object id="1518" gid="1" x="912" y="704" width="16" height="16"/>
+  <object id="1519" gid="1" x="928" y="704" width="16" height="16"/>
+  <object id="1520" gid="1" x="944" y="704" width="16" height="16"/>
+  <object id="1521" gid="1" x="960" y="704" width="16" height="16"/>
+  <object id="1522" gid="1" x="976" y="704" width="16" height="16"/>
+  <object id="1523" gid="1" x="992" y="704" width="16" height="16"/>
+  <object id="1524" gid="1" x="1008" y="704" width="16" height="16"/>
+  <object id="1525" gid="1" x="1024" y="704" width="16" height="16"/>
+  <object id="1526" gid="1" x="1024" y="656" width="16" height="16"/>
+  <object id="1527" gid="1" x="1024" y="672" width="16" height="16"/>
+  <object id="1528" gid="1" x="1024" y="688" width="16" height="16"/>
  </objectgroup>
  <objectgroup id="19" name="QuestionBlock">
   <object id="449" gid="5" x="144" y="720" width="16" height="16">

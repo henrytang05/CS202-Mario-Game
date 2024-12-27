@@ -2623,15 +2623,15 @@
         }, 
         {
          "firstgid":944,
-         "source":"..\/..\/..\/..\/..\/HCMUS\/CS202-Mario-Game\/assets\/Level1\/Goomba-Left-Idle.json"
+         "source":"Goomba-Left-Idle.json"
         }, 
         {
          "firstgid":945,
-         "source":"..\/..\/..\/..\/..\/HCMUS\/CS202-Mario-Game\/assets\/Level1\/Coin.json"
+         "source":"Coin.json"
         }, 
         {
          "firstgid":948,
-         "source":"..\/..\/..\/..\/..\/HCMUS\/CS202-Mario-Game\/assets\/Level1\/Koopa-Left-Idle.json"
+         "source":"Koopa-Left-Idle.json"
         }],
  "tilewidth":16,
  "type":"map",

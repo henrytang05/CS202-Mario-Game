@@ -43,7 +43,7 @@ void Game::update(float deltaTime) {
     if(typeid(*scenes.top()) == typeid(SceneSpace::GameScene)){
       Shared<SceneSpace::Scene> scene = scenes.top()->updateScene(deltaTime);
       if(scene){
-        if(typeid(*scene) == typeid(SceneSpace::GameScene)) {
+        if(typeid(*scene) != typeid(SceneSpace::GuideScene)) {
           popScene();
         }
         pushScene(scene);

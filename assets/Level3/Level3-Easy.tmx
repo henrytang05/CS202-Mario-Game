@@ -12,9 +12,9 @@
  <tileset firstgid="938" source="Pipe.json"/>
  <tileset firstgid="939" source="Piranha.json"/>
  <tileset firstgid="941" source="Checkpoint.json"/>
- <tileset firstgid="944" source="../../../../../HCMUS/CS202-Mario-Game/assets/Level1/Goomba-Left-Idle.json"/>
- <tileset firstgid="945" source="../../../../../HCMUS/CS202-Mario-Game/assets/Level1/Coin.json"/>
- <tileset firstgid="948" source="../../../../../HCMUS/CS202-Mario-Game/assets/Level1/Koopa-Left-Idle.json"/>
+ <tileset firstgid="944" source="Goomba-Left-Idle.json"/>
+ <tileset firstgid="945" source="Coin.json"/>
+ <tileset firstgid="948" source="Koopa-Left-Idle.json"/>
  <layer id="1" name="BackGround" width="164" height="50" opacity="0.9">
   <data encoding="csv">
 199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,199,

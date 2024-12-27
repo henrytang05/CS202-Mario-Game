@@ -27,6 +27,7 @@ GameScene::GameScene(const std::string &_nameScene) : Scene(), EM(EntityManager:
   Shared<PlayerSystem> playerSystem = std::make_shared<PlayerSystem>();
   Shared<SwingSystem> swingSystem = std::make_shared<SwingSystem>();
   Shared<CoinSystem> coinSystem = std::make_shared<CoinSystem>();
+  Shared<FlagSystem> flagSystem = std::make_shared<FlagSystem>();
   Shared<CollisionHandlingSystem> collisionHandlingSystem = std::make_shared<CollisionHandlingSystem>();
   Shared<BlockSystem> blockSystem = std::make_shared<BlockSystem>();
   systems.push_back(playerSystem);
@@ -37,6 +38,7 @@ GameScene::GameScene(const std::string &_nameScene) : Scene(), EM(EntityManager:
   systems.push_back(blockSystem);
   systems.push_back(swingSystem);
   systems.push_back(coinSystem);
+  systems.push_back(flagSystem);
   update_systems.push_back(playerSystem);
   update_systems.push_back(collisionSystem);
   update_systems.push_back(transformSystem);
@@ -45,6 +47,7 @@ GameScene::GameScene(const std::string &_nameScene) : Scene(), EM(EntityManager:
   draw_systems.push_back(animationSystem);
   update_systems.push_back(swingSystem);
   update_systems.push_back(coinSystem);
+  update_systems.push_back(flagSystem);
 
 }
 GameScene::GameScene() : Scene(), EM(EntityManager::getInstance()) {}
@@ -91,12 +94,11 @@ void GameScene::draw() {
   }
 
   EndMode2D();
-  int scores =0;
   DrawText(TextFormat("Time: %03i", (int)time), 1200, 35, GAMEPLAY_TEXT_SIZE,
            WHITE);
   DrawText(TextFormat("Lives: %03i", (int)lives), 1200 - 35 * 6, 35,
            GAMEPLAY_TEXT_SIZE, WHITE);
-  DrawText(TextFormat("Score: %03i", (int)scores), 1200 - 35 * 12, 35, GAMEPLAY_TEXT_SIZE, WHITE);
+  DrawText(TextFormat("Score: %03i", (int)ScoreManager::getInstance().getScore()), 1200 - 35 * 12, 35, GAMEPLAY_TEXT_SIZE, WHITE);
 }
 Unique<Scene> GameScene::updateScene(float deltaTime) {
   this->update(deltaTime);

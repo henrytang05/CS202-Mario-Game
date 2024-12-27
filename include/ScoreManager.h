@@ -17,6 +17,8 @@ public:
     void resetScore() {
         score = 0;
     }
+    
+    
 
 private:
     ScoreManager() : score(0) {}

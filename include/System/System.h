@@ -81,6 +81,12 @@ public:
   void update(float dt) override;
 };
 
+
+class FlagSystem : public IUpdatableSystem {
+public:
+  void update(float dt) override;
+};
+
 class PlayerSystem : public IUpdatableSystem {
 public:
   void update(float dt) override;

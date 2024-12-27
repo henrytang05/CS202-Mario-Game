@@ -2,12 +2,15 @@
 #define POSITION_COMPONENT_H
 
 #include "Components/Component.h"
+#include "Exporter.h"
 #include "raylib.h"
 
 Vector2 operator+(const Vector2 &v1, const Vector2 &v2);
 Vector2 operator-(const Vector2 &v);
 
 class PositionComponent : public Component, public Vector2 {
+  friend class JSONExporter;
+
 public:
   PositionComponent();
   PositionComponent(Vector2 pos);
@@ -16,6 +19,7 @@ public:
 
   void setPosition(Vector2 pos);
   Vector2 getPosition();
+  void accept(Exporter &exporter) override;
 };
 
 class TransformComponent : public Component, public Vector2 {

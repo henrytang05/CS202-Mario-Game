@@ -1,10 +1,14 @@
 #ifndef COMPONENT_H
 #define COMPONENT_H
 
+#include "Exporter.h"
+
 class EntityManager;
 class AbstractEntity;
 
-class Component {
+class Component : public Exportable {
+  friend class JSONExporter;
+
 public:
   Component(std::string name = "Unnamed", AbstractEntity *e = nullptr,
             EntityManager *em = nullptr);
@@ -13,6 +17,7 @@ public:
   void setEntity(AbstractEntity *e);
   void setEntityManager(EntityManager *em);
   std::string getName() const;
+  virtual void accept(Exporter &exporter) override {};
 
 protected:
   AbstractEntity *entity; // this is only a reference, dont delete

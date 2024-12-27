@@ -1,6 +1,7 @@
 #ifndef ENTITY_MANAGER_H
 #define ENTITY_MANAGER_H
 
+#include "Exporter.h"
 #include "Interface.h"
 #include "globals.h"
 #include <bitset>
@@ -31,7 +32,7 @@ template <typename T> inline ComponentIDType getComponentTypeID() noexcept {
   return typeID;
 }
 
-class IComponentArray {
+class IComponentArray : public JSONExportable<IComponentArray> {
 public:
   virtual ~IComponentArray() = default;
   virtual void onEntityDestroyed(EntityID id) = 0;
@@ -39,10 +40,15 @@ public:
 
 template <typename T> class ComponentArray : public IComponentArray {
 public:
+  void accept(Exporter &exporter) override;
+  void to_json(json &j) const override;
+  void from_json(const json &j, ComponentArray<T> &componentArray) override;
+
   ComponentArray<T>() { entityComponentIndexMap.fill(-1); }
   virtual ~ComponentArray() = default;
   void onEntityDestroyed(EntityID id) override {
-    if(entityComponentIndexMap[id] == -1) return;
+    if (entityComponentIndexMap[id] == -1)
+      return;
 
     if (entityComponentIndexMap[id] != -1) {
       size_t index = entityComponentIndexMap[id];
@@ -66,7 +72,10 @@ public:
       entityComponentIndexMap; // entityID : componentIndex
 };
 
-class AbstractEntity : public IUpdatable {
+class AbstractEntity : public IUpdatable,
+                       public JSONExportable<AbstractEntity> {
+  friend class JSONExporter;
+
 private:
   bool active;       // check if entity is active
   uint32_t id;       // entity id
@@ -74,7 +83,7 @@ private:
   EntityManager *EM; // Haven't find a way to make this safer
 
 public:
-  // AbstractEntity(); // Avoid using this constructor
+  AbstractEntity() = default; // Avoid using this constructor
   AbstractEntity(EntityManager &EM, uint32_t id = INVALID_ENTITY_ID,
                  std::string name = UNNAMED, bool active = true);
 
@@ -91,6 +100,10 @@ public:
   bool isActive() const;
   void deactivate();
   void destroy();
+
+  void accept(Exporter &exporter) override;
+  void to_json(json &j) const override;
+  void from_json(const json &j, AbstractEntity &entity) override;
 
   virtual void update(float deltaTime) override;
   virtual void changeState();
@@ -114,11 +127,16 @@ public:
   inline T &modifyComponent(TArgs &&...mArgs);
 };
 
-class EntityManager {
+class EntityManager : public JSONExportable<EntityManager> {
+  friend class JSONExporter;
 
-  inline static EntityID lastID = 0;
+public:
+  void accept(Exporter &exporter) override;
+  void to_json(json &j) const override;
+  void from_json(const json &j, EntityManager &EM) override;
 
 private:
+  inline static EntityID lastID = 0;
   std::array<Shared<AbstractEntity>, maxEntity>
       entities; // id : entity
                 // TODO: change ptr type later

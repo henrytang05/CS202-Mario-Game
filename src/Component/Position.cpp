@@ -15,6 +15,8 @@ void PositionComponent::setPosition(Vector2 pos) {
 
 Vector2 PositionComponent::getPosition() { return {x, y}; }
 
+void PositionComponent::accept(Exporter &exporter) { exporter.visit(*this); }
+
 Vector2 operator+(const Vector2 &v1, const Vector2 &v2) {
   return {v1.x + v2.x, v1.y + v2.y};
 }

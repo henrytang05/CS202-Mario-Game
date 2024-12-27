@@ -15,7 +15,7 @@ void EntityManager::reset() {
   for (auto &entity : entities) {
     entity.reset();
   }
-  for(auto &componentArray : componentArrays) {
+  for (auto &componentArray : componentArrays) {
     componentArray.reset();
   }
 }
@@ -183,9 +183,7 @@ AbstractEntity::~AbstractEntity() {
 uint32_t AbstractEntity::getID() const { return id; }
 
 bool AbstractEntity::isActive() const { return active; }
-void AbstractEntity::deactivate() {
-  active = false;
-}
+void AbstractEntity::deactivate() { active = false; }
 void AbstractEntity::destroy() {
   active = false;
   EM->destroyEntity(id);
@@ -193,3 +191,32 @@ void AbstractEntity::destroy() {
 
 std::string AbstractEntity::getName() const { return name; }
 void AbstractEntity::setName(std::string name) { this->name = name; }
+
+void AbstractEntity::accept(Exporter &exporter) { exporter.visit(*this); }
+
+void AbstractEntity::to_json(json &j) const {
+  j = json{{"id", id}, {"name", name}, {"active", active}};
+}
+
+void AbstractEntity::from_json(const json &j, AbstractEntity &entity) {
+  uint32_t id = j.at("id").get<uint32_t>();
+  std::string name = j.at("name").get<std::string>();
+  bool active = j.at("active").get<bool>();
+  entity = AbstractEntity(name, id, active);
+}
+
+void EntityManager::to_json(json &j) const {
+  throw std::runtime_error("Not implemented yet");
+}
+
+void EntityManager::from_json(const json &j, EntityManager &EM) {
+  throw std::runtime_error("Not implemented yet");
+}
+
+void EntityManager::accept(Exporter &exporter) {
+  for (auto &entity : entities) {
+    if (entity) {
+      entity->accept(exporter);
+    }
+  }
+}

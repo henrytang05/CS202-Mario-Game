@@ -193,9 +193,11 @@ Unique<Scene> GameScene::updateScene(float deltaTime) {
              player.lock()->getComponent<PositionComponent>().x >
                  164.0f * 16.0f) {
     if (level == "Easy") {
+      lives = 3;
       return make_unique<SceneSpace::GameScene>(nameScene, "Medium");
     }
     if (level == "Medium") {
+      lives = 3;
       return make_unique<SceneSpace::GameScene>(nameScene, "Hard");
     }
     return make_unique<SceneSpace::IntroScene>();
@@ -226,7 +228,7 @@ bool GameScene::isFinished() { return gameOver; }
 
 void GameScene::save() {
   std::ofstream o(savePath);
-  ASSERT(o.is_open(), "Failed to open file");
+  //ASSERT(o.is_open(), "Failed to open file");
   o << lives << "\n";
   ScoreManager::getInstance().save(o);
   o << level << "\n";

@@ -20,11 +20,14 @@ RELEASE_FLAGS := -std=c++17 -I$(INCLUDE) -O3 -Wall -include $(PCH_H)
 PCH_FLAGS := -std=c++17 -O0 -x c++-header
 FLAGS := $(DEBUG_FLAGS)
 
-# Libraries for Windows and Linux
+UNAME_S := $(shell uname -s)
 ifeq ($(OS),Windows_NT)
-    LIBS := -L$(LIB) -lraylib -lopengl32 -lgdi32 -lwinmm -lcomdlg32 -lole32 
+    LIBS := -L$(LIB) -lraylib -lopengl32 -lgdi32 -lwinmm -lcomdlg32 -lole32
+else ifeq ($(UNAME_S), Darwin)
+	RAYLIB_DIR := /opt/homebrew/opt/raylib
+	LIBS := -L$(RAYLIB_DIR)/lib -lraylib -framework OpenGL -framework Cocoa -framework IOKit -framework CoreVideo
 else
-    LIBS := -L$(LIB) -lraylib 
+    LIBS := -L$(LIB) -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
 endif
 
 $(TARGET): $(OBJS) $(PCH_GCH)
